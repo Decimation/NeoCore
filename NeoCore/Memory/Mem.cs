@@ -46,13 +46,6 @@ namespace NeoCore.Memory
 				return null;
 			}
 
-//			return Marshal.PtrToStringAuto(new IntPtr(first), len)
-//			              .Erase(StringConstants.NULL_TERMINATOR);
-
-			/*byte[] rg = new byte[len];
-			Marshal.Copy(new IntPtr(first), rg, 0, rg.Length);
-			return Encoding.ASCII.GetString(rg);*/
-
 			return new string(first, 0, len);
 		}
 
@@ -64,9 +57,8 @@ namespace NeoCore.Memory
 				ptr.ClearBytes(size);*/
 				throw new NotImplementedException();
 			}
-			else {
-				value = default;
-			}
+
+			value = default;
 		}
 	}
 }

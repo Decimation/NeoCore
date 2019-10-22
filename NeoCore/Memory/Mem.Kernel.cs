@@ -7,7 +7,7 @@ namespace NeoCore.Memory
 {
 	public static unsafe partial class Mem
 	{
-		public static unsafe class Kernel
+		public static class Kernel
 		{
 			#region Read / Write
 

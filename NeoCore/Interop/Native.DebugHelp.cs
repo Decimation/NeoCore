@@ -15,10 +15,10 @@ namespace NeoCore.Interop
 		/// <summary>
 		/// Functions from <see cref="DBGHELP_DLL"/>
 		/// </summary>
-		internal static unsafe class DebugHelp
+		internal static class DebugHelp
 		{
 			//todo: clean up
-			
+
 			/// <summary>
 			///     https://github.com/Microsoft/DbgShell/blob/master/DbgProvider/internal/Native/DbgHelp.cs
 			/// </summary>
@@ -27,7 +27,7 @@ namespace NeoCore.Interop
 
 			#region Abstraction
 
-			internal static void SymInitialize(IntPtr hProcess) => 
+			internal static void SymInitialize(IntPtr hProcess) =>
 				SymInitialize(hProcess, IntPtr.Zero, false);
 
 
@@ -47,11 +47,11 @@ namespace NeoCore.Interop
 
 			internal static Symbol GetSymbol(IntPtr hProc, string name)
 			{
-				int sz = (int) (Symbol.StructureSize + Symbol.MAX_SYM_NAME * sizeof(byte)
+				var sz = (int) (Symbol.StructureSize + Symbol.MAX_SYM_NAME * sizeof(byte)
 				                                     + sizeof(ulong) - 1 / sizeof(ulong));
 
-				var byteBuffer = stackalloc byte[sz];
-				var buffer     = (SymbolInfo*) byteBuffer;
+				byte* byteBuffer = stackalloc byte[sz];
+				var   buffer     = (SymbolInfo*) byteBuffer;
 
 				buffer->SizeOfStruct = (uint) Symbol.StructureSize;
 				buffer->MaxNameLen   = Symbol.MAX_SYM_NAME;
@@ -99,9 +99,11 @@ namespace NeoCore.Interop
 			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
 			[return: As(Types.Bool)]
-			private static extern bool SymEnumTypesByName(IntPtr hProcess, ulong                  modBase,
-			                                              string mask,     SymEnumSymbolsCallback callback,
-			                                              IntPtr pUserContext);
+			private static extern bool SymEnumTypesByName(IntPtr                 hProcess,
+			                                              ulong                  modBase,
+			                                              string                 mask,
+			                                              SymEnumSymbolsCallback callback,
+			                                              IntPtr                 pUserContext);
 
 			[SuppressUnmanagedCodeSecurity]
 			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
