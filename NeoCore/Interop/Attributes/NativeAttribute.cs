@@ -2,7 +2,7 @@ using System;
 
 namespace NeoCore.Interop.Attributes
 {
-	public class NativeAttribute : Attribute
+	public abstract class NativeAttribute : Attribute
 	{
 		public string Id { get; }
 

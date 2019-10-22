@@ -3,9 +3,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.InteropServices;
 using NeoCore;
+using NeoCore.CoreClr;
 using NeoCore.Memory;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Diagnostics;
 
 #endregion
 
@@ -15,20 +18,11 @@ namespace Test
 	{
 		private static void Main(string[] args)
 		{
-			int          i = Int32.MaxValue;
-			Pointer<int> p = &i;
-			Console.WriteLine(p.Value);
+			Console.WriteLine(RuntimeEnvironment.GetRuntimeDirectory());
 
-			var p2 = p.Cast<ushort>();
-			Console.WriteLine(p2.Value);
-			p2++;
-			Console.WriteLine(p2.Value);
-			Console.WriteLine(++p2.Value);
-
-			var rg = BitConverter.GetBytes(i);
-			Console.WriteLine(Format.Collections.FormatJoin(rg, "X"));
-
-			Console.WriteLine(Format.Collections.FuncJoin(rg, b => b + "b"));
+			foreach (ProcessModule module in Process.GetCurrentProcess().Modules) {
+				Console.WriteLine("{0}: {1}", module.FileName, module.ModuleName);
+			}
 		}
 	}
 }

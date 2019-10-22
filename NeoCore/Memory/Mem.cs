@@ -1,20 +1,30 @@
 using System;
 using System.Runtime.CompilerServices;
+using NeoCore.CoreClr;
 
 namespace NeoCore.Memory
 {
-	public static class Mem
+	public static unsafe partial class Mem
 	{
+		#region Fields
+
+		/// <summary>
+		/// Size of a pointer. Equals <see cref="IntPtr.Size"/>.
+		/// </summary>
+		public static readonly int PointerSize = IntPtr.Size;
+
 		/// <summary>
 		/// Determines whether this process is 64-bit.
 		/// </summary>
-		public static bool Is64Bit => IntPtr.Size == sizeof(long) && Environment.Is64BitProcess;
+		public static bool Is64Bit => PointerSize == sizeof(long) && Environment.Is64BitProcess;
 
 		/// <summary>
 		/// Represents a <c>null</c> <see cref="Pointer{T}"/>. Equivalent to <see cref="IntPtr.Zero"/>.
 		/// </summary>
 		public static readonly Pointer<byte> Nullptr = null;
-		
+
+		#endregion
+
 		/// <summary>
 		/// Calculates the total byte size of <paramref name="elemCnt"/> elements with
 		/// the size of <paramref name="elemSize"/>.
@@ -28,6 +38,35 @@ namespace NeoCore.Memory
 			// (void*) (((long) m_value) + byteOffset)
 			// (void*) (((long) m_value) + (elemOffset * ElementSize))
 			return elemCnt * elemSize;
+		}
+		
+		public static string ReadString(sbyte* first, int len)
+		{
+			if (first == null || len <= 0) {
+				return null;
+			}
+
+//			return Marshal.PtrToStringAuto(new IntPtr(first), len)
+//			              .Erase(StringConstants.NULL_TERMINATOR);
+
+			/*byte[] rg = new byte[len];
+			Marshal.Copy(new IntPtr(first), rg, 0, rg.Length);
+			return Encoding.ASCII.GetString(rg);*/
+
+			return new string(first, 0, len);
+		}
+
+		public static void Delete<T>(ref T value)
+		{
+			if (!Runtime.Info.IsStruct(value)) {
+				/*int           size = Unsafe.SizeOf(value, SizeOfOptions.Data);
+				Pointer<byte> ptr  = Unsafe.AddressOfFields(ref value);
+				ptr.ClearBytes(size);*/
+				throw new NotImplementedException();
+			}
+			else {
+				value = default;
+			}
 		}
 	}
 }

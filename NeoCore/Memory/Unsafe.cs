@@ -5,7 +5,10 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using InlineIL;
+using NeoCore.CoreClr;
 using NeoCore.Interop.Attributes;
+using NeoCore.Utilities;
+using NeoCore.Utilities.Diagnostics;
 
 #endregion
 
@@ -26,6 +29,82 @@ namespace NeoCore.Memory
 	/// </summary>
 	public static unsafe class Unsafe
 	{
+		/// <summary>
+		///     <para>Returns the address of <paramref name="value" />.</para>
+		/// </summary>
+		/// <param name="value">Value to return the address of.</param>
+		/// <returns>The address of the type in memory.</returns>
+		public static Pointer<T> AddressOf<T>(ref T value)
+		{
+			/*var tr = __makeref(t);
+			return *(IntPtr*) (&tr);*/
+
+			return AsPointer(ref value);
+		}
+		
+		/// <summary>
+		///     Returns the address of reference type <paramref name="value" />'s heap memory, offset by the specified
+		///     <see cref="OffsetOptions" />.
+		///     <remarks>
+		///         <para>
+		///             Note: This does not pin the reference in memory if it is a reference type.
+		///             This may require pinning to prevent the GC from moving the object.
+		///             If the GC compacts the heap, this pointer may become invalid.
+		///         </para>
+		///     </remarks>
+		/// </summary>
+		/// <param name="value">Reference type to return the heap address of</param>
+		/// <param name="offset">Offset type</param>
+		/// <returns>The address of <paramref name="value" /></returns>
+		/// <exception cref="ArgumentOutOfRangeException">If <paramref name="offset"></paramref> is out of range.</exception>
+		public static Pointer<byte> AddressOfHeap<T>(T value, OffsetOptions offset = OffsetOptions.None) where T : class
+			=> AddressOfHeapInternal(value, offset);
+
+		private static Pointer<byte> AddressOfHeapInternal<T>(T value, OffsetOptions offset)
+		{
+			// It is already assumed value is a class type
+
+			//var tr = __makeref(value);
+			//var heapPtr = **(IntPtr**) (&tr);
+
+			Pointer<byte> heapPtr = AddressOf(ref value).ReadPointer();
+
+
+			// NOTE:
+			// Strings have their data offset by Offsets.OffsetToStringData
+			// Arrays have their data offset by IntPtr.Size * 2 bytes (may be different for 32 bit)
+			
+			var offsetValue = 0;
+
+			switch (offset) {
+				case OffsetOptions.StringData:
+					Guard.Assert(Runtime.Info.IsString(value));
+					offsetValue = Offsets.OffsetToStringData;
+					break;
+
+				case OffsetOptions.ArrayData:
+					Guard.Assert(Runtime.Info.IsArray(value));
+					offsetValue = Offsets.OffsetToArrayData;
+					break;
+
+				case OffsetOptions.Fields:
+					offsetValue = Offsets.OffsetToData;
+					break;
+
+				case OffsetOptions.None:
+					break;
+
+				case OffsetOptions.Header:
+					offsetValue = -Offsets.OffsetToData;
+					break;
+				
+				default:
+					throw new ArgumentOutOfRangeException(nameof(offset), offset, null);
+			}
+
+			return heapPtr + offsetValue;
+		}
+
 
 		#region Unsafe
 
@@ -116,20 +195,10 @@ namespace NeoCore.Memory
 		}
 
 
-		/// <summary>
-		///     <para>Returns the address of <paramref name="value" />.</para>
-		/// </summary>
-		/// <param name="value">Value to return the address of.</param>
-		/// <returns>The address of the type in memory.</returns>
 		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void* AddressOf<T>(ref T value)
+		public static void* AsPointer<T>(ref T value)
 		{
-			// Original name: AsPointer
-			
-			/*var tr = __makeref(t);
-			return *(IntPtr*) (&tr);*/
-			
 			IL.Emit.Ldarg(nameof(value));
 			IL.Emit.Conv_U();
 			return IL.ReturnPointer();
