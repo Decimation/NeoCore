@@ -2,8 +2,7 @@
 
 namespace NeoCore
 {
-	
-	public class Global
+	internal class Global
 	{
 		
 	}

@@ -3,6 +3,7 @@
 using System;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using InlineIL;
 using NeoCore.Interop.Attributes;
 
@@ -11,22 +12,20 @@ using NeoCore.Interop.Attributes;
 namespace NeoCore.Memory
 {
 	/// <summary>
-	/// 
+	///     Provides utilities for manipulating pointers, memory, and types. This class has
+	/// CompilerServices.Unsafe built in.
+	///     <seealso cref="BitConverter" />
+	///     <seealso cref="System.Convert" />
+	///     <seealso cref="MemoryMarshal" />
+	///     <seealso cref="Marshal" />
+	///     <seealso cref="Span{T}" />
+	///     <seealso cref="Memory{T}" />
+	///     <seealso cref="Buffer" />
+	///     <seealso cref="Mem" />
+	///     <seealso cref="System.Runtime.CompilerServices.JitHelpers" />
 	/// </summary>
 	public static unsafe class Unsafe
 	{
-		/// <summary>
-		///     <para>Returns the address of <paramref name="value" />.</para>
-		/// </summary>
-		/// <param name="value">Value to return the address of.</param>
-		/// <returns>The address of the type in memory.</returns>
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer<T> AddressOf<T>(ref T value)
-		{
-			/*var tr = __makeref(t);
-			return *(IntPtr*) (&tr);*/
-			return AsPointer(ref value);
-		}
 
 		#region Unsafe
 
@@ -117,10 +116,20 @@ namespace NeoCore.Memory
 		}
 
 
+		/// <summary>
+		///     <para>Returns the address of <paramref name="value" />.</para>
+		/// </summary>
+		/// <param name="value">Value to return the address of.</param>
+		/// <returns>The address of the type in memory.</returns>
 		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void* AsPointer<T>(ref T value)
+		public static void* AddressOf<T>(ref T value)
 		{
+			// Original name: AsPointer
+			
+			/*var tr = __makeref(t);
+			return *(IntPtr*) (&tr);*/
+			
 			IL.Emit.Ldarg(nameof(value));
 			IL.Emit.Conv_U();
 			return IL.ReturnPointer();

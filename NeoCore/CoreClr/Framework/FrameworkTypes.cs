@@ -5,6 +5,8 @@ namespace NeoCore.CoreClr.Framework
 	/// </summary>
 	public enum FrameworkTypes
 	{
+		// https://docs.microsoft.com/en-us/dotnet/standard/frameworks
+		
 		/// <summary>
 		///     .NET Standard
 		/// </summary>

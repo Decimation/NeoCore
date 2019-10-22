@@ -10,9 +10,11 @@ namespace NeoCore.CoreClr
 {
 	public static partial class Runtime
 	{
+		/// <summary>
+		/// Contains utilities for retrieving information about the .NET runtime and its components.
+		/// </summary>
 		public static class Info
 		{
-
 			public static bool IsInDebugMode => Debugger.IsAttached;
 
 			public static FrameworkIdentifier CurrentFramework {

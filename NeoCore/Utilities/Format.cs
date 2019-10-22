@@ -13,9 +13,6 @@ namespace NeoCore.Utilities
 
 		public static unsafe string AsHex(void* value) => AsHex((IntPtr) value);
 
-		public static string AsHex(IntPtr value)
-		{
-			return ((long) value).ToString(HEX_FORMAT_SPECIFIER);
-		}
+		public static string AsHex(IntPtr value) => value.ToInt64().ToString(HEX_FORMAT_SPECIFIER);
 	}
 }

@@ -31,7 +31,6 @@ namespace NeoCore.Memory
 		/// <summary>
 		/// Internal pointer value.
 		/// </summary>
-		[NativeField]
 		private void* m_value;
 
 		#region Properties
@@ -136,7 +135,7 @@ namespace NeoCore.Memory
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		private void* Offset(int elemCnt) => (void*) ((long) m_value + (Mem.FullSizeOf(ElementSize, elemCnt)));
+		private void* Offset(int elemCnt) => (void*) ((long) m_value + (Mem.FlatSize(ElementSize, elemCnt)));
 
 		#region Operators
 
@@ -267,10 +266,7 @@ namespace NeoCore.Memory
 		///     the current pointer
 		/// </returns>
 		[Pure]
-		public T[] Copy(int elemCnt)
-		{
-			return Copy(0, elemCnt);
-		}
+		public T[] Copy(int elemCnt) => Copy(0, elemCnt);
 
 		#endregion
 
@@ -305,6 +301,7 @@ namespace NeoCore.Memory
 		/// <returns>A native <c>void*</c> pointer</returns>
 		[Pure]
 		public void* ToPointer() => m_value;
+
 
 		[Pure]
 		public long ToInt64() => (long) m_value;
