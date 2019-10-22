@@ -1,11 +1,20 @@
-using System;
+#region
 
-namespace NeoCore
+using System;
+using System.Diagnostics;
+using NeoCore.CoreClr.Framework;
+
+#endregion
+
+namespace NeoCore.CoreClr
 {
 	public static partial class Runtime
 	{
 		public static class Info
 		{
+
+			public static bool IsInDebugMode => Debugger.IsAttached;
+
 			public static FrameworkIdentifier CurrentFramework {
 				get {
 					FrameworkTypes fwk = default;

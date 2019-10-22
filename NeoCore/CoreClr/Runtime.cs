@@ -1,4 +1,4 @@
-namespace NeoCore
+namespace NeoCore.CoreClr
 {
 	public static partial class Runtime
 	{

@@ -1,5 +1,13 @@
-﻿using System;
+﻿#region
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using NeoCore;
+using NeoCore.Memory;
+using NeoCore.Utilities;
+
+#endregion
 
 namespace Test
 {
@@ -7,13 +15,18 @@ namespace Test
 	{
 		private static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
-			Console.WriteLine(Runtime.Info.CurrentFramework);
-
-			int i = 256;
+			int i = Int32.MaxValue;
 			Pointer<int> p = &i;
-			Console.WriteLine(p);
-			Console.WriteLine("{0:X}", new IntPtr(&i).ToInt64());
+			Console.WriteLine(p.Value);
+			
+			var p2 = p.Cast<ushort>();
+			Console.WriteLine(p2.Value);
+			p2++;
+			Console.WriteLine(p2.Value);
+			Console.WriteLine(++p2.Value);
+
+			var rg = BitConverter.GetBytes(i);
+			Console.WriteLine(Format.FormatJoin(rg,"X"));
 		}
 	}
 }

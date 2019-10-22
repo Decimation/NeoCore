@@ -1,23 +1,23 @@
-namespace NeoCore
+namespace NeoCore.CoreClr.Framework
 {
 	/// <summary>
-	/// Specifies .NET framework types.
+	///     Specifies .NET framework types.
 	/// </summary>
 	public enum FrameworkTypes
 	{
 		/// <summary>
-		/// .NET Standard
+		///     .NET Standard
 		/// </summary>
 		Standard,
 
 
 		/// <summary>
-		/// .NET Core
+		///     .NET Core
 		/// </summary>
 		Core,
 
 		/// <summary>
-		/// .NET Framework
+		///     .NET Framework
 		/// </summary>
 		Framework
 	}

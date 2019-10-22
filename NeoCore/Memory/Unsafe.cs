@@ -4,20 +4,21 @@ using System;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using InlineIL;
+using NeoCore.Interop.Attributes;
 
 #endregion
 
-namespace NeoCore
+namespace NeoCore.Memory
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public static unsafe class Unsafe
 	{
 		/// <summary>
 		///     <para>Returns the address of <paramref name="value" />.</para>
-		///     <remarks>
-		///         <para>Equals <see cref="AsPointer{T}" /></para>
-		///     </remarks>
 		/// </summary>
-		/// <param name="value">Type to return the address of</param>
+		/// <param name="value">Value to return the address of.</param>
 		/// <returns>The address of the type in memory.</returns>
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Pointer<T> AddressOf<T>(ref T value)
@@ -33,7 +34,7 @@ namespace NeoCore
 		// https://github.com/dotnet/corefx/blob/master/src/System.Runtime.CompilerServices.Unsafe/src/System.Runtime.CompilerServices.Unsafe.il
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T Read<T>(void* source)
 		{
@@ -42,7 +43,7 @@ namespace NeoCore
 			return IL.Return<T>();
 		}
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T ReadUnaligned<T>(void* source)
 		{
@@ -52,7 +53,7 @@ namespace NeoCore
 			return IL.Return<T>();
 		}
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T ReadUnaligned<T>(ref byte source)
 		{
@@ -62,7 +63,7 @@ namespace NeoCore
 			return IL.Return<T>();
 		}
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Write<T>(void* destination, T value)
 		{
@@ -72,7 +73,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void WriteUnaligned<T>(void* destination, T value)
 		{
@@ -83,7 +84,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void WriteUnaligned<T>(ref byte destination, T value)
 		{
@@ -94,7 +95,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Copy<T>(void* destination, ref T source)
 		{
@@ -105,7 +106,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void Copy<T>(ref T destination, void* source)
 		{
@@ -116,7 +117,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void* AsPointer<T>(ref T value)
 		{
@@ -130,7 +131,7 @@ namespace NeoCore
 		///     <para>Returns the size of a type in memory.</para>
 		/// </summary>
 		/// <returns><see cref="Size" /> for reference types, size for value types</returns>
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static int SizeOf<T>()
 		{
@@ -139,7 +140,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void CopyBlock(void* destination, void* source, uint byteCount)
 		{
@@ -150,7 +151,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void CopyBlock(ref byte destination, ref byte source, uint byteCount)
 		{
@@ -161,7 +162,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void CopyBlockUnaligned(void* destination, void* source, uint byteCount)
 		{
@@ -173,7 +174,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void CopyBlockUnaligned(ref byte destination, ref byte source, uint byteCount)
 		{
@@ -185,7 +186,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void InitBlock(void* startAddress, byte value, uint byteCount)
 		{
@@ -196,7 +197,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void InitBlock(ref byte startAddress, byte value, uint byteCount)
 		{
@@ -207,7 +208,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void InitBlockUnaligned(void* startAddress, byte value, uint byteCount)
 		{
@@ -219,7 +220,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void InitBlockUnaligned(ref byte startAddress, byte value, uint byteCount)
 		{
@@ -231,7 +232,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T As<T>(object o) where T : class
 		{
@@ -240,7 +241,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref T AsRef<T>(void* source)
 		{
@@ -263,7 +264,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref T AsRef<T>(in T source)
 		{
@@ -272,7 +273,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref TTo As<TFrom, TTo>(ref TFrom source)
 		{
@@ -281,7 +282,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref T Unbox<T>(object box) where T : struct
 		{
@@ -291,7 +292,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref T Add<T>(ref T source, int elementOffset)
 		{
@@ -305,7 +306,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void* Add<T>(void* source, int elementOffset)
 		{
@@ -319,7 +320,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref T Add<T>(ref T source, IntPtr elementOffset)
 		{
@@ -332,7 +333,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref T AddByteOffset<T>(ref T source, IntPtr byteOffset)
 		{
@@ -343,7 +344,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref T Subtract<T>(ref T source, int elementOffset)
 		{
@@ -357,7 +358,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void* Subtract<T>(void* source, int elementOffset)
 		{
@@ -371,7 +372,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref T Subtract<T>(ref T source, IntPtr elementOffset)
 		{
@@ -384,7 +385,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static ref T SubtractByteOffset<T>(ref T source, IntPtr byteOffset)
 		{
@@ -395,7 +396,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static IntPtr ByteOffset<T>(ref T origin, ref T target)
 		{
@@ -406,7 +407,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool AreSame<T>(ref T left, ref T right)
 		{
@@ -417,7 +418,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsAddressGreaterThan<T>(ref T left, ref T right)
 		{
@@ -428,7 +429,7 @@ namespace NeoCore
 		}
 
 
-		[Native]
+		[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsAddressLessThan<T>(ref T left, ref T right)
 		{
