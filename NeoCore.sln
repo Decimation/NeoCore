@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NeoCore", "NeoCore\NeoCore.csproj", "{578ACE6C-BAAC-4954-9C7D-05CB5A38E885}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test", "Test\Test.csproj", "{3C4EEFFB-439E-4069-90A0-B3C72D50E706}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{578ACE6C-BAAC-4954-9C7D-05CB5A38E885}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{578ACE6C-BAAC-4954-9C7D-05CB5A38E885}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{578ACE6C-BAAC-4954-9C7D-05CB5A38E885}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{578ACE6C-BAAC-4954-9C7D-05CB5A38E885}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3C4EEFFB-439E-4069-90A0-B3C72D50E706}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C4EEFFB-439E-4069-90A0-B3C72D50E706}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C4EEFFB-439E-4069-90A0-B3C72D50E706}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C4EEFFB-439E-4069-90A0-B3C72D50E706}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
