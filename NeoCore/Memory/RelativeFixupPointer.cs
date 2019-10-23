@@ -1,16 +1,17 @@
+using System;
 using NeoCore.CoreClr.Support;
 
 namespace NeoCore.Memory
 {
 	public unsafe struct RelativeFixupPointer<T> where T : unmanaged
 	{
-		private QInt m_delta;
-		
+		private ulong m_delta;
+
 		// Returns value of the encoded pointer. Assumes that the pointer is not NULL.
-		public T GetValue(QInt value)
+		public Pointer<T> GetValue(ulong value)
 		{
 			const ulong FIXUP_POINTER_INDIRECTION = 1;
-			
+
 //			PRECONDITION(!IsNull());
 //			PRECONDITION(!IsTagged(base));
 //			TADDR addr = base + m_delta;
@@ -18,16 +19,20 @@ namespace NeoCore.Memory
 //				addr = *PTR_TADDR(addr - FIXUP_POINTER_INDIRECTION);
 //			return dac_cast<PTR_TYPE>(addr);
 
-			QInt addr = value + m_delta;
-			
+			ulong addr = value + m_delta;
+
 			if ((addr & FIXUP_POINTER_INDIRECTION) != 0) {
 				//addr = *PTR_TADDR(addr - FIXUP_POINTER_INDIRECTION);
-				
 				// ???
-				addr = *((QInt*) (addr - FIXUP_POINTER_INDIRECTION).Value);
+				addr = *((ulong*) (addr - FIXUP_POINTER_INDIRECTION));
 			}
 
-			return ClrAccess.Cast<QInt, T>(addr);
+			return (Pointer<T>) addr;
+		}
+
+		public override string ToString()
+		{
+			return String.Format("{0:X} d", m_delta);
 		}
 	}
 }

@@ -87,15 +87,17 @@ namespace NeoCore.Memory
 		#endregion
 
 		#region Implicit / explicit conversions
-		
+
 		public static explicit operator Pointer<T>(ulong ul) => new Pointer<T>((void*) ul);
 
 		public static explicit operator void*(Pointer<T> ptr) => ptr.ToPointer();
 
 		public static explicit operator long(Pointer<T> ptr) => ptr.ToInt64();
 
+		public static explicit operator ulong(Pointer<T> ptr) => (ulong) ptr.ToInt64();
+
 		public static explicit operator Pointer<byte>(Pointer<T> ptr) => ptr.ToPointer();
-		
+
 		public static implicit operator Pointer<T>(void* value) => new Pointer<T>(value);
 
 		public static implicit operator Pointer<T>(IntPtr value) => new Pointer<T>(value);
@@ -161,7 +163,7 @@ namespace NeoCore.Memory
 		/// </returns>
 		[Pure]
 		public Pointer<T> Subtract(long byteCnt = 1) => Add(-byteCnt);
-		
+
 		public static Pointer<T> operator +(Pointer<T> left, long right)
 		{
 			return (void*) (left.ToInt64() + right);
@@ -171,14 +173,14 @@ namespace NeoCore.Memory
 		{
 			return (void*) (left.ToInt64() - right);
 		}
-		
+
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void* Offset(int elemCnt) => (void*) ((long) m_value + (Mem.FlatSize(ElementSize, elemCnt)));
 
 		[Pure]
 		public Pointer<T> AddressOfIndex(int index) => Offset(index);
-		
+
 		#region Operators
 
 		/// <summary>
@@ -274,7 +276,7 @@ namespace NeoCore.Memory
 		[Pure]
 		public ref T AsRef(int elemOffset = DEF_OFFSET) => ref Unsafe.AsRef<T>(Offset(elemOffset));
 
-		
+
 		#region Pointer
 
 		[Pure]
@@ -293,7 +295,6 @@ namespace NeoCore.Memory
 
 		#endregion
 
-		
 		#endregion
 
 		#region Copy

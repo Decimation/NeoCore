@@ -47,10 +47,9 @@ namespace NeoCore.CoreClr.Support
 			// #define PTR_HOST_MEMBER_TADDR(type, host, memb) \
 			// (PTR_HOST_TO_TADDR(host) + (TADDR)offsetof(type, memb))
 
-			var taddr = HostToQInt(host);
-			var ofs = (QInt) OffsetOf<TClr>(member, isProperty);
-			
-			
+			var taddr = (ulong) host;
+			var ofs = (ulong) OffsetOf<TClr>(member, isProperty);
+
 			// PTR_HOST_MEMBER_TADDR(type, host, memb)
 			// Retrieves the target address of a host instance pointer and
 			// offsets it by the given member's offset within the type.

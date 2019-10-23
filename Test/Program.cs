@@ -45,6 +45,7 @@ namespace Test
 		{
 			Resources.SetupAll();
 
+			// 7FFBD9A975C8
 			var mt = (MetaType) typeof(MyClass);
 			var fn = mt.GetMethod("Hi");
 			Console.WriteLine(fn.EnclosingType);
