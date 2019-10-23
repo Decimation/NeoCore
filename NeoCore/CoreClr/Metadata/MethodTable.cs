@@ -13,7 +13,6 @@ using NeoCore.Memory;
 
 namespace NeoCore.CoreClr.Metadata
 {
-	
 	[ImportNamespace]
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MethodTable
@@ -99,16 +98,12 @@ namespace NeoCore.CoreClr.Metadata
 		#endregion
 
 		/// <summary>
-		///     Bit mask for <see cref="UnionType" />
-		/// </summary>
-		private const long UNION_MASK = 3;
-
-		/// <summary>
-		///     Describes what the union at offset <c>40</c> (<see cref="Union1" />)
+		///     Describes what the union at offset of <see cref="Union1" />
 		///     contains.
 		/// </summary>
 		internal UnionType UnionType {
 			get {
+				const long UNION_MASK = 3;
 				long l = (long) Union1;
 				return (UnionType) (l & UNION_MASK);
 			}

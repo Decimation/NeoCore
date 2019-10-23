@@ -13,7 +13,7 @@ namespace NeoCore.CoreClr.Meta
 {
 	/// <summary>
 	///     <list type="bullet">
-	///         <item><description>CLR structure: <see cref="MethodDesc"/></description></item>
+	///         <item><description>CLR structure: <see cref="MethodDesc"/>, <see cref="MethodDescChunk"/></description></item>
 	///         <item><description>Reflection structure: <see cref="MethodInfo"/></description></item>
 	///     </list>
 	/// </summary>
@@ -72,7 +72,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public long RVA => Value.Reference.RVA;
 
-		public override MetaType EnclosingType => (Pointer<MethodTable>) Value.Reference.MethodTable;
+		public override MetaType EnclosingType => Value.Reference.MethodTable;
 
 		public override int Token => Value.Reference.Token;
 

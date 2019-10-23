@@ -61,8 +61,7 @@ namespace NeoCore.CoreClr.Metadata
 				var rawToken = (int) (UInt1 & 0xFFFFFF);
 				// Check if this FieldDesc is using the packed mb layout
 				if (!RequiresFullMBValue)
-					return Tokens.TokenFromRid(rawToken & (int) PackedLayoutMask.MbMask,
-					                           TokenType.FieldDef);
+					return Tokens.TokenFromRid(rawToken & (int) PackedLayoutMask.MbMask, TokenType.FieldDef);
 
 				return Tokens.TokenFromRid(rawToken, TokenType.FieldDef);
 			}
@@ -70,18 +69,20 @@ namespace NeoCore.CoreClr.Metadata
 
 		internal int Offset => (int) (UInt2 & 0x7FFFFFF);
 
-		internal ElementType ElementType => (ElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
+		internal ElementType ElementType {
+			get {
+				//return (ElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
+				return (ElementType) (int) Bits.ReadBits(UInt2, 27, 5);
+			}
+		}
 
 		internal ProtectionLevel ProtectionLevel => (ProtectionLevel) (int) ((UInt1 >> 26) & 0x3FFFFFF);
 
 		internal bool IsPointer => ElementType == ElementType.Ptr;
-
-
+		
 		internal bool IsStatic => Bits.ReadBit(UInt1, 24);
-
-
+		
 		internal bool IsThreadLocal => Bits.ReadBit(UInt1, 25);
-
 
 		internal bool IsRVA => Bits.ReadBit(UInt1, 26);
 

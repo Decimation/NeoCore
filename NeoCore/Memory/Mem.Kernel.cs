@@ -11,29 +11,29 @@ namespace NeoCore.Memory
 		{
 			#region Read / Write
 
-			public static T ReadCurrentProcessMemory<T>(Pointer<byte> lpBaseAddress) =>
-				ReadProcessMemory<T>(Process.GetCurrentProcess(), lpBaseAddress);
+			public static T ReadCurrentProcessMemory<T>(Pointer<byte> ptrBase) =>
+				ReadProcessMemory<T>(Process.GetCurrentProcess(), ptrBase);
 
-			public static T ReadProcessMemory<T>(Process proc, Pointer<byte> lpBaseAddress)
+			public static T ReadProcessMemory<T>(Process proc, Pointer<byte> ptrBase)
 			{
 				T   t    = default;
 				int size = Unsafe.SizeOf<T>();
 				var ptr  = Unsafe.AddressOf(ref t);
 
-				ReadProcessMemory(proc, lpBaseAddress.Address, ptr.Address, size);
+				ReadProcessMemory(proc, ptrBase.Address, ptr.Address, size);
 
 				return t;
 			}
 
-			public static void WriteCurrentProcessMemory<T>(Pointer<byte> lpBaseAddress, T value) =>
-				WriteProcessMemory(Process.GetCurrentProcess(), lpBaseAddress, value);
+			public static void WriteCurrentProcessMemory<T>(Pointer<byte> ptrBase, T value) =>
+				WriteProcessMemory(Process.GetCurrentProcess(), ptrBase, value);
 
-			public static void WriteProcessMemory<T>(Process proc, Pointer<byte> lpBaseAddress, T value)
+			public static void WriteProcessMemory<T>(Process proc, Pointer<byte> ptrBase, T value)
 			{
 				int dwSize = Unsafe.SizeOf<T>();
 				var ptr    = Unsafe.AddressOf(ref value);
 
-				WriteProcessMemory(proc, lpBaseAddress.Address, ptr.Address, dwSize);
+				WriteProcessMemory(proc, ptrBase.Address, ptr.Address, dwSize);
 			}
 
 			#endregion
@@ -42,15 +42,15 @@ namespace NeoCore.Memory
 
 			#region Read raw bytes
 
-			public static void ReadProcessMemory(Process       proc,     Pointer<byte> lpBaseAddress,
-			                                     Pointer<byte> lpBuffer, int           cb)
+			public static void ReadProcessMemory(Process       proc,     Pointer<byte> ptrBase,
+			                                     Pointer<byte> ptrBuffer, int           cb)
 			{
 				var hProc = Native.Kernel32.OpenProcess(proc);
 
 
 				// Read the memory
-				bool ok = (Native.Kernel32.ReadProcessMemoryInternal(hProc, lpBaseAddress.Address,
-				                                                     lpBuffer.Address, cb,
+				bool ok = (Native.Kernel32.ReadProcessMemoryInternal(hProc, ptrBase.Address,
+				                                                     ptrBuffer.Address, cb,
 				                                                     out int numberOfBytesRead));
 
 				if (numberOfBytesRead != cb || !ok) {
@@ -61,12 +61,12 @@ namespace NeoCore.Memory
 				Native.Kernel32.CloseHandle(hProc);
 			}
 
-			public static byte[] ReadProcessMemory(Process proc, Pointer<byte> lpBaseAddress, int cb)
+			public static byte[] ReadProcessMemory(Process proc, Pointer<byte> ptrBase, int cb)
 			{
 				var mem = new byte[cb];
 
 				fixed (byte* p = mem) {
-					ReadProcessMemory(proc, lpBaseAddress, (IntPtr) p, cb);
+					ReadProcessMemory(proc, ptrBase, (IntPtr) p, cb);
 				}
 
 				return mem;
@@ -75,14 +75,14 @@ namespace NeoCore.Memory
 
 			#region Current process
 
-			public static byte[] ReadCurrentProcessMemory(Pointer<byte> lpBaseAddress, int cb)
+			public static byte[] ReadCurrentProcessMemory(Pointer<byte> ptrBase, int cb)
 			{
-				return ReadProcessMemory(Process.GetCurrentProcess(), lpBaseAddress, cb);
+				return ReadProcessMemory(Process.GetCurrentProcess(), ptrBase, cb);
 			}
 
-			public static void ReadCurrentProcessMemory(Pointer<byte> lpBaseAddress, Pointer<byte> lpBuffer, int cb)
+			public static void ReadCurrentProcessMemory(Pointer<byte> ptrBase, Pointer<byte> ptrBuffer, int cb)
 			{
-				ReadProcessMemory(Process.GetCurrentProcess(), lpBaseAddress, lpBuffer, cb);
+				ReadProcessMemory(Process.GetCurrentProcess(), ptrBase, ptrBuffer, cb);
 			}
 
 			#endregion
@@ -93,26 +93,26 @@ namespace NeoCore.Memory
 
 			#region Current process
 
-			public static void WriteCurrentProcessMemory(Pointer<byte> lpBaseAddress, byte[] value)
+			public static void WriteCurrentProcessMemory(Pointer<byte> ptrBase, byte[] value)
 			{
-				WriteProcessMemory(Process.GetCurrentProcess(), lpBaseAddress, value);
+				WriteProcessMemory(Process.GetCurrentProcess(), ptrBase, value);
 			}
 
-			public static void WriteCurrentProcessMemory(Pointer<byte> lpBaseAddress, Pointer<byte> lpBuffer,
+			public static void WriteCurrentProcessMemory(Pointer<byte> ptrBase, Pointer<byte> ptrBuffer,
 			                                             int           dwSize)
 			{
-				WriteProcessMemory(Process.GetCurrentProcess(), lpBaseAddress, lpBuffer, dwSize);
+				WriteProcessMemory(Process.GetCurrentProcess(), ptrBase, ptrBuffer, dwSize);
 			}
 
 			#endregion
 
-			public static void WriteProcessMemory(Process proc, Pointer<byte> lpBaseAddress, Pointer<byte> lpBuffer,
+			public static void WriteProcessMemory(Process proc, Pointer<byte> ptrBase, Pointer<byte> ptrBuffer,
 			                                      int     dwSize)
 			{
 				var hProc = Native.Kernel32.OpenProcess(proc);
 
 				// Write the memory
-				bool ok = (Native.Kernel32.WriteProcessMemoryInternal(hProc, lpBaseAddress.Address, lpBuffer.Address,
+				bool ok = (Native.Kernel32.WriteProcessMemoryInternal(hProc, ptrBase.Address, ptrBuffer.Address,
 				                                                      dwSize, out int numberOfBytesWritten));
 
 
@@ -125,13 +125,13 @@ namespace NeoCore.Memory
 				Native.Kernel32.CloseHandle(hProc);
 			}
 
-			public static void WriteProcessMemory(Process proc, Pointer<byte> lpBaseAddress, byte[] value)
+			public static void WriteProcessMemory(Process proc, Pointer<byte> ptrBase, byte[] value)
 			{
 				int dwSize = value.Length;
 
 				// Write the memory
 				fixed (byte* rg = value) {
-					WriteProcessMemory(proc, lpBaseAddress, (IntPtr) rg, dwSize);
+					WriteProcessMemory(proc, ptrBase, (IntPtr) rg, dwSize);
 				}
 			}
 

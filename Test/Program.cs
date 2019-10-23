@@ -49,6 +49,11 @@ namespace Test
 			var mt = (MetaType) typeof(MyClass);
 			var fn = mt.GetMethod("Hi");
 			Console.WriteLine(fn.EnclosingType);
+
+			var fld = mt.GetField("Field");
+			Console.WriteLine(fld);
+
+			Console.WriteLine(fn.Value.Reference.MethodDescChunk.Reference.FlagsAndTokenRange);
 		}
 	}
 }

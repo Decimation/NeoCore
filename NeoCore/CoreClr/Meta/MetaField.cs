@@ -36,7 +36,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public ElementType ElementType => Value.Reference.ElementType;
 
-		public ProtectionLevel Protection => Value.Reference.ProtectionLevel;
+		public ProtectionLevel ProtectionLevel => Value.Reference.ProtectionLevel;
 
 		public int Offset => Value.Reference.Offset;
 

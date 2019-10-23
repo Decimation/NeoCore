@@ -30,7 +30,7 @@ namespace NeoCore.CoreClr.Metadata
 		/// </summary>
 		internal byte Count { get; }
 
-		internal ushort FlagsAndTokenRange { get; }
+		internal ChunkFlags FlagsAndTokenRange { get; }
 
 		// Followed by array of method descs...
 

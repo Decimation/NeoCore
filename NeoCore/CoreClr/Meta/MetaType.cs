@@ -182,9 +182,9 @@ namespace NeoCore.CoreClr.Meta
 		
 		public MetaMethod GetMethod(string name) => RuntimeType.GetAnyMethod(name);
 		
-		public MemberInfo[] GetOriginalMember(string name) => RuntimeType.GetAnyMember(name);
+//		public MemberInfo[] GetOriginalMember(string name) => RuntimeType.GetAnyMember(name);
 		
-		public MemberInfo GetFirstOriginalMember(string name) => GetOriginalMember(name)[0];
+//		public MemberInfo GetFirstOriginalMember(string name) => GetOriginalMember(name)[0];
 		
 		#region bool
 

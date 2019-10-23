@@ -26,7 +26,8 @@ namespace NeoCore.Memory
 	///     <seealso cref="Memory{T}" />
 	///     <seealso cref="Buffer" />
 	///     <seealso cref="Mem" />
-	///     <seealso cref="System.Runtime.CompilerServices.JitHelpers" />
+	///     <seealso cref="System.Runtime.CompilerServices.Unsafe" />
+	/// 	<seealso cref="System.Runtime.CompilerServices.JitHelpers" />
 	/// </summary>
 	public static unsafe class Unsafe
 	{
@@ -69,11 +70,7 @@ namespace NeoCore.Memory
 		{
 			Pointer<T> addr = AddressOf(ref value);
 
-			if (Runtime.Info.IsStruct(value)) {
-				return addr.Cast();
-			}
-
-			return AddressOfHeapInternal(value, OffsetOptions.Fields);
+			return Runtime.Info.IsStruct(value) ? addr.Cast() : AddressOfHeapInternal(value, OffsetOptions.Fields);
 		}
 		
 		

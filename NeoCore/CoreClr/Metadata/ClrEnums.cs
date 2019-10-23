@@ -133,6 +133,28 @@ namespace NeoCore.CoreClr.Metadata
 		RequiresFullSlotNumber = 0x8000
 	}
 
+
+	[Flags]
+	public enum ChunkFlags : ushort
+	{
+		/// <summary>
+		/// This must equal METHOD_TOKEN_RANGE_MASK calculated higher in this file.
+		/// These are seperate to allow the flags space available and used to be obvious here
+		/// and for the logic that splits the token to be algorithmically generated based on the #define
+		/// </summary>
+		TokenRangeMask = 0x03FF,
+
+		/// <summary>
+		/// Compact temporary entry points
+		/// </summary>
+		HasCompactEntryPoints = 0x4000,
+
+		/// <summary>
+		/// This chunk lives in NGen module
+		/// </summary>
+		IsZapped = 0x8000,
+	}
+
 	/// <summary>
 	/// Describes <see cref="MethodDesc"/> JIT/entry point status
 	/// </summary>

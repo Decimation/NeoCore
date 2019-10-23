@@ -37,7 +37,7 @@ namespace NeoCore.CoreClr.Metadata
 
 		/// <summary>
 		///     Valid only if the function is non-virtual,
-		///     non-abstract, non-generic (size of this MethodDesc <c>== 16</c>)
+		///     non-abstract, non-generic (size of this <see cref="MethodDesc"/> <c>== 16</c>)
 		/// </summary>
 		internal void* Function { get; }
 
@@ -131,16 +131,16 @@ namespace NeoCore.CoreClr.Metadata
 			}
 		}
 
-		internal MethodDescChunk* MethodDescChunk {
+		internal Pointer<MethodDescChunk> MethodDescChunk {
 			get {
 				// PTR_MethodDescChunk(dac_cast<TADDR>(this) -(sizeof(MethodDescChunk) + (GetMethodDescIndex() * MethodDesc::ALIGNMENT)));
 
 				var thisptr = Unsafe.AddressOf(ref this).Cast();
-				return (MethodDescChunk*) (thisptr - (sizeof(MethodDescChunk) + (ChunkIndex * Alignment)));
+				return (thisptr - (sizeof(MethodDescChunk) + (ChunkIndex * Alignment)));
 			}
 		}
 
-		internal Pointer<MethodTable> MethodTable => MethodDescChunk->MethodTable;
+		internal Pointer<MethodTable> MethodTable => MethodDescChunk.Reference.MethodTable;
 
 		#endregion
 	}
