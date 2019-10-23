@@ -57,19 +57,19 @@ namespace NeoCore.CoreClr.Metadata
 				// Check if this FieldDesc is using the packed mb layout
 				if (!RequiresFullMBValue)
 					return Tokens.TokenFromRid(rawToken & (int) PackedLayoutMask.MbMask,
-					                           CorTokenType.FieldDef);
+					                           TokenType.FieldDef);
 
-				return Tokens.TokenFromRid(rawToken, CorTokenType.FieldDef);
+				return Tokens.TokenFromRid(rawToken, TokenType.FieldDef);
 			}
 		}
 
 		internal int Offset => (int) (UInt2 & 0x7FFFFFF);
 
-		internal CorElementType CorType => (CorElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
+		internal ElementType ElementType => (ElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
 
 		internal ProtectionLevel ProtectionLevel => (ProtectionLevel) (int) ((UInt1 >> 26) & 0x3FFFFFF);
 
-		internal bool IsPointer => CorType == CorElementType.Ptr;
+		internal bool IsPointer => ElementType == ElementType.Ptr;
 
 
 		internal bool IsStatic => Bits.ReadBit(UInt1, 24);
@@ -84,7 +84,7 @@ namespace NeoCore.CoreClr.Metadata
 
 		#region Imports
 
-		[ImportCall(CallOptions = ImportCallOptions.Map)]
+		[ImportCall(ImportCallOptions.Map)]
 		internal int LoadSize()
 		{
 			fixed (FieldDesc* value = &this) {
@@ -92,21 +92,11 @@ namespace NeoCore.CoreClr.Metadata
 			}
 		}
 
-		[ImportCall(CallOptions = ImportCallOptions.Map)]
+		[ImportCall(ImportCallOptions.Map)]
 		internal void* GetCurrentStaticAddress()
 		{
 			fixed (FieldDesc* value = &this) {
 				return Functions.Native.CallReturnPointer((void*) Imports[nameof(GetCurrentStaticAddress)], value);
-			}
-		}
-
-
-		[ImportCall(CallOptions = ImportCallOptions.Map)]
-		internal void* GetApproxEnclosingMethodTable()
-		{
-			fixed (FieldDesc* value = &this) {
-				return Functions.Native.CallReturnPointer((void*) Imports[nameof(GetApproxEnclosingMethodTable)],
-				                                          value);
 			}
 		}
 

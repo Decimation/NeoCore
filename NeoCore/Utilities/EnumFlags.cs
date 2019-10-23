@@ -10,7 +10,7 @@ namespace NeoCore.Utilities
 	public static class EnumFlags
 	{
 		// ((uThis & uFlag) == uFlag)
-		public static bool HasFlagFast(this CodeStatus value, CodeStatus flag)
+		public static bool HasFlagFast(this CodeInfo value, CodeInfo flag)
 		{
 			return (value & flag) != 0;
 		}
@@ -25,7 +25,7 @@ namespace NeoCore.Utilities
 			return (value & flag) != 0;
 		}
 
-		public static bool HasFlagFast(this TypeHierarchy value, TypeHierarchy flag)
+		public static bool HasFlagFast(this TypeInfo value, TypeInfo flag)
 		{
 			return (value & flag) != 0;
 		}

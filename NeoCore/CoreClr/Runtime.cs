@@ -18,6 +18,15 @@ namespace NeoCore.CoreClr
 		}
 		
 		/// <summary>
+		/// Alias: PTR_HOST_MEMBER_TADDR
+		/// </summary>
+		internal static Pointer<byte> FieldOffset<T>(ref T value, long ofs, Pointer<byte> fieldValue)
+			where T : struct
+		{
+			return Unsafe.AddressOf(ref value).Add((long) fieldValue).Add(ofs).Cast();
+		}
+		
+		/// <summary>
 		/// Returns a pointer to the internal CLR metadata structure of <paramref name="member"/>
 		/// </summary>
 		/// <param name="member">Reflection type</param>

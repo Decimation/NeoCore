@@ -6,6 +6,7 @@ using NeoCore.CoreClr.Metadata.EE;
 using NeoCore.Memory;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+using TypeInfo = NeoCore.CoreClr.Metadata.TypeInfo;
 
 // ReSharper disable InconsistentNaming
 
@@ -21,11 +22,11 @@ namespace NeoCore.CoreClr.Meta
 	public unsafe class MetaType : ClrStructure<MethodTable>
 	{
 		#region Constructor
-
-		// Root constructor
+		
 		internal MetaType(Pointer<MethodTable> mt) : base(mt)
 		{
 			RuntimeType = Runtime.ResolveType(mt.Cast());
+			Properties = ReadProperties(RuntimeType);
 		}
 
 		public MetaType(Type t) : this(Runtime.ResolveHandle(t)) { }
@@ -34,90 +35,52 @@ namespace NeoCore.CoreClr.Meta
 
 		#region Accessors
 
+		private static AuxiliaryProperties ReadProperties(Type t)
+		{
+			var mp = new AuxiliaryProperties();
+
+			if (Runtime.Info.IsInteger(t)) {
+				mp |= AuxiliaryProperties.Integer;
+			}
+			
+			if (Runtime.Info.IsReal(t)) {
+				mp |= AuxiliaryProperties.Real;
+			}
+			
+			if (Runtime.Info.IsStruct(t)) {
+				mp |= AuxiliaryProperties.Struct;
+			}
+			
+			if (Runtime.Info.IsUnmanaged(t)) {
+				mp |= AuxiliaryProperties.Unmanaged;
+			}
+			
+			if (Runtime.Info.IsEnumerableType(t)) {
+				mp |= AuxiliaryProperties.Enumerable;
+			}
+			
+			if (t.IsPointer) {
+				mp |= AuxiliaryProperties.Pointer;
+			}
+			
+			return mp;
+		}
+		
 		public override MemberInfo Info => RuntimeType;
 		
-		
-
-		#region bool
-
-		public bool IsInteger {
-			get {
-				return Type.GetTypeCode(RuntimeType) switch
-				{
-					TypeCode.Byte => true,
-					TypeCode.SByte => true,
-					TypeCode.UInt16 => true,
-					TypeCode.Int16 => true,
-					TypeCode.UInt32 => true,
-					TypeCode.Int32 => true,
-					TypeCode.UInt64 => true,
-					TypeCode.Int64 => true,
-					_ => false
-				};
-			}
-		}
-
-		public bool IsReal {
-			get {
-				return Type.GetTypeCode(RuntimeType) switch
-				{
-					TypeCode.Decimal => true,
-					TypeCode.Double => true,
-					TypeCode.Single => true,
-					_ => false
-				};
-			}
-		}
-
-		public bool IsNumeric => IsInteger || IsReal;
-
-		public bool IsStruct => RuntimeType.IsValueType;
-
-		public bool IsPointer => RuntimeType.IsPointer;
-
-//		public bool IsIListType => RuntimeType.IsIListType();
-
-//		public bool IsIEnumerableType => RuntimeType.IsEnumerableType();
-
-		#region Unmanaged
-
-		/// <summary>
-		/// Dummy class for use with <see cref="IsUnmanaged"/> and <see cref="IsUnmanaged"/>
-		/// </summary>
-		// ReSharper disable once UnusedTypeParameter
-		private sealed class U<T> where T : unmanaged { }
-
-		/// <summary>
-		/// Determines whether this type fits the <c>unmanaged</c> type constraint.
-		/// </summary>
-		public bool IsUnmanaged {
-			get {
-				try {
-					// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-					typeof(U<>).MakeGenericType(RuntimeType);
-					return true;
-				}
-				catch {
-					return false;
-				}
-			}
-		}
-
-		#endregion
-
-		#endregion
+		public AuxiliaryProperties Properties { get; }
 
 		#region MethodTable
 
 		public short ComponentSize => Value.Reference.ComponentSize;
-
-		public GenericsFlags FlagsLow => Value.Reference.Generics;
-
+		
 		public int BaseSize => Value.Reference.BaseSize;
+		
+		public GenericInfo GenericFlags => Value.Reference.GenericFlags;
+		
+		public OptionalSlots SlotFlags => Value.Reference.SlotFlags;
 
-		public SlotsFlags Flags2 => Value.Reference.Slots;
-
-		public override int Token => Tokens.TokenFromRid(Value.Reference.RawToken, CorTokenType.TypeDef);
+		public override int Token => Tokens.TokenFromRid(Value.Reference.RawToken, TokenType.TypeDef);
 
 		public short VirtualsCount => Value.Reference.NumVirtuals;
 
@@ -129,7 +92,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public Pointer<byte> WriteableData => Value.Reference.WriteableData;
 
-		public TypeHierarchy Flags => Value.Reference.Hierarchy;
+		public TypeInfo TypeFlags => Value.Reference.TypeFlags;
 
 		private Pointer<EEClass> EEClass => Value.Reference.EEClass;
 
@@ -139,11 +102,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public MetaType ElementTypeHandle => (Pointer<MethodTable>) Value.Reference.ElementTypeHandle;
 
-//		public Pointer<byte> MultipurposeSlot1 => Value.Reference.MultipurposeSlot1;
-
 		public Pointer<byte> InterfaceMap => Value.Reference.InterfaceMap;
-
-//		public Pointer<byte> MultipurposeSlot2 => Value.Reference.MultipurposeSlot2;
 
 		public Type RuntimeType { get; }
 
@@ -159,15 +118,13 @@ namespace NeoCore.CoreClr.Meta
 
 		public int NativeSize => (int) EEClass.Reference.NativeSize;
 
-		public CorInterfaceAttr ComInterfaceType => EEClass.Reference.ComInterfaceType;
-
-//		public Pointer<byte> CCWTemplate => EEClass.Reference.CCWTemplate;
+		public InterfaceType InterfaceType => EEClass.Reference.InterfaceType;
 
 		public TypeAttributes Attributes => EEClass.Reference.Attributes;
 
 		public VMFlags VMFlags => EEClass.Reference.VMFlags;
 
-		public CorElementType NormType => EEClass.Reference.NormType;
+		public ElementType NormType => EEClass.Reference.NormType;
 
 		public bool FieldsArePacked => EEClass.Reference.FieldsArePacked;
 
@@ -202,23 +159,33 @@ namespace NeoCore.CoreClr.Meta
 		/// </summary>
 		public int InstanceFieldsSize => BaseSize - BaseSizePadding;
 
-		public int FieldsCount => EEClass.Reference.FieldDescListLength;
+		public int FieldsCount => EEClass.Reference.FieldListLength;
 
-		/*public MetaField[] FieldList {
+		public MetaField[] FieldList {
 			get {
-				var ptr = (Pointer<FieldDesc>) EEClass.Reference.FieldDescList;
+				var ptr = (Pointer<FieldDesc>) EEClass.Reference.FieldList;
 				int len = FieldsCount;
 
 				var rg = new MetaField[len];
 
-				for (int i = 0; i < len; i++) {
+				for (var i = 0; i < len; i++) {
 					rg[i] = new MetaField(ptr.AddressOfIndex(i));
 				}
 
 				return rg;
 			}
-		}*/
+		}
 
+		public MetaField this[string name] => GetField(name);
+		
+		public MetaField GetField(string name) => RuntimeType.GetAnyField(name);
+		
+		public MetaMethod GetMethod(string name) => RuntimeType.GetAnyMethod(name);
+		
+		public MemberInfo[] GetOriginalMember(string name) => RuntimeType.GetAnyMember(name);
+		
+		public MemberInfo GetFirstOriginalMember(string name) => GetOriginalMember(name)[0];
+		
 		#region bool
 
 		/// <summary>
@@ -230,15 +197,15 @@ namespace NeoCore.CoreClr.Meta
 
 		public bool IsBlittable => HasLayout && LayoutInfo.Flags.HasFlagFast(LayoutFlags.Blittable);
 
-		public bool HasComponentSize => Flags.HasFlagFast(TypeHierarchy.HasComponentSize);
+		public bool HasComponentSize => TypeFlags.HasFlagFast(TypeInfo.HasComponentSize);
 
-		public bool IsArray => Flags.HasFlagFast(TypeHierarchy.Array);
+		public bool IsArray => TypeFlags.HasFlagFast(TypeInfo.Array);
 		
 		public bool IsStringOrArray => HasComponentSize;
 
 		public bool IsString => HasComponentSize && !IsArray;
 		
-		public bool ContainsPointers => Flags.HasFlagFast(TypeHierarchy.ContainsPointers);
+		public bool ContainsPointers => TypeFlags.HasFlagFast(TypeInfo.ContainsPointers);
 
 		public bool IsReferenceOrContainsReferences => !RuntimeType.IsValueType || ContainsPointers;
 

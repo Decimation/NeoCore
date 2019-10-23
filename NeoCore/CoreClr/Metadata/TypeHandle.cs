@@ -20,22 +20,18 @@ namespace NeoCore.CoreClr.Metadata
 
 		#region Fields
 
-//		[FieldOffset(default)]
-//		private TAddr m_asTAddr;
-
-		[FieldOffset(default)]
-		private void* m_asPtr;
-
-		[FieldOffset(default)]
-		private MethodTable* m_asMT;
+		[field: FieldOffset(default)]
+		private void* Union1 { get; }
 
 		#endregion
+
+		private MethodTable* AsMethodTable => (MethodTable*) Union1;
 
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
 		
 		internal Pointer<MethodTable> MethodTable {
-			[ImportCall(IdentifierOptions.UseAccessorName, ImportCallOptions.Map)]
+			[ImportProperty]
 			get {
 				fixed (TypeHandle* value = &this) {
 					return Functions.Native.CallReturnPointer((void*) Imports[nameof(MethodTable)], value);

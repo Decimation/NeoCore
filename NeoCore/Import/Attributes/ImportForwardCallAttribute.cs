@@ -1,5 +1,6 @@
 using System;
 using JetBrains.Annotations;
+using NeoCore.Utilities;
 
 namespace NeoCore.Import.Attributes
 {
@@ -13,7 +14,7 @@ namespace NeoCore.Import.Attributes
 	{
 		public ImportForwardCallAttribute(string nameSpace, string id, ImportCallOptions options)
 		{
-			Identifier  = ImportManager.Combine(nameSpace, id);
+			Identifier  = Format.Combine(nameSpace, id);
 			Options     = IdentifierOptions.FullyQualified;
 			CallOptions = options;
 		}

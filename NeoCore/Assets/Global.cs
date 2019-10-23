@@ -49,7 +49,7 @@ namespace NeoCore.Assets
 #if DEBUG
 			var levelSwitch = new LoggingLevelSwitch
 			{
-				MinimumLevel = LogEventLevel.Debug
+				MinimumLevel = LogEventLevel.Verbose
 			};
 
 			Log = new LoggerConfiguration()

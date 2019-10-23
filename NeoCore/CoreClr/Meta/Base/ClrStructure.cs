@@ -13,7 +13,7 @@ namespace NeoCore.CoreClr.Meta.Base
 	{
 		#region Fields
 
-		public string Name => Info.Name;
+		public virtual string Name => Info?.Name;
 		
 		public abstract MemberInfo Info { get; }
 
@@ -24,13 +24,14 @@ namespace NeoCore.CoreClr.Meta.Base
 		#region Constructors
 		
 		internal ClrStructure(Pointer<TClr> ptr) : base(ptr) { }
-		
-		internal ClrStructure(MemberInfo member) : base(member) { }
+
+		protected ClrStructure(MemberInfo member) : base(member) { }
 
 		#endregion
 
 
 		#region ToString
+		
 
 		public override string ToString()
 		{

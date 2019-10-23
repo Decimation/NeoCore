@@ -63,7 +63,7 @@ namespace NeoCore.CoreClr.Metadata
 		Dynamic = 7,
 		Count
 	}
-	
+
 	/// <summary>
 	/// Describes the type and properties of a <see cref="MethodDesc"/>
 	/// </summary>
@@ -75,7 +75,7 @@ namespace NeoCore.CoreClr.Metadata
 		///     <see cref="MethodClassification" /> above.
 		/// </summary>
 		Classification = 0x0007,
-		
+
 		ClassificationCount = Classification + 1,
 
 		// Note that layout of code:MethodDesc::s_ClassificationSizeTable depends on the exact values
@@ -132,12 +132,12 @@ namespace NeoCore.CoreClr.Metadata
 		/// </summary>
 		RequiresFullSlotNumber = 0x8000
 	}
-	
+
 	/// <summary>
 	/// Describes <see cref="MethodDesc"/> JIT/entry point status
 	/// </summary>
 	[Flags]
-	public enum CodeStatus : byte
+	public enum CodeInfo : byte
 	{
 		/// <summary>
 		///     The method entry point is stable (either precode or actual code)
@@ -162,12 +162,12 @@ namespace NeoCore.CoreClr.Metadata
 		/// </summary>
 		IsJitIntrinsic = 0x10
 	}
-	
+
 	/// <summary>
 	/// Describes <see cref="MethodDesc"/> parameters
 	/// </summary>
 	[Flags]
-	public enum ParameterTypes : ushort
+	public enum ParameterInfo : ushort
 	{
 		TokenRemainderMask = 0x3FFF,
 
@@ -191,15 +191,15 @@ namespace NeoCore.CoreClr.Metadata
 		/// </summary>
 		DoesNotHaveEquivalentValueTypeParameters = 0x8000
 	}
-	
+
 	/// <summary>
 	///     <remarks>
 	/// <para>Alias: High flags</para>
-	///         <para>Use with <see cref="MethodTable.Hierarchy" /></para>
+	///         <para>Use with <see cref="MethodTable.TypeFlags" /></para>
 	///     </remarks>
 	/// </summary>
 	[Flags]
-	public enum TypeHierarchy : uint
+	public enum TypeInfo : uint
 	{
 		Mask             = 0x000F0000,
 		Class            = 0x00000000,
@@ -272,7 +272,7 @@ namespace NeoCore.CoreClr.Metadata
 		///     m_pParentMethodTable has double indirection
 		/// </summary>
 		HasIndirectParent = 0x00800000,
-		
+
 		ContainsPointers = 0x01000000,
 
 		/// <summary>
@@ -312,11 +312,11 @@ namespace NeoCore.CoreClr.Metadata
 	/// <summary>
 	///     <remarks>
 	/// <para>Alias: flags 2</para>
-	///         <para>Use with <see cref="MethodTable.Slots" /></para>
+	///         <para>Use with <see cref="MethodTable.SlotFlags" /></para>
 	///     </remarks>
 	/// </summary>
 	[Flags]
-	public enum SlotsFlags : ushort
+	public enum OptionalSlots : ushort
 	{
 		MultipurposeSlotsMask    = 0x001F,
 		HasPerInstInfo           = 0x0001,
@@ -345,12 +345,12 @@ namespace NeoCore.CoreClr.Metadata
 	/// <summary>
 	///     <remarks>
 	/// 		<para>Alias: low flags</para>
-	/// <para>Use with <see cref="MethodTable.Generics" /></para>
+	/// <para>Use with <see cref="MethodTable.GenericFlags" /></para>
 	///     </remarks>
 	/// 
 	/// </summary>
 	[Flags]
-	public enum GenericsFlags : ushort
+	public enum GenericInfo : ushort
 	{
 		// We are overloading the low 2 bytes of m_dwFlags to be a component size for Strings
 		// and Arrays and some set of flags which we can be assured are of a specified state
@@ -372,7 +372,7 @@ namespace NeoCore.CoreClr.Metadata
 		GenericsMask_NonGeneric  = 0x00000000, // no instantiation
 		GenericsMask_GenericInst = 0x00000010, // regular instantiation, e.g. List<String>
 
-		GenericsMask_SharedInst = 0x00000020,                        // shared instantiation, e.g. List<__Canon> or List<MyValueType<__Canon>>
+		GenericsMask_SharedInst  = 0x00000020, // shared instantiation, e.g. List<__Canon> or List<MyValueType<__Canon>>
 		GenericsMask_TypicalInst = 0x00000030, // the type instantiated at its formal parameters, e.g. List<T>
 
 		HasRemotingVtsInfo = 0x00000080, // Optional data present indicating VTS methods and optional fields
@@ -381,8 +381,9 @@ namespace NeoCore.CoreClr.Metadata
 
 		HasDefaultCtor = 0x00000200,
 
-		HasPreciseInitCctors = 0x00000400, // Do we need to run class constructors at allocation time? (Not perf important, could be moved to EEClass
-		
+		HasPreciseInitCctors =
+			0x00000400, // Do we need to run class constructors at allocation time? (Not perf important, could be moved to EEClass
+
 		IsHFA = 0x00000800, // This type is an HFA (Homogenous Floating-point Aggregate)
 
 		IsRegStructPassed = 0x00000800, // This type is a System V register passed struct.
@@ -402,7 +403,7 @@ namespace NeoCore.CoreClr.Metadata
 		                    (HasDefaultCtor & 0) |
 		                    (HasPreciseInitCctors & 0)
 	}
-	
+
 	/// <summary>
 	///     The value of lowest two bits describe what the union contains
 	///     <remarks>
@@ -434,18 +435,43 @@ namespace NeoCore.CoreClr.Metadata
 		/// </summary>
 		Indirection = 3
 	}
-	
+
+	/// <summary>
+	/// Alias: CorInterfaceAttr
+	/// </summary>
 	[Flags]
-	public enum CorInterfaceAttr
+	public enum InterfaceType
 	{
-		Dual        = 0, // Interface derives from IDispatch.
-		Vtable      = 1, // Interface derives from IUnknown.
-		Dispatch    = 2, // Interface is a dispinterface.
-		Inspectable = 3, // Interface derives from IInspectable.
-		Last        = 4, // The last member of the enum.
+		/// <summary>
+		/// Interface derives from IDispatch.
+		/// </summary>
+		Dual = 0,
+
+		/// <summary>
+		/// Interface derives from IUnknown.
+		/// </summary>
+		VTable = 1,
+
+		/// <summary>
+		/// Interface is a dispinterface.
+		/// </summary>
+		Dispatch = 2,
+
+		/// <summary>
+		/// Interface derives from IInspectable.
+		/// </summary>
+		Inspectable = 3,
+
+		/// <summary>
+		/// The last member of the enum.
+		/// </summary>
+		Last = 4,
 	}
-	
-	public enum CorElementType : byte
+
+	/// <summary>
+	/// Alias: CorElementType
+	/// </summary>
+	public enum ElementType : byte
 	{
 		End  = 0x00,
 		Void = 0x01,
@@ -547,7 +573,10 @@ namespace NeoCore.CoreClr.Metadata
 		Pinned      = 0x45
 	}
 
-	public enum CorTokenType : uint
+	/// <summary>
+	/// Alias: CorTokenType
+	/// </summary>
+	public enum TokenType : uint
 	{
 		Module                 = 0x00000000,
 		TypeRef                = 0x01000000,
@@ -578,7 +607,7 @@ namespace NeoCore.CoreClr.Metadata
 
 		BaseType = 0x72000000 // Leave this on the high end value. This does not correspond to metadata table
 	}
-	
+
 	public enum EEClassFieldId : uint
 	{
 		NumInstanceFields = 0,
@@ -594,7 +623,7 @@ namespace NeoCore.CoreClr.Metadata
 		NumNonVirtualSlots,
 		COUNT
 	}
-	
+
 	[Flags]
 	public enum LayoutFlags : byte
 	{
@@ -703,7 +732,7 @@ namespace NeoCore.CoreClr.Metadata
 		MarshalingTypeFreeThreaded = 0x80000000,
 		MarshalingTypeStandard     = 0xc0000000
 	}
-	
+
 	public enum ProtectionLevel
 	{
 		Private           = 4,
@@ -713,7 +742,7 @@ namespace NeoCore.CoreClr.Metadata
 		ProtectedInternal = 20,
 		Public            = 24
 	}
-	
+
 	/// <summary>
 	/// Packed MB layout masks
 	/// </summary>

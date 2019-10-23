@@ -5,6 +5,7 @@ using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Metadata;
 using NeoCore.Memory;
 using NeoCore.Utilities;
+using ParameterInfo = NeoCore.CoreClr.Metadata.ParameterInfo;
 
 // ReSharper disable InconsistentNaming
 
@@ -22,7 +23,7 @@ namespace NeoCore.CoreClr.Meta
 
 		internal MetaMethod(Pointer<MethodDesc> ptr) : base(ptr) { }
 
-		public MetaMethod(MethodInfo member) : this(Runtime.ResolveHandle(member)) { }
+		public MetaMethod(MethodInfo member) : base(member) { }
 
 		#endregion
 
@@ -42,12 +43,10 @@ namespace NeoCore.CoreClr.Meta
 
 		public bool HasILHeader => IsIL && !IsUnboxingStub && RVA > default(long);
 
-		private bool IsUnboxingStub => Code.HasFlagFast(CodeStatus.IsUnboxingStub);
+		private bool IsUnboxingStub => Code.HasFlagFast(CodeInfo.IsUnboxingStub);
 
 		public bool IsIL => MethodClassification.IL == Classification ||
 		                    MethodClassification.Instantiated == Classification;
-
-		public bool IsPreImplemented => !PreImplementedCode.IsNull;
 
 		#endregion
 
@@ -55,8 +54,8 @@ namespace NeoCore.CoreClr.Meta
 
 		public MethodClassification Classification => Value.Reference.Classification;
 		public MethodProperties     Properties     => Value.Reference.Properties;
-		public CodeStatus           Code           => Value.Reference.Code;
-		public ParameterTypes       ParameterTypes => Value.Reference.Flags3AndTokenRemainder;
+		public CodeInfo           Code           => Value.Reference.Code;
+		public ParameterInfo       ParameterTypes => Value.Reference.Flags3AndTokenRemainder;
 		public MethodAttributes     Attributes     => MethodInfo.Attributes;
 
 		#endregion
@@ -90,8 +89,6 @@ namespace NeoCore.CoreClr.Meta
 		public void Reset() => Value.Reference.Reset();
 
 		public bool IsPointingToNativeCode => Value.Reference.IsPointingToNativeCode();
-
-		public Pointer<byte> PreImplementedCode => Value.Reference.PreImplementedCode;
 
 		#endregion
 

@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using JetBrains.Annotations;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Meta;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Memory;
@@ -17,8 +19,8 @@ using NeoCore.Utilities.Diagnostics;
 namespace NeoCore.Import
 {
 	// todo: cleanup
-	
-	public sealed class ImportManager : Releasable
+
+	public sealed partial class ImportManager : Releasable
 	{
 		#region Constants
 
@@ -27,14 +29,7 @@ namespace NeoCore.Import
 
 		protected override string Id => nameof(ImportManager);
 
-		private static readonly string MapError =
-			$"Map must static, readonly, and of type {typeof(ImportMap)}";
-
-		private static readonly string NamespaceError = 
-			$"Type must be decorated with \"{nameof(ImportNamespaceAttribute)}\"";
-		
-		private delegate void LoadMethodFunction(ImportAttribute attr, MethodInfo memberInfo, Pointer<byte> ptr);
-		
+		private delegate void LoadFunction(ImportAttribute attr, MethodInfo memberInfo, Pointer<byte> ptr);
 
 		#endregion
 
@@ -79,74 +74,16 @@ namespace NeoCore.Import
 
 		#endregion
 
-		#region Helper
 
-		internal static string Combine(params string[] args)
-		{
-			const string SCOPE_RESOLUTION_OPERATOR = "::";
-
-			var sb = new StringBuilder();
-
-			for (int i = 0; i < args.Length; i++) {
-				sb.Append(args[i]);
-
-				if (i + 1 != args.Length) {
-					sb.Append(SCOPE_RESOLUTION_OPERATOR);
-				}
-			}
-
-			return sb.ToString();
-		}
-
-		private bool IsBound(Type t) => m_boundTypes.Contains(t);
-
-		private void VerifyImport(ImportAttribute attr, MemberInfo member)
-		{
-			switch (member.MemberType) {
-				case MemberTypes.Constructor:
-				case MemberTypes.Property:
-				case MemberTypes.Method:
-
-					if (!(attr is ImportCallAttribute)) {
-						Guard.Fail();
-					}
-
-					break;
-				case MemberTypes.Field:
-
-					if (!(attr is ImportFieldAttribute)) {
-						Guard.Fail();
-					}
-
-					break;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-		}
-
-		private static bool IsAnnotated(Type t, out ImportNamespaceAttribute attr)
-		{
-			attr = t.GetCustomAttribute<ImportNamespaceAttribute>();
-
-			return attr != null;
-		}
-
-		
-
-		private static string ResolveIdentifier(ImportAttribute attr, [NotNull] MemberInfo member)
-		{
-			return ResolveIdentifier(attr, member, out _);
-		}
-
-		private static string ResolveIdentifier(ImportAttribute attr, [NotNull] MemberInfo member,
-		                                        out string      resolvedId)
+		private static string ResolveIdentifier(ImportAttribute      attr,
+		                                        [NotNull] MemberInfo member,
+		                                        out       string     resolvedId)
 		{
 			Guard.AssertNotNull(member.DeclaringType, nameof(member.DeclaringType));
-			
-			if (!IsAnnotated(member.DeclaringType, out var nameSpaceAttr)) {
-				Guard.Fail(NamespaceError);
-			}
 
+			//CheckNamespaceAnnotation(member, out var nameSpaceAttr);
+			CheckAnnotations(member, true, out var nameSpaceAttr);
+			
 			// Resolve the symbol
 
 			resolvedId = attr.Identifier ?? member.Name;
@@ -156,28 +93,27 @@ namespace NeoCore.Import
 
 			var options = attr.Options;
 
-			if (member.MemberType == MemberTypes.Method
-			    && attr is ImportCallAttribute callAttr
-			    && callAttr.CallOptions.HasFlagFast(ImportCallOptions.Constructor)) {
-				if (!options.HasFlagFast(IdentifierOptions.FullyQualified)) {
-					Guard.Fail(
-						$"\"{nameof(IdentifierOptions)}\" must be \"{nameof(IdentifierOptions.FullyQualified)}\"");
-				}
+			bool isMethod   = member.MemberType == MemberTypes.Method;
+			bool isCallAttr = attr is ImportCallAttribute;
 
-				// return enclosingNamespace + SCOPE_RESOLUTION_OPERATOR + enclosingNamespace;
-				return Combine(enclosingNamespace, enclosingNamespace);
+			var  callAttr = (ImportCallAttribute) attr;
+			bool isCtor   = callAttr.CallOptions.HasFlagFast(ImportCallOptions.Constructor);
+
+			if (isMethod && isCallAttr && isCtor) {
+				CheckConstructorOptions(options);
+
+				return Format.Combine(enclosingNamespace, enclosingNamespace);
 			}
 
 
 			if (!options.HasFlagFast(IdentifierOptions.IgnoreEnclosingNamespace)) {
 				// resolvedId = enclosingNamespace + SCOPE_RESOLUTION_OPERATOR + resolvedId;
-				resolvedId = Combine(enclosingNamespace, resolvedId);
+				resolvedId = Format.Combine(enclosingNamespace, resolvedId);
 			}
 
 			if (!options.HasFlagFast(IdentifierOptions.IgnoreNamespace)) {
 				if (nameSpace != null) {
-					// resolvedId = nameSpace + SCOPE_RESOLUTION_OPERATOR + resolvedId;
-					resolvedId = Combine(nameSpace, resolvedId);
+					resolvedId = Format.Combine(nameSpace, resolvedId);
 				}
 			}
 
@@ -191,7 +127,6 @@ namespace NeoCore.Import
 			return resolvedId;
 		}
 
-		#endregion
 
 		#region Unload
 
@@ -219,6 +154,8 @@ namespace NeoCore.Import
 				return;
 			}
 
+			Global.Value.WriteInformation(null, "Unloading {name}", type.Name);
+
 			if (UsingMap(type, out var mapField)) {
 				UnloadMap(type, mapField);
 
@@ -236,7 +173,6 @@ namespace NeoCore.Import
 
 				bool wasBound = attr is ImportCallAttribute callAttr &&
 				                callAttr.CallOptions.HasFlagFast(ImportCallOptions.Bind);
-
 
 				switch (mem.MemberType) {
 					case MemberTypes.Property:
@@ -263,7 +199,6 @@ namespace NeoCore.Import
 						if (wasBound) {
 							FunctionFactory.Managed.Restore((MethodInfo) mem);
 						}
-
 
 						break;
 					default:
@@ -302,11 +237,13 @@ namespace NeoCore.Import
 
 		#region Map
 
-		private void LoadMap(Type t, FieldInfo field)
+		private void AddMapToDictionary(Type t, FieldInfo field)
 		{
-			if (!field.IsStatic || field.FieldType != typeof(ImportMap)) {
-				Guard.Fail(MapError);
+			if (m_typeImportMaps.ContainsKey(t)) {
+				return;
 			}
+
+			CheckImportMap(field);
 
 			var map = (ImportMap) field.GetValue(null);
 			m_typeImportMaps.Add(t, map);
@@ -317,10 +254,7 @@ namespace NeoCore.Import
 		{
 			var mapField = type.GetAnyField(ImportMap.FIELD_NAME);
 
-			if (mapField != null && mapField.GetCustomAttribute<ImportMapFieldAttribute>() == null) {
-				Guard.Fail(
-					$"Map field should be annotated with {nameof(ImportMapFieldAttribute)}");
-			}
+			CheckImportMapAnnotation(mapField);
 
 			if (mapField == null) {
 				var (member, _) = type.GetFirstAnnotated<ImportMapFieldAttribute>();
@@ -333,13 +267,6 @@ namespace NeoCore.Import
 			return mapField;
 		}
 
-		private static bool CheckImportMap(FieldInfo mapField)
-		{
-			return mapField.IsStatic							// Must be static
-			       && mapField.IsInitOnly 						// Must be readonly
-			       && mapField.FieldType == typeof(ImportMap); 	// Must be of type ImportMap
-		}
-
 		private bool UsingMap(Type type, out FieldInfo mapField)
 		{
 			mapField = FindMapField(type);
@@ -347,13 +274,7 @@ namespace NeoCore.Import
 			bool exists = mapField != null;
 
 			if (exists) {
-				if (!CheckImportMap(mapField)) {
-					Guard.Fail(MapError);
-				}
-
-				if (mapField.GetValue(null) == null) {
-					Guard.Fail($"{typeof(ImportMap)} is null");
-				}
+				CheckImportMap(mapField);
 			}
 
 			return exists;
@@ -376,12 +297,15 @@ namespace NeoCore.Import
 				return value;
 			}
 
-			if (!IsAnnotated(type, out _)) {
-				Guard.Fail(NamespaceError);
-			}
+			//CheckAnnotation(type);
+			CheckAnnotations(type, false, out _);
 
 			if (UsingMap(type, out var mapField)) {
-				LoadMap(type, mapField);
+				if (m_typeImportMaps.ContainsKey(type)) {
+					return value;
+				}
+
+				AddMapToDictionary(type, mapField);
 				value = LoadComponents(value, type, ip, LoadMethod);
 			}
 			else {
@@ -390,8 +314,8 @@ namespace NeoCore.Import
 
 			m_boundTypes.Add(type);
 
-			Global.Value.WriteVerbose(Id, "Completed loading {Name}", type.Name);
 
+			Global.Value.WriteInformation(null, "Loaded {Name}", type.Name);
 			return value;
 		}
 
@@ -419,31 +343,14 @@ namespace NeoCore.Import
 			}
 		}
 
-		// Shortcut
-//		internal void LoadClr(Type t) => Load(t, Clr.Value.ClrSymbols);
-
-		// Shortcut
-//		internal void LoadAllClr(Type[] t) => LoadAll(t, Clr.Value.ClrSymbols);
-
-		// Field loading is not yet rewritten
-
 
 		private void LoadMethod(ImportAttribute attr, MethodInfo method, Pointer<byte> addr)
 		{
-			var callAttr = attr as ImportCallAttribute;
-			Guard.AssertNotNull(callAttr, nameof(callAttr));
-			var options = callAttr.CallOptions;
+			Guard.AssertNotNull(attr as ImportCallAttribute);
+			var callAttr = (ImportCallAttribute) attr;
+			var options  = callAttr.CallOptions;
 
-			if (options == ImportCallOptions.None) {
-				Guard.Fail("You must specify an option");
-			}
-			
-			bool bind     = options.HasFlagFast(ImportCallOptions.Bind);
-			bool addToMap = options.HasFlagFast(ImportCallOptions.Map);
-
-			if (bind && addToMap) {
-				Guard.Fail($"The option {ImportCallOptions.Bind} cannot be used with {ImportCallOptions.Map}");
-			}
+			CheckOptions(options, out var bind, out var addToMap);
 
 			if (bind) {
 				Global.Value.WriteWarning("Binding {Name}", method.Name);
@@ -453,27 +360,21 @@ namespace NeoCore.Import
 			if (addToMap) {
 				var enclosing = method.DeclaringType;
 
-				if (enclosing == null) {
-					Guard.Fail();
-				}
+				Guard.AssertNotNull(enclosing);
 
 				var name = method.Name;
 
 				if (name.StartsWith(GET_PROPERTY_PREFIX)) {
 					// The nameof operator does not return the name with the get prefix
-					Format.Remove(ref name,GET_PROPERTY_PREFIX);
+					Format.Remove(ref name, GET_PROPERTY_PREFIX);
 				}
-
 
 				m_typeImportMaps[enclosing].Add(name, addr);
 			}
 		}
 
 
-		private static T LoadComponents<T>(T                    value,
-		                                   Type                 type,
-		                                   IImportProvider      ip,
-		                                   LoadMethodFunction   methodFn)
+		private static T LoadComponents<T>(T value, Type type, IImportProvider ip, LoadFunction methodFn)
 		{
 			(MemberInfo[] members, ImportAttribute[] attributes) = type.GetAnnotated<ImportAttribute>();
 
@@ -483,13 +384,13 @@ namespace NeoCore.Import
 				return value;
 			}
 
-			for (int i = 0; i < lim; i++) {
+			for (var i = 0; i < lim; i++) {
 				var attr = attributes[i];
 				var mem  = members[i];
 
 				// Resolve the symbol
 
-				string        id   = ResolveIdentifier(attr, mem);
+				string        id   = ResolveIdentifier(attr, mem, out _);
 				Pointer<byte> addr = ip.GetAddress(id);
 
 				switch (mem.MemberType) {
@@ -499,12 +400,15 @@ namespace NeoCore.Import
 						methodFn(attr, get, addr);
 						break;
 					case MemberTypes.Method:
+
+						FindOptimization(attr, mem);
+
 						// The import is a function or (ctor)
 						methodFn(attr, (MethodInfo) mem, addr);
 						break;
 				}
 
-				Global.Value.WriteVerbose(null, "Loaded member {Id} @ {Addr}", id, addr);
+				//Global.Value.WriteVerbose(null, "Loaded member {Id} @ {Addr}", id, addr);
 			}
 
 			return value;

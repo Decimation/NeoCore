@@ -25,11 +25,11 @@ namespace NeoCore.CoreClr.Metadata
 
 		internal short ComponentSize { get; }
 
-		internal GenericsFlags Generics { get; }
+		internal GenericInfo GenericFlags { get; }
 
 		internal int BaseSize { get; }
 
-		internal SlotsFlags Slots { get; }
+		internal OptionalSlots SlotFlags { get; }
 
 		internal short RawToken { get; }
 
@@ -43,10 +43,10 @@ namespace NeoCore.CoreClr.Metadata
 
 		internal void* WriteableData { get; }
 
-		internal TypeHierarchy Hierarchy {
+		internal TypeInfo TypeFlags {
 			get {
 				fixed (MethodTable* ptr = &this) {
-					return (TypeHierarchy) (*(int*) ptr);
+					return (TypeInfo) (*(int*) ptr);
 				}
 			}
 		}

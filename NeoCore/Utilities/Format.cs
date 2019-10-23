@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace NeoCore.Utilities
 {
@@ -15,6 +16,23 @@ namespace NeoCore.Utilities
 
 		public static string AsHex(IntPtr value) => value.ToInt64().ToString(HEX_FORMAT_SPECIFIER);
 
+		internal static string Combine(params string[] args)
+		{
+			const string SCOPE_RESOLUTION_OPERATOR = "::";
+
+			var sb = new StringBuilder();
+
+			for (int i = 0; i < args.Length; i++) {
+				sb.Append(args[i]);
+
+				if (i + 1 != args.Length) {
+					sb.Append(SCOPE_RESOLUTION_OPERATOR);
+				}
+			}
+
+			return sb.ToString();
+		}
+		
 		public static void Remove(ref string value, string substring)
 		{
 			value = value.Replace(substring, String.Empty);

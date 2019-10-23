@@ -5,10 +5,12 @@ using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
+using NeoCore.Memory;
+
+// ReSharper disable InconsistentNaming
 
 namespace NeoCore.CoreClr.Metadata
 {
-	
 	[ImportNamespace]
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MethodDesc
@@ -23,11 +25,11 @@ namespace NeoCore.CoreClr.Metadata
 
 		#region Fields
 
-		internal ParameterTypes Flags3AndTokenRemainder { get; }
+		internal ParameterInfo Flags3AndTokenRemainder { get; }
 
 		internal byte ChunkIndex { get; }
 
-		internal CodeStatus Code { get; }
+		internal CodeInfo Code { get; }
 
 		internal ushort SlotNumber { get; }
 
@@ -71,18 +73,8 @@ namespace NeoCore.CoreClr.Metadata
 		}
 
 
-		internal void* PreImplementedCode {
-			[ImportCall(IdentifierOptions.UseAccessorName, ImportCallOptions.Map)]
-			get {
-				fixed (MethodDesc* value = &this) {
-					return Functions.Native.CallReturnPointer((void*) Imports[nameof(PreImplementedCode)], value);
-				}
-			}
-		}
-
-
 		internal void* NativeCode {
-			[ImportCall(IdentifierOptions.UseAccessorName, ImportCallOptions.Map)]
+			[ImportProperty]
 			get {
 				fixed (MethodDesc* value = &this) {
 					return Functions.Native.CallReturnPointer((void*) Imports[nameof(NativeCode)], value);
@@ -120,7 +112,7 @@ namespace NeoCore.CoreClr.Metadata
 
 
 		internal long RVA {
-			[ImportCall(IdentifierOptions.UseAccessorName, ImportCallOptions.Map)]
+			[ImportProperty]
 			get {
 				fixed (MethodDesc* value = &this) {
 					return Functions.Native.Call<long>((void*) Imports[nameof(RVA)], value);
@@ -128,16 +120,27 @@ namespace NeoCore.CoreClr.Metadata
 			}
 		}
 
-
-		internal MethodTable* MethodTable {
-			[ImportCall(IdentifierOptions.UseAccessorName, ImportCallOptions.Map)]
+		private static int Alignment {
 			get {
-				fixed (MethodDesc* value = &this) {
-					return (MethodTable*) Functions.Native.CallReturnPointer(
-						(void*) Imports[nameof(MethodTable)], value);
-				}
+				//int alignmentShift = 3;
+				int alignmentShift = Mem.Is64Bit ? 3 : 2;
+				int alignment      = 1 << alignmentShift;
+				int alignmentMask  = alignment - 1;
+
+				return alignment;
 			}
 		}
+
+		internal MethodDescChunk* MethodDescChunk {
+			get {
+				// PTR_MethodDescChunk(dac_cast<TADDR>(this) -(sizeof(MethodDescChunk) + (GetMethodDescIndex() * MethodDesc::ALIGNMENT)));
+				
+				var thisptr = Unsafe.AddressOf(ref this).Cast();
+				return (MethodDescChunk*) (thisptr - (sizeof(MethodDescChunk) + (ChunkIndex * Alignment)));
+			}
+		}
+
+		internal MethodTable* MethodTable => MethodDescChunk->MethodTable;
 
 		#endregion
 	}

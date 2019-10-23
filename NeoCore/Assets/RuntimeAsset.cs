@@ -34,7 +34,7 @@ namespace NeoCore.Assets
 			LibraryFile = dllFile;
 			SymbolsFile = symFile;
 			Module      = Modules.GetModule(dllFile.Name);
-			Imports     = new ModuleImportProvider(SymbolsFile, Module);
+			Imports     = new ModuleImport(SymbolsFile, Module);
 		}
 		
 		public override string ToString()
@@ -44,7 +44,7 @@ namespace NeoCore.Assets
 			sb.AppendFormat("Library: {0}\n", LibraryFile);
 			sb.AppendFormat("Symbol: {0}\n", SymbolsFile);
 			sb.AppendFormat("Module: {0}\n", Module.FileName);
-			sb.AppendFormat("Imports: {0}\n", ((ModuleImportProvider) Imports).Address);
+			sb.AppendFormat("Imports: {0}\n", ((ModuleImport) Imports).Address);
 
 			return sb.ToString();
 		}

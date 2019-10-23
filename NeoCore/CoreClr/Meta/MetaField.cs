@@ -1,10 +1,11 @@
 using System;
 using System.Reflection;
-using NeoCore.Component;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Metadata;
 using NeoCore.Memory;
+using NeoCore.Model;
 using NeoCore.Utilities.Diagnostics;
+// ReSharper disable InconsistentNaming
 
 namespace NeoCore.CoreClr.Meta
 {
@@ -19,14 +20,12 @@ namespace NeoCore.CoreClr.Meta
 		private const int FIELD_OFFSET_MAX = (1 << 27) - 1;
 
 		private const int FIELD_OFFSET_NEW_ENC = FIELD_OFFSET_MAX - 4;
-
-		private const int DW2_OFFSET_BITS = 27;
 		
 		#region Constructors
 
 		internal MetaField(Pointer<FieldDesc> ptr) : base(ptr) { }
 
-		public MetaField(FieldInfo info) : this(Runtime.ResolveHandle(info)) { }
+		public MetaField(FieldInfo info) : base(info) { }
 
 		#endregion
 
@@ -34,7 +33,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public FieldInfo FieldInfo => (FieldInfo) Info;
 		
-		public CorElementType CorType => Value.Reference.CorType;
+		public ElementType ElementType => Value.Reference.ElementType;
 
 		public ProtectionLevel Protection => Value.Reference.ProtectionLevel;
 
@@ -45,16 +44,12 @@ namespace NeoCore.CoreClr.Meta
 		public MetaType FieldType => FieldInfo.FieldType;
 
 		public override MetaType EnclosingType {
-			get { return (Pointer<MethodTable>) Value.Reference.GetApproxEnclosingMethodTable(); }
+			get { throw new NotImplementedException();}
 		}
 
 		public override int Token => Value.Reference.Token;
 
 		public FieldAttributes Attributes => FieldInfo.Attributes;
-
-//		public bool IsPrivate {
-//			get => (((CorFieldAttr)Value.Reference.Dword1) & CorFieldAttr.fdFieldAccessMask) == CorFieldAttr.fdPrivate;
-//		}
 
 		#region bool
 

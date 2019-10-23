@@ -1,3 +1,4 @@
+using System;
 using System.Reflection;
 using System.Text;
 using NeoCore.Assets;
@@ -42,11 +43,7 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		public override string ToString()
 		{
-			var sb = new StringBuilder();
-
-			sb.AppendFormat("Handle: {0}", Value);
-
-			return sb.ToString();
+			return String.Format("Handle: {0}", Value);
 		}
 
 		#endregion

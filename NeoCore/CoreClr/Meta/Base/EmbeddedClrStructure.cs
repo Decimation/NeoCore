@@ -1,3 +1,4 @@
+using System.Reflection;
 using NeoCore.CoreClr.Metadata;
 using NeoCore.Memory;
 
@@ -13,8 +14,10 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		protected EmbeddedClrStructure(Pointer<TClr> ptr) : base(ptr) { }
 
+		protected EmbeddedClrStructure(MemberInfo info) : base(info) { }
+
 		#endregion
-		
+
 		#region MethodTable
 
 		public abstract MetaType EnclosingType { get; }

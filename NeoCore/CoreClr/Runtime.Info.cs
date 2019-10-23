@@ -1,6 +1,7 @@
 #region
 
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.Runtime;
 using System.Runtime.InteropServices;
@@ -11,7 +12,9 @@ using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+
 // ReSharper disable InconsistentNaming
+// ReSharper disable UnusedTypeParameter
 
 #endregion
 
@@ -62,6 +65,61 @@ namespace NeoCore.CoreClr
 
 				throw new NotImplementedException();
 			}
+
+			public static bool IsInteger(Type t)
+			{
+				return Type.GetTypeCode(t) switch
+				{
+					TypeCode.Byte => true,
+					TypeCode.SByte => true,
+					TypeCode.UInt16 => true,
+					TypeCode.Int16 => true,
+					TypeCode.UInt32 => true,
+					TypeCode.Int32 => true,
+					TypeCode.UInt64 => true,
+					TypeCode.Int64 => true,
+					_ => false
+				};
+			}
+
+			public static bool IsReal(Type t)
+			{
+				return Type.GetTypeCode(t) switch
+				{
+					TypeCode.Decimal => true,
+					TypeCode.Double => true,
+					TypeCode.Single => true,
+					_ => false
+				};
+			}
+
+			#region Unmanaged
+
+			/// <summary>
+			/// Dummy class for use with <see cref="IsUnmanaged"/> and <see cref="IsUnmanaged"/>
+			/// </summary>
+			private sealed class U<T> where T : unmanaged { }
+
+			/// <summary>
+			/// Determines whether this type fits the <c>unmanaged</c> type constraint.
+			/// </summary>
+			public static bool IsUnmanaged(Type t)
+			{
+				try {
+					// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+					typeof(U<>).MakeGenericType(t);
+					return true;
+				}
+				catch {
+					return false;
+				}
+			}
+
+			public static bool ImplementsInterface(Type type, string name) => type.GetInterface(name) != null;
+
+			public static bool IsEnumerableType(Type type) => ImplementsInterface(type, nameof(IEnumerable));
+
+			#endregion
 
 
 			/// <summary>

@@ -43,6 +43,14 @@ namespace NeoCore.Assets
 		
 		internal static RuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(ClrFrameworks.Core);
 
+		internal static void SetupAll()
+		{
+			ImportManager.Value.LoadAll(CoreClrTypes, Clr.Imports);
+			
+			//var appDomain = AppDomain.CurrentDomain;
+			//appDomain.ProcessExit += (sender, eventArgs) => { Close(); };
+		}
+		
 		internal static void Close()
 		{
 			Clr = null;

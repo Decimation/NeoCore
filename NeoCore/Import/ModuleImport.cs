@@ -10,14 +10,14 @@ namespace NeoCore.Import
 	/// <summary>
 	/// Combines a process module with a PDB file, allowing access to the module's symbols.
 	/// </summary>
-	internal class ModuleImportProvider : IImportProvider
+	internal class ModuleImport : IImportProvider
 	{
 		public FileInfo      SymbolFile { get; }
 		public Pointer<byte> Address    { get; }
 
-		internal ModuleImportProvider(FileInfo pdb, ProcessModule module) : this(pdb, module.BaseAddress) { }
+		internal ModuleImport(FileInfo pdb, ProcessModule module) : this(pdb, module.BaseAddress) { }
 
-		private ModuleImportProvider(FileInfo pdb, Pointer<byte> baseAddr)
+		private ModuleImport(FileInfo pdb, Pointer<byte> baseAddr)
 		{
 			Guard.AssertNotNull(baseAddr, nameof(baseAddr));
 

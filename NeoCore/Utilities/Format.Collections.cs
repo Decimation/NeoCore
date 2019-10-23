@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
 
 namespace NeoCore.Utilities
 {
@@ -13,14 +15,14 @@ namespace NeoCore.Utilities
 		{
 			private const string JOIN_COMMA = ", ";
 
-			public static string FuncJoin<T>(IEnumerable<T>  values,
+			public static string FuncJoin<T>(IEnumerable<T> values,
 			                                 Func<T, string> toString,
 			                                 string          delim = JOIN_COMMA)
 			{
 				return String.Join(delim, values.Select(toString));
 			}
 
-			public static string FormatJoin<T>(IEnumerable<T>  values,
+			public static string FormatJoin<T>(IEnumerable<T> values,
 			                                   string          format,
 			                                   IFormatProvider provider = null,
 			                                   string          delim    = JOIN_COMMA) where T : IFormattable

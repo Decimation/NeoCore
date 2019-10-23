@@ -15,7 +15,6 @@ namespace NeoCore.Utilities.Diagnostics
 
 		private const string UNCONDITIONAL_HALT = "=> halt";
 
-		
 
 		#region Assert
 
@@ -51,7 +50,7 @@ namespace NeoCore.Utilities.Diagnostics
 				throw new GuardException();
 			}
 		}
-		
+
 		/// <summary>
 		///     Checks compatibility
 		/// </summary>
@@ -68,18 +67,26 @@ namespace NeoCore.Utilities.Diagnostics
 
 		[AssertionMethod]
 		[ContractAnnotation(VALUE_NULL_HALT)]
-		internal static void AssertNotNull<T>(T value, string name) where T : class
+		internal static void AssertNotNull<T>(T value, string name = null) where T : class
 		{
 			if (value == null) {
+				if (name == null) {
+					throw new ArgumentNullException();
+				}
+
 				throw new ArgumentNullException(name);
 			}
 		}
 
 		[AssertionMethod]
 		[ContractAnnotation(VALUE_NULL_HALT)]
-		internal static void AssertNotNull(Pointer<byte> value, string name)
+		internal static void AssertNotNull(Pointer<byte> value, string name = null)
 		{
 			if (value.IsNull) {
+				if (name == null) {
+					throw new ArgumentNullException();
+				}
+
 				throw new ArgumentNullException(name);
 			}
 		}

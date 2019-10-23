@@ -1,6 +1,6 @@
 using NeoCore.Memory;
 
-namespace NeoCore.Component
+namespace NeoCore.Model
 {
 	public interface IStructure
 	{

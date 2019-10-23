@@ -176,6 +176,9 @@ namespace NeoCore.Memory
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void* Offset(int elemCnt) => (void*) ((long) m_value + (Mem.FlatSize(ElementSize, elemCnt)));
 
+		[Pure]
+		public Pointer<T> AddressOfIndex(int index) => Offset(index);
+		
 		#region Operators
 
 		/// <summary>
