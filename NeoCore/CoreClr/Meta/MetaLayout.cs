@@ -16,7 +16,7 @@ namespace NeoCore.CoreClr.Meta
 	{
 		#region Constructors
 
-		internal MetaLayout(Pointer<EEClassLayoutInfo> ptr) : base(ptr) { }
+		public MetaLayout(Pointer<EEClassLayoutInfo> ptr) : base(ptr) { }
 
 		#endregion
 

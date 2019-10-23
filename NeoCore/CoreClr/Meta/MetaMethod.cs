@@ -21,7 +21,7 @@ namespace NeoCore.CoreClr.Meta
 	{
 		#region Constructors
 
-		internal MetaMethod(Pointer<MethodDesc> ptr) : base(ptr) { }
+		public MetaMethod(Pointer<MethodDesc> ptr) : base(ptr) { }
 
 		public MetaMethod(MethodInfo member) : base(member) { }
 

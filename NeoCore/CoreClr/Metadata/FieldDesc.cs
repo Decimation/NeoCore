@@ -41,7 +41,7 @@ namespace NeoCore.CoreClr.Metadata
 		///     <para>unsigned m_prot : 3;</para>
 		///     <para>unsigned m_requiresFullMbValue : 1;</para>
 		/// </summary>
-		private uint UInt1 { get; }
+		internal uint UInt1 { get; }
 
 		/// <summary>
 		/// <c>DWORD</c> #2
@@ -54,7 +54,7 @@ namespace NeoCore.CoreClr.Metadata
 
 		#region Calculated values
 
-		private bool RequiresFullMBValue => Bits.ReadBit(UInt1, 31);
+		internal bool RequiresFullMBValue => Bits.ReadBit(UInt1, 31);
 
 		internal int Token {
 			get {
@@ -69,14 +69,9 @@ namespace NeoCore.CoreClr.Metadata
 
 		internal int Offset => (int) (UInt2 & 0x7FFFFFF);
 
-		internal ElementType ElementType {
-			get {
-				//return (ElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
-				return (ElementType) (int) Bits.ReadBits(UInt2, 27, 5);
-			}
-		}
+		internal ElementType ElementType => (ElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
 
-		internal ProtectionLevel ProtectionLevel => (ProtectionLevel) (int) ((UInt1 >> 26) & 0x3FFFFFF);
+		internal AccessModifiers Access => (AccessModifiers) (int) ((UInt1 >> 26) & 0x3FFFFFF);
 
 		internal bool IsPointer => ElementType == ElementType.Ptr;
 		
@@ -85,6 +80,10 @@ namespace NeoCore.CoreClr.Metadata
 		internal bool IsThreadLocal => Bits.ReadBit(UInt1, 25);
 
 		internal bool IsRVA => Bits.ReadBit(UInt1, 26);
+
+		internal FieldProperties Properties {
+			get { return (FieldProperties) UInt1; }
+		}
 
 		#endregion
 

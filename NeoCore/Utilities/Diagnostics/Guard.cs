@@ -15,7 +15,6 @@ namespace NeoCore.Utilities.Diagnostics
 
 		private const string UNCONDITIONAL_HALT = "=> halt";
 
-
 		#region Assert
 
 		[AssertionMethod]
@@ -56,9 +55,9 @@ namespace NeoCore.Utilities.Diagnostics
 		/// </summary>
 		internal static void AssertCompatibility()
 		{
-			Guard.Assert(Runtime.Info.IsWindowsPlatform);
-			Guard.Assert(Runtime.Info.IsWorkstationGC);
-			Guard.Assert(!Runtime.Info.IsMonoRuntime);
+			Assert(Runtime.Info.IsWindowsPlatform
+			       && Runtime.Info.IsWorkstationGC
+			       && !Runtime.Info.IsMonoRuntime);
 		}
 
 		#endregion

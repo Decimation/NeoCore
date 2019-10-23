@@ -24,7 +24,7 @@ namespace NeoCore.CoreClr.Meta
 
 		#region Constructors
 
-		internal MetaField(Pointer<FieldDesc> ptr) : base(ptr) { }
+		public MetaField(Pointer<FieldDesc> ptr) : base(ptr) { }
 
 		public MetaField(FieldInfo info) : base(info) { }
 
@@ -36,7 +36,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public ElementType ElementType => Value.Reference.ElementType;
 
-		public ProtectionLevel ProtectionLevel => Value.Reference.ProtectionLevel;
+		public AccessModifiers Access => Value.Reference.Access;
 
 		public int Offset => Value.Reference.Offset;
 
@@ -45,7 +45,7 @@ namespace NeoCore.CoreClr.Meta
 		public MetaType FieldType => FieldInfo.FieldType;
 
 		public override MetaType EnclosingType {
-			get { return (Pointer<MethodTable>) Value.Reference.ApproxEnclosingMethodTable; }
+			get { return Value.Reference.ApproxEnclosingMethodTable; }
 		}
 
 		public override int Token => Value.Reference.Token;

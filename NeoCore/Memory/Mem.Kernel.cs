@@ -42,7 +42,7 @@ namespace NeoCore.Memory
 
 			#region Read raw bytes
 
-			public static void ReadProcessMemory(Process       proc,     Pointer<byte> ptrBase,
+			public static void ReadProcessMemory(Process       proc,      Pointer<byte> ptrBase,
 			                                     Pointer<byte> ptrBuffer, int           cb)
 			{
 				var hProc = Native.Kernel32.OpenProcess(proc);
@@ -127,11 +127,8 @@ namespace NeoCore.Memory
 
 			public static void WriteProcessMemory(Process proc, Pointer<byte> ptrBase, byte[] value)
 			{
-				int dwSize = value.Length;
-
-				// Write the memory
 				fixed (byte* rg = value) {
-					WriteProcessMemory(proc, ptrBase, (IntPtr) rg, dwSize);
+					WriteProcessMemory(proc, ptrBase, (IntPtr) rg, value.Length);
 				}
 			}
 

@@ -22,8 +22,8 @@ namespace NeoCore.CoreClr.Meta
 	public unsafe class MetaType : ClrStructure<MethodTable>
 	{
 		#region Constructor
-		
-		internal MetaType(Pointer<MethodTable> mt) : base(mt)
+
+		public MetaType(Pointer<MethodTable> mt) : base(mt)
 		{
 			RuntimeType = Runtime.ResolveType(mt.Cast());
 			TypeProperties = ReadProperties(RuntimeType);
@@ -168,7 +168,7 @@ namespace NeoCore.CoreClr.Meta
 
 				var rg = new MetaField[len];
 
-				for (var i = 0; i < len; i++) {
+				for (int i = 0; i < len; i++) {
 					rg[i] = new MetaField(ptr.AddressOfIndex(i));
 				}
 

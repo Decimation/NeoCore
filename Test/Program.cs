@@ -25,20 +25,14 @@ namespace Test
 	{
 		class MyClass
 		{
-			public int Field;
+			[ThreadStatic]
+			public static int Field;
 
 			public void Hi() { }
 
 			public int Value {
 				get { return 1; }
 			}
-		}
-
-
-		[StructLayout(LayoutKind.Sequential)]
-		struct MyStruct
-		{
-			internal MethodTable* Field { get; }
 		}
 
 		private static void Main(string[] args)
@@ -51,9 +45,21 @@ namespace Test
 			Console.WriteLine(fn.EnclosingType);
 
 			var fld = mt.GetField("Field");
-			Console.WriteLine(fld);
+			Console.WriteLine(fld.Access);
 
-			Console.WriteLine(fn.Value.Reference.MethodDescChunk.Reference.FlagsAndTokenRange);
+			var u1 = fld.Value.Reference.UInt1;
+			Console.WriteLine(u1);
+			Console.WriteLine(Convert.ToString(u1, 2));
+
+			var v = u1 & (uint) FieldProperties.Static;
+			Console.WriteLine(v);
+			var v2 = u1 & (uint) FieldProperties.ThreadLocal;
+			Console.WriteLine(v2);
+			
+			Console.WriteLine(fld.Value.Reference.IsStatic == fld.Value.Reference.Properties.HasFlag(FieldProperties.Static));
+			Console.WriteLine(fld.Value.Reference.IsThreadLocal == fld.Value.Reference.Properties.HasFlag(FieldProperties.ThreadLocal));
+			Console.WriteLine(fld.Value.Reference.RequiresFullMBValue == fld.Value.Reference.Properties.HasFlag(FieldProperties.RequiresFullMBValue));
+			Console.WriteLine(fld.Value.Reference.IsRVA == fld.Value.Reference.Properties.HasFlag(FieldProperties.RVA));
 		}
 	}
 }

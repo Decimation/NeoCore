@@ -755,7 +755,7 @@ namespace NeoCore.CoreClr.Metadata
 		MarshalingTypeStandard     = 0xc0000000
 	}
 
-	public enum ProtectionLevel
+	public enum AccessModifiers
 	{
 		Private           = 4,
 		PrivateProtected  = 8,
