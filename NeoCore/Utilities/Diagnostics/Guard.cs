@@ -91,10 +91,10 @@ namespace NeoCore.Utilities.Diagnostics
 		internal static void Fail(string msg = null)
 		{
 			if (msg == null) {
-				throw new GeneralFailureException();
+				throw new OperationFailedException();
 			}
 
-			throw new GeneralFailureException(msg);
+			throw new OperationFailedException(msg);
 		}
 
 		internal static string CreateErrorMessage(string template, string msg = null)

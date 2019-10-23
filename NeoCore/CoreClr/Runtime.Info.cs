@@ -6,6 +6,7 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using InlineIL;
 using JetBrains.Annotations;
+using NeoCore.CoreClr.Support;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Utilities;

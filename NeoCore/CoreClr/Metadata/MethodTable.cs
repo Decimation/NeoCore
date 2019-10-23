@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Metadata.EE;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;

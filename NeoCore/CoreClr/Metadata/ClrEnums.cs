@@ -632,7 +632,7 @@ namespace NeoCore.CoreClr.Metadata
 		R4HFA = 0x10,
 		R8HFA = 0x20
 	}
-	
+
 	[Flags]
 	public enum VMFlags : uint
 	{
@@ -702,5 +702,24 @@ namespace NeoCore.CoreClr.Metadata
 		MarshalingTypeInhibit      = 0x40000000,
 		MarshalingTypeFreeThreaded = 0x80000000,
 		MarshalingTypeStandard     = 0xc0000000
+	}
+	
+	public enum ProtectionLevel
+	{
+		Private           = 4,
+		PrivateProtected  = 8,
+		Internal          = 12,
+		Protected         = 16,
+		ProtectedInternal = 20,
+		Public            = 24
+	}
+	
+	/// <summary>
+	/// Packed MB layout masks
+	/// </summary>
+	internal enum PackedLayoutMask
+	{
+		MbMask       = 0x01FFFF,
+		NameHashMask = 0xFE0000
 	}
 }

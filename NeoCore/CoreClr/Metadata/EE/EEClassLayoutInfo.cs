@@ -3,7 +3,7 @@ using NeoCore.Interop.Attributes;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Metadata
+namespace NeoCore.CoreClr.Metadata.EE
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]

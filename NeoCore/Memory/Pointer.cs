@@ -147,9 +147,6 @@ namespace NeoCore.Memory
 		[Pure]
 		public Pointer<T> Add(long byteCnt = 1)
 		{
-//			m_value = PointerUtil.Add(m_value, bytes).ToPointer();
-//			return this;
-
 			long val = ToInt64() + byteCnt;
 			return (void*) val;
 		}

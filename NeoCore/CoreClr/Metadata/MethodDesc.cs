@@ -27,11 +27,11 @@ namespace NeoCore.CoreClr.Metadata
 
 		internal byte ChunkIndex { get; }
 
-		internal CodeStatus Flags2 { get; }
+		internal CodeStatus Code { get; }
 
 		internal ushort SlotNumber { get; }
 
-		internal MethodProperties Flags { get; }
+		internal MethodProperties Properties { get; }
 
 		/// <summary>
 		///     Valid only if the function is non-virtual,
@@ -46,7 +46,7 @@ namespace NeoCore.CoreClr.Metadata
 		#region Flags
 
 		internal MethodClassification Classification =>
-			(MethodClassification) ((ushort) Flags & (ushort) MethodProperties.Classification);
+			(MethodClassification) ((ushort) Properties & (ushort) MethodProperties.Classification);
 
 		#endregion
 

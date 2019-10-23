@@ -2,6 +2,8 @@ using System;
 using System.Runtime.CompilerServices;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.Metadata.EE;
+using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Model;
 using NeoCore.Utilities.Diagnostics;
@@ -11,6 +13,13 @@ namespace NeoCore.Assets
 {
 	internal static class Resources
 	{
+		/**
+		 * todo list
+		 *
+		 * - Compare with RazorSharp
+		 * - Add/improve missing features from RazorSharp
+		 */
+		
 		static Resources()
 		{
 			Guard.AssertCompatibility();
@@ -20,7 +29,9 @@ namespace NeoCore.Assets
 		{
 			typeof(TypeHandle),
 			typeof(MethodTable),
-			typeof(MethodDesc)
+			typeof(MethodDesc),
+			typeof(FieldDesc),
+			typeof(EEClass),
 		};
 		
 		private static readonly Closable[] CoreObjects =

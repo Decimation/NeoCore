@@ -1,7 +1,8 @@
 using System.Runtime.InteropServices;
+
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Metadata
+namespace NeoCore.CoreClr.Metadata.EE
 {
 	[StructLayout(LayoutKind.Explicit)]
 	internal struct LayoutEEClass

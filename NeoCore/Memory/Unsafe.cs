@@ -60,6 +60,24 @@ namespace NeoCore.Memory
 		}
 		
 		/// <summary>
+		///     Returns the address of the data of <paramref name="value"/>. If <typeparamref name="T" /> is a value type,
+		///     this will return <see cref="AddressOf{T}" />. If <typeparamref name="T" /> is a reference type,
+		///     this will return the equivalent of <see cref="AddressOfHeap{T}(T, OffsetOptions)" /> with
+		///     <see cref="OffsetOptions.Fields" />.
+		/// </summary>
+		public static Pointer<byte> AddressOfFields<T>(ref T value)
+		{
+			Pointer<T> addr = AddressOf(ref value);
+
+			if (Runtime.Info.IsStruct(value)) {
+				return addr.Cast();
+			}
+
+			return AddressOfHeapInternal(value, OffsetOptions.Fields);
+		}
+		
+		
+		/// <summary>
 		///     Returns the address of reference type <paramref name="value" />'s heap memory, offset by the specified
 		///     <see cref="OffsetOptions" />.
 		///     <remarks>

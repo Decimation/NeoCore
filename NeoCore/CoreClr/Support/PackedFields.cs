@@ -2,14 +2,18 @@ using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Metadata;
+using NeoCore.Interop.Attributes;
 
-namespace NeoCore.CoreClr
+// ReSharper disable BuiltInTypeReferenceStyle
+
+namespace NeoCore.CoreClr.Support
 {
 	using DWORD = UInt32;
 	
 	/// <summary>
 	/// Packed DWORD fields
 	/// </summary>
+	[NativeStructure]
 	[StructLayout(LayoutKind.Explicit)]
 	internal unsafe struct PackedFields
 	{

@@ -1,13 +1,15 @@
 using System;
-using System.Linq;
 using System.Reflection;
-using NeoCore.CoreClr.Meta;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.Metadata.EE;
 using NeoCore.Memory;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Diagnostics;
+
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr
+namespace NeoCore.CoreClr.Meta
 {
 	/// <summary>
 	///     <list type="bullet">
@@ -33,6 +35,8 @@ namespace NeoCore.CoreClr
 		#region Accessors
 
 		public override MemberInfo Info => RuntimeType;
+		
+		
 
 		#region bool
 
@@ -100,25 +104,6 @@ namespace NeoCore.CoreClr
 		}
 
 		#endregion
-
-
-		public bool IsAnyPointer {
-			get {
-				if (IsPointer || this == typeof(IntPtr)
-				              || this == typeof(UIntPtr)
-				              || this == typeof(Pointer)) {
-					return true;
-				}
-
-				if (RuntimeType.IsConstructedGenericType) {
-					var genDef = RuntimeType.GetGenericTypeDefinition();
-					return genDef == typeof(Pointer<>);
-				}
-
-
-				return false;
-			}
-		}
 
 		#endregion
 
@@ -193,13 +178,13 @@ namespace NeoCore.CoreClr
 		/// </summary>
 		public int BaseSizePadding => EEClass.Reference.BaseSizePadding;
 
-		/*public MetaLayout LayoutInfo {
+		public MetaLayout LayoutInfo {
 			get {
-				Conditions.Require(HasLayout, nameof(HasLayout));
+				Guard.Assert(HasLayout);
 
 				return new MetaLayout(EEClass.Reference.LayoutInfo);
 			}
-		}*/
+		}
 
 		public int InstanceFieldsCount => EEClass.Reference.NumInstanceFields;
 
@@ -243,7 +228,7 @@ namespace NeoCore.CoreClr
 
 		public bool IsDelegate => VMFlags.HasFlagFast(VMFlags.Delegate);
 
-//		public bool IsBlittable => HasLayout && LayoutInfo.Flags.HasFlagFast(LayoutFlags.Blittable);
+		public bool IsBlittable => HasLayout && LayoutInfo.Flags.HasFlagFast(LayoutFlags.Blittable);
 
 		public bool HasComponentSize => Flags.HasFlagFast(TypeHierarchy.HasComponentSize);
 
@@ -260,23 +245,14 @@ namespace NeoCore.CoreClr
 		#endregion
 
 		#endregion
-
 		
-
 		#endregion
-		
 
 		#region Operators
 
-		public static implicit operator MetaType(Pointer<MethodTable> ptr)
-		{
-			return new MetaType(ptr);
-		}
+		public static implicit operator MetaType(Pointer<MethodTable> ptr) => new MetaType(ptr);
 
-		public static implicit operator MetaType(Type t)
-		{
-			return new MetaType(t);
-		}
+		public static implicit operator MetaType(Type t) => new MetaType(t);
 
 		public bool Equals(MetaType other)
 		{
