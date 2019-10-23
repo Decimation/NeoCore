@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using NeoCore;
+using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.Memory;
 using NeoCore.Utilities;
@@ -16,13 +17,14 @@ namespace Test
 {
 	internal static unsafe class Program
 	{
+		public static void Hi()
+		{
+			Console.WriteLine("g");
+		}
+		
 		private static void Main(string[] args)
 		{
-			Console.WriteLine(RuntimeEnvironment.GetRuntimeDirectory());
-
-			foreach (ProcessModule module in Process.GetCurrentProcess().Modules) {
-				Console.WriteLine("{0}: {1}", module.FileName, module.ModuleName);
-			}
+			
 		}
 	}
 }

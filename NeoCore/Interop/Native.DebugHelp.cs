@@ -1,9 +1,12 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using NeoCore.CoreClr;
 using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures;
 using NeoCore.Memory;
+using static NeoCore.Assets.Constants;
+using static NeoCore.Assets.Constants.Native;
 
 namespace NeoCore.Interop
 {
@@ -27,8 +30,10 @@ namespace NeoCore.Interop
 
 			#region Abstraction
 
-			internal static void SymInitialize(IntPtr hProcess) =>
+			internal static void SymInitialize(IntPtr hProcess)
+			{
 				SymInitialize(hProcess, IntPtr.Zero, false);
+			}
 
 
 			internal static ulong SymLoadModuleEx(IntPtr hProc, IntPtr hFile, string img, string mod, ulong dllBase,
@@ -47,14 +52,14 @@ namespace NeoCore.Interop
 
 			internal static Symbol GetSymbol(IntPtr hProc, string name)
 			{
-				var sz = (int) (Symbol.StructureSize + Symbol.MAX_SYM_NAME * sizeof(byte)
-				                                     + sizeof(ulong) - 1 / sizeof(ulong));
+				var sz = (int) (StructureSize + MaxSymbolNameLength * sizeof(byte)
+				                              + sizeof(ulong) - 1 / sizeof(ulong));
 
 				byte* byteBuffer = stackalloc byte[sz];
 				var   buffer     = (SymbolInfo*) byteBuffer;
 
-				buffer->SizeOfStruct = (uint) Symbol.StructureSize;
-				buffer->MaxNameLen   = Symbol.MAX_SYM_NAME;
+				buffer->SizeOfStruct = (uint) StructureSize;
+				buffer->MaxNameLen   = MaxSymbolNameLength;
 
 
 				if (SymFromName(hProc, name, (IntPtr) buffer)) {

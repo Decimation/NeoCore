@@ -5,7 +5,7 @@ namespace NeoCore.Model
 	///         <listheader>Inheriting types:</listheader>
 	///         <item>
 	///             <description>
-	///                 <see cref="Global" />
+	///                 <see cref="Global2" />
 	///             </description>
 	///         </item>
 	///         <item>

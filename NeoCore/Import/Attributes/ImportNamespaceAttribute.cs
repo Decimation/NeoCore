@@ -1,11 +1,12 @@
 using System;
 using JetBrains.Annotations;
+using NeoCore.Interop.Attributes;
 
 namespace NeoCore.Import.Attributes
 {
-	[MeansImplicitUse]
+	
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-	public sealed class ImportNamespaceAttribute : Attribute
+	public sealed class ImportNamespaceAttribute : NativeStructureAttribute
 	{
 		public ImportNamespaceAttribute(string nameSpace)
 		{

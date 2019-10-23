@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using InlineIL;
+using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.Interop.Attributes;
 using NeoCore.Utilities;
@@ -40,6 +41,22 @@ namespace NeoCore.Memory
 			return *(IntPtr*) (&tr);*/
 
 			return AsPointer(ref value);
+		}
+		
+		public static bool TryGetAddressOfHeap<T>(T value, OffsetOptions options, out Pointer<byte> ptr)
+		{
+			if (Runtime.Info.IsStruct(value)) {
+				ptr = null;
+				return false;
+			}
+
+			ptr = AddressOfHeapInternal(value, options);
+			return true;
+		}
+		
+		public static bool TryGetAddressOfHeap<T>(T value, out Pointer<byte> ptr)
+		{
+			return TryGetAddressOfHeap(value, OffsetOptions.None, out ptr);
 		}
 		
 		/// <summary>
@@ -79,23 +96,23 @@ namespace NeoCore.Memory
 			switch (offset) {
 				case OffsetOptions.StringData:
 					Guard.Assert(Runtime.Info.IsString(value));
-					offsetValue = Offsets.OffsetToStringData;
+					offsetValue = Constants.Offsets.OffsetToStringData;
 					break;
 
 				case OffsetOptions.ArrayData:
 					Guard.Assert(Runtime.Info.IsArray(value));
-					offsetValue = Offsets.OffsetToArrayData;
+					offsetValue = Constants.Offsets.OffsetToArrayData;
 					break;
 
 				case OffsetOptions.Fields:
-					offsetValue = Offsets.OffsetToData;
+					offsetValue = Constants.Offsets.OffsetToData;
 					break;
 
 				case OffsetOptions.None:
 					break;
 
 				case OffsetOptions.Header:
-					offsetValue = -Offsets.OffsetToData;
+					offsetValue = -Constants.Offsets.OffsetToData;
 					break;
 				
 				default:

@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using NeoCore.CoreClr;
+using NeoCore.CoreClr.Metadata;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Memory;
@@ -8,7 +9,7 @@ using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Interop
 {
-	public static partial class FunctionFactory
+	public static unsafe partial class FunctionFactory
 	{
 		/// <summary>
 		/// Provides functions for resetting and setting the entry point for managed methods.
@@ -19,11 +20,10 @@ namespace NeoCore.Interop
 			/// Resets the method represented by <paramref name="mi"/> to its original, blank state.
 			/// </summary>
 			/// <param name="mi">Method</param>
-//			[ImportForwardCall(typeof(MethodDesc), nameof(MethodDesc.Reset), ImportCallOptions.Map)]
+			[ImportForwardCall(typeof(MethodDesc), nameof(MethodDesc.Reset), ImportCallOptions.Map)]
 			internal static void Restore(MethodInfo mi)
 			{
-				throw new NotImplementedException();
-//				Functions.Native.CallVoid((void*) Imports[nameof(Restore)], Runtime.ResolveHandle(mi).ToPointer());
+				Functions.Native.CallVoid((void*) Imports[nameof(Restore)], Runtime.ResolveHandle(mi).ToPointer());
 			}
 
 			/// <summary>
@@ -33,20 +33,17 @@ namespace NeoCore.Interop
 			/// <param name="ptr">Function pointer</param>
 			/// <returns><c>true</c> if the operation succeeded; <c>false</c> otherwise</returns>
 			/// <exception cref="InvalidOperationException">The process is not 64-bit</exception>
-//			[ImportForwardCall(typeof(MethodDesc), nameof(MethodDesc.SetNativeCodeInterlocked), ImportCallOptions.Map)]
+			[ImportForwardCall(typeof(MethodDesc), nameof(MethodDesc.SetNativeCodeInterlocked), ImportCallOptions.Map)]
 			internal static bool SetEntryPoint(MethodInfo mi, Pointer<byte> ptr)
 			{
-				throw new NotImplementedException();
-				
 				if (!Mem.Is64Bit) {
 					Guard.Fail();
 				}
 
 				Restore(mi);
 
-//				return Functions.Native.Call<bool>((void*) Imports[nameof(SetEntryPoint)], mi.MethodHandle.Value.ToPointer(), ptr.ToPointer());
-
-				
+				return Functions.Native.Call<bool>((void*) Imports[nameof(SetEntryPoint)], 
+				                                   mi.MethodHandle.Value.ToPointer(), ptr.ToPointer());
 			}
 		}
 	}

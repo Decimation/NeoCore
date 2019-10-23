@@ -2,12 +2,15 @@
 
 using System;
 using System.Diagnostics;
+using System.Runtime;
+using System.Runtime.InteropServices;
 using InlineIL;
 using JetBrains.Annotations;
-using NeoCore.CoreClr.Framework;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Diagnostics;
+// ReSharper disable InconsistentNaming
 
 #endregion
 
@@ -22,29 +25,28 @@ namespace NeoCore.CoreClr
 		{
 			public static bool IsInDebugMode => Debugger.IsAttached;
 
-			public static FrameworkIdentifier CurrentFramework {
+			public static bool IsWindowsPlatform => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+			public static bool IsWorkstationGC => !GCSettings.IsServerGC;
+
+			public static bool IsMonoRuntime => Type.GetType("Mono.Runtime") != null;
+
+			public static ClrFramework CurrentFramework {
 				get {
-					FrameworkTypes fwk = default;
-					Version        vsn = null;
-
 #if NETCOREAPP
-					fwk = FrameworkTypes.Core;
-
-#if NETCOREAPP3_0
-					vsn = new Version(3, 0);
-#endif
+					return ClrFrameworks.Core;
 
 #endif
 
 #if NETFRAMEWORK
-					fwk = NetFrameworks.Framework;
+					return ClrFrameworks.Framework;
 #endif
 
 #if NETSTANDARD
-					fwk = NetFrameworks.Standard;
+					return ClrFrameworks.Standard;
 #endif
 
-					return new FrameworkIdentifier(fwk, vsn);
+					Guard.Fail();
 				}
 			}
 
@@ -82,11 +84,11 @@ namespace NeoCore.CoreClr
 				IL.Emit.Ret();
 				return IL.Return<bool>();
 			}
-			
+
 			internal static bool IsString<T>(T value) => value is string;
-			
+
 			internal static bool IsArray<T>(T value) => value is Array;
-			
+
 			internal static bool IsStruct<T>(T value) => value.GetType().IsValueType;
 		}
 	}

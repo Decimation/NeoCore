@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using JetBrains.Annotations;
+using NeoCore.Assets;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Memory;
@@ -15,8 +16,8 @@ using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Import
 {
+	// todo: cleanup
 	
-
 	public sealed class ImportManager : Releasable
 	{
 		#region Constants
@@ -140,7 +141,7 @@ namespace NeoCore.Import
 		private static string ResolveIdentifier(ImportAttribute attr, [NotNull] MemberInfo member,
 		                                        out string      resolvedId)
 		{
-			Guard.NullCheck(member.DeclaringType, nameof(member.DeclaringType));
+			Guard.AssertNotNull(member.DeclaringType, nameof(member.DeclaringType));
 			
 			if (!IsAnnotated(member.DeclaringType, out var nameSpaceAttr)) {
 				Guard.Fail(NamespaceError);
@@ -185,7 +186,7 @@ namespace NeoCore.Import
 				resolvedId = resolvedId.Replace(GET_PROPERTY_PREFIX, GET_PROPERTY_REPLACEMENT);
 			}
 
-			Guard.NullCheck(resolvedId, nameof(resolvedId));
+			Guard.AssertNotNull(resolvedId, nameof(resolvedId));
 
 			return resolvedId;
 		}
@@ -221,7 +222,7 @@ namespace NeoCore.Import
 			if (UsingMap(type, out var mapField)) {
 				UnloadMap(type, mapField);
 
-//				Global.Value.Log.Verbose("Unloaded map in {Name}", type.Name);
+				Global.Value.WriteVerbose("Unloaded map in {Name}", type.Name);
 			}
 
 
@@ -269,12 +270,12 @@ namespace NeoCore.Import
 						throw new ArgumentOutOfRangeException();
 				}
 
-//				Global.Value.Log.Verbose("Unloaded member {Name}", mem.Name);
+				Global.Value.WriteVerbose("Unloaded member {Name}", mem.Name);
 			}
 
 			m_boundTypes.Remove(type);
 
-//			Global.Value.WriteVerbose(Id, "Unloaded {Name}", type.Name);
+			Global.Value.WriteVerbose(Id, "Unloaded {Name}", type.Name);
 		}
 
 		public void Unload<T>(ref T value)
@@ -316,13 +317,13 @@ namespace NeoCore.Import
 		{
 			var mapField = type.GetAnyField(ImportMap.FIELD_NAME);
 
-			if (mapField != null && mapField.GetCustomAttribute<ImportMapDesignationAttribute>() == null) {
+			if (mapField != null && mapField.GetCustomAttribute<ImportMapFieldAttribute>() == null) {
 				Guard.Fail(
-					$"Map field should be annotated with {nameof(ImportMapDesignationAttribute)}");
+					$"Map field should be annotated with {nameof(ImportMapFieldAttribute)}");
 			}
 
 			if (mapField == null) {
-				var (member, _) = type.GetFirstAnnotated<ImportMapDesignationAttribute>();
+				var (member, _) = type.GetFirstAnnotated<ImportMapFieldAttribute>();
 
 				if (member != null) {
 					mapField = (FieldInfo) member;
@@ -389,7 +390,7 @@ namespace NeoCore.Import
 
 			m_boundTypes.Add(type);
 
-//			Global.Value.WriteVerbose(Id, "Completed loading {Name}", type.Name);
+			Global.Value.WriteVerbose(Id, "Completed loading {Name}", type.Name);
 
 			return value;
 		}
@@ -430,7 +431,7 @@ namespace NeoCore.Import
 		private void LoadMethod(ImportAttribute attr, MethodInfo method, Pointer<byte> addr)
 		{
 			var callAttr = attr as ImportCallAttribute;
-			Guard.NullCheck(callAttr, nameof(callAttr));
+			Guard.AssertNotNull(callAttr, nameof(callAttr));
 			var options = callAttr.CallOptions;
 
 			if (options == ImportCallOptions.None) {
@@ -445,7 +446,7 @@ namespace NeoCore.Import
 			}
 
 			if (bind) {
-//				Global.Value.Log.Warning("Binding {Name}", method.Name);
+				Global.Value.WriteWarning("Binding {Name}", method.Name);
 				FunctionFactory.Managed.SetEntryPoint(method, addr);
 			}
 
@@ -503,7 +504,7 @@ namespace NeoCore.Import
 						break;
 				}
 
-//				Global.Value.WriteVerbose(null, "Loaded member {Id} @ {Addr}", id, addr);
+				Global.Value.WriteVerbose(null, "Loaded member {Id} @ {Addr}", id, addr);
 			}
 
 			return value;

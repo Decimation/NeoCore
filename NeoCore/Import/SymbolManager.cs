@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using NeoCore.Assets;
 using NeoCore.Interop;
 using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures;
@@ -114,7 +115,7 @@ namespace NeoCore.Import
 		{
 			string img = m_pdb.FullName;
 
-//			Global.Value.WriteVerbose(Id, "Loading image {Img}", m_pdb.Name);
+			Global.Value.WriteVerbose(Id, "Loading image {Img}", m_pdb.Name);
 
 			UnloadModule();
 			

@@ -12,40 +12,40 @@ namespace NeoCore.Import
 	/// </summary>
 	internal class ModuleImportProvider : IImportProvider
 	{
-		private readonly FileInfo      m_pdb;
-		private readonly Pointer<byte> m_baseAddress;
+		public FileInfo      SymbolFile { get; }
+		public Pointer<byte> Address    { get; }
 
 		internal ModuleImportProvider(FileInfo pdb, ProcessModule module) : this(pdb, module.BaseAddress) { }
 
 		private ModuleImportProvider(FileInfo pdb, Pointer<byte> baseAddr)
 		{
-			Guard.NullCheck(baseAddr, nameof(baseAddr));
+			Guard.AssertNotNull(baseAddr, nameof(baseAddr));
 
-			m_baseAddress = baseAddr;
-			m_pdb         = pdb;
+			Address    = baseAddr;
+			SymbolFile = pdb;
 		}
 
 		private Symbol GetSymbol(string name)
 		{
-			SymbolManager.Value.CurrentImage = m_pdb;
+			SymbolManager.Value.CurrentImage = SymbolFile;
 			return SymbolManager.Value.GetSymbol(name);
 		}
 
 		public Pointer<byte> GetAddress(string id)
 		{
 			long ofs = GetSymbol(id).Offset;
-			return m_baseAddress + ofs;
+			return Address + ofs;
 		}
 
 		public Pointer<byte>[] GetAddresses(string[] names)
 		{
-			SymbolManager.Value.CurrentImage = m_pdb;
+			SymbolManager.Value.CurrentImage = SymbolFile;
 			var offsets = SymbolManager.Value.GetSymOffsets(names);
 
 			var rg = new Pointer<byte>[offsets.Length];
 
 			for (int i = 0; i < rg.Length; i++) {
-				rg[i] = m_baseAddress + offsets[i];
+				rg[i] = Address + offsets[i];
 			}
 
 			return rg;

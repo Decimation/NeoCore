@@ -67,9 +67,5 @@ namespace NeoCore.Interop.Structures
 			return String.Format("Name: {0} | Offset: {1:X} | Address: {2:X} | Tag: {3} | Flags: {4}", Name, Offset,
 			                     Address, Tag, Flags);
 		}
-
-		internal const uint MAX_SYM_NAME = 2000;
-
-		internal static readonly int StructureSize = Marshal.SizeOf<SymbolInfo>();
 	}
 }

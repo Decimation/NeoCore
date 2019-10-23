@@ -3,8 +3,10 @@
 using System;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using NeoCore.CoreClr;
 using NeoCore.Interop.Attributes;
 using NeoCore.Utilities;
+using static NeoCore.Assets.Constants.Defaults;
 
 #endregion
 
@@ -85,7 +87,15 @@ namespace NeoCore.Memory
 		#endregion
 
 		#region Implicit / explicit conversions
+		
+		public static explicit operator Pointer<T>(ulong ul) => new Pointer<T>((void*) ul);
 
+		public static explicit operator void*(Pointer<T> ptr) => ptr.ToPointer();
+
+		public static explicit operator long(Pointer<T> ptr) => ptr.ToInt64();
+
+		public static explicit operator Pointer<byte>(Pointer<T> ptr) => ptr.ToPointer();
+		
 		public static implicit operator Pointer<T>(void* value) => new Pointer<T>(value);
 
 		public static implicit operator Pointer<T>(IntPtr value) => new Pointer<T>(value);
@@ -93,12 +103,6 @@ namespace NeoCore.Memory
 		public static implicit operator Pointer<T>(Pointer<byte> ptr) => ptr.Address;
 
 		public static explicit operator Pointer<T>(long value) => new Pointer<T>((void*) value);
-
-		public static explicit operator void*(Pointer<T> ptr) => ptr.ToPointer();
-
-		public static explicit operator long(Pointer<T> ptr) => ptr.ToInt64();
-
-		public static explicit operator Pointer<byte>(Pointer<T> ptr) => ptr.ToPointer();
 
 		#endregion
 
@@ -133,6 +137,34 @@ namespace NeoCore.Memory
 
 		#region Arithmetic
 
+		/// <summary>
+		///     Increment <see cref="Address" /> by the specified number of bytes
+		/// </summary>
+		/// <param name="byteCnt">Number of bytes to add</param>
+		/// <returns>
+		///     A new <see cref="Pointer{T}"/> with <paramref name="byteCnt"/> bytes added
+		/// </returns>
+		[Pure]
+		public Pointer<T> Add(long byteCnt = 1)
+		{
+//			m_value = PointerUtil.Add(m_value, bytes).ToPointer();
+//			return this;
+
+			long val = ToInt64() + byteCnt;
+			return (void*) val;
+		}
+
+
+		/// <summary>
+		///     Decrement <see cref="Address" /> by the specified number of bytes
+		/// </summary>
+		/// <param name="byteCnt">Number of bytes to subtract</param>
+		/// <returns>
+		///     A new <see cref="Pointer{T}"/> with <paramref name="byteCnt"/> bytes subtracted
+		/// </returns>
+		[Pure]
+		public Pointer<T> Subtract(long byteCnt = 1) => Add(-byteCnt);
+		
 		public static Pointer<T> operator +(Pointer<T> left, long right)
 		{
 			return (void*) (left.ToInt64() + right);
@@ -157,7 +189,7 @@ namespace NeoCore.Memory
 		///     A new <see cref="Pointer{T}"/> with <paramref name="elemCnt"/> elements incremented
 		/// </returns>
 		[Pure]
-		public Pointer<T> Increment(int elemCnt = Constants.DEF_ELEM_CNT) => Offset(elemCnt);
+		public Pointer<T> Increment(int elemCnt = DEF_ELEM_CNT) => Offset(elemCnt);
 
 
 		/// <summary>
@@ -168,7 +200,7 @@ namespace NeoCore.Memory
 		///     A new <see cref="Pointer{T}"/> with <paramref name="elemCnt"/> elements decremented
 		/// </returns>
 		[Pure]
-		public Pointer<T> Decrement(int elemCnt = Constants.DEF_ELEM_CNT) => Increment(-elemCnt);
+		public Pointer<T> Decrement(int elemCnt = DEF_ELEM_CNT) => Increment(-elemCnt);
 
 		/// <summary>
 		///     Increments the <see cref="Address" /> by the specified number of elements.
@@ -223,7 +255,7 @@ namespace NeoCore.Memory
 		/// </summary>
 		/// <param name="value">Value to write.</param>
 		/// <param name="elemOffset">Element offset (in terms of type <typeparamref name="T" />).</param>
-		public void Write(T value, int elemOffset = Constants.DEF_OFFSET) => Unsafe.Write(Offset(elemOffset), value);
+		public void Write(T value, int elemOffset = DEF_OFFSET) => Unsafe.Write(Offset(elemOffset), value);
 
 
 		/// <summary>
@@ -232,7 +264,7 @@ namespace NeoCore.Memory
 		/// <param name="elemOffset">Element offset (in terms of type <typeparamref name="T" />).</param>
 		/// <returns>The value read from the offset <see cref="Address" />.</returns>
 		[Pure]
-		public T Read(int elemOffset = Constants.DEF_OFFSET) => Unsafe.Read<T>(Offset(elemOffset));
+		public T Read(int elemOffset = DEF_OFFSET) => Unsafe.Read<T>(Offset(elemOffset));
 
 		/// <summary>
 		///     Reinterprets <see cref="Address" /> as a reference to a value of type <typeparamref name="T" />.
@@ -240,21 +272,21 @@ namespace NeoCore.Memory
 		/// <param name="elemOffset">Element offset (in terms of type <typeparamref name="T" />).</param>
 		/// <returns>A reference to a value of type <typeparamref name="T" />.</returns>
 		[Pure]
-		public ref T AsRef(int elemOffset = Constants.DEF_OFFSET) => ref Unsafe.AsRef<T>(Offset(elemOffset));
+		public ref T AsRef(int elemOffset = DEF_OFFSET) => ref Unsafe.AsRef<T>(Offset(elemOffset));
 
 		
 		#region Pointer
 
 		[Pure]
-		public Pointer<byte> ReadPointer(int elemOffset = Constants.DEF_OFFSET) => ReadPointer<byte>(elemOffset);
+		public Pointer<byte> ReadPointer(int elemOffset = DEF_OFFSET) => ReadPointer<byte>(elemOffset);
 
 		[Pure]
-		public Pointer<TType> ReadPointer<TType>(int elemOffset = Constants.DEF_OFFSET)
+		public Pointer<TType> ReadPointer<TType>(int elemOffset = DEF_OFFSET)
 		{
 			return Cast<Pointer<TType>>().Read(elemOffset);
 		}
 
-		public void WritePointer<TType>(Pointer<TType> ptr, int elemOffset = Constants.DEF_OFFSET)
+		public void WritePointer<TType>(Pointer<TType> ptr, int elemOffset = DEF_OFFSET)
 		{
 			Cast<Pointer<TType>>().Write(ptr, elemOffset);
 		}

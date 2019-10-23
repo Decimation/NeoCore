@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using JetBrains.Annotations;
+using NeoCore.Assets;
+using NeoCore.CoreClr;
 using NeoCore.Memory;
 
 namespace NeoCore.Utilities.Diagnostics
@@ -13,13 +15,13 @@ namespace NeoCore.Utilities.Diagnostics
 
 		private const string UNCONDITIONAL_HALT = "=> halt";
 
-		private const string STRING_FMT_ARG = "msg";
+		
 
-		private const string CONDITIONAL_DEBUG = "DEBUG";
+		#region Assert
 
 		[AssertionMethod]
 		[ContractAnnotation(COND_FALSE_HALT)]
-		[Conditional(CONDITIONAL_DEBUG)]
+		[Conditional(Constants.COND_DEBUG)]
 		internal static void AssertDebug(bool condition)
 		{
 			if (!condition) {
@@ -38,7 +40,7 @@ namespace NeoCore.Utilities.Diagnostics
 
 		[AssertionMethod]
 		[ContractAnnotation(COND_FALSE_HALT)]
-		[StringFormatMethod(STRING_FMT_ARG)]
+		[StringFormatMethod(Constants.STRING_FMT_ARG)]
 		internal static void Assert(bool condition, string msg = null, params object[] args)
 		{
 			if (!condition) {
@@ -49,10 +51,24 @@ namespace NeoCore.Utilities.Diagnostics
 				throw new GuardException();
 			}
 		}
+		
+		/// <summary>
+		///     Checks compatibility
+		/// </summary>
+		internal static void AssertCompatibility()
+		{
+			Guard.Assert(Runtime.Info.IsWindowsPlatform);
+			Guard.Assert(Runtime.Info.IsWorkstationGC);
+			Guard.Assert(!Runtime.Info.IsMonoRuntime);
+		}
+
+		#endregion
+
+		#region Null check
 
 		[AssertionMethod]
 		[ContractAnnotation(VALUE_NULL_HALT)]
-		internal static void NullCheck<T>(T value, string name) where T : class
+		internal static void AssertNotNull<T>(T value, string name) where T : class
 		{
 			if (value == null) {
 				throw new ArgumentNullException(name);
@@ -61,12 +77,14 @@ namespace NeoCore.Utilities.Diagnostics
 
 		[AssertionMethod]
 		[ContractAnnotation(VALUE_NULL_HALT)]
-		internal static void NullCheck(Pointer<byte> value, string name)
+		internal static void AssertNotNull(Pointer<byte> value, string name)
 		{
 			if (value.IsNull) {
 				throw new ArgumentNullException(name);
 			}
 		}
+
+		#endregion
 
 		[AssertionMethod]
 		[ContractAnnotation(UNCONDITIONAL_HALT)]
