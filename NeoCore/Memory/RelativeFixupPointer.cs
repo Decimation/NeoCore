@@ -3,6 +3,7 @@ using NeoCore.CoreClr.Support;
 
 namespace NeoCore.Memory
 {
+	// todo: WIP
 	public unsafe struct RelativeFixupPointer<T> where T : unmanaged
 	{
 		private ulong m_delta;

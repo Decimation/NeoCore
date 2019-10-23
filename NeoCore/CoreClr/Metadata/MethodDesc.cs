@@ -134,13 +134,13 @@ namespace NeoCore.CoreClr.Metadata
 		internal MethodDescChunk* MethodDescChunk {
 			get {
 				// PTR_MethodDescChunk(dac_cast<TADDR>(this) -(sizeof(MethodDescChunk) + (GetMethodDescIndex() * MethodDesc::ALIGNMENT)));
-				
+
 				var thisptr = Unsafe.AddressOf(ref this).Cast();
 				return (MethodDescChunk*) (thisptr - (sizeof(MethodDescChunk) + (ChunkIndex * Alignment)));
 			}
 		}
 
-		internal Pointer<MethodTable>  MethodTable => MethodDescChunk->MethodTable;
+		internal Pointer<MethodTable> MethodTable => MethodDescChunk->MethodTable;
 
 		#endregion
 	}

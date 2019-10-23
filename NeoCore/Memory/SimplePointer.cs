@@ -1,5 +1,10 @@
+using NeoCore.Interop.Attributes;
+
 namespace NeoCore.Memory
 {
+	// todo: WIP
+	
+	[NativeStructure]
 	public unsafe struct SimplePointer<T> where T : unmanaged
 	{
 		private T* m_value;

@@ -1,9 +1,11 @@
 using System.Net.Security;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
+using NeoCore.Memory;
 using NeoCore.Utilities;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
@@ -25,7 +27,9 @@ namespace NeoCore.CoreClr.Metadata
 
 		#region Fields
 
-		// RelativePointer
+		/// <summary>
+		/// <see cref="RelativePointer{T}"/>
+		/// </summary>
 		private MethodTable* EnclosingMethodTableStub { get; }
 
 		/// <summary>
@@ -103,12 +107,11 @@ namespace NeoCore.CoreClr.Metadata
 
 		#endregion
 
-		internal MethodTable* ApproxEnclosingMethodTable
-		{
+		internal Pointer<MethodTable> ApproxEnclosingMethodTable {
 			get {
 				// m_pMTOfEnclosingClass.GetValue(PTR_HOST_MEMBER_TADDR(FieldDesc, this, m_pMTOfEnclosingClass));
 				const int MT_FIELD_OFS = 0;
-				return (MethodTable*) (MT_FIELD_OFS + ((long) EnclosingMethodTableStub));
+				return ClrAccess.FieldOffset(EnclosingMethodTableStub, MT_FIELD_OFS);
 			}
 		}
 	}

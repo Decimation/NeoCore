@@ -1,7 +1,11 @@
 using NeoCore.CoreClr.Support;
+using NeoCore.Interop.Attributes;
 
 namespace NeoCore.Memory
 {
+	// todo: WIP
+	
+	[NativeStructure]
 	public unsafe struct RelativePointer<T> where T : unmanaged
 	{
 		private QInt m_delta;
@@ -11,7 +15,7 @@ namespace NeoCore.Memory
 		{
 			// return dac_cast<PTR_TYPE>(base + m_delta);
 
-			return ClrAccess.Cast<QInt, T>(value + m_delta);
+			return default;
 		}
 	}
 }

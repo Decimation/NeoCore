@@ -10,14 +10,15 @@ namespace NeoCore.CoreClr.Metadata
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MethodDescChunk
 	{
-		// RelativeFixupPointer
-		//internal MethodTable* MethodTableRaw { get; }
-		//internal RelativeFixupPointer<SimplePointer<byte>> MethodTableRaw { get; }
-		internal RelativeFixupPointer<byte> MethodTableRaw { get; }
+		/// <summary>
+		/// <see cref="RelativeFixupPointer{T}"/>
+		/// </summary>
+		internal MethodTable* MethodTableRaw { get; }
 
-		// RelativePointer
-		//internal MethodDescChunk* Next { get; }
-		internal RelativePointer<SimplePointer<byte>> Next { get; }
+		/// <summary>
+		/// <see cref="RelativePointer{T}"/>
+		/// </summary>
+		internal MethodDescChunk* Next { get; }
 
 		/// <summary>
 		/// The size of this chunk minus 1 (in multiples of MethodDesc::ALIGNMENT)
@@ -37,16 +38,8 @@ namespace NeoCore.CoreClr.Metadata
 			get {
 				// for MDC: m_methodTable.GetValue(PTR_HOST_MEMBER_TADDR(MethodDescChunk, this, m_methodTable));
 
-				//const int MT_FIELD_OFS = 0;
-				//return (MethodTable*) (MT_FIELD_OFS + ((long) MethodTableRaw));
-
-				//fixed (MethodDescChunk* value = &this) {
-				//	return MethodTableRaw.GetValue((QInt) ClrAccess.HostMemberAddress(value, nameof(MethodTableRaw), true).ToInt64()).Cast<MethodTable>();
-				//}
-
-				fixed (MethodDescChunk* value = &this) {
-					return ClrAccess.HostMemberAddress(value, nameof(MethodTableRaw), true);
-				}
+				const int MT_FIELD_OFS = 0;
+				return ClrAccess.FieldOffset(MethodTableRaw, MT_FIELD_OFS);
 			}
 		}
 	}
