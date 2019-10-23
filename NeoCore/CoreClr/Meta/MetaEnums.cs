@@ -6,7 +6,7 @@ namespace NeoCore.CoreClr.Meta
 	/// Additional type properties.
 	/// </summary>
 	[Flags]
-	public enum AuxiliaryProperties
+	public enum MetaTypeProperties
 	{
 		None = 0,
 		

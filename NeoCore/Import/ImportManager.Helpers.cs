@@ -11,9 +11,6 @@ namespace NeoCore.Import
 {
 	public sealed partial class ImportManager
 	{
-		private static readonly string NamespaceError =
-			$"Type must be decorated with \"{nameof(ImportNamespaceAttribute)}\"";
-
 		private bool IsBound(Type t) => m_boundTypes.Contains(t);
 
 		private static bool IsAnnotated(Type t, out ImportNamespaceAttribute attr)
@@ -31,30 +28,30 @@ namespace NeoCore.Import
 		}
 
 		[AssertionMethod]
-		private static void CheckNamespaceAnnotation(MemberInfo member, out ImportNamespaceAttribute nameSpaceAttr)
+		private void CloseCheck()
 		{
-			if (!IsAnnotated(member.DeclaringType, out nameSpaceAttr)) {
-				Guard.Fail(NamespaceError);
+			if (m_boundTypes.Count != 0 || m_typeImportMaps.Count != 0) {
+				Guard.Fail();
 			}
 		}
 
 		[AssertionMethod]
-		private static void CheckAnnotation(Type t)
+		private void CheckMapFieldUnload(Type t, FieldInfo mapField)
 		{
-			if (!IsAnnotated(t, out _)) {
-				Guard.Fail(NamespaceError);
-			}
+			Guard.AssertDebug(!m_typeImportMaps.ContainsKey(t));
+			Guard.AssertDebug(mapField.GetValue(null) == null);
 		}
-
+		
 		[AssertionMethod]
 		private static void CheckAnnotations(MemberInfo                   member,
 		                                     bool                         nameSpace,
 		                                     out ImportNamespaceAttribute nameSpaceAttr)
 		{
-			Type t = nameSpace ? member.DeclaringType : (Type) member;
+			var t = nameSpace ? member.DeclaringType : (Type) member;
 			
 			if (!IsAnnotated(t, out nameSpaceAttr)) {
-				Guard.Fail(NamespaceError);
+				string namespaceError = $"Type must be decorated with \"{nameof(ImportNamespaceAttribute)}\"";
+				Guard.Fail(namespaceError);
 			}
 		}
 
@@ -76,8 +73,7 @@ namespace NeoCore.Import
 		private static void CheckImportMapAnnotation(FieldInfo mapField)
 		{
 			if (mapField != null && mapField.GetCustomAttribute<ImportMapFieldAttribute>() == null) {
-				Guard.Fail(
-					$"Map field should be annotated with {nameof(ImportMapFieldAttribute)}");
+				Guard.Fail($"Map field should be annotated with {nameof(ImportMapFieldAttribute)}");
 			}
 		}
 

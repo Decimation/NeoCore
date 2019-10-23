@@ -139,7 +139,7 @@ namespace NeoCore.Memory
 
 			return heapPtr + offsetValue;
 		}
-
+		
 
 		#region Unsafe
 

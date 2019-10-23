@@ -18,8 +18,7 @@ using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Import
 {
-	// todo: cleanup
-
+	
 	public sealed partial class ImportManager : Releasable
 	{
 		#region Constants
@@ -54,9 +53,7 @@ namespace NeoCore.Import
 			UnloadAll();
 
 			// Sanity check
-			if (m_boundTypes.Count != 0 || m_typeImportMaps.Count != 0) {
-				Guard.Fail();
-			}
+			CloseCheck();
 
 			// Delete instance
 			Value = null;
@@ -80,8 +77,7 @@ namespace NeoCore.Import
 		                                        out       string     resolvedId)
 		{
 			Guard.AssertNotNull(member.DeclaringType, nameof(member.DeclaringType));
-
-			//CheckNamespaceAnnotation(member, out var nameSpaceAttr);
+			
 			CheckAnnotations(member, true, out var nameSpaceAttr);
 			
 			// Resolve the symbol
@@ -107,7 +103,6 @@ namespace NeoCore.Import
 
 
 			if (!options.HasFlagFast(IdentifierOptions.IgnoreEnclosingNamespace)) {
-				// resolvedId = enclosingNamespace + SCOPE_RESOLUTION_OPERATOR + resolvedId;
 				resolvedId = Format.Combine(enclosingNamespace, resolvedId);
 			}
 
@@ -141,8 +136,7 @@ namespace NeoCore.Import
 			mapField.SetValue(null, null);
 
 			// Sanity check
-			Guard.AssertDebug(!m_typeImportMaps.ContainsKey(type));
-			Guard.AssertDebug(mapField.GetValue(null) == null);
+			CheckMapFieldUnload(type, mapField);
 		}
 
 		/// <summary>
@@ -250,7 +244,7 @@ namespace NeoCore.Import
 		}
 
 
-		private FieldInfo FindMapField(Type type)
+		private static FieldInfo FindMapField(Type type)
 		{
 			var mapField = type.GetAnyField(ImportMap.FIELD_NAME);
 
@@ -267,7 +261,7 @@ namespace NeoCore.Import
 			return mapField;
 		}
 
-		private bool UsingMap(Type type, out FieldInfo mapField)
+		private static bool UsingMap(Type type, out FieldInfo mapField)
 		{
 			mapField = FindMapField(type);
 
@@ -296,8 +290,7 @@ namespace NeoCore.Import
 			if (IsBound(type)) {
 				return value;
 			}
-
-			//CheckAnnotation(type);
+			
 			CheckAnnotations(type, false, out _);
 
 			if (UsingMap(type, out var mapField)) {

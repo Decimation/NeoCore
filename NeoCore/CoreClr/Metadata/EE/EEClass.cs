@@ -84,7 +84,7 @@ namespace NeoCore.CoreClr.Metadata.EE
 			get {
 				// Offset for the field
 				const int FD_LIST_FIELD_OFFSET = 24;
-				return (FieldDesc*) Runtime.FieldOffset(ref this, FD_LIST_FIELD_OFFSET, FieldDescList);
+				return (FieldDesc*) ClrAccess.FieldOffset(ref this, FD_LIST_FIELD_OFFSET, FieldDescList);
 			}
 		}
 

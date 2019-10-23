@@ -5,6 +5,7 @@ using NeoCore.CoreClr.Metadata;
 using NeoCore.Memory;
 using NeoCore.Model;
 using NeoCore.Utilities.Diagnostics;
+
 // ReSharper disable InconsistentNaming
 
 namespace NeoCore.CoreClr.Meta
@@ -20,7 +21,7 @@ namespace NeoCore.CoreClr.Meta
 		private const int FIELD_OFFSET_MAX = (1 << 27) - 1;
 
 		private const int FIELD_OFFSET_NEW_ENC = FIELD_OFFSET_MAX - 4;
-		
+
 		#region Constructors
 
 		internal MetaField(Pointer<FieldDesc> ptr) : base(ptr) { }
@@ -32,7 +33,7 @@ namespace NeoCore.CoreClr.Meta
 		#region Accessors
 
 		public FieldInfo FieldInfo => (FieldInfo) Info;
-		
+
 		public ElementType ElementType => Value.Reference.ElementType;
 
 		public ProtectionLevel Protection => Value.Reference.ProtectionLevel;
@@ -44,7 +45,7 @@ namespace NeoCore.CoreClr.Meta
 		public MetaType FieldType => FieldInfo.FieldType;
 
 		public override MetaType EnclosingType {
-			get { throw new NotImplementedException();}
+			get { return (Pointer<MethodTable>) Value.Reference.ApproxEnclosingMethodTable; }
 		}
 
 		public override int Token => Value.Reference.Token;
@@ -74,7 +75,6 @@ namespace NeoCore.CoreClr.Meta
 		#endregion
 
 		#endregion
-		
 
 		public Pointer<byte> GetValueAddress<T>(ref T value)
 		{
@@ -116,8 +116,6 @@ namespace NeoCore.CoreClr.Meta
 
 		#region Equality
 
-		
-
 //		public static bool operator ==(MetaField left, MetaField right) => Equals(left, right);
 
 //		public static bool operator !=(MetaField left, MetaField right) => !Equals(left, right);
@@ -125,6 +123,5 @@ namespace NeoCore.CoreClr.Meta
 		#endregion
 
 		#endregion
-		
 	}
 }

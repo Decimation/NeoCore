@@ -16,6 +16,11 @@ namespace NeoCore.Utilities
 
 		public static string AsHex(IntPtr value) => value.ToInt64().ToString(HEX_FORMAT_SPECIFIER);
 
+		public static string GetBackingFieldName(string name)
+		{
+			return String.Format("<{0}>k__BackingField", name);
+		}
+		
 		internal static string Combine(params string[] args)
 		{
 			const string SCOPE_RESOLUTION_OPERATOR = "::";

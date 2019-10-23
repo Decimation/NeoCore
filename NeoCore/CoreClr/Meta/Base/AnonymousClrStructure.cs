@@ -34,7 +34,7 @@ namespace NeoCore.CoreClr.Meta.Base
 			Value = ptr;
 		}
 
-		internal AnonymousClrStructure(MemberInfo member) : this(Runtime.ResolveHandle(member)) { }
+		protected AnonymousClrStructure(MemberInfo member) : this(Runtime.ResolveHandle(member)) { }
 
 		#endregion
 

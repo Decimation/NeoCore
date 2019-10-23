@@ -10,6 +10,8 @@ using NeoCore;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
+using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Memory;
 using NeoCore.Utilities;
@@ -23,38 +25,29 @@ namespace Test
 	{
 		class MyClass
 		{
-			public void Hi()
-			{
-				
-			}
+			public int Field;
+
+			public void Hi() { }
 
 			public int Value {
 				get { return 1; }
 			}
 		}
-		
-		static PropertyInfo GetProperty(MethodInfo method)
+
+
+		[StructLayout(LayoutKind.Sequential)]
+		struct MyStruct
 		{
-			bool takesArg  = method.GetParameters().Length == 1;
-			bool hasReturn = method.ReturnType != typeof(void);
-			if (takesArg == hasReturn) return null;
-			if (takesArg)
-			{
-				return method.DeclaringType
-				             .GetProperties().FirstOrDefault(prop => prop.GetSetMethod() == method);
-			}
-			else
-			{
-				return method.DeclaringType
-				             .GetProperties().FirstOrDefault(prop => prop.GetGetMethod() == method);
-			}
+			internal MethodTable* Field { get; }
 		}
-		
+
 		private static void Main(string[] args)
 		{
 			Resources.SetupAll();
-			
 
+			var mt = (MetaType) typeof(MyClass);
+			var fn = mt.GetMethod("Hi");
+			Console.WriteLine(fn.EnclosingType);
 		}
 	}
 }

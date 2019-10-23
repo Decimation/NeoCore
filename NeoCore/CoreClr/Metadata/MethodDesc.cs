@@ -140,7 +140,7 @@ namespace NeoCore.CoreClr.Metadata
 			}
 		}
 
-		internal MethodTable* MethodTable => MethodDescChunk->MethodTable;
+		internal Pointer<MethodTable>  MethodTable => MethodDescChunk->MethodTable;
 
 		#endregion
 	}

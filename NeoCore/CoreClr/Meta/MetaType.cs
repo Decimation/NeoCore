@@ -26,7 +26,7 @@ namespace NeoCore.CoreClr.Meta
 		internal MetaType(Pointer<MethodTable> mt) : base(mt)
 		{
 			RuntimeType = Runtime.ResolveType(mt.Cast());
-			Properties = ReadProperties(RuntimeType);
+			TypeProperties = ReadProperties(RuntimeType);
 		}
 
 		public MetaType(Type t) : this(Runtime.ResolveHandle(t)) { }
@@ -35,32 +35,32 @@ namespace NeoCore.CoreClr.Meta
 
 		#region Accessors
 
-		private static AuxiliaryProperties ReadProperties(Type t)
+		private static MetaTypeProperties ReadProperties(Type t)
 		{
-			var mp = new AuxiliaryProperties();
+			var mp = new MetaTypeProperties();
 
 			if (Runtime.Info.IsInteger(t)) {
-				mp |= AuxiliaryProperties.Integer;
+				mp |= MetaTypeProperties.Integer;
 			}
 			
 			if (Runtime.Info.IsReal(t)) {
-				mp |= AuxiliaryProperties.Real;
+				mp |= MetaTypeProperties.Real;
 			}
 			
 			if (Runtime.Info.IsStruct(t)) {
-				mp |= AuxiliaryProperties.Struct;
+				mp |= MetaTypeProperties.Struct;
 			}
 			
 			if (Runtime.Info.IsUnmanaged(t)) {
-				mp |= AuxiliaryProperties.Unmanaged;
+				mp |= MetaTypeProperties.Unmanaged;
 			}
 			
 			if (Runtime.Info.IsEnumerableType(t)) {
-				mp |= AuxiliaryProperties.Enumerable;
+				mp |= MetaTypeProperties.Enumerable;
 			}
 			
 			if (t.IsPointer) {
-				mp |= AuxiliaryProperties.Pointer;
+				mp |= MetaTypeProperties.Pointer;
 			}
 			
 			return mp;
@@ -68,7 +68,7 @@ namespace NeoCore.CoreClr.Meta
 		
 		public override MemberInfo Info => RuntimeType;
 		
-		public AuxiliaryProperties Properties { get; }
+		public MetaTypeProperties TypeProperties { get; }
 
 		#region MethodTable
 

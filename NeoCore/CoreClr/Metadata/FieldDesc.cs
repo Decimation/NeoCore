@@ -25,6 +25,7 @@ namespace NeoCore.CoreClr.Metadata
 
 		#region Fields
 
+		// RelativePointer
 		private MethodTable* EnclosingMethodTableStub { get; }
 
 		/// <summary>
@@ -101,5 +102,14 @@ namespace NeoCore.CoreClr.Metadata
 		}
 
 		#endregion
+
+		internal MethodTable* ApproxEnclosingMethodTable
+		{
+			get {
+				// m_pMTOfEnclosingClass.GetValue(PTR_HOST_MEMBER_TADDR(FieldDesc, this, m_pMTOfEnclosingClass));
+				const int MT_FIELD_OFS = 0;
+				return (MethodTable*) (MT_FIELD_OFS + ((long) EnclosingMethodTableStub));
+			}
+		}
 	}
 }

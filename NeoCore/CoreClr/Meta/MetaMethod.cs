@@ -54,8 +54,8 @@ namespace NeoCore.CoreClr.Meta
 
 		public MethodClassification Classification => Value.Reference.Classification;
 		public MethodProperties     Properties     => Value.Reference.Properties;
-		public CodeInfo           Code           => Value.Reference.Code;
-		public ParameterInfo       ParameterTypes => Value.Reference.Flags3AndTokenRemainder;
+		public CodeInfo             Code           => Value.Reference.Code;
+		public ParameterInfo        ParameterTypes => Value.Reference.Flags3AndTokenRemainder;
 		public MethodAttributes     Attributes     => MethodInfo.Attributes;
 
 		#endregion
