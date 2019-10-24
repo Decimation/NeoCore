@@ -1,11 +1,13 @@
 using System.Runtime.InteropServices;
 using NeoCore.CoreClr.Support;
+using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Metadata.EE
+namespace NeoCore.CoreClr.VM.EE
 {
+	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct EEClassLayoutInfo : IClr

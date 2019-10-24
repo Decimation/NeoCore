@@ -1,7 +1,9 @@
 using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 using NeoCore.CoreClr;
 using NeoCore.Memory.Pointers;
+using NeoCore.Utilities;
 
 namespace NeoCore.Memory
 {
@@ -60,6 +62,15 @@ namespace NeoCore.Memory
 			}
 
 			value = default;
+		}
+
+		public static int OffsetOf(Type t, string name, bool isProperty = false)
+		{
+			if (isProperty) {
+				name = Format.GetBackingFieldName(name);
+			}
+
+			return (int) Marshal.OffsetOf(t, name);
 		}
 	}
 }

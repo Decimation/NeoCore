@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.VM;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
@@ -26,9 +26,15 @@ namespace NeoCore.CoreClr.Meta
 
 		#region Constructors
 
-		public MetaField(Pointer<FieldDesc> ptr) : base(ptr) { }
+		public MetaField(Pointer<FieldDesc> ptr) : base(ptr)
+		{
+			
+		}
 
-		public MetaField(FieldInfo info) : base(info) { }
+		public MetaField(FieldInfo info) : base(info)
+		{
+			
+		}
 
 		#endregion
 
@@ -36,7 +42,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public FieldInfo FieldInfo => (FieldInfo) Info;
 
-		public ElementType ElementType => Value.Reference.ElementType;
+		public ElementType Element => Value.Reference.Element;
 
 		public AccessModifiers Access => Value.Reference.Access;
 
@@ -75,6 +81,8 @@ namespace NeoCore.CoreClr.Meta
 		#endregion
 
 		#endregion
+
+		protected override Type[] AdditionalSources => Array.Empty<Type>();
 
 		public Pointer<byte> GetValueAddress<T>(ref T value)
 		{

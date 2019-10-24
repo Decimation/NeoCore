@@ -1,20 +1,16 @@
-using System;
-using System.Net.Security;
 using System.Runtime.InteropServices;
-using NeoCore.Assets;
 using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
-using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Metadata
+namespace NeoCore.CoreClr.VM
 {
 	[ImportNamespace]
 	[NativeStructure]
@@ -58,7 +54,7 @@ namespace NeoCore.CoreClr.Metadata
 				var rawToken = (int) (UInt1 & 0xFFFFFF);
 				// Check if this FieldDesc is using the packed mb layout
 				if (!Properties.HasFlagFast(FieldProperties.RequiresFullMBValue))
-					return Tokens.TokenFromRid(rawToken & (int) PackedLayoutMask.MbMask, TokenType.FieldDef);
+					return Tokens.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, TokenType.FieldDef);
 
 				return Tokens.TokenFromRid(rawToken, TokenType.FieldDef);
 			}
@@ -66,11 +62,11 @@ namespace NeoCore.CoreClr.Metadata
 
 		internal int Offset => (int) (UInt2 & 0x7FFFFFF);
 
-		internal ElementType ElementType => (ElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
+		internal ElementType Element => (ElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
 
 		internal AccessModifiers Access => (AccessModifiers) (int) ((UInt1 >> 26) & 0x3FFFFFF);
 
-		internal bool IsPointer => ElementType == ElementType.Ptr;
+		internal bool IsPointer => Element == ElementType.Ptr;
 
 		internal FieldProperties Properties => (FieldProperties) UInt1;
 

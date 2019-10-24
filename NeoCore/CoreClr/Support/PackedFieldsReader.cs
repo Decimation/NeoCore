@@ -1,10 +1,11 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
-using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.VM;
 using NeoCore.Interop.Attributes;
-
+using NeoCore.Memory.Pointers;
 // ReSharper disable BuiltInTypeReferenceStyle
+// ReSharper disable ConvertToAutoPropertyWhenPossible
 
 namespace NeoCore.CoreClr.Support
 {
@@ -14,30 +15,47 @@ namespace NeoCore.CoreClr.Support
 	/// Packed DWORD fields
 	/// </summary>
 	[NativeStructure]
-	[StructLayout(LayoutKind.Explicit)]
-	internal unsafe struct PackedFields
+	internal readonly struct PackedFieldsReader
 	{
-		/// <summary>
-		///     <see cref="EEClassFieldId.COUNT" /> == <see cref="EECLASS_LENGTH" /> == <c>11</c>
-		/// </summary>
-		private const int EECLASS_LENGTH = (int) EEClassFieldId.COUNT;
-
+		private const int PACKED_FIELDS_RG_LEN = 1;
 		private const int MAX_LENGTH_BITS = 5;
 
-		[FieldOffset(0)]
-		private fixed DWORD m_rgUnpackedFields[EECLASS_LENGTH];
+//		[FieldOffset(0)]
+//		private fixed DWORD m_rgUnpackedFields[EECLASS_LENGTH];
+// 		DWORD   m_rgUnpackedFields[FIELD_COUNT];
+		
+//		[FieldOffset(0)]
+//		private DWORD m_rgPackedFields;
+// 		DWORD   m_rgPackedFields[1];
 
-		[FieldOffset(0)]
-		private fixed DWORD m_rgPackedFields[1];
+		private readonly int m_unpackedFieldsLength;
+		
+		private readonly Pointer<DWORD> m_ptr;
+		
+		/// <summary>
+		/// The first DWORD block of fields in the packed state.
+		/// There should only be <see cref="PACKED_FIELDS_RG_LEN"/> elements.
+		/// </summary>
+		private Pointer<DWORD> PackedFields => m_ptr;
+		
+		/// <summary>
+		/// The fields in their unpacked state
+		/// </summary>
+		private Pointer<DWORD> UnpackedFields => m_ptr;
 
+		internal PackedFieldsReader(Pointer<DWORD> p, int l)
+		{
+			m_ptr = p;
+			m_unpackedFieldsLength = l;
+		}
+		
+		
 		/// <summary>
 		///     Get the value of the given field when the structure is in its unpacked state.
 		/// </summary>
 		internal DWORD GetUnpackedField(DWORD dwFieldIndex)
 		{
-			fixed (PackedFields* p = &this) {
-				return p->m_rgUnpackedFields[dwFieldIndex];
-			}
+			return UnpackedFields[(int) dwFieldIndex];
 		}
 
 		internal DWORD GetPackedField(DWORD dwFieldIndex)
@@ -76,9 +94,9 @@ namespace NeoCore.CoreClr.Support
 				
 				// Mask out the bits we want and shift them down into the bottom of the result DWORD.
 
-				fixed (PackedFields* p = &this) {
-					return (p->m_rgPackedFields[dwStartBlock] & dwValueMask) >> (int) dwValueShift;
-				}
+				
+				return (PackedFields[(int) dwStartBlock] & dwValueMask) >> (int) dwValueShift;
+				
 			}
 
 			// Hard case: the return value is split across two DWORDs (two DWORDs is the max as the new value

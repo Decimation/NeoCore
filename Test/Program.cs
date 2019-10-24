@@ -10,8 +10,8 @@ using NeoCore;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
-using NeoCore.CoreClr.Metadata;
 using NeoCore.CoreClr.Support;
+using NeoCore.FastReflection;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Memory;
@@ -26,44 +26,22 @@ namespace Test
 {
 	internal static unsafe class Program
 	{
-		class MyClass : Releasable
+		public class TestObject
 		{
-			public int Field;
+			private protected string StringField;
 
-			public static readonly string Field2 = "11";
-
-			public void Hi() { }
-
-			public int Value {
-				get { return 1; }
-			}
-
-			public override void Setup()
-			{
-				base.Setup();
-			}
-
-			protected override string Id { get; }
+			public void Hello() { }
 		}
 
-		struct Ptr1<T> : IPointer<T>
-		{
-			public T Read()
-			{
-				throw new NotImplementedException();
-			}
-		}
 
-		class MyClass2
-		{
-			public IPointer<int> p;
-		}
-		
 		private static void Main(string[] args)
 		{
-			Resources.SetupAll();
-			
-			
+			var t = (MetaType) typeof(TestObject);
+			var ee = t.Value.Reference.EEClass;
+			Console.WriteLine(ee.Reference.NumInstanceFields);
+			Console.WriteLine(ee.Reference.NumStaticFields);
+			Console.WriteLine(ee.Reference.NumMethods);
+			Console.WriteLine(ee.Reference.NumNonVirtualSlots);
 		}
 	}
 }

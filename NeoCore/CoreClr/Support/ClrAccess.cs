@@ -6,14 +6,13 @@ using NeoCore.Utilities;
 
 namespace NeoCore.CoreClr.Support
 {
-	public static unsafe class ClrAccess
+	internal static unsafe class ClrAccess
 	{
 		// https://github.com/dotnet/coreclr/blob/master/src/inc/daccess.h
 		
 		/// <summary>
 		/// Alias: PTR_HOST_MEMBER_TADDR (alt)
 		/// </summary>
-		[Obsolete]
 		internal static Pointer<byte> FieldOffsetAlt<T>(ref T value, long ofs, Pointer<byte> fieldValue)
 			where T : unmanaged
 		{
@@ -43,21 +42,7 @@ namespace NeoCore.CoreClr.Support
 		internal static Pointer<byte> FieldOffset<TClr, TField>(TField* field, string name, bool isProperty = false) 
 			where TField : unmanaged
 		{
-			return FieldOffset(field, OffsetOf<TClr>(name, isProperty));
-		}
-
-		public static int OffsetOf(Type t, string name, bool isProperty = false)
-		{
-			if (isProperty) {
-				name = Format.GetBackingFieldName(name);
-			}
-
-			return (int) Marshal.OffsetOf(t, name);
-		}
-
-		public static int OffsetOf<TClr>(string name, bool isProperty = false)
-		{
-			return OffsetOf(typeof(TClr), name, isProperty);
+			return FieldOffset(field, Mem.OffsetOf<TClr>(name, isProperty));
 		}
 	}
 }

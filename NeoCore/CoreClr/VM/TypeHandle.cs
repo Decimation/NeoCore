@@ -5,16 +5,20 @@ using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
-using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
-namespace NeoCore.CoreClr.Metadata
+namespace NeoCore.CoreClr.VM
 {
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct TypeHandle : IClr
 	{
+		static TypeHandle()
+		{
+			ImportManager.Value.Load(typeof(TypeHandle), Resources.Clr.Imports);
+		}
+		
 		private void* Union1 { get; }
 		
 		private MethodTable* AsMethodTable => (MethodTable*) Union1;

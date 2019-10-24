@@ -39,7 +39,6 @@ namespace NeoCore.CoreClr
 				get {
 #if NETCOREAPP
 					return ClrFrameworks.Core;
-
 #endif
 
 #if NETFRAMEWORK
@@ -49,8 +48,10 @@ namespace NeoCore.CoreClr
 #if NETSTANDARD
 					return ClrFrameworks.Standard;
 #endif
-
+#pragma warning disable 162
+					// ReSharper disable once HeuristicUnreachableCode
 					Guard.Fail();
+#pragma warning restore 162
 				}
 			}
 

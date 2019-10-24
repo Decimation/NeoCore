@@ -4,7 +4,6 @@ using System;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
 using NeoCore.Utilities;
-using static NeoCore.Assets.Constants.Defaults;
 
 #endregion
 
@@ -26,7 +25,7 @@ namespace NeoCore.Memory.Pointers
 	///     </list>
 	/// </summary>
 	/// <typeparam name="T">Pointer element type</typeparam>
-	public unsafe struct Pointer<T>
+	public unsafe struct Pointer<T> : IPointer<T>
 	{
 		/// <summary>
 		/// Internal pointer value.
@@ -84,6 +83,16 @@ namespace NeoCore.Memory.Pointers
 
 		#endregion
 
+		/// <summary>
+		/// Default offset for <see cref="Pointer{T}"/>
+		/// </summary>
+		private const int DEF_OFFSET = 0;
+
+		/// <summary>
+		/// Default increment/decrement/element count for <see cref="Pointer{T}"/>
+		/// </summary>
+		private const int DEF_ELEM_CNT = 1;
+		
 		#region Implicit / explicit conversions
 
 		public static explicit operator Pointer<T>(ulong ul) => new Pointer<T>((void*) ul);

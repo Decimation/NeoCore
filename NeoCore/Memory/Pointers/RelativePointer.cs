@@ -4,9 +4,9 @@ using NeoCore.Interop.Attributes;
 namespace NeoCore.Memory.Pointers
 {
 	// todo: WIP
-	
+
 	[NativeStructure]
-	public unsafe struct RelativePointer<T> where T : unmanaged
+	public unsafe struct RelativePointer<T> : IRelativePointer<T>
 	{
 		public ulong Value { get; }
 
@@ -24,7 +24,7 @@ namespace NeoCore.Memory.Pointers
 
 			return (Pointer<T>) (Value + value);
 		}
-		
+
 		public override string ToString()
 		{
 			return String.Format("{0:X} d", Value);

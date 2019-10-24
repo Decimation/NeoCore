@@ -2,7 +2,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
-using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.VM;
 
 namespace NeoCore.Memory
 {

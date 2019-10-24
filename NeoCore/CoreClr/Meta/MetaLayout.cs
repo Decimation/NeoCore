@@ -1,6 +1,7 @@
+using System;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.Metadata;
-using NeoCore.CoreClr.Metadata.EE;
+using NeoCore.CoreClr.VM;
+using NeoCore.CoreClr.VM.EE;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
@@ -22,6 +23,8 @@ namespace NeoCore.CoreClr.Meta
 
 		#endregion
 
+		protected override Type[] AdditionalSources => Array.Empty<Type>();
+		
 		#region Accessors
 
 		public int NativeSize => Value.Reference.NativeSize;

@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
-using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.Meta;
+using NeoCore.CoreClr.VM;
 using NeoCore.Interop;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
@@ -30,14 +31,14 @@ namespace NeoCore.CoreClr
 
 			return member switch
 			{
-				Type t => ReadTypeHandle(t).MethodTable.Cast(),
+				Type t => ReadTypeHandle(t).Value.Cast(),
 				FieldInfo field => field.FieldHandle.Value,
 				MethodInfo method => method.MethodHandle.Value,
 				_ => throw new InvalidOperationException()
 			};
 		}
 		
-		internal static TypeHandle ReadTypeHandle<T>(T value)
+		internal static MetaType ReadTypeHandle<T>(T value)
 		{
 			// Value types do not have a MethodTable ptr, but they do have a TypeHandle.
 			if (Runtime.Info.IsStruct(value))
@@ -45,14 +46,22 @@ namespace NeoCore.CoreClr
 
 			Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr);
 			Guard.AssertNotNull(ptr, nameof(ptr));
-			return *(TypeHandle*) ptr;
+
+			var handle = *(TypeHandle*) ptr;
+			return new MetaType(handle.MethodTable);
 		}
 
-		internal static TypeHandle ReadTypeHandle(Type t)
+		internal static MetaType ReadTypeHandle(Type t)
 		{
 			var handle          = t.TypeHandle.Value;
 			var typeHandleValue = *(TypeHandle*) &handle;
-			return typeHandleValue;
+			return new MetaType(typeHandleValue.MethodTable);
+		}
+
+		internal static ObjHeader ReadObjHeader<T>(T value) where T : class
+		{
+			var ptr = Unsafe.AddressOfHeap(value, OffsetOptions.Header).Cast<ObjHeader>();
+			return ptr.Value;
 		}
 	}
 }

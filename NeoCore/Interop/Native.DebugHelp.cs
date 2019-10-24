@@ -37,10 +37,14 @@ namespace NeoCore.Interop
 			}
 
 
-			internal static ulong SymLoadModuleEx(IntPtr hProc, IntPtr hFile, string img, string mod, ulong dllBase,
-			                                      uint   fileSize)
+			internal static bool SymEnumSymbols(IntPtr hProcess, ulong modBase, SymEnumSymbolsCallback callback)
 			{
-				return SymLoadModuleEx(hProc, hFile, img, mod, dllBase,
+				return SymEnumSymbols(hProcess, modBase, null, callback, IntPtr.Zero);
+			}
+
+			internal static ulong SymLoadModuleEx(IntPtr hProc, string img, ulong dllBase, uint fileSize)
+			{
+				return SymLoadModuleEx(hProc, IntPtr.Zero, img, null, dllBase,
 				                       fileSize, IntPtr.Zero, default);
 			}
 
@@ -122,6 +126,11 @@ namespace NeoCore.Interop
 
 			#region Sym enum symbols
 
+			/// <param name="hProcess">Process handle of the current process</param>
+			/// <param name="modBase">Base address of the module</param>
+			/// <param name="mask">Mask (NULL -> all symbols)</param>
+			/// <param name="callback">The callback function</param>
+			/// <param name="pUserContext">A used-defined context can be passed here, if necessary</param>
 			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
 			[return: As(Types.Bool)]
@@ -175,6 +184,14 @@ namespace NeoCore.Interop
 			internal static extern bool SymUnloadModule64(IntPtr hProc, ulong baseAddr);
 
 
+			/// <param name="hProcess">Process handle of the current process</param>
+			/// <param name="hFile">Handle to the module's image file (not needed)</param>
+			/// <param name="imageName">Path/name of the file</param>
+			/// <param name="moduleName">User-defined short name of the module (it can be NULL)</param>
+			/// <param name="baseOfDll">Base address of the module (cannot be NULL if .PDB file is used, otherwise it can be NULL)</param>
+			/// <param name="dllSize">Size of the file (cannot be NULL if .PDB file is used, otherwise it can be NULL)</param>
+			/// <param name="data">?</param>
+			/// <param name="flags">?</param>
 			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
 			private static extern ulong SymLoadModuleEx(IntPtr hProcess,   IntPtr hFile,     string imageName,

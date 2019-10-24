@@ -5,10 +5,10 @@ namespace NeoCore.Memory.Pointers
 {
 	// todo: WIP
 	[NativeStructure]
-	public unsafe struct RelativeFixupPointer<T> where T : unmanaged
+	public unsafe struct RelativeFixupPointer<T> : IRelativePointer<T>
 	{
 		// https://github.com/dotnet/coreclr/blob/master/src/inc/fixuppointer.h
-		
+
 		public ulong Value { get; }
 
 		/// <summary>

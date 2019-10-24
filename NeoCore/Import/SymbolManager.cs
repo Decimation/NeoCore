@@ -122,31 +122,15 @@ namespace NeoCore.Import
 			Guard.Assert(IsSetup);
 
 			Native.Kernel32.GetFileParams(img, out ulong baseAddr, out ulong fileSize);
-
-
-			m_modBase = Native.DebugHelp.SymLoadModuleEx(
-				m_proc,         // Process handle of the current process
-				IntPtr.Zero,    // Handle to the module's image file (not needed)
-				img,            // Path/name of the file
-				null,           // User-defined short name of the module (it can be NULL)
-				baseAddr,       // Base address of the module (cannot be NULL if .PDB file is used, otherwise it can be NULL)
-				(uint) fileSize // Size of the file (cannot be NULL if .PDB file is used, otherwise it can be NULL)
-//				IntPtr.Zero,
-//				0x1
-			);
+			
+			m_modBase = Native.DebugHelp.SymLoadModuleEx(m_proc, img, baseAddr, (uint) fileSize);
 
 			CheckModule();
 		}
 
-		internal long[] GetSymOffsets(string[] names)
-		{
-			return GetSymbols(names).Select(x => x.Offset).ToArray();
-		}
+		internal long[] GetSymOffsets(string[] names) => GetSymbols(names).Select(x => x.Offset).ToArray();
 
-		internal long GetSymOffset(string name)
-		{
-			return GetSymbol(name).Offset;
-		}
+		internal long GetSymOffset(string name) => GetSymbol(name).Offset;
 
 		internal Symbol[] GetSymbols()
 		{
@@ -154,13 +138,7 @@ namespace NeoCore.Import
 
 			m_symBuffer = new List<Symbol>();
 
-			Native.DebugHelp.SymEnumSymbols(
-				m_proc,             // Process handle of the current process
-				m_modBase,          // Base address of the module
-				null,               // Mask (NULL -> all symbols)
-				CollectSymCallback, // The callback function
-				IntPtr.Zero         // A used-defined context can be passed here, if necessary
-			);
+			Native.DebugHelp.SymEnumSymbols(m_proc, m_modBase, AddSymCallback);
 
 			Symbol[] cpy = m_symBuffer.ToArray();
 			ClearBuffer();
@@ -204,13 +182,7 @@ namespace NeoCore.Import
 			m_symBuffer        = new List<Symbol>();
 			m_singleNameBuffer = name;
 
-			Native.DebugHelp.SymEnumSymbols(
-				m_proc,                  // Process handle of the current process
-				m_modBase,               // Base address of the module
-				null,                    // Mask (NULL -> all symbols)
-				SymNameContainsCallback, // The callback function
-				IntPtr.Zero              // A used-defined context can be passed here, if necessary
-			);
+			Native.DebugHelp.SymEnumSymbols(m_proc, m_modBase, AddSymByNameCallback);
 
 			Symbol[] cpy = m_symBuffer.ToArray();
 
@@ -221,7 +193,7 @@ namespace NeoCore.Import
 
 		#region Callbacks
 
-		private bool SymNameContainsCallback(IntPtr sym, uint symSize, IntPtr userCtx)
+		private bool AddSymByNameCallback(IntPtr sym, uint symSize, IntPtr userCtx)
 		{
 			string symName = Native.DebugHelp.GetSymbolName(sym);
 
@@ -232,7 +204,7 @@ namespace NeoCore.Import
 			return true;
 		}
 
-		private bool CollectSymCallback(IntPtr sym, uint symSize, IntPtr userCtx)
+		private bool AddSymCallback(IntPtr sym, uint symSize, IntPtr userCtx)
 		{
 			m_symBuffer.Add(new Symbol(sym));
 

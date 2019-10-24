@@ -2,11 +2,11 @@ using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.VM;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
-using ParameterInfo = NeoCore.CoreClr.Metadata.ParameterInfo;
+using ParameterInfo = NeoCore.CoreClr.VM.ParameterInfo;
 
 // ReSharper disable InconsistentNaming
 
@@ -33,6 +33,8 @@ namespace NeoCore.CoreClr.Meta
 		public int ChunkIndex => Value.Reference.ChunkIndex;
 
 		public int SlotNumber => Value.Reference.SlotNumber;
+
+		protected override Type[] AdditionalSources => new[] {typeof(MethodDescChunk)};
 
 		#region bool
 

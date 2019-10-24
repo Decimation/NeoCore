@@ -1,6 +1,8 @@
+using NeoCore.Memory;
+
 namespace NeoCore.Assets
 {
-	public static partial class Constants
+	public static unsafe partial class Constants
 	{
 		/// <summary>
 		/// Name of this assembly.
@@ -17,5 +19,7 @@ namespace NeoCore.Assets
 		internal const string COND_DEBUG = "DEBUG";
 		
 		internal const string STRING_FMT_ARG = "msg";
+
+		
 	}
 }

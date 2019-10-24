@@ -298,7 +298,8 @@ namespace NeoCore.Import
 				return value;
 			}
 
-
+			Global.Value.WriteInformation(null, "Load: {Name}", type.Name);
+			
 			if (UsingMap(type, out var mapField)) {
 				if (m_typeImportMaps.ContainsKey(type)) {
 					return value;

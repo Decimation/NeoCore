@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 using NeoCore.CoreClr;
-using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.VM;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Memory;

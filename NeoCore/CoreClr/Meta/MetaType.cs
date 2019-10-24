@@ -1,14 +1,14 @@
 using System;
 using System.Reflection;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.Metadata;
-using NeoCore.CoreClr.Metadata.EE;
+using NeoCore.CoreClr.VM;
+using NeoCore.CoreClr.VM.EE;
 using NeoCore.FastReflection;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
-using TypeInfo = NeoCore.CoreClr.Metadata.TypeInfo;
+using TypeInfo = NeoCore.CoreClr.VM.TypeInfo;
 
 // ReSharper disable InconsistentNaming
 
@@ -37,6 +37,8 @@ namespace NeoCore.CoreClr.Meta
 
 		#region Accessors
 
+		protected override Type[] AdditionalSources => new[] {typeof(EEClass), typeof(TypeHandle)};
+		
 		private static MetaTypeProperties ReadProperties(Type t)
 		{
 			var mp = new MetaTypeProperties();

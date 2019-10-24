@@ -32,7 +32,7 @@ namespace NeoCore.CoreClr.Support
 	/// <summary>
 	/// Represents a CLR framework type.
 	/// </summary>
-	public struct ClrFramework
+	public readonly struct ClrFramework
 	{
 		private readonly FileInfo m_symbolFile;
 		private readonly FileInfo m_libraryFile;

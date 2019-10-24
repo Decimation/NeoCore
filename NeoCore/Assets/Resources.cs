@@ -1,9 +1,8 @@
 using System;
 using System.Runtime.CompilerServices;
 using NeoCore.CoreClr;
-using NeoCore.CoreClr.Metadata;
-using NeoCore.CoreClr.Metadata.EE;
 using NeoCore.CoreClr.Support;
+using NeoCore.CoreClr.VM;
 using NeoCore.Import;
 using NeoCore.Interop;
 using NeoCore.Model;
@@ -21,6 +20,8 @@ namespace NeoCore.Assets
 		 * - Add/improve missing features from RazorSharp
 		 * - Clean up
 		 */
+
+		private static bool IsSetup { get; set; } = false;
 		
 		static Resources()
 		{
@@ -43,7 +44,6 @@ namespace NeoCore.Assets
 		{
 			SymbolManager.Value,
 			ImportManager.Value,
-			
 			Global.Value, 
 		};
 		
@@ -51,10 +51,16 @@ namespace NeoCore.Assets
 
 		internal static void SetupAll()
 		{
+			if (IsSetup) {
+				return;
+			}
+			
 			ImportManager.Value.LoadAll(CoreClrTypes, Clr.Imports);
 			
 			var appDomain = AppDomain.CurrentDomain;
 			appDomain.ProcessExit += (sender, eventArgs) => { Close(); };
+
+			IsSetup = true;
 		}
 		
 		internal static void Close()
@@ -64,8 +70,8 @@ namespace NeoCore.Assets
 			foreach (var value in CoreObjects) {
 				value?.Close();
 			}
-			
-			
+
+			IsSetup = false;
 		}
 	}
 }

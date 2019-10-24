@@ -31,17 +31,36 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		#region Constructors
 
-		// Root constructor
+		/// <summary>
+		/// Root constructor
+		/// </summary>
+		/// <param name="ptr">Metadata structure handle</param>
 		protected AnonymousClrStructure(Pointer<TClr> ptr)
 		{
 			Value = ptr;
 			
-			ImportManager.Value.Load(typeof(TClr), Resources.Clr.Imports);
+			LoadSources();
 		}
 
 		protected AnonymousClrStructure(MemberInfo member) : this(Runtime.ResolveHandle(member)) { }
 
 		#endregion
+
+		/// <summary>
+		/// Additional <see cref="IClr"/> metadata sources.
+		/// </summary>
+		protected abstract Type[] AdditionalSources { get; }
+
+		private void LoadSources()
+		{
+			ImportManager.Value.Load(typeof(TClr), Resources.Clr.Imports);
+
+			if (AdditionalSources != null && AdditionalSources.Length > 0) {
+				ImportManager.Value.LoadAll(AdditionalSources, Resources.Clr.Imports);
+			}
+
+			
+		}
 
 
 		#region ToString
@@ -79,9 +98,11 @@ namespace NeoCore.CoreClr.Meta.Base
 			return Constants.INVALID_VALUE;
 		}
 
-		public static bool operator ==(AnonymousClrStructure<TClr> left, AnonymousClrStructure<TClr> right) => Equals(left, right);
+		public static bool operator ==(AnonymousClrStructure<TClr> left, AnonymousClrStructure<TClr> right) =>
+			Equals(left, right);
 
-		public static bool operator !=(AnonymousClrStructure<TClr> left, AnonymousClrStructure<TClr> right) => !Equals(left, right);
+		public static bool operator !=(AnonymousClrStructure<TClr> left, AnonymousClrStructure<TClr> right) =>
+			!Equals(left, right);
 
 		#endregion
 	}

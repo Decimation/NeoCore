@@ -1,9 +1,25 @@
 using System;
+using System.Reflection;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Metadata
+namespace NeoCore.CoreClr.VM
 {
+	[Flags]
+	public enum SyncBlockFlags : uint
+	{
+		StringHasNoHighChars = 0x80000000,
+		AgileInProgress      = 0x80000000,
+		StringHighCharsKnown = 0x40000000,
+		StringHasSpecialSort = 0xC0000000,
+		StringHighCharMask   = 0xC0000000,
+		FinalizerRun         = 0x40000000,
+		GcReserve            = 0x20000000,
+		SpinLock             = 0x10000000,
+		IsHashOrSyncblkindex = 0x08000000,
+		IsHashcode           = 0x04000000
+	}
+
 	/// <summary>
 	/// Describes the type of <see cref="MethodDesc"/>
 	/// </summary>
@@ -757,14 +773,37 @@ namespace NeoCore.CoreClr.Metadata
 
 	public enum AccessModifiers
 	{
-		Private           = 4,
-		PrivateProtected  = 8,
-		Internal          = 12,
-		Protected         = 16,
-		ProtectedInternal = 20,
-		Public            = 24
+		/// <summary>
+		/// <see cref="FieldInfo.IsPrivate"/>
+		/// </summary>
+		Private = 2,
+
+		/// <summary>
+		/// <see cref="FieldInfo.IsFamilyAndAssembly"/>
+		/// </summary>
+		PrivateProtected = 4,
+
+		/// <summary>
+		/// <see cref="FieldInfo.IsAssembly"/>
+		/// </summary>
+		Internal = 6,
+
+		/// <summary>
+		/// <see cref="FieldInfo.IsFamily"/>
+		/// </summary>
+		Protected = 8,
+
+		/// <summary>
+		/// <see cref="FieldInfo.IsFamilyOrAssembly"/>
+		/// </summary>
+		ProtectedInternal = 10,
+
+		/// <summary>
+		/// <see cref="FieldInfo.IsPublic"/>
+		/// </summary>
+		Public = 12
 	}
-	
+
 	[Flags]
 	public enum FieldProperties
 	{
@@ -777,15 +816,15 @@ namespace NeoCore.CoreClr.Metadata
 		//     <para>unsigned m_prot : 3;</para>
 		//     <para>unsigned m_requiresFullMbValue : 1;</para>
 		// </summary>
-		
+
 		None = 0,
-		
+
 		Static = 1 << 24,
-		
+
 		ThreadLocal = 1 << 25,
-		
+
 		RVA = 1 << 26,
-		
+
 		RequiresFullMBValue = 1 << 31
 	}
 
@@ -794,7 +833,7 @@ namespace NeoCore.CoreClr.Metadata
 	/// </summary>
 	internal enum PackedLayoutMask
 	{
-		MbMask       = 0x01FFFF,
+		MBMask       = 0x01FFFF,
 		NameHashMask = 0xFE0000
 	}
 }

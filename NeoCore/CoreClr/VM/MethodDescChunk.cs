@@ -1,12 +1,12 @@
-using System;
 using System.Runtime.InteropServices;
 using NeoCore.CoreClr.Support;
+using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
-using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
-namespace NeoCore.CoreClr.Metadata
+namespace NeoCore.CoreClr.VM
 {
+	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MethodDescChunk : IClr

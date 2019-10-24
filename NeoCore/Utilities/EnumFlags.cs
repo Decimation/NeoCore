@@ -1,5 +1,5 @@
 using System;
-using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.VM;
 using NeoCore.Import;
 
 namespace NeoCore.Utilities

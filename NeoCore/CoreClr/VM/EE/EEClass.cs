@@ -1,20 +1,17 @@
-using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using NeoCore.Assets;
 using NeoCore.CoreClr.Support;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
-using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
-using NeoCore.Utilities;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Metadata.EE
+namespace NeoCore.CoreClr.VM.EE
 {
+	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct EEClass : IClr
@@ -138,18 +135,19 @@ namespace NeoCore.CoreClr.Metadata.EE
 		private int GetPackableField(EEClassFieldId eField)
 		{
 			var u = (uint) eField;
-			return (int) (FieldsArePacked ? PackedFields->GetPackedField(u) : PackedFields->GetUnpackedField(u));
+			var pf = new PackedFieldsReader(PackedFields,(int) EEClassFieldId.COUNT);
+			return (int) (FieldsArePacked ? pf.GetPackedField(u) : pf.GetUnpackedField(u));
 		}
 
-		private PackedFields* PackedFields {
+		private Pointer<byte> PackedFields {
 			get {
 				fixed (EEClass* value = &this) {
 					var thisptr = (Pointer<byte>) value;
-					return (PackedFields*) thisptr.Add(FixedEEClassFields);
+					return thisptr.Add(FixedEEClassFields);
 				}
 			}
 		}
-
+		
 		#endregion
 	}
 

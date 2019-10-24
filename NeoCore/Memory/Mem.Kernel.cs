@@ -137,5 +137,10 @@ namespace NeoCore.Memory
 
 			#endregion
 		}
+
+		public static int OffsetOf<TClr>(string name, bool isProperty = false)
+		{
+			return Mem.OffsetOf(typeof(TClr), name, isProperty);
+		}
 	}
 }
