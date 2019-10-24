@@ -1,15 +1,14 @@
 using System;
-using System.Runtime.InteropServices;
 using NeoCore.Interop.Enums;
 
 namespace NeoCore.Interop.Structures
 {
 	/// <summary>
-	///     Wraps a <see cref="SymbolInfo" />
+	///     Wraps a <see cref="DebugSymbol" />
 	/// </summary>
 	public unsafe class Symbol
 	{
-		internal Symbol(SymbolInfo* pSymInfo, string name)
+		internal Symbol(DebugSymbol* pSymInfo, string name)
 		{
 			Name = name;
 
@@ -18,15 +17,15 @@ namespace NeoCore.Interop.Structures
 			Index        = pSymInfo->Index;
 			Size         = pSymInfo->Size;
 			ModBase      = pSymInfo->ModBase;
-			Flags        = (SymbolFlag) pSymInfo->Flags;
+			Flags        = pSymInfo->Flags;
 			Value        = pSymInfo->Value;
 			Address      = pSymInfo->Address;
 			Register     = pSymInfo->Register;
 			Scope        = pSymInfo->Scope;
-			Tag          = (SymbolTag) pSymInfo->Tag;
+			Tag          = pSymInfo->Tag;
 		}
 
-		internal Symbol(IntPtr pSym) : this((SymbolInfo*) pSym, Native.DebugHelp.GetSymbolName(pSym)) { }
+		internal Symbol(IntPtr pSym) : this((DebugSymbol*) pSym, Native.DebugHelp.GetSymbolName(pSym)) { }
 
 
 		public string Name { get; }
@@ -56,7 +55,7 @@ namespace NeoCore.Interop.Structures
 		public long Offset => (long) (Address - ModBase);
 
 
-		private static int GetSymbolInfoSize(SymbolInfo* pSym)
+		private static int GetSymbolInfoSize(DebugSymbol* pSym)
 		{
 			// SizeOfStruct + (MaxNameLen - 1) * sizeof(TCHAR)
 			return (int) (pSym->SizeOfStruct + (pSym->MaxNameLen - 1) * sizeof(byte));

@@ -2,11 +2,13 @@ using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Metadata.EE;
+using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable InconsistentNaming
@@ -14,14 +16,10 @@ using NeoCore.Memory;
 namespace NeoCore.CoreClr.Metadata
 {
 	[ImportNamespace]
+	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct MethodTable
+	public unsafe struct MethodTable : IClr
 	{
-		static MethodTable()
-		{
-			ImportManager.Value.Load(typeof(MethodTable), Resources.Clr.Imports);
-		}
-
 		internal short ComponentSize { get; }
 
 		internal GenericInfo GenericFlags { get; }
@@ -54,8 +52,8 @@ namespace NeoCore.CoreClr.Metadata
 
 		/// <summary>
 		///     <para>Union 1</para>
-		///     <para>EEClass* <see cref="EEClass" /></para>
-		///     <para>MethodTable* <see cref="Canon" /></para>
+		///     <para><see cref="EEClass" /></para>
+		///     <para><see cref="Canon" /></para>
 		/// </summary>
 		private void* Union1 { get; }
 
@@ -68,9 +66,9 @@ namespace NeoCore.CoreClr.Metadata
 
 		/// <summary>
 		///     <para>Union 2</para>
-		///     <para>void* <see cref="PerInstInfo" /></para>
-		///     <para>void* <see cref="ElementTypeHandle" /></para>
-		///     <para>void* <see cref="MultipurposeSlot1" /></para>
+		///     <para><see cref="PerInstInfo" /></para>
+		///     <para><see cref="ElementTypeHandle" /></para>
+		///     <para><see cref="MultipurposeSlot1" /></para>
 		/// </summary>
 		private void* Union2 { get; }
 
@@ -86,8 +84,8 @@ namespace NeoCore.CoreClr.Metadata
 
 		/// <summary>
 		///     <para>Union 3</para>
-		///     <para>void* <see cref="InterfaceMap" /></para>
-		///     <para>void* <see cref="MultipurposeSlot2" /></para>
+		///     <para><see cref="InterfaceMap" /></para>
+		///     <para><see cref="MultipurposeSlot2" /></para>
 		/// </summary>
 		private void* Union3 { get; }
 

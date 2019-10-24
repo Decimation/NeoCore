@@ -2,6 +2,8 @@ using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Metadata;
 using NeoCore.CoreClr.Metadata.EE;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
+
 // ReSharper disable InconsistentNaming
 
 namespace NeoCore.CoreClr.Meta

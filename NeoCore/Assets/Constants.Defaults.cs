@@ -1,4 +1,5 @@
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 
 namespace NeoCore.Assets
 {

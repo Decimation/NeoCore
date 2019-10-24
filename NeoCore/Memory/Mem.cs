@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using NeoCore.CoreClr;
+using NeoCore.Memory.Pointers;
 
 namespace NeoCore.Memory
 {

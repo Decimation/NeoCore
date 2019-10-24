@@ -5,6 +5,7 @@ using NeoCore.CoreClr;
 using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures;
 using NeoCore.Memory;
+using NeoCore.Utilities.Diagnostics;
 using static NeoCore.Assets.Constants;
 using static NeoCore.Assets.Constants.Native;
 
@@ -46,7 +47,7 @@ namespace NeoCore.Interop
 
 			internal static string GetSymbolName(IntPtr sym)
 			{
-				var pSym = (SymbolInfo*) sym;
+				var pSym = (DebugSymbol*) sym;
 				return Mem.ReadString(&pSym->Name, (int) pSym->NameLen);
 			}
 
@@ -56,7 +57,7 @@ namespace NeoCore.Interop
 				                              + sizeof(ulong) - 1 / sizeof(ulong));
 
 				byte* byteBuffer = stackalloc byte[sz];
-				var   buffer     = (SymbolInfo*) byteBuffer;
+				var   buffer     = (DebugSymbol*) byteBuffer;
 
 				buffer->SizeOfStruct = (uint) StructureSize;
 				buffer->MaxNameLen   = MaxSymbolNameLength;
@@ -68,7 +69,7 @@ namespace NeoCore.Interop
 					return new Symbol(buffer, symName);
 				}
 
-				throw new Exception(String.Format("Symbol \"{0}\" not found", name));
+				throw new NativeException(String.Format("Symbol \"{0}\" not found", name));
 			}
 
 			#endregion
@@ -154,7 +155,7 @@ namespace NeoCore.Interop
 
 			[DllImport(DBGHELP_DLL, SetLastError = true)]
 			[return: As(Types.Bool)]
-			private static extern bool SymFromAddr(IntPtr hProc, ulong addr, ulong* displacement, SymbolInfo* pSym);
+			private static extern bool SymFromAddr(IntPtr hProc, ulong addr, ulong* displacement, DebugSymbol* pSym);
 
 			#endregion
 

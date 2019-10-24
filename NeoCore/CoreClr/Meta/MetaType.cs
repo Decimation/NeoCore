@@ -3,7 +3,9 @@ using System.Reflection;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Metadata;
 using NeoCore.CoreClr.Metadata.EE;
+using NeoCore.FastReflection;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using TypeInfo = NeoCore.CoreClr.Metadata.TypeInfo;
@@ -161,9 +163,12 @@ namespace NeoCore.CoreClr.Meta
 
 		public int FieldsCount => EEClass.Reference.FieldListLength;
 
+		
 		public MetaField[] FieldList {
 			get {
-				var ptr = (Pointer<FieldDesc>) EEClass.Reference.FieldList;
+				// todo: fix
+
+				/*var ptr = (Pointer<FieldDesc>) EEClass.Reference.FieldList;
 				int len = FieldsCount;
 
 				var rg = new MetaField[len];
@@ -172,10 +177,12 @@ namespace NeoCore.CoreClr.Meta
 					rg[i] = new MetaField(ptr.AddressOfIndex(i));
 				}
 
-				return rg;
+				return rg;*/
+				
+				throw new NotImplementedException();
 			}
 		}
-
+		
 		public MetaField this[string name] => GetField(name);
 		
 		public MetaField GetField(string name) => RuntimeType.GetAnyField(name);

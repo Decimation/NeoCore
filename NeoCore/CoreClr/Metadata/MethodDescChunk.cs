@@ -3,12 +3,13 @@ using System.Runtime.InteropServices;
 using NeoCore.CoreClr.Support;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 
 namespace NeoCore.CoreClr.Metadata
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct MethodDescChunk
+	public unsafe struct MethodDescChunk : IClr
 	{
 		/// <summary>
 		/// <see cref="RelativeFixupPointer{T}"/>

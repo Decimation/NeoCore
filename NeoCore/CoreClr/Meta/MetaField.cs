@@ -3,7 +3,9 @@ using System.Reflection;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Metadata;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Model;
+using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
 // ReSharper disable InconsistentNaming
@@ -56,11 +58,9 @@ namespace NeoCore.CoreClr.Meta
 
 		public bool IsPointer => Value.Reference.IsPointer;
 
-		public bool IsStatic => Value.Reference.IsStatic;
+		public FieldProperties Properties => Value.Reference.Properties;
 
-		public bool IsThreadLocal => Value.Reference.IsThreadLocal;
-
-		public bool IsRVA => Value.Reference.IsRVA;
+		public bool IsStatic => Properties.HasFlagFast(FieldProperties.Static);
 
 		public bool IsLiteral => FieldInfo.IsLiteral;
 
@@ -104,15 +104,9 @@ namespace NeoCore.CoreClr.Meta
 
 		#region Operators
 
-		public static implicit operator MetaField(Pointer<FieldDesc> ptr)
-		{
-			return new MetaField(ptr);
-		}
+		public static implicit operator MetaField(Pointer<FieldDesc> ptr) => new MetaField(ptr);
 
-		public static implicit operator MetaField(FieldInfo t)
-		{
-			return new MetaField(t);
-		}
+		public static implicit operator MetaField(FieldInfo t) => new MetaField(t);
 
 		#region Equality
 

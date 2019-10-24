@@ -1,6 +1,6 @@
 using NeoCore.Interop.Attributes;
 
-namespace NeoCore.Memory
+namespace NeoCore.Memory.Pointers
 {
 	// todo: WIP
 	

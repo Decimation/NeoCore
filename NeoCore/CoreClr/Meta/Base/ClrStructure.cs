@@ -1,7 +1,9 @@
 using System.Reflection;
 using System.Text;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Support;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 
 namespace NeoCore.CoreClr.Meta.Base
 {
@@ -9,7 +11,7 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// Describes a CLR structure that has metadata information.
 	/// </summary>
 	/// <typeparam name="TClr">CLR structure type</typeparam>
-	public abstract unsafe class ClrStructure<TClr> : AnonymousClrStructure<TClr> where TClr : unmanaged
+	public abstract unsafe class ClrStructure<TClr> : AnonymousClrStructure<TClr>  where TClr : unmanaged, IClr
 	{
 		#region Fields
 

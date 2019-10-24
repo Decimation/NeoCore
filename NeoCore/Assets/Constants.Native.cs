@@ -8,14 +8,14 @@ namespace NeoCore.Assets
 		internal static class Native
 		{
 			/// <summary>
-			/// Max string length for <see cref="SymbolInfo.Name"/>
+			/// Max string length for <see cref="DebugSymbol.Name"/>
 			/// </summary>
 			internal const int MaxSymbolNameLength = 2000;
 
 			/// <summary>
-			/// Size of <see cref="SymbolInfo"/>
+			/// Size of <see cref="DebugSymbol"/>
 			/// </summary>
-			internal static readonly int StructureSize = Marshal.SizeOf<SymbolInfo>();
+			internal static readonly int StructureSize = Marshal.SizeOf<DebugSymbol>();
 		}
 	}
 }

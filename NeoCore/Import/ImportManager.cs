@@ -7,9 +7,11 @@ using System.Text;
 using JetBrains.Annotations;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
+using NeoCore.FastReflection;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
@@ -18,7 +20,6 @@ using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Import
 {
-	
 	public sealed partial class ImportManager : Releasable
 	{
 		#region Constants
@@ -77,9 +78,9 @@ namespace NeoCore.Import
 		                                        out       string     resolvedId)
 		{
 			Guard.AssertNotNull(member.DeclaringType, nameof(member.DeclaringType));
-			
+
 			CheckAnnotations(member, true, out var nameSpaceAttr);
-			
+
 			// Resolve the symbol
 
 			resolvedId = attr.Identifier ?? member.Name;
@@ -133,7 +134,11 @@ namespace NeoCore.Import
 
 			m_typeImportMaps.Remove(type);
 
-			mapField.SetValue(null, null);
+			var value = (ImportMap) mapField.GetValue(null);
+			//mapField.SetValue(null, null);
+			value?.Clear();
+
+
 
 			// Sanity check
 			CheckMapFieldUnload(type, mapField);
@@ -148,22 +153,18 @@ namespace NeoCore.Import
 				return;
 			}
 
-			Global.Value.WriteInformation(null, "Unloading {name}", type.Name);
-
 			if (UsingMap(type, out var mapField)) {
 				UnloadMap(type, mapField);
-
-				Global.Value.WriteVerbose("Unloaded map in {Name}", type.Name);
 			}
 
 
-			(MemberInfo[] members, ImportAttribute[] attributes) = type.GetAnnotated<ImportAttribute>();
+			var components = type.GetAnnotated<ImportAttribute>();
 
-			int lim = attributes.Length;
+			int lim = components.Length;
 
 			for (int i = 0; i < lim; i++) {
-				var mem  = members[i];
-				var attr = attributes[i];
+				var mem  = components[i].Member;
+				var attr = components[i].Attribute;
 
 				bool wasBound = attr is ImportCallAttribute callAttr &&
 				                callAttr.CallOptions.HasFlagFast(ImportCallOptions.Bind);
@@ -198,13 +199,11 @@ namespace NeoCore.Import
 					default:
 						throw new ArgumentOutOfRangeException();
 				}
-
-				Global.Value.WriteVerbose("Unloaded member {Name}", mem.Name);
 			}
 
 			m_boundTypes.Remove(type);
 
-			Global.Value.WriteVerbose(Id, "Unloaded {Name}", type.Name);
+			Global.Value.WriteVerbose(null, "Unloaded {Name}", type.Name);
 		}
 
 		public void Unload<T>(ref T value)
@@ -251,7 +250,7 @@ namespace NeoCore.Import
 			CheckImportMapAnnotation(mapField);
 
 			if (mapField == null) {
-				var (member, _) = type.GetFirstAnnotated<ImportMapFieldAttribute>();
+				var member = type.GetFirstAnnotated<ImportMapFieldAttribute>().Member;
 
 				if (member != null) {
 					mapField = (FieldInfo) member;
@@ -290,8 +289,15 @@ namespace NeoCore.Import
 			if (IsBound(type)) {
 				return value;
 			}
-			
+
+
 			CheckAnnotations(type, false, out _);
+
+			if (!ContainsAnnotatedMembers(type, out var components)) {
+				Global.Value.WriteWarning(null, "Load: {Name} has no members to import", type.Name);
+				return value;
+			}
+
 
 			if (UsingMap(type, out var mapField)) {
 				if (m_typeImportMaps.ContainsKey(type)) {
@@ -299,10 +305,10 @@ namespace NeoCore.Import
 				}
 
 				AddMapToDictionary(type, mapField);
-				value = LoadComponents(value, type, ip, LoadMethod);
+				value = LoadComponents(value, type, ip, components, LoadMethod);
 			}
 			else {
-				value = LoadComponents(value, type, ip);
+				value = LoadComponents(value, type, ip, components);
 			}
 
 			m_boundTypes.Add(type);
@@ -367,19 +373,21 @@ namespace NeoCore.Import
 		}
 
 
-		private static T LoadComponents<T>(T value, Type type, IImportProvider ip, LoadFunction methodFn)
+		private static T LoadComponents<T>(T                                  value,
+		                                   Type                               type,
+		                                   IImportProvider                    ip,
+		                                   AnnotatedMember<ImportAttribute>[] components,
+		                                   LoadFunction                       methodFn)
 		{
-			(MemberInfo[] members, ImportAttribute[] attributes) = type.GetAnnotated<ImportAttribute>();
-
-			int lim = attributes.Length;
+			int lim = components.Length;
 
 			if (lim == default) {
 				return value;
 			}
 
 			for (var i = 0; i < lim; i++) {
-				var attr = attributes[i];
-				var mem  = members[i];
+				var attr = components[i].Attribute;
+				var mem  = components[i].Member;
 
 				// Resolve the symbol
 
@@ -407,9 +415,10 @@ namespace NeoCore.Import
 			return value;
 		}
 
-		private T LoadComponents<T>(T value, Type type, IImportProvider ip)
+		private T LoadComponents<T>(T                                  value, Type type, IImportProvider ip,
+		                            AnnotatedMember<ImportAttribute>[] components)
 		{
-			return LoadComponents(value, type, ip, LoadMethod);
+			return LoadComponents(value, type, ip, components, LoadMethod);
 		}
 
 		#endregion

@@ -1,4 +1,5 @@
 using System;
+using NeoCore.FastReflection;
 using NeoCore.Utilities;
 
 namespace NeoCore.Interop

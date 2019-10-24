@@ -2,6 +2,7 @@ using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using NeoCore.Interop;
+using NeoCore.Memory.Pointers;
 
 namespace NeoCore.Memory
 {

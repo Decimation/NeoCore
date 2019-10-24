@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using NeoCore.Interop.Structures;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Import

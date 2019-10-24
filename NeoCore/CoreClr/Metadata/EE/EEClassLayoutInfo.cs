@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Support;
 using NeoCore.Interop.Attributes;
 
 // ReSharper disable InconsistentNaming
@@ -7,7 +8,7 @@ namespace NeoCore.CoreClr.Metadata.EE
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct EEClassLayoutInfo
+	public unsafe struct EEClassLayoutInfo : IClr
 	{
 		#region Fields
 

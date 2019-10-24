@@ -1,3 +1,4 @@
+using System;
 using System.Net.Security;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
@@ -5,7 +6,9 @@ using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
+using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
@@ -14,23 +17,19 @@ using NeoCore.Utilities;
 namespace NeoCore.CoreClr.Metadata
 {
 	[ImportNamespace]
+	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct FieldDesc
+	public unsafe struct FieldDesc : IClr
 	{
-		static FieldDesc()
-		{
-			ImportManager.Value.Load(typeof(FieldDesc), Resources.Clr.Imports);
-		}
-
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
 
 		#region Fields
 
 		/// <summary>
-		/// <see cref="RelativePointer{T}"/>
+		/// <see cref="RelativePointer{T}"/> to <see cref="MethodTable"/>
 		/// </summary>
-		private MethodTable* EnclosingMethodTableStub { get; }
+		private RelativePointer<byte> EnclosingMethodTableStub { get; }
 
 		/// <summary>
 		/// <c>DWORD</c> #1
@@ -41,7 +40,7 @@ namespace NeoCore.CoreClr.Metadata
 		///     <para>unsigned m_prot : 3;</para>
 		///     <para>unsigned m_requiresFullMbValue : 1;</para>
 		/// </summary>
-		internal uint UInt1 { get; }
+		private uint UInt1 { get; }
 
 		/// <summary>
 		/// <c>DWORD</c> #2
@@ -54,13 +53,11 @@ namespace NeoCore.CoreClr.Metadata
 
 		#region Calculated values
 
-		internal bool RequiresFullMBValue => Bits.ReadBit(UInt1, 31);
-
 		internal int Token {
 			get {
 				var rawToken = (int) (UInt1 & 0xFFFFFF);
 				// Check if this FieldDesc is using the packed mb layout
-				if (!RequiresFullMBValue)
+				if (!Properties.HasFlagFast(FieldProperties.RequiresFullMBValue))
 					return Tokens.TokenFromRid(rawToken & (int) PackedLayoutMask.MbMask, TokenType.FieldDef);
 
 				return Tokens.TokenFromRid(rawToken, TokenType.FieldDef);
@@ -74,16 +71,8 @@ namespace NeoCore.CoreClr.Metadata
 		internal AccessModifiers Access => (AccessModifiers) (int) ((UInt1 >> 26) & 0x3FFFFFF);
 
 		internal bool IsPointer => ElementType == ElementType.Ptr;
-		
-		internal bool IsStatic => Bits.ReadBit(UInt1, 24);
-		
-		internal bool IsThreadLocal => Bits.ReadBit(UInt1, 25);
 
-		internal bool IsRVA => Bits.ReadBit(UInt1, 26);
-
-		internal FieldProperties Properties {
-			get { return (FieldProperties) UInt1; }
-		}
+		internal FieldProperties Properties => (FieldProperties) UInt1;
 
 		#endregion
 
@@ -110,8 +99,10 @@ namespace NeoCore.CoreClr.Metadata
 		internal Pointer<MethodTable> ApproxEnclosingMethodTable {
 			get {
 				// m_pMTOfEnclosingClass.GetValue(PTR_HOST_MEMBER_TADDR(FieldDesc, this, m_pMTOfEnclosingClass));
+
 				const int MT_FIELD_OFS = 0;
-				return ClrAccess.FieldOffset(EnclosingMethodTableStub, MT_FIELD_OFS);
+				
+				return ClrAccess.FieldOffset((MethodTable*) EnclosingMethodTableStub.Value, MT_FIELD_OFS);
 			}
 		}
 	}

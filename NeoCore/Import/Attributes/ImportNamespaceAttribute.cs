@@ -6,7 +6,7 @@ namespace NeoCore.Import.Attributes
 {
 	
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
-	public sealed class ImportNamespaceAttribute : NativeStructureAttribute
+	public sealed class ImportNamespaceAttribute : Attribute
 	{
 		public ImportNamespaceAttribute(string nameSpace)
 		{

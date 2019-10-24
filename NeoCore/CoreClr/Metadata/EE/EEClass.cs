@@ -4,7 +4,9 @@ using System.Runtime.InteropServices;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Support;
 using NeoCore.Import.Attributes;
+using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
@@ -13,9 +15,9 @@ using NeoCore.Utilities;
 
 namespace NeoCore.CoreClr.Metadata.EE
 {
-	[ImportNamespace]
+	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct EEClass
+	public unsafe struct EEClass : IClr
 	{
 		#region Fields
 
@@ -25,17 +27,20 @@ namespace NeoCore.CoreClr.Metadata.EE
 
 		internal MethodTable* MethodTable { get; }
 
+		/// <summary>
+		/// <see cref="RelativePointer{T}"/> to <see cref="FieldDesc"/>
+		/// </summary>
 		private FieldDesc* FieldDescList { get; }
 
 		internal void* Chunks { get; }
-		
+
 		#region Union 1
 
 		/// <summary>
 		///     <para>Union 1</para>
-		///     <para>void* <see cref="ObjectHandleDelegate" /></para>
-		///     <para>uint <see cref="NativeSize" /></para>
-		///     <para>int <see cref="InterfaceType" /></para>
+		///     <para><see cref="ObjectHandleDelegate" /></para>
+		///     <para><see cref="NativeSize" /></para>
+		///     <para><see cref="InterfaceType" /></para>
 		/// </summary>
 		private void* m_union1;
 
@@ -80,11 +85,17 @@ namespace NeoCore.CoreClr.Metadata.EE
 
 		#region Accessors
 
-		internal FieldDesc* FieldList {
+		internal Pointer<FieldDesc> FieldList {
 			get {
+				// return m_pFieldDescList.GetValueMaybeNull(PTR_HOST_MEMBER_TADDR(EEClass, this, m_pFieldDescList));
+
+				// PTR_HOST_MEMBER_TADDR(EEClass, this, m_pFieldDescList)
+				// return (FieldDesc*) Runtime.HostMemberOffset(ref this, FD_LIST_FIELD_OFFSET, FieldDescListRaw);
+				
 				// Offset for the field
 				const int FD_LIST_FIELD_OFFSET = 24;
-				return (FieldDesc*) ClrAccess.FieldOffset(ref this, FD_LIST_FIELD_OFFSET, FieldDescList);
+				
+				return (FieldDesc*) ClrAccess.FieldOffsetAlt(ref this, FD_LIST_FIELD_OFFSET, FieldDescList);
 			}
 		}
 
@@ -141,9 +152,9 @@ namespace NeoCore.CoreClr.Metadata.EE
 
 		#endregion
 	}
-	
+
 	[StructLayout(LayoutKind.Explicit)]
-	internal struct LayoutEEClass
+	internal struct LayoutEEClass : IClr
 	{
 		// Note: This offset should be 72 or sizeof(EEClass)
 		// 		 but I'm keeping it at 0 to minimize size usage,

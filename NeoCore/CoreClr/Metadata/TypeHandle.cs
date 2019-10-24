@@ -1,35 +1,27 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 
 namespace NeoCore.CoreClr.Metadata
 {
-	
 	[ImportNamespace]
-	[StructLayout(LayoutKind.Explicit)]
-	internal unsafe struct TypeHandle
+	[NativeStructure]
+	[StructLayout(LayoutKind.Sequential)]
+	internal unsafe struct TypeHandle : IClr
 	{
-		static TypeHandle()
-		{
-			ImportManager.Value.Load(typeof(TypeHandle), Resources.Clr.Imports);
-		}
-
-		#region Fields
-
-		[field: FieldOffset(default)]
 		private void* Union1 { get; }
-
-		#endregion
-
+		
 		private MethodTable* AsMethodTable => (MethodTable*) Union1;
 
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
-		
+
 		internal Pointer<MethodTable> MethodTable {
 			[ImportProperty]
 			get {

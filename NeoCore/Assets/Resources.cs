@@ -5,6 +5,7 @@ using NeoCore.CoreClr.Metadata;
 using NeoCore.CoreClr.Metadata.EE;
 using NeoCore.CoreClr.Support;
 using NeoCore.Import;
+using NeoCore.Interop;
 using NeoCore.Model;
 using NeoCore.Utilities.Diagnostics;
 
@@ -18,6 +19,7 @@ namespace NeoCore.Assets
 		 *
 		 * - Compare with RazorSharp
 		 * - Add/improve missing features from RazorSharp
+		 * - Clean up
 		 */
 		
 		static Resources()
@@ -28,17 +30,21 @@ namespace NeoCore.Assets
 		private static readonly Type[] CoreClrTypes =
 		{
 			typeof(TypeHandle),
-			typeof(MethodTable),
 			typeof(MethodDesc),
 			typeof(FieldDesc),
-			typeof(EEClass),
+			
+//			typeof(MethodTable),
+//			typeof(EEClass),
+//			typeof(MethodDescChunk),
+//			typeof(FunctionFactory),
 		};
 		
 		private static readonly Closable[] CoreObjects =
 		{
-			Global.Value, 
-			SymbolManager.Value, 
+			SymbolManager.Value,
 			ImportManager.Value,
+			
+			Global.Value, 
 		};
 		
 		internal static RuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(ClrFrameworks.Core);
@@ -47,8 +53,8 @@ namespace NeoCore.Assets
 		{
 			ImportManager.Value.LoadAll(CoreClrTypes, Clr.Imports);
 			
-			//var appDomain = AppDomain.CurrentDomain;
-			//appDomain.ProcessExit += (sender, eventArgs) => { Close(); };
+			var appDomain = AppDomain.CurrentDomain;
+			appDomain.ProcessExit += (sender, eventArgs) => { Close(); };
 		}
 		
 		internal static void Close()
@@ -58,6 +64,8 @@ namespace NeoCore.Assets
 			foreach (var value in CoreObjects) {
 				value?.Close();
 			}
+			
+			
 		}
 	}
 }

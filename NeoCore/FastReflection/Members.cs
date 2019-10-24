@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace NeoCore.Utilities
+namespace NeoCore.FastReflection
 {
 	/// <summary>
 	/// Provides utilities for accessing members of a type.
@@ -48,38 +48,32 @@ namespace NeoCore.Utilities
 		internal static MethodInfo[] GetAllMethods(this Type t) => t.GetMethods(ALL_FLAGS);
 
 		internal static MethodInfo GetAnyMethod(this Type t, string name) =>
-			t.GetMethod(name, (BindingFlags) ALL_FLAGS);
+			t.GetMethod(name, ALL_FLAGS);
 
 		#endregion
 
 		#region Attributes
 
-		internal static (MemberInfo, TAttribute) GetFirstAnnotated<TAttribute>(this Type t)
-			where TAttribute : Attribute
+		internal static AnnotatedMember<TAttr> GetFirstAnnotated<TAttr>(this Type t)
+			where TAttr : Attribute
 		{
-			(MemberInfo[] memberInfos, TAttribute[] attributes) = t.GetAnnotated<TAttribute>();
+			var rg = t.GetAnnotated<TAttr>();
 
-			if (memberInfos.Length == default || attributes.Length == default) {
-				return (null, null);
-			}
-
-			return (memberInfos[0], attributes[0]);
+			return rg.Length == default ? new AnnotatedMember<TAttr>() : rg[0];
 		}
 
-		internal static (MemberInfo[], TAttribute[]) GetAnnotated<TAttribute>(this Type t)
-			where TAttribute : Attribute
+		internal static AnnotatedMember<TAttr>[] GetAnnotated<TAttr>(this Type t)
+			where TAttr : Attribute
 		{
-			var members    = new List<MemberInfo>();
-			var attributes = new List<TAttribute>();
+			var components = new List<AnnotatedMember<TAttr>>();
 
 			foreach (var member in t.GetAllMembers()) {
-				if (Attribute.IsDefined(member, typeof(TAttribute))) {
-					members.Add(member);
-					attributes.Add(member.GetCustomAttribute<TAttribute>());
+				if (Attribute.IsDefined(member, typeof(TAttr))) {
+					components.Add(new AnnotatedMember<TAttr>(member, member.GetCustomAttribute<TAttr>()));
 				}
 			}
 
-			return (members.ToArray(), attributes.ToArray());
+			return components.ToArray();
 		}
 
 		#endregion

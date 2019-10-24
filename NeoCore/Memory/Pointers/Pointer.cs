@@ -3,14 +3,12 @@
 using System;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
-using NeoCore.CoreClr;
-using NeoCore.Interop.Attributes;
 using NeoCore.Utilities;
 using static NeoCore.Assets.Constants.Defaults;
 
 #endregion
 
-namespace NeoCore.Memory
+namespace NeoCore.Memory.Pointers
 {
 	/// <summary>
 	///     <para>Represents a native pointer. Equals the size of <see cref="P:System.IntPtr.Size" />.</para>

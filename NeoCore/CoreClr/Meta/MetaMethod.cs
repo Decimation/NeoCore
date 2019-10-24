@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Metadata;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using ParameterInfo = NeoCore.CoreClr.Metadata.ParameterInfo;
 

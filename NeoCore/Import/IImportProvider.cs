@@ -1,5 +1,6 @@
 using System;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 
 namespace NeoCore.Import
 {

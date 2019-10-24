@@ -3,6 +3,7 @@ using System.Reflection;
 using NeoCore.CoreClr.Metadata;
 using NeoCore.Interop;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.CoreClr

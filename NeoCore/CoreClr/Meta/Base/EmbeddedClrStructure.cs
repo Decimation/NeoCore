@@ -1,6 +1,8 @@
 using System.Reflection;
 using NeoCore.CoreClr.Metadata;
+using NeoCore.CoreClr.Support;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 
 namespace NeoCore.CoreClr.Meta.Base
 {
@@ -8,7 +10,7 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// Describes a <see cref="ClrStructure{TClr}"/> that is enclosed by an accompanying <see cref="MethodTable"/>
 	/// </summary>
 	/// <typeparam name="TClr">CLR structure type</typeparam>
-	public abstract unsafe class EmbeddedClrStructure<TClr> : ClrStructure<TClr> where TClr : unmanaged
+	public abstract unsafe class EmbeddedClrStructure<TClr> : ClrStructure<TClr>  where TClr : unmanaged, IClr
 	{
 		#region Constructors
 

@@ -1,3 +1,7 @@
+using NeoCore.Assets;
+using NeoCore.Import;
+using NeoCore.Interop;
+
 namespace NeoCore.Model
 {
 	/// <summary>
@@ -5,17 +9,12 @@ namespace NeoCore.Model
 	///         <listheader>Inheriting types:</listheader>
 	///         <item>
 	///             <description>
-	///                 <see cref="Global2" />
+	///                 <see cref="Global" />
 	///             </description>
 	///         </item>
 	///         <item>
 	///             <description>
-	///                 <see cref="Clr" />
-	///             </description>
-	///         </item>
-	///         <item>
-	///             <description>
-	///                 <see cref="ModuleInitializer" /> (implicit)
+	///                 <see cref="Functions.Clr" />
 	///             </description>
 	///         </item>
 	///         <item>
@@ -40,7 +39,6 @@ namespace NeoCore.Model
 		{
 			if (!IsSetup) {
 				IsSetup = true;
-				
 			}
 		}
 

@@ -1,25 +1,24 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
+using static NeoCore.Interop.Functions;
 
 // ReSharper disable InconsistentNaming
 
 namespace NeoCore.CoreClr.Metadata
 {
 	[ImportNamespace]
+	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct MethodDesc
+	public unsafe struct MethodDesc : IClr
 	{
-		static MethodDesc()
-		{
-			ImportManager.Value.Load(typeof(MethodDesc), Resources.Clr.Imports);
-		}
-
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
 

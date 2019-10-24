@@ -8,6 +8,7 @@ using InlineIL;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.Interop.Attributes;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 

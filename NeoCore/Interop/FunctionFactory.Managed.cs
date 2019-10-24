@@ -5,6 +5,7 @@ using NeoCore.CoreClr.Metadata;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Interop

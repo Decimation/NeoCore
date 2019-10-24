@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using JetBrains.Annotations;
 using NeoCore.Assets;
+using NeoCore.FastReflection;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
 using NeoCore.Utilities;
@@ -18,6 +19,13 @@ namespace NeoCore.Import
 			attr = t.GetCustomAttribute<ImportNamespaceAttribute>();
 
 			return attr != null;
+		}
+
+		private static bool ContainsAnnotatedMembers(Type type, out AnnotatedMember<ImportAttribute>[] components)
+		{
+			components = type.GetAnnotated<ImportAttribute>();
+
+			return components!= null && components.Length > 0;
 		}
 
 		private static bool IsImportMapQualified(FieldInfo mapField)
@@ -39,7 +47,7 @@ namespace NeoCore.Import
 		private void CheckMapFieldUnload(Type t, FieldInfo mapField)
 		{
 			Guard.AssertDebug(!m_typeImportMaps.ContainsKey(t));
-			Guard.AssertDebug(mapField.GetValue(null) == null);
+			//Guard.AssertDebug(mapField.GetValue(null) == null);
 		}
 		
 		[AssertionMethod]
@@ -50,7 +58,7 @@ namespace NeoCore.Import
 			var t = nameSpace ? member.DeclaringType : (Type) member;
 			
 			if (!IsAnnotated(t, out nameSpaceAttr)) {
-				string namespaceError = $"Type must be decorated with \"{nameof(ImportNamespaceAttribute)}\"";
+				string namespaceError = $"Type \"{t?.Name}\" must be decorated with \"{nameof(ImportNamespaceAttribute)}\"";
 				Guard.Fail(namespaceError);
 			}
 		}

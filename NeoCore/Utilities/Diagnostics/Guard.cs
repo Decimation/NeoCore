@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 
 namespace NeoCore.Utilities.Diagnostics
 {
