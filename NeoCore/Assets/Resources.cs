@@ -3,6 +3,7 @@ using System.Runtime.CompilerServices;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Support;
 using NeoCore.CoreClr.VM;
+using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import;
 using NeoCore.Interop;
 using NeoCore.Model;
@@ -11,6 +12,9 @@ using NeoCore.Utilities.Diagnostics;
 [assembly: InternalsVisibleTo("Test")]
 namespace NeoCore.Assets
 {
+	/// <summary>
+	/// Contains core resources for NeoCore.
+	/// </summary>
 	internal static class Resources
 	{
 		/**
@@ -35,13 +39,12 @@ namespace NeoCore.Assets
 			typeof(MethodDesc),
 			typeof(FieldDesc),
 			typeof(GCHeap),
-			
-//			typeof(MethodTable),
-//			typeof(EEClass),
-//			typeof(EEClassLayoutInfo),
-//			typeof(MethodDescChunk),
-//			typeof(FunctionFactory),
-//			typeof(Globals),
+			typeof(MethodTable),
+			typeof(EEClass),
+			typeof(EEClassLayoutInfo),
+			typeof(MethodDescChunk),
+			typeof(FunctionFactory),
+			typeof(Globals),
 		};
 		
 		private static readonly Closable[] CoreObjects =
@@ -53,7 +56,7 @@ namespace NeoCore.Assets
 		
 		internal static RuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(ClrFrameworks.Core);
 
-		internal static void SetupAll()
+		private static void SetupAll()
 		{
 			if (IsSetup) {
 				return;

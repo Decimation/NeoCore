@@ -39,6 +39,8 @@ namespace Test
 		{
 			var mt = (MetaType) typeof(TestObject);
 			Console.WriteLine(mt);
+
+			Console.WriteLine(Globals.GCHeap);
 		}
 	}
 }

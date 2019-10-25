@@ -366,6 +366,12 @@ namespace NeoCore.Import
 			Pointer<byte> ptr       = ip.GetAddress(identifier);
 			var           options   = ifld.FieldOptions;
 			Pointer<byte> fieldAddr = field.GetValueAddress(ref value);
+			
+
+			if (ifld is ImportGlobalFieldAttribute) {
+				CheckGlobalField(field);
+			}
+			
 
 			object fieldValue;
 

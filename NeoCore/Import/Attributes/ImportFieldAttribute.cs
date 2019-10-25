@@ -9,7 +9,7 @@ namespace NeoCore.Import.Attributes
 {
 	[MeansImplicitUse]
 	[AttributeUsage(FIELD_TARGETS)]
-	public sealed class ImportFieldAttribute : ImportAttribute
+	public class ImportFieldAttribute : ImportAttribute
 	{
 		internal const AttributeTargets FIELD_TARGETS = AttributeTargets.Field;
 		
@@ -23,13 +23,13 @@ namespace NeoCore.Import.Attributes
 		/// <summary>
 		/// Specifies how the target field will be loaded.
 		/// </summary>
-		public ImportFieldOptions FieldOptions { get; set; } = ImportFieldOptions.Proxy;
+		public ImportFieldOptions FieldOptions { get; private set; } = ImportFieldOptions.Proxy;
 
 		public ImportFieldAttribute() { }
 
-		public ImportFieldAttribute(IdentifierOptions options, ImportFieldOptions loadOptions) : this(options)
+		public ImportFieldAttribute(IdentifierOptions options, ImportFieldOptions fieldOptions) : this(options)
 		{
-			FieldOptions = loadOptions;
+			FieldOptions = fieldOptions;
 		}
 
 		public ImportFieldAttribute(IdentifierOptions options) : base(options) { }

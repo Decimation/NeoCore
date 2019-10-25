@@ -2,6 +2,7 @@ using System;
 using System.Reflection;
 using JetBrains.Annotations;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Meta;
 using NeoCore.FastReflection;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
@@ -41,6 +42,12 @@ namespace NeoCore.Import
 			if (m_boundTypes.Count != 0 || m_typeImportMaps.Count != 0) {
 				Guard.Fail();
 			}
+		}
+
+		[AssertionMethod]
+		private static void CheckGlobalField(MetaField field)
+		{
+			Guard.Assert(field.IsStatic && field.FieldInfo.IsInitOnly);
 		}
 
 		[AssertionMethod]

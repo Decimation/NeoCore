@@ -20,8 +20,8 @@ namespace NeoCore.CoreClr
 		{
 			ImportManager.Value.Load(typeof(Globals), Resources.Clr.Imports);
 		}
-
-		[ImportField(IdentifierOptions.FullyQualified, ImportFieldOptions.Fast)]
+		
+		[ImportGlobalField(ImportFieldOptions.Fast)]
 		private static readonly Pointer<GCHeap> g_pGCHeap;
 		
 		/// <summary>

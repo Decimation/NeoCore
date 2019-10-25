@@ -9,7 +9,7 @@ namespace NeoCore.Import.Attributes
 	/// </summary>
 	[MeansImplicitUse]
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
-	public class ImportAccessorAttribute : ImportCallAttribute
+	public sealed class ImportAccessorAttribute : ImportCallAttribute
 	{
 		public ImportAccessorAttribute() : base(IdentifierOptions.UseAccessorName, ImportCallOptions.Map) { }
 	}
