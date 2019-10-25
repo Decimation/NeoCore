@@ -12,7 +12,7 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	internal unsafe struct TypeHandle : IClr
+	internal unsafe struct TypeHandle : IClrSource
 	{
 		static TypeHandle()
 		{

@@ -6,10 +6,12 @@ namespace NeoCore.Memory.Pointers
 	// todo: WIP
 
 	[NativeStructure]
-	public unsafe struct RelativePointer<T> : IRelativePointer<T>
+	public unsafe struct RelativePointer<T> : IRelativePointer<T> where T : unmanaged
 	{
 		public ulong Value { get; }
-
+		
+		public T* NativeValue => (T*) Value;
+		
 		public RelativePointer(ulong delta)
 		{
 			Value = delta;

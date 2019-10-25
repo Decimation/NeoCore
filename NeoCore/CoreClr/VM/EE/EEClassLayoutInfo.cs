@@ -10,7 +10,7 @@ namespace NeoCore.CoreClr.VM.EE
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct EEClassLayoutInfo : IClr
+	public unsafe struct EEClassLayoutInfo : IClrSource
 	{
 		#region Fields
 
@@ -23,11 +23,15 @@ namespace NeoCore.CoreClr.VM.EE
 		// of each of the EEClass's members. If the NStruct extends another NStruct,
 		// the base NStruct is treated as the first member for the purpose of
 		// this calculation.
-		internal byte LargestAlignmentRequirementOfAllMembers { get; }
+		
+		// Alias: LargestAlignmentRequirementOfAllMembers
+		internal byte MaxAlignReqOfAll { get; }
 
 		// Post V1.0 addition: This is the equivalent of m_LargestAlignmentRequirementOfAllMember
 		// for the managed layout.
-		internal byte ManagedLargestAlignmentRequirementOfAllMembers { get; }
+		
+		// Alias: ManagedLargestAlignmentRequirementOfAllMembers
+		internal byte ManagedMaxAlignReqOfAll { get; }
 
 		internal LayoutFlags Flags { get; }
 

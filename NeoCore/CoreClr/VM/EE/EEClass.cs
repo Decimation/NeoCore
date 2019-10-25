@@ -14,7 +14,7 @@ namespace NeoCore.CoreClr.VM.EE
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct EEClass : IClr
+	public unsafe struct EEClass : IClrSource
 	{
 		#region Fields
 
@@ -152,7 +152,7 @@ namespace NeoCore.CoreClr.VM.EE
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
-	internal struct LayoutEEClass : IClr
+	internal struct LayoutEEClass : IClrSource
 	{
 		// Note: This offset should be 72 or sizeof(EEClass)
 		// 		 but I'm keeping it at 0 to minimize size usage,

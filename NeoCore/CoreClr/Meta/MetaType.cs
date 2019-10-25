@@ -63,6 +63,10 @@ namespace NeoCore.CoreClr.Meta
 				mp |= MetaTypeProperties.Enumerable;
 			}
 			
+			if (Runtime.Info.IsAnyPointer(t)) {
+				mp |= MetaTypeProperties.AnyPointer;
+			}
+			
 			if (t.IsPointer) {
 				mp |= MetaTypeProperties.Pointer;
 			}
@@ -73,6 +77,8 @@ namespace NeoCore.CoreClr.Meta
 		public override MemberInfo Info => RuntimeType;
 		
 		public MetaTypeProperties TypeProperties { get; }
+
+		public bool IsAnyPointer => TypeProperties.HasFlag(MetaTypeProperties.AnyPointer);
 
 		#region MethodTable
 

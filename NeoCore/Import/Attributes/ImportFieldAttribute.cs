@@ -21,15 +21,6 @@ namespace NeoCore.Import.Attributes
 		public Type LoadAs { get; set; }
 
 		/// <summary>
-		/// Specifies the size of memory to be copied into the field. If this is not specified, the base size of
-		/// the field type will be used. (<see cref="Unsafe.BaseSizeOfData"/>)
-		///
-		/// <remarks>To use this, <see cref="FieldOptions"/> must be <see cref="ImportFieldOptions.CopyIn"/>.</remarks>
-		/// 
-		/// </summary>
-		public int SizeConst { get; set; } = Constants.INVALID_VALUE;
-
-		/// <summary>
 		/// Specifies how the target field will be loaded.
 		/// </summary>
 		public ImportFieldOptions FieldOptions { get; set; } = ImportFieldOptions.Proxy;

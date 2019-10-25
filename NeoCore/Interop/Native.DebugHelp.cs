@@ -21,8 +21,6 @@ namespace NeoCore.Interop
 		/// </summary>
 		internal static class DebugHelp
 		{
-			//todo: clean up
-
 			/// <summary>
 			///     https://github.com/Microsoft/DbgShell/blob/master/DbgProvider/internal/Native/DbgHelp.cs
 			/// </summary>
@@ -81,34 +79,25 @@ namespace NeoCore.Interop
 			#region Sym misc
 
 			[SuppressUnmanagedCodeSecurity]
-			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
-			[return: As(Types.Bool)]
 			private static extern bool SymInitialize(IntPtr                hProcess,
 			                                         IntPtr                userSearchPath,
 			                                         [As(Types.Bool)] bool fInvadeProcess);
 
 
 			[SuppressUnmanagedCodeSecurity]
-			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode, EntryPoint = nameof(SymCleanup))]
-			[return: As(Types.Bool)]
 			internal static extern bool SymCleanup(IntPtr hProcess);
 
-			/// <summary>
-			///     SYM_ENUMERATESYMBOLS_CALLBACK
-			/// </summary>
+			
 			/// <param name="symInfo">SYMBOL_INFO</param>
-			[return: As(Types.Bool)]
 			internal delegate bool SymEnumSymbolsCallback(IntPtr symInfo, uint symbolSize, IntPtr pUserContext);
 
 			#endregion
 
 			#region Sym enum types
-
-			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
+			
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
-			[return: As(Types.Bool)]
 			private static extern bool SymEnumTypesByName(IntPtr                 hProcess,
 			                                              ulong                  modBase,
 			                                              string                 mask,
@@ -116,9 +105,7 @@ namespace NeoCore.Interop
 			                                              IntPtr                 pUserContext);
 
 			[SuppressUnmanagedCodeSecurity]
-			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
-			[return: As(Types.Bool)]
 			private static extern bool SymEnumTypes(IntPtr                 hProcess, ulong  modBase,
 			                                        SymEnumSymbolsCallback callback, IntPtr pUserContext);
 
@@ -131,10 +118,8 @@ namespace NeoCore.Interop
 			/// <param name="mask">Mask (NULL -> all symbols)</param>
 			/// <param name="callback">The callback function</param>
 			/// <param name="pUserContext">A used-defined context can be passed here, if necessary</param>
-			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
-			[return: As(Types.Bool)]
-			internal static extern bool SymEnumSymbols(IntPtr hProcess, ulong                  modBase,
+			private static extern bool SymEnumSymbols(IntPtr hProcess, ulong                  modBase,
 			                                           string mask,     SymEnumSymbolsCallback callback,
 			                                           IntPtr pUserContext);
 
@@ -153,34 +138,25 @@ namespace NeoCore.Interop
 			#region Sym from
 
 			[DllImport(DBGHELP_DLL)]
-			[return: As(Types.Bool)]
 			private static extern bool SymFromName(IntPtr hProcess, IntPtr name, IntPtr pSymbol);
 
 			[DllImport(DBGHELP_DLL)]
 			[SuppressUnmanagedCodeSecurity]
-			[return: As(Types.Bool)]
 			private static extern bool SymFromName(IntPtr hProcess, string name, IntPtr pSymbol);
 
 
-			[DllImport(DBGHELP_DLL, SetLastError = true)]
-			[return: As(Types.Bool)]
+			[DllImport(DBGHELP_DLL)]
 			private static extern bool SymFromAddr(IntPtr hProc, ulong addr, ulong* displacement, DebugSymbol* pSym);
 
 			#endregion
 
 			#region Sym module
 
-			[DllImport(DBGHELP_DLL)]
-			private static extern ulong SymLoadModule64(IntPtr hProc, IntPtr h, string p, string s, ulong baseAddr,
-			                                            uint   fileSize);
-
-
 			[DllImport(DBGHELP_DLL, SetLastError = true)]
 			private static extern bool SymGetModuleInfo64(IntPtr hProc, ulong qwAddr, IntPtr pModInfo);
 
 
 			[DllImport(DBGHELP_DLL)]
-			[return: As(Types.Bool)]
 			internal static extern bool SymUnloadModule64(IntPtr hProc, ulong baseAddr);
 
 
@@ -192,7 +168,6 @@ namespace NeoCore.Interop
 			/// <param name="dllSize">Size of the file (cannot be NULL if .PDB file is used, otherwise it can be NULL)</param>
 			/// <param name="data">?</param>
 			/// <param name="flags">?</param>
-			[DefaultDllImportSearchPaths(DllImportSearchPath.LegacyBehavior)]
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
 			private static extern ulong SymLoadModuleEx(IntPtr hProcess,   IntPtr hFile,     string imageName,
 			                                            string moduleName, ulong  baseOfDll, uint   dllSize,

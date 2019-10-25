@@ -3,6 +3,7 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime;
 using System.Runtime.InteropServices;
 using InlineIL;
@@ -10,6 +11,7 @@ using JetBrains.Annotations;
 using NeoCore.CoreClr.Support;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
@@ -116,6 +118,21 @@ namespace NeoCore.CoreClr
 				}
 			}
 
+			public static bool IsAnyPointer(Type t)
+			{
+				var isIPointer =ImplementsGenericInterface(t, typeof(IPointer<>));
+				var isIntPtr = t == typeof(IntPtr) || t == typeof(UIntPtr);
+				
+				return t.IsPointer || isIPointer || isIntPtr;
+			}
+
+			public static bool ImplementsGenericInterface(Type type, Type interfaceType)
+			{
+				return type.GetInterfaces().Any(x =>
+					                    x.IsGenericType &&
+					                    x.GetGenericTypeDefinition() == interfaceType);
+			}
+			
 			public static bool ImplementsInterface(Type type, string name) => type.GetInterface(name) != null;
 
 			public static bool IsEnumerableType(Type type) => ImplementsInterface(type, nameof(IEnumerable));

@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using NeoCore.FastReflection;
 using NeoCore.Utilities;
 
@@ -8,6 +9,34 @@ namespace NeoCore.Interop
 	{
 		public static class Reflection
 		{
+			#region Generic
+
+			/// <summary>
+			///     Executes a generic method
+			/// </summary>
+			/// <param name="method">Method to execute</param>
+			/// <param name="typeArgs">Generic type parameters</param>
+			/// <param name="value">Instance of type; <c>null</c> if the method is static</param>
+			/// <param name="args">Method arguments</param>
+			/// <returns>Return value of the method specified by <paramref name="method"/></returns>
+			public static object CallGeneric(MethodInfo      method,
+			                                 Type[]          typeArgs,
+			                                 object          value,
+			                                 params object[] args)
+			{
+				return method.MakeGenericMethod(typeArgs).Invoke(value, args);
+			}
+
+			public static object CallGeneric(MethodInfo      method,
+			                                 Type            typeArg,
+			                                 object          value,
+			                                 params object[] args)
+			{
+				return method.MakeGenericMethod(typeArg).Invoke(value, args);
+			}
+
+			#endregion
+			
 			public static TDelegate FindFunction<TDelegate, TSource>(string name) where TDelegate : Delegate
 			{
 				return FindFunction<TDelegate>(typeof(TSource), name);

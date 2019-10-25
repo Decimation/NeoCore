@@ -13,7 +13,7 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct MethodTable : IClr
+	public unsafe struct MethodTable : IClrSource
 	{
 		internal short ComponentSize { get; }
 

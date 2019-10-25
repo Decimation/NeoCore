@@ -15,7 +15,7 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct FieldDesc : IClr
+	public unsafe struct FieldDesc : IClrSource
 	{
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
@@ -25,7 +25,7 @@ namespace NeoCore.CoreClr.VM
 		/// <summary>
 		/// <see cref="RelativePointer{T}"/> to <see cref="MethodTable"/>
 		/// </summary>
-		private RelativePointer<byte> EnclosingMethodTableStub { get; }
+		private RelativePointer<MethodTable> EnclosingMethodTableStub { get; }
 
 		/// <summary>
 		/// <c>DWORD</c> #1
@@ -98,7 +98,7 @@ namespace NeoCore.CoreClr.VM
 
 				const int MT_FIELD_OFS = 0;
 				
-				return ClrAccess.FieldOffset((MethodTable*) EnclosingMethodTableStub.Value, MT_FIELD_OFS);
+				return ClrAccess.FieldOffset(EnclosingMethodTableStub.NativeValue, MT_FIELD_OFS);
 			}
 		}
 	}

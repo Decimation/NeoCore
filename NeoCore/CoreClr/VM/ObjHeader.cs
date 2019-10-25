@@ -9,7 +9,7 @@ namespace NeoCore.CoreClr.VM
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct ObjHeader : IClr
+	public unsafe struct ObjHeader : IClrSource
 	{
 		// https://github.com/dotnet/coreclr/blob/master/src/gc/env/gcenv.object.h
 

@@ -15,7 +15,7 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct MethodDesc : IClr
+	public unsafe struct MethodDesc : IClrSource
 	{
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();

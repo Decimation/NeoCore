@@ -22,6 +22,8 @@ namespace NeoCore.CoreClr.Meta
 		
 		Enumerable = 1 << 5,
 		
+		AnyPointer = 1 << 6,
+		
 		Numeric = Integer & Real
 	}
 }

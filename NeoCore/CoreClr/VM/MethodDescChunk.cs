@@ -9,17 +9,17 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct MethodDescChunk : IClr
+	public unsafe struct MethodDescChunk : IClrSource
 	{
 		/// <summary>
 		/// <see cref="RelativeFixupPointer{T}"/>
 		/// </summary>
-		internal MethodTable* MethodTableRaw { get; }
+		private RelativeFixupPointer<MethodTable> MethodTableStub { get; }
 
 		/// <summary>
-		/// <see cref="RelativePointer{T}"/>
+		/// <see cref="RelativePointer{T}"/> to <see cref="MethodDescChunk"/>
 		/// </summary>
-		internal MethodDescChunk* Next { get; }
+		private RelativePointer<byte> Next { get; }
 
 		/// <summary>
 		/// The size of this chunk minus 1 (in multiples of MethodDesc::ALIGNMENT)
@@ -40,7 +40,7 @@ namespace NeoCore.CoreClr.VM
 				// for MDC: m_methodTable.GetValue(PTR_HOST_MEMBER_TADDR(MethodDescChunk, this, m_methodTable));
 
 				const int MT_FIELD_OFS = 0;
-				return ClrAccess.FieldOffset(MethodTableRaw, MT_FIELD_OFS);
+				return ClrAccess.FieldOffset(MethodTableStub.NativeValue, MT_FIELD_OFS);
 			}
 		}
 	}

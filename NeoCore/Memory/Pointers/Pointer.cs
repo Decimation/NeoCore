@@ -1,8 +1,11 @@
 ﻿#region
 
 using System;
+using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using JetBrains.Annotations;
+using NeoCore.Interop;
 using NeoCore.Utilities;
 
 #endregion
@@ -283,6 +286,39 @@ namespace NeoCore.Memory.Pointers
 		[Pure]
 		public ref T AsRef(int elemOffset = DEF_OFFSET) => ref Unsafe.AsRef<T>(Offset(elemOffset));
 
+		/// <summary>
+		///     Writes all elements of <paramref name="rg" /> to the current pointer.
+		/// </summary>
+		/// <param name="rg">Values to write</param>
+		public void WriteAll(T[] rg)
+		{
+			for (int j = 0; j < rg.Length; j++) {
+				this[j] = rg[j];
+			}
+		}
+		#region Any
+
+		private MethodInfo GetMethod(Type t, string name, out object ptr)
+		{
+			ptr = CastAny(t);
+			var fn = ptr.GetType().GetMethod(name);
+			return fn;
+		}
+
+		public void WriteAny(Type type, object value, int elemOffset = DEF_OFFSET)
+		{
+			var fn = GetMethod(type, nameof(Write), out var ptr);
+			fn.Invoke(ptr, new object[] {value, elemOffset});
+		}
+
+		public object ReadAny(Type type, int elemOffset = DEF_OFFSET)
+		{
+			var fn = GetMethod(type, nameof(Read), out var ptr);
+			return fn.Invoke(ptr, new object[] {elemOffset});
+		}
+
+		#endregion
+		
 
 		#region Pointer
 
@@ -371,6 +407,13 @@ namespace NeoCore.Memory.Pointers
 		/// <returns>A native <c>void*</c> pointer</returns>
 		[Pure]
 		public void* ToPointer() => m_value;
+		
+		public object CastAny(Type type)
+		{
+			var cast = GetType().GetMethods().First(f => f.Name == nameof(Cast) && f.IsGenericMethod);
+			var ptr  = Functions.Reflection.CallGeneric(cast, type, this);
+			return ptr;
+		}
 
 
 		[Pure]

@@ -92,7 +92,6 @@ namespace NeoCore.Interop
 			#endregion
 
 			[DllImport(KERNEL32_DLL, SetLastError = true, PreserveSig = true, EntryPoint = nameof(CloseHandle))]
-			[return: As(Types.Bool)]
 			internal static extern bool CloseHandle(IntPtr hObject);
 
 			[DllImport(KERNEL32_DLL, SetLastError = true, CharSet = CharSet.Unicode, EntryPoint = nameof(OpenProcess))]
@@ -124,7 +123,6 @@ namespace NeoCore.Interop
 			                                           int                        length);
 
 			[DllImport(KERNEL32_DLL, EntryPoint = nameof(VirtualProtect))]
-			[return: As(Types.Bool)]
 			internal static extern bool VirtualProtect(IntPtr               lpAddress, int dwSize,
 			                                           MemoryProtection     flNewProtect,
 			                                           out MemoryProtection lpflOldProtect);
@@ -146,7 +144,6 @@ namespace NeoCore.Interop
 			#region Read
 
 			[DllImport(KERNEL32_DLL, EntryPoint = nameof(Mem.Kernel.ReadProcessMemory))]
-			[return: As(Types.Bool)]
 			internal static extern bool ReadProcessMemoryInternal(IntPtr  hProcess, IntPtr lpBaseAddress,
 			                                                      IntPtr  lpBuffer, int    nSize,
 			                                                      out int lpNumberOfBytesRead);
@@ -156,7 +153,6 @@ namespace NeoCore.Interop
 			#region Write
 
 			[DllImport(KERNEL32_DLL, SetLastError = true, EntryPoint = nameof(Mem.Kernel.WriteProcessMemory))]
-			[return: As(Types.Bool)]
 			internal static extern bool WriteProcessMemoryInternal(IntPtr  hProcess, IntPtr lpBaseAddress,
 			                                                       IntPtr  lpBuffer, int    dwSize,
 			                                                       out int lpNumberOfBytesWritten);

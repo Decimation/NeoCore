@@ -15,6 +15,7 @@ using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+using Unsafe = NeoCore.Memory.Unsafe;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 
@@ -28,8 +29,6 @@ namespace NeoCore.Import
 		private const string GET_PROPERTY_REPLACEMENT = "Get";
 
 		protected override string Id => nameof(ImportManager);
-
-		private delegate void LoadFunction(ImportAttribute attr, MethodInfo memberInfo, Pointer<byte> ptr);
 
 		#endregion
 
@@ -93,13 +92,15 @@ namespace NeoCore.Import
 			bool isMethod   = member.MemberType == MemberTypes.Method;
 			bool isCallAttr = attr is ImportCallAttribute;
 
-			var  callAttr = (ImportCallAttribute) attr;
-			bool isCtor   = callAttr.CallOptions.HasFlagFast(ImportCallOptions.Constructor);
+			if (isCallAttr) {
+				var  callAttr = (ImportCallAttribute) attr;
+				bool isCtor   = callAttr.CallOptions.HasFlagFast(ImportCallOptions.Constructor);
 
-			if (isMethod && isCallAttr && isCtor) {
-				CheckConstructorOptions(options);
+				if (isMethod && isCtor) {
+					CheckConstructorOptions(options);
 
-				return Format.Combine(enclosingNamespace, enclosingNamespace);
+					return Format.Combine(enclosingNamespace, enclosingNamespace);
+				}
 			}
 
 
@@ -137,7 +138,6 @@ namespace NeoCore.Import
 			var value = (ImportMap) mapField.GetValue(null);
 			//mapField.SetValue(null, null);
 			value?.Clear();
-
 
 
 			// Sanity check
@@ -275,6 +275,59 @@ namespace NeoCore.Import
 
 		#endregion
 
+		#region Load field
+
+		private static object ProxyLoadField(ImportFieldAttribute ifld, MetaField field, Pointer<byte> ptr)
+		{
+			var fieldLoadType = (MetaType) (ifld.LoadAs ?? field.FieldType.RuntimeType);
+
+			return fieldLoadType.IsAnyPointer ? ptr : ptr.ReadAny(fieldLoadType.RuntimeType);
+		}
+
+		private static void FastLoadField(MetaField fieldInfo, Pointer<byte> addr, Pointer<byte> fieldAddr)
+		{
+			int    fieldSize = fieldInfo.Size;
+			byte[] memCpy    = addr.Cast().Copy(fieldSize);
+			fieldAddr.WriteAll(memCpy);
+		}
+
+		private static void LoadFieldComponent<T>(ref T           value,
+		                                          IImportProvider ip,
+		                                          string          identifier,
+		                                          MetaField       field,
+		                                          ImportAttribute attr)
+		{
+			var           ifld      = (ImportFieldAttribute) attr;
+			Pointer<byte> ptr       = ip.GetAddress(identifier);
+			var           options   = ifld.FieldOptions;
+			Pointer<byte> fieldAddr = field.GetValueAddress(ref value);
+
+			object fieldValue;
+
+			Global.Value.WriteDebug(null, "Loading field {Id} with {Option}",
+			                        field.Name, options);
+
+			switch (options) {
+				case ImportFieldOptions.Proxy:
+					fieldValue = ProxyLoadField(ifld, field, ptr);
+					break;
+				case ImportFieldOptions.Fast:
+					FastLoadField(field, ptr, fieldAddr);
+					return;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			if (field.FieldType.IsAnyPointer) {
+				ptr.WritePointer((Pointer<byte>) fieldValue);
+			}
+			else {
+				ptr.WriteAny(field.FieldType.RuntimeType, fieldValue);
+			}
+		}
+
+		#endregion
+
 		/// <summary>
 		///     Root load function. Loads <paramref name="value" /> of type <paramref name="type" /> using the
 		///     specified <see cref="IImportProvider" /> <paramref name="ip" />.
@@ -299,18 +352,16 @@ namespace NeoCore.Import
 			}
 
 			Global.Value.WriteInformation(null, "Load: {Name}", type.Name);
-			
+
 			if (UsingMap(type, out var mapField)) {
 				if (m_typeImportMaps.ContainsKey(type)) {
 					return value;
 				}
 
 				AddMapToDictionary(type, mapField);
-				value = LoadComponents(value, type, ip, components, LoadMethod);
 			}
-			else {
-				value = LoadComponents(value, type, ip, components);
-			}
+
+			value = LoadComponents(value, ip, components, m_typeImportMaps);
 
 			m_boundTypes.Add(type);
 
@@ -344,7 +395,10 @@ namespace NeoCore.Import
 		}
 
 
-		private void LoadMethod(ImportAttribute attr, MethodInfo method, Pointer<byte> addr)
+		private static void LoadMethodComponent(ImportAttribute             attr,
+		                                        MethodInfo                  method,
+		                                        Pointer<byte>               addr,
+		                                        Dictionary<Type, ImportMap> importMaps)
 		{
 			Guard.AssertNotNull(attr as ImportCallAttribute);
 			var callAttr = (ImportCallAttribute) attr;
@@ -369,16 +423,15 @@ namespace NeoCore.Import
 					Format.Remove(ref name, GET_PROPERTY_PREFIX);
 				}
 
-				m_typeImportMaps[enclosing].Add(name, addr);
+				importMaps[enclosing].Add(name, addr);
 			}
 		}
 
 
 		private static T LoadComponents<T>(T                                  value,
-		                                   Type                               type,
 		                                   IImportProvider                    ip,
 		                                   AnnotatedMember<ImportAttribute>[] components,
-		                                   LoadFunction                       methodFn)
+		                                   Dictionary<Type, ImportMap>        importMaps)
 		{
 			int lim = components.Length;
 
@@ -399,14 +452,18 @@ namespace NeoCore.Import
 					case MemberTypes.Property:
 						var propInfo = (PropertyInfo) mem;
 						var get      = propInfo.GetMethod;
-						methodFn(attr, get, addr);
+						LoadMethodComponent(attr, get, addr, importMaps);
 						break;
 					case MemberTypes.Method:
 
 						FindOptimization(attr, mem);
 
 						// The import is a function or (ctor)
-						methodFn(attr, (MethodInfo) mem, addr);
+
+						LoadMethodComponent(attr, (MethodInfo) mem, addr, importMaps);
+						break;
+					case MemberTypes.Field:
+						LoadFieldComponent(ref value, ip, id, (MetaField) mem, attr);
 						break;
 				}
 
@@ -414,12 +471,6 @@ namespace NeoCore.Import
 			}
 
 			return value;
-		}
-
-		private T LoadComponents<T>(T                                  value, Type type, IImportProvider ip,
-		                            AnnotatedMember<ImportAttribute>[] components)
-		{
-			return LoadComponents(value, type, ip, components, LoadMethod);
 		}
 
 		#endregion

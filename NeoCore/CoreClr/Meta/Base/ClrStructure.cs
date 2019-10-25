@@ -10,8 +10,8 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// <summary>
 	/// Describes a CLR structure that has metadata information.
 	/// </summary>
-	/// <typeparam name="TClr">CLR structure type (<see cref="IClr"/>)</typeparam>
-	public abstract unsafe class ClrStructure<TClr> : AnonymousClrStructure<TClr>  where TClr : unmanaged, IClr
+	/// <typeparam name="TClr">CLR structure type (<see cref="IClrSource"/>)</typeparam>
+	public abstract unsafe class ClrStructure<TClr> : AnonymousClrStructure<TClr>  where TClr : unmanaged, IClrSource
 	{
 		#region Fields
 
