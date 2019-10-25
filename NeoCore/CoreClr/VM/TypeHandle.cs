@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
@@ -12,7 +13,7 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	internal unsafe struct TypeHandle : IClrSource
+	internal unsafe struct TypeHandle : IClrStructure
 	{
 		static TypeHandle()
 		{
@@ -27,7 +28,7 @@ namespace NeoCore.CoreClr.VM
 		private static readonly ImportMap Imports = new ImportMap();
 
 		internal Pointer<MethodTable> MethodTable {
-			[ImportProperty]
+			[ImportAccessor]
 			get {
 				fixed (TypeHandle* value = &this) {
 					return Functions.Native.CallReturnPointer((void*) Imports[nameof(MethodTable)], value);

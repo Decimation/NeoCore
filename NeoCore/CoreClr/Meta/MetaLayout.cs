@@ -12,7 +12,6 @@ namespace NeoCore.CoreClr.Meta
 	/// <summary>
 	///     <list type="bullet">
 	///         <item><description>CLR structure: <see cref="EEClassLayoutInfo"/></description></item>
-	///         <item><description>Reflection structure: N/A</description></item>
 	///     </list>
 	/// </summary>
 	public unsafe class MetaLayout : AnonymousClrStructure<EEClassLayoutInfo>

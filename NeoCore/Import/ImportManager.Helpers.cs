@@ -112,13 +112,13 @@ namespace NeoCore.Import
 
 		private static void FindOptimization(ImportAttribute import, MemberInfo mem)
 		{
-			if (import is ImportCallAttribute callAttr && !(callAttr is ImportPropertyAttribute)) {
+			if (import is ImportCallAttribute callAttr && !(callAttr is ImportAccessorAttribute)) {
 				bool warn = callAttr.CallOptions == ImportCallOptions.Map
 				            && callAttr.Options == IdentifierOptions.UseAccessorName;
 
 				if (warn) {
-					Global.Value.WriteWarning(null, "Use {Name} on member {Member} in {Type}",
-					                          nameof(ImportPropertyAttribute),
+					CoreLog.Value.WriteWarning(null, "Use {Name} on member {Member} in {Type}",
+					                          nameof(ImportAccessorAttribute),
 					                          mem.Name, mem.DeclaringType?.Name);
 				}
 			}

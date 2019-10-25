@@ -5,12 +5,12 @@ namespace NeoCore.Import.Attributes
 {
 	/// <summary>
 	/// Shortcut to <see cref="ImportCallAttribute"/> with <see cref="IdentifierOptions.UseAccessorName"/> and
-	/// <see cref="ImportCallOptions.Map"/>
+	/// <see cref="ImportCallOptions.Map"/> for use with <c>get</c> accessors.
 	/// </summary>
 	[MeansImplicitUse]
 	[AttributeUsage(AttributeTargets.Property | AttributeTargets.Method)]
-	public class ImportPropertyAttribute : ImportCallAttribute
+	public class ImportAccessorAttribute : ImportCallAttribute
 	{
-		public ImportPropertyAttribute() : base(IdentifierOptions.UseAccessorName, ImportCallOptions.Map) { }
+		public ImportAccessorAttribute() : base(IdentifierOptions.UseAccessorName, ImportCallOptions.Map) { }
 	}
 }

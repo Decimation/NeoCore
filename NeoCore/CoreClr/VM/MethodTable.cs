@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Support;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import.Attributes;
@@ -13,7 +14,7 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct MethodTable : IClrSource
+	public unsafe struct MethodTable : IClrStructure
 	{
 		internal short ComponentSize { get; }
 

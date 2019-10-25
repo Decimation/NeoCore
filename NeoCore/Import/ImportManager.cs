@@ -183,7 +183,7 @@ namespace NeoCore.Import
 					case MemberTypes.Field:
 						// The field will be deleted later
 						var fi = (FieldInfo) mem;
-						if (fi.IsStatic) {
+						if (fi.IsStatic && !fi.IsInitOnly) {
 							fi.SetValue(null, default);
 						}
 
@@ -203,7 +203,7 @@ namespace NeoCore.Import
 
 			m_boundTypes.Remove(type);
 
-			Global.Value.WriteVerbose(null, "Unloaded {Name}", type.Name);
+			CoreLog.Value.WriteInformation(null, "Unloaded {Name}", type.Name);
 		}
 
 		public void Unload<T>(ref T value)
@@ -291,40 +291,7 @@ namespace NeoCore.Import
 			fieldAddr.WriteAll(memCpy);
 		}
 
-		private static void LoadFieldComponent<T>(ref T           value,
-		                                          IImportProvider ip,
-		                                          string          identifier,
-		                                          MetaField       field,
-		                                          ImportAttribute attr)
-		{
-			var           ifld      = (ImportFieldAttribute) attr;
-			Pointer<byte> ptr       = ip.GetAddress(identifier);
-			var           options   = ifld.FieldOptions;
-			Pointer<byte> fieldAddr = field.GetValueAddress(ref value);
-
-			object fieldValue;
-
-			Global.Value.WriteDebug(null, "Loading field {Id} with {Option}",
-			                        field.Name, options);
-
-			switch (options) {
-				case ImportFieldOptions.Proxy:
-					fieldValue = ProxyLoadField(ifld, field, ptr);
-					break;
-				case ImportFieldOptions.Fast:
-					FastLoadField(field, ptr, fieldAddr);
-					return;
-				default:
-					throw new ArgumentOutOfRangeException();
-			}
-
-			if (field.FieldType.IsAnyPointer) {
-				ptr.WritePointer((Pointer<byte>) fieldValue);
-			}
-			else {
-				ptr.WriteAny(field.FieldType.RuntimeType, fieldValue);
-			}
-		}
+		
 
 		#endregion
 
@@ -343,15 +310,12 @@ namespace NeoCore.Import
 				return value;
 			}
 
-
 			CheckAnnotations(type, false, out _);
 
 			if (!ContainsAnnotatedMembers(type, out var components)) {
-				Global.Value.WriteWarning(null, "Load: {Name} has no members to import", type.Name);
+				//CoreLog.Value.WriteWarning(null, "Load: {Name} has no members to import", type.Name);
 				return value;
 			}
-
-			Global.Value.WriteInformation(null, "Load: {Name}", type.Name);
 
 			if (UsingMap(type, out var mapField)) {
 				if (m_typeImportMaps.ContainsKey(type)) {
@@ -365,8 +329,7 @@ namespace NeoCore.Import
 
 			m_boundTypes.Add(type);
 
-
-			Global.Value.WriteInformation(null, "Loaded {Name}", type.Name);
+			CoreLog.Value.WriteInformation(null, "Loaded {Name}", type.Name);
 			return value;
 		}
 
@@ -394,7 +357,40 @@ namespace NeoCore.Import
 			}
 		}
 
+		private static void LoadFieldComponent<T>(ImportAttribute attr, ref T value,
+		                                          IImportProvider ip,
+		                                          string          identifier,
+		                                          MetaField       field)
+		{
+			var           ifld      = (ImportFieldAttribute) attr;
+			Pointer<byte> ptr       = ip.GetAddress(identifier);
+			var           options   = ifld.FieldOptions;
+			Pointer<byte> fieldAddr = field.GetValueAddress(ref value);
 
+			object fieldValue;
+
+			CoreLog.Value.WriteDebug(null, "Loading field {Id} with {Option}",
+			                        field.Name, options);
+
+			switch (options) {
+				case ImportFieldOptions.Proxy:
+					fieldValue = ProxyLoadField(ifld, field, ptr);
+					break;
+				case ImportFieldOptions.Fast:
+					FastLoadField(field, ptr, fieldAddr);
+					return;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+
+			if (field.FieldType.IsAnyPointer) {
+				ptr.WritePointer((Pointer<byte>) fieldValue);
+			}
+			else {
+				ptr.WriteAny(field.FieldType.RuntimeType, fieldValue);
+			}
+		}
+		
 		private static void LoadMethodComponent(ImportAttribute             attr,
 		                                        MethodInfo                  method,
 		                                        Pointer<byte>               addr,
@@ -407,7 +403,7 @@ namespace NeoCore.Import
 			CheckOptions(options, out var bind, out var addToMap);
 
 			if (bind) {
-				Global.Value.WriteWarning("Binding {Name}", method.Name);
+				CoreLog.Value.WriteWarning("Binding {Name}", method.Name);
 				FunctionFactory.Managed.SetEntryPoint(method, addr);
 			}
 
@@ -457,13 +453,11 @@ namespace NeoCore.Import
 					case MemberTypes.Method:
 
 						FindOptimization(attr, mem);
-
-						// The import is a function or (ctor)
-
+						
 						LoadMethodComponent(attr, (MethodInfo) mem, addr, importMaps);
 						break;
 					case MemberTypes.Field:
-						LoadFieldComponent(ref value, ip, id, (MetaField) mem, attr);
+						LoadFieldComponent(attr, ref value, ip, id, (MetaField) mem);
 						break;
 				}
 

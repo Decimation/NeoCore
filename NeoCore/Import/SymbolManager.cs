@@ -115,7 +115,7 @@ namespace NeoCore.Import
 		{
 			string img = m_pdb.FullName;
 
-			Global.Value.WriteVerbose(Id, "Loading image {Img}", m_pdb.Name);
+			CoreLog.Value.WriteVerbose(Id, "Loading image {Img}", m_pdb.Name);
 
 			UnloadModule();
 			

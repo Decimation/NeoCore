@@ -26,6 +26,7 @@ namespace NeoCore.Assets
 		static Resources()
 		{
 			Guard.AssertCompatibility();
+			SetupAll();
 		}
 
 		private static readonly Type[] CoreClrTypes =
@@ -33,18 +34,21 @@ namespace NeoCore.Assets
 			typeof(TypeHandle),
 			typeof(MethodDesc),
 			typeof(FieldDesc),
+			typeof(GCHeap),
 			
 //			typeof(MethodTable),
 //			typeof(EEClass),
+//			typeof(EEClassLayoutInfo),
 //			typeof(MethodDescChunk),
 //			typeof(FunctionFactory),
+//			typeof(Globals),
 		};
 		
 		private static readonly Closable[] CoreObjects =
 		{
 			SymbolManager.Value,
 			ImportManager.Value,
-			Global.Value, 
+			CoreLog.Value, 
 		};
 		
 		internal static RuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(ClrFrameworks.Core);
@@ -55,15 +59,15 @@ namespace NeoCore.Assets
 				return;
 			}
 			
-			ImportManager.Value.LoadAll(CoreClrTypes, Clr.Imports);
+//			ImportManager.Value.LoadAll(CoreClrTypes, Clr.Imports);
 			
 			var appDomain = AppDomain.CurrentDomain;
 			appDomain.ProcessExit += (sender, eventArgs) => { Close(); };
 
 			IsSetup = true;
 		}
-		
-		internal static void Close()
+
+		private static void Close()
 		{
 			Clr = null;
 

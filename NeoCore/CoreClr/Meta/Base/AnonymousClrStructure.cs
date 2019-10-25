@@ -13,7 +13,7 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// Describes a CLR structure that doesn't have an accompanying token or <see cref="MemberInfo"/>
 	/// </summary>
 	/// <typeparam name="TClr">CLR structure type</typeparam>
-	public abstract unsafe class AnonymousClrStructure<TClr> where TClr : unmanaged, IClrSource
+	public abstract unsafe class AnonymousClrStructure<TClr> where TClr : unmanaged, IClrStructure
 	{
 		#region Fields
 
@@ -47,7 +47,7 @@ namespace NeoCore.CoreClr.Meta.Base
 		#endregion
 
 		/// <summary>
-		/// Additional <see cref="IClrSource"/> metadata sources.
+		/// Additional <see cref="IClrStructure"/> metadata sources.
 		/// </summary>
 		protected abstract Type[] AdditionalSources { get; }
 

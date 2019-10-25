@@ -14,9 +14,9 @@ using Serilog.Sinks.SystemConsole.Themes;
 namespace NeoCore.Assets
 {
 	/// <summary>
-	/// Contains the logger and other useful resources for NeoCore.
+	/// Contains the logger for NeoCore.
 	/// </summary>
-	internal sealed class Global : Releasable
+	internal sealed class CoreLog : Releasable
 	{
 		#region Logger
 
@@ -38,18 +38,18 @@ namespace NeoCore.Assets
 		#endregion
 
 		
-		protected override string Id => nameof(Global);
+		protected override string Id => nameof(CoreLog);
 
 		#region Singleton
 
-		internal static Global Value { get; private set; } = new Global();
+		internal static CoreLog Value { get; private set; } = new CoreLog();
 		
-		private Global()
+		private CoreLog()
 		{
 #if DEBUG
 			var levelSwitch = new LoggingLevelSwitch
 			{
-				MinimumLevel = LogEventLevel.Debug
+				MinimumLevel = LogEventLevel.Verbose
 			};
 
 			Log = new LoggerConfiguration()

@@ -9,7 +9,7 @@ namespace NeoCore.Model
 	///         <listheader>Inheriting types:</listheader>
 	///         <item>
 	///             <description>
-	///                 <see cref="Global" />
+	///                 <see cref="CoreLog" />
 	///             </description>
 	///         </item>
 	///         <item>

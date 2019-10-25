@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Support;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
@@ -10,7 +11,7 @@ namespace NeoCore.CoreClr.VM.EE
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct EEClassLayoutInfo : IClrSource
+	public unsafe struct EEClassLayoutInfo : IClrStructure
 	{
 		#region Fields
 

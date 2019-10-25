@@ -69,7 +69,7 @@ namespace NeoCore.CoreClr
 				throw new NotImplementedException();
 			}
 
-			public static bool IsInteger(Type t)
+			internal static bool IsInteger(Type t)
 			{
 				return Type.GetTypeCode(t) switch
 				{
@@ -85,7 +85,7 @@ namespace NeoCore.CoreClr
 				};
 			}
 
-			public static bool IsReal(Type t)
+			internal static bool IsReal(Type t)
 			{
 				return Type.GetTypeCode(t) switch
 				{
@@ -106,7 +106,7 @@ namespace NeoCore.CoreClr
 			/// <summary>
 			/// Determines whether this type fits the <c>unmanaged</c> type constraint.
 			/// </summary>
-			public static bool IsUnmanaged(Type t)
+			internal static bool IsUnmanaged(Type t)
 			{
 				try {
 					// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
@@ -118,24 +118,25 @@ namespace NeoCore.CoreClr
 				}
 			}
 
-			public static bool IsAnyPointer(Type t)
+			internal static bool IsAnyPointer(Type t)
 			{
-				var isIPointer =ImplementsGenericInterface(t, typeof(IPointer<>));
-				var isIntPtr = t == typeof(IntPtr) || t == typeof(UIntPtr);
+				bool isIPointer =ImplementsGenericInterface(t, typeof(IPointer<>));
+				bool isIntPtr = t == typeof(IntPtr) || t == typeof(UIntPtr);
 				
 				return t.IsPointer || isIPointer || isIntPtr;
 			}
 
+			internal static bool IsEnumerableType(Type type) => ImplementsInterface(type, nameof(IEnumerable));
+			
 			public static bool ImplementsGenericInterface(Type type, Type interfaceType)
 			{
-				return type.GetInterfaces().Any(x =>
-					                    x.IsGenericType &&
-					                    x.GetGenericTypeDefinition() == interfaceType);
+				return type.GetInterfaces().Any(x => x.IsGenericType 
+				                                     && x.GetGenericTypeDefinition() == interfaceType);
 			}
 			
 			public static bool ImplementsInterface(Type type, string name) => type.GetInterface(name) != null;
 
-			public static bool IsEnumerableType(Type type) => ImplementsInterface(type, nameof(IEnumerable));
+			
 
 			#endregion
 

@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
@@ -15,7 +16,7 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct MethodDesc : IClrSource
+	public unsafe struct MethodDesc : IClrStructure
 	{
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
@@ -71,7 +72,7 @@ namespace NeoCore.CoreClr.VM
 
 
 		internal void* NativeCode {
-			[ImportProperty]
+			[ImportAccessor]
 			get {
 				fixed (MethodDesc* value = &this) {
 					return Functions.Native.CallReturnPointer((void*) Imports[nameof(NativeCode)], value);
@@ -109,7 +110,7 @@ namespace NeoCore.CoreClr.VM
 
 
 		internal long RVA {
-			[ImportProperty]
+			[ImportAccessor]
 			get {
 				fixed (MethodDesc* value = &this) {
 					return Functions.Native.Call<long>((void*) Imports[nameof(RVA)], value);

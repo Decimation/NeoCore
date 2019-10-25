@@ -11,7 +11,9 @@ namespace NeoCore.Utilities.Diagnostics
 	internal static class Guard
 	{
 		private const string VALUE_NULL_HALT = "value:null => halt";
-
+		
+		private const string VALUE_NOTNULL_HALT = "value:notnull => halt";
+		
 		private const string COND_FALSE_HALT = "condition:false => halt";
 
 		private const string UNCONDITIONAL_HALT = "=> halt";
@@ -65,6 +67,19 @@ namespace NeoCore.Utilities.Diagnostics
 
 		#region Null check
 
+		[AssertionMethod]
+		[ContractAnnotation(VALUE_NOTNULL_HALT)]
+		internal static void AssertNull<T>(T value, string name = null) where T : class
+		{
+			if (value != null) {
+				if (name == null) {
+					throw new GuardException();
+				}
+
+				throw new GuardException(name);
+			}
+		}
+		
 		[AssertionMethod]
 		[ContractAnnotation(VALUE_NULL_HALT)]
 		internal static void AssertNotNull<T>(T value, string name = null) where T : class

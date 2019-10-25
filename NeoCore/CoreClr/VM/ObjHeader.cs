@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Support;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
@@ -9,7 +10,7 @@ namespace NeoCore.CoreClr.VM
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct ObjHeader : IClrSource
+	public unsafe struct ObjHeader : IClrStructure
 	{
 		// https://github.com/dotnet/coreclr/blob/master/src/gc/env/gcenv.object.h
 

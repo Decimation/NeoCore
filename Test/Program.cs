@@ -37,10 +37,8 @@ namespace Test
 
 		private static void Main(string[] args)
 		{
-			string s = "";
-			Console.WriteLine(GCHeap.IsHeapPointer(s));
-
-
+			var mt = (MetaType) typeof(TestObject);
+			Console.WriteLine(mt);
 		}
 	}
 }

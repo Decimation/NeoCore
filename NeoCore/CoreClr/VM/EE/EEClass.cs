@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Support;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
@@ -14,7 +15,7 @@ namespace NeoCore.CoreClr.VM.EE
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct EEClass : IClrSource
+	public unsafe struct EEClass : IClrStructure
 	{
 		#region Fields
 
@@ -152,7 +153,7 @@ namespace NeoCore.CoreClr.VM.EE
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
-	internal struct LayoutEEClass : IClrSource
+	internal struct LayoutEEClass : IClrStructure
 	{
 		// Note: This offset should be 72 or sizeof(EEClass)
 		// 		 but I'm keeping it at 0 to minimize size usage,

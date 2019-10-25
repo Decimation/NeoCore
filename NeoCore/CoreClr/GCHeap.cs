@@ -1,53 +1,45 @@
+// ReSharper disable InconsistentNaming
+
 using NeoCore.Assets;
+using NeoCore.CoreClr.Meta.Base;
+using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
-// ReSharper disable InconsistentNaming
-
 namespace NeoCore.CoreClr
 {
 	[ImportNamespace(WKS_NAMESPACE)]
-	public static class GCHeap
+	public unsafe struct GCHeap : IClrStructure
 	{
 		private const string WKS_NAMESPACE = "WKS";
-
-		static GCHeap()
-		{
-			ImportManager.Value.Load(typeof(GCHeap), Resources.Clr.Imports);
-		}
-
-		[ImportField(IdentifierOptions.FullyQualified, ImportFieldOptions.Fast)]
-		private static readonly Pointer<byte> g_pGCHeap;
 
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
 
-		public static int GCCount {
+		internal int GCCount {
 			[ImportCall("GetGcCount", ImportCallOptions.Map)]
 			get {
-				unsafe {
-					return Functions.Native.Call<int>((void*) Imports[nameof(GCCount)], g_pGCHeap.ToPointer());
+				fixed (GCHeap* value = &this) {
+					return Functions.Native.Call<int>((void*) Imports[nameof(GCCount)], value);
 				}
 			}
 		}
-		
-		public static bool IsHeapPointer<T>(T value, bool smallHeapOnly = false)
+
+		internal bool IsHeapPointer<T>(T value, bool smallHeapOnly = false)
 		{
-			unsafe {
-				return Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr) &&
-				       IsHeapPointer(ptr.ToPointer(), smallHeapOnly);
-			}
+			return Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr) &&
+			       IsHeapPointer(ptr.ToPointer(), smallHeapOnly);
 		}
 
 		[ImportCall(ImportCallOptions.Map)]
-		public static bool IsHeapPointer(Pointer<byte> p, bool smallHeapOnly = false)
+		internal bool IsHeapPointer(Pointer<byte> p, bool smallHeapOnly = false)
 		{
-			unsafe {
+			fixed (GCHeap* value = &this) {
 				return Functions.Native.Call<bool, bool>((void*) Imports[nameof(IsHeapPointer)],
-				                                         g_pGCHeap.ToPointer(), p.ToPointer(), smallHeapOnly);
+				                                         value, p.ToPointer(), smallHeapOnly);
 			}
 		}
 	}

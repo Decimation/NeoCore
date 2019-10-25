@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
@@ -15,7 +16,7 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct FieldDesc : IClrSource
+	public unsafe struct FieldDesc : IClrStructure
 	{
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
