@@ -1,5 +1,6 @@
 // ReSharper disable InconsistentNaming
 
+using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;

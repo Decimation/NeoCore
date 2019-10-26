@@ -1,4 +1,6 @@
+using System;
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;
@@ -19,7 +21,7 @@ namespace NeoCore.CoreClr.Components.VM
 	{
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
-		
+
 		internal short ComponentSize { get; }
 
 		internal GenericInfo GenericFlags { get; }
@@ -57,8 +59,8 @@ namespace NeoCore.CoreClr.Components.VM
 		/// </summary>
 		private void* Union1 { get; }
 
-		internal Pointer<EEClass>     EEClass_old => (EEClass*) Union1;
-		internal Pointer<MethodTable> Canon_old   => (MethodTable*) Union1;
+		[Obsolete]
+		internal Pointer<MethodTable> Canon => (MethodTable*) Union1;
 
 		#endregion
 
@@ -102,20 +104,20 @@ namespace NeoCore.CoreClr.Components.VM
 		internal UnionType UnionType {
 			get {
 				const long UNION_MASK = 3;
-				long l = (long) Union1;
+				long       l          = (long) Union1;
 				return (UnionType) (l & UNION_MASK);
 			}
 		}
 
 		internal Pointer<EEClass> EEClass {
-			[ImportCall("MethodTable::GetClass_NoLogging", IdentifierOptions.FullyQualified)]
+			[ImportCall("GetClass_NoLogging")]
 			get {
 				fixed (MethodTable* ptr = &this) {
 					return Functions.Native.CallReturnPointer(Imports[nameof(EEClass)].ToPointer(), ptr);
 				}
 			}
 		}
-		
+
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

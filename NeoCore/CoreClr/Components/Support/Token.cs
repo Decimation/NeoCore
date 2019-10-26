@@ -2,7 +2,7 @@ using System;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Components.VM;
 
-namespace NeoCore.CoreClr
+namespace NeoCore.CoreClr.Components.Support
 {
 	internal static class Tokens
 	{

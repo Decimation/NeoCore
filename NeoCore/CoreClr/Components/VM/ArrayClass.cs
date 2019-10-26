@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import.Attributes;
@@ -11,9 +12,10 @@ namespace NeoCore.CoreClr.Components.VM
 	[StructLayout(LayoutKind.Sequential)]
 	public struct ArrayClass : IClrStructure, INativeInheritance<EEClass>
 	{
-		internal byte Rank;
+		internal byte Rank { get; }
 
-		internal ElementType ElementType;
+		// todo: Doesn't seem to be correct
+		internal ElementType ElementType { get; }
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}

@@ -117,7 +117,7 @@ namespace NeoCore.CoreClr
 				return (PT_Primitive & PrimitiveAttributes[(byte) type]) != 0;
 			}
 
-			public static bool CheckFunctionThrow<TException>(Action action) where TException : Exception
+			public static bool FunctionThrows<TException>(Action action) where TException : Exception
 			{
 				try {
 					action();
@@ -128,18 +128,19 @@ namespace NeoCore.CoreClr
 				}
 			}
 
-			public static bool IsPinnableAlt<T>(T value) where T : class
+			public static bool IsPinnable(object value)
 			{
 				/*var throws = !CheckFunctionThrow<ArgumentException>(() =>
 				{
 					var gc = GCHandle.Alloc(value, GCHandleType.Pinned);
 					gc.Free();
 				});*/
-				
+
 				return Functions.Clr.IsPinnable(value);
 			}
 
-			public static bool IsPinnable<T>(T value) where T : class
+			[Obsolete]
+			public static bool IsPinnableFast(object value)
 			{
 				// https://github.com/dotnet/coreclr/blob/master/src/vm/marshalnative.cpp#L280
 
@@ -156,16 +157,19 @@ namespace NeoCore.CoreClr
 
 				if (mt.IsArray) {
 					var rg = value as Array;
-					var rgElemType = rg.GetType().GetElementType();
+					//var rgElemType = rg.GetType().GetElementType();
 
-					//var corType = mt.ElementTypeHandle.NormType;
+					var corType = mt.ElementTypeHandle.NormType;
+					
+					
 					//var corType = rgElemType.AsMetaType().NormType;
-					var corType = mt.ArrayElementType;
-					Console.WriteLine(">>>"+corType);
-					var isPrimitiveElem = IsPrimitiveType(corType);
 
-					Console.WriteLine(">>"+mt.ElementTypeHandle.NormType);
-					Console.WriteLine(">>"+isPrimitiveElem);
+					// todo
+					
+
+					var isPrimitiveElem = IsPrimitiveType(corType);
+					//var isPrimitiveElem =rg.GetType().GetElementType().IsPrimitive;
+					
 					if (isPrimitiveElem) {
 						return true;
 					}
@@ -173,7 +177,9 @@ namespace NeoCore.CoreClr
 					var th = mt.ElementTypeHandle;
 
 					if (!th.IsTypeDesc) {
-						if (mt.IsStruct && mt.IsBlittable) {
+						
+						if (th.RuntimeType.IsValueType && th.IsBlittable) {
+							
 							return true;
 						}
 					}
@@ -258,7 +264,7 @@ namespace NeoCore.CoreClr
 			/// </summary>
 			private static bool IsUnmanaged(Type t)
 			{
-				return !CheckFunctionThrow<Exception>(() =>
+				return !FunctionThrows<Exception>(() =>
 				{
 					// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
 					typeof(U<>).MakeGenericType(t);

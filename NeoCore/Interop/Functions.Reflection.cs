@@ -1,6 +1,8 @@
 using System;
 using System.Reflection;
+using NeoCore.Interop.Attributes;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
 
 namespace NeoCore.Interop
@@ -36,6 +38,13 @@ namespace NeoCore.Interop
 			}
 
 			#endregion
+
+			public static TDelegate FindFunction<TDelegate>() where TDelegate : Delegate
+			{
+				var attr = typeof(TDelegate).GetCustomAttribute<ReflectionFunctionAttribute>();
+				Guard.AssertNotNull(attr);
+				return FindFunction<TDelegate>(attr.DeclaringType, attr.Name);
+			}
 			
 			public static TDelegate FindFunction<TDelegate, TSource>(string name) where TDelegate : Delegate
 			{

@@ -101,19 +101,23 @@ namespace NeoCore.CoreClr.Components.VM.EE
 		internal Pointer<ArrayClass> AsArrayClass {
 			get {
 				fixed (EEClass* value = &this) {
-					void* thisptr = ((Pointer<byte>) value).Add(sizeof(EEClass)).ToPointer();
-					return thisptr;
+					return Runtime.ReadSubStructure<EEClass, ArrayClass>(value);
 				}
 			}
 		}
 
 		internal ElementType ArrayElementType => AsArrayClass.Reference.ElementType;
-
+		
+		internal int ArrayRank => AsArrayClass.Reference.Rank;
+		
 		internal Pointer<EEClassLayoutInfo> LayoutInfo {
 			get {
 				fixed (EEClass* value = &this) {
-					void* thisptr = ((Pointer<byte>) value).Add(sizeof(EEClass)).ToPointer();
-					return &((LayoutEEClass*) thisptr)->m_LayoutInfo;
+					//void* thisptr = ((Pointer<byte>) value).Add(sizeof(EEClass)).ToPointer();
+					//return &((LayoutEEClass*) thisptr)->m_LayoutInfo;
+					
+					return Runtime.ReadSubStructure<EEClass, LayoutEEClass>(value)
+					              .Cast<EEClassLayoutInfo>();
 				}
 			}
 		}
@@ -166,7 +170,7 @@ namespace NeoCore.CoreClr.Components.VM.EE
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
-	internal struct LayoutEEClass : IClrStructure
+	internal struct LayoutEEClass : IClrStructure, INativeInheritance<EEClass>
 	{
 		// Note: This offset should be 72 or sizeof(EEClass)
 		// 		 but I'm keeping it at 0 to minimize size usage,

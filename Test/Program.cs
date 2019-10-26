@@ -35,16 +35,15 @@ namespace Test
 		private static void Main(string[] args)
 		{
 			
-			var rg = new[] {1};
-			GCHandle.Alloc(rg, GCHandleType.Pinned);
-
-			var mt = rg.GetType().AsMetaType();
-			var ee = mt.Value.Reference.EEClass;
-			Console.WriteLine(mt.ElementTypeHandle);
-			Console.WriteLine(ee.Reference.AsArrayClass.Reference.Rank);
+			var b = new BlittableStruct();
+			var rg = new[] {new BlittableStruct()};
 			
-			Console.WriteLine(Runtime.Info.IsPinnableAlt(rg));
-
+			Console.WriteLine(Runtime.Info.IsPinnableFast(b));
+			Console.WriteLine(Runtime.Info.IsPinnableFast(new[]{1}));
+			Console.WriteLine(Runtime.Info.IsPinnableFast(rg));
+			
+			var h=GCHandle.Alloc(rg, GCHandleType.Pinned);
+			Console.WriteLine(h.IsAllocated);
 		}
 	}
 }

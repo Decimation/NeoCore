@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;

@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Interop;
@@ -63,5 +64,12 @@ namespace NeoCore.CoreClr
 			var ptr = Unsafe.AddressOfHeap(value, OffsetOptions.Header).Cast<ObjHeader>();
 			return ptr.Value;
 		}
+
+		internal static Pointer<TSub> ReadSubStructure<TSuper, TSub>(Pointer<TSuper> super) 
+			where TSub : INativeInheritance<TSuper>
+		{
+			var size = Unsafe.SizeOf<TSuper>();
+			return super.Add(size).Cast<TSub>();
+		} 
 	}
 }

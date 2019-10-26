@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
+using NeoCore.CoreClr.Components.Support;
+using NeoCore.Interop.Attributes;
 
 namespace NeoCore.Interop
 {
@@ -10,20 +12,19 @@ namespace NeoCore.Interop
 		{
 			static Clr()
 			{
-				const string FN_NAME = "GetTypeFromHandleUnsafe";
-				ReadTypeFromHandle = Reflection.FindFunction<GetTypeFromHandleSig, Type>(FN_NAME);
-				
-				const string FN2_NAME = "IsPinnable";
-				IsPinnable = Reflection.FindFunction<IsPinnableSig>(typeof(Marshal),FN2_NAME);
+				ReadTypeFromHandle = Reflection.FindFunction<GetTypeFromHandleFunc>();
+				IsPinnable = Reflection.FindFunction<IsPinnableFunc>();
 			}
 			
-			internal delegate bool IsPinnableSig([CanBeNull] object handle);
+			[ReflectionFunction(typeof(Marshal),"IsPinnable")]
+			internal delegate bool IsPinnableFunc([CanBeNull] object handle);
 			
-			internal delegate Type GetTypeFromHandleSig(IntPtr handle);
+			[ReflectionFunction(typeof(Type),"GetTypeFromHandleUnsafe")]
+			internal delegate Type GetTypeFromHandleFunc(IntPtr handle);
 
-			internal static GetTypeFromHandleSig ReadTypeFromHandle { get; }
+			internal static GetTypeFromHandleFunc ReadTypeFromHandle { get; }
 			
-			internal static IsPinnableSig IsPinnable { get; }
+			internal static IsPinnableFunc IsPinnable { get; }
 		}
 	}
 }
