@@ -11,9 +11,11 @@ using JetBrains.Annotations;
 using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
+using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
+using NeoCore.Utilities.Extensions;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedTypeParameter
@@ -112,14 +114,36 @@ namespace NeoCore.CoreClr
 					return false;
 				}
 
-				return (PT_Primitive & PrimitiveAttributes[(int) type]) != 0;
+				return (PT_Primitive & PrimitiveAttributes[(byte) type]) != 0;
+			}
+
+			public static bool CheckFunctionThrow<TException>(Action action) where TException : Exception
+			{
+				try {
+					action();
+					return false;
+				}
+				catch (TException) {
+					return true;
+				}
+			}
+
+			public static bool IsPinnableAlt<T>(T value) where T : class
+			{
+				/*var throws = !CheckFunctionThrow<ArgumentException>(() =>
+				{
+					var gc = GCHandle.Alloc(value, GCHandleType.Pinned);
+					gc.Free();
+				});*/
+				
+				return Functions.Clr.IsPinnable(value);
 			}
 
 			public static bool IsPinnable<T>(T value) where T : class
 			{
 				// https://github.com/dotnet/coreclr/blob/master/src/vm/marshalnative.cpp#L280
-				
-				if (IsNil(value)) {
+
+				if (value == null) {
 					return true;
 				}
 
@@ -131,15 +155,24 @@ namespace NeoCore.CoreClr
 				}
 
 				if (mt.IsArray) {
-					var isPrimitiveElem = IsPrimitiveType(mt.ElementTypeHandle.NormType);
+					var rg = value as Array;
+					var rgElemType = rg.GetType().GetElementType();
 
+					//var corType = mt.ElementTypeHandle.NormType;
+					//var corType = rgElemType.AsMetaType().NormType;
+					var corType = mt.ArrayElementType;
+					Console.WriteLine(">>>"+corType);
+					var isPrimitiveElem = IsPrimitiveType(corType);
+
+					Console.WriteLine(">>"+mt.ElementTypeHandle.NormType);
+					Console.WriteLine(">>"+isPrimitiveElem);
 					if (isPrimitiveElem) {
 						return true;
 					}
 
 					var th = mt.ElementTypeHandle;
 
-					if (th.IsTypeDesc) {
+					if (!th.IsTypeDesc) {
 						if (mt.IsStruct && mt.IsBlittable) {
 							return true;
 						}
@@ -225,14 +258,11 @@ namespace NeoCore.CoreClr
 			/// </summary>
 			private static bool IsUnmanaged(Type t)
 			{
-				try {
+				return !CheckFunctionThrow<Exception>(() =>
+				{
 					// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
 					typeof(U<>).MakeGenericType(t);
-					return true;
-				}
-				catch {
-					return false;
-				}
+				});
 			}
 
 			#endregion

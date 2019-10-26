@@ -98,6 +98,16 @@ namespace NeoCore.CoreClr.Components.VM.EE
 			}
 		}
 
+		internal Pointer<ArrayClass> AsArrayClass {
+			get {
+				fixed (EEClass* value = &this) {
+					void* thisptr = ((Pointer<byte>) value).Add(sizeof(EEClass)).ToPointer();
+					return thisptr;
+				}
+			}
+		}
+
+		internal ElementType ArrayElementType => AsArrayClass.Reference.ElementType;
 
 		internal Pointer<EEClassLayoutInfo> LayoutInfo {
 			get {

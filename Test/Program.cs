@@ -25,16 +25,26 @@ namespace Test
 {
 	internal static unsafe class Program
 	{
+		public struct BlittableStruct
+		{
+			public int IntField;
+
+			public void Hello() { }
+		}
 		
 		private static void Main(string[] args)
 		{
-			Console.WriteLine(Runtime.Info.IsPinnable("foo"));
-			Console.WriteLine(Runtime.Info.IsPinnable<object>(null));
-
-			var rg = new[] {"foo"};
-			Console.WriteLine(Runtime.Info.IsPinnable(rg));
-
+			
+			var rg = new[] {1};
 			GCHandle.Alloc(rg, GCHandleType.Pinned);
+
+			var mt = rg.GetType().AsMetaType();
+			var ee = mt.Value.Reference.EEClass;
+			Console.WriteLine(mt.ElementTypeHandle);
+			Console.WriteLine(ee.Reference.AsArrayClass.Reference.Rank);
+			
+			Console.WriteLine(Runtime.Info.IsPinnableAlt(rg));
+
 		}
 	}
 }

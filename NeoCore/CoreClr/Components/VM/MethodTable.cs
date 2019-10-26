@@ -1,7 +1,9 @@
 using System.Runtime.InteropServices;
 using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Meta.Base;
+using NeoCore.Import;
 using NeoCore.Import.Attributes;
+using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
 
@@ -15,6 +17,8 @@ namespace NeoCore.CoreClr.Components.VM
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MethodTable : IClrStructure
 	{
+		[ImportMapField]
+		private static readonly ImportMap Imports = new ImportMap();
 		
 		internal short ComponentSize { get; }
 
@@ -53,8 +57,8 @@ namespace NeoCore.CoreClr.Components.VM
 		/// </summary>
 		private void* Union1 { get; }
 
-		internal Pointer<EEClass>     EEClass => (EEClass*) Union1;
-		internal Pointer<MethodTable> Canon   => (MethodTable*) Union1;
+		internal Pointer<EEClass>     EEClass_old => (EEClass*) Union1;
+		internal Pointer<MethodTable> Canon_old   => (MethodTable*) Union1;
 
 		#endregion
 
@@ -100,6 +104,15 @@ namespace NeoCore.CoreClr.Components.VM
 				const long UNION_MASK = 3;
 				long l = (long) Union1;
 				return (UnionType) (l & UNION_MASK);
+			}
+		}
+
+		internal Pointer<EEClass> EEClass {
+			[ImportCall("MethodTable::GetClass_NoLogging", IdentifierOptions.FullyQualified)]
+			get {
+				fixed (MethodTable* ptr = &this) {
+					return Functions.Native.CallReturnPointer(Imports[nameof(EEClass)].ToPointer(), ptr);
+				}
 			}
 		}
 		

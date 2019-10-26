@@ -48,6 +48,8 @@ namespace NeoCore.CoreClr.Meta
 			}
 		}
 		
+		
+		
 		public override MemberInfo Info => RuntimeType;
 		
 		public AuxiliaryProperties AuxiliaryProperties { get; }
@@ -92,12 +94,12 @@ namespace NeoCore.CoreClr.Meta
 
 		private Pointer<EEClass> EEClass => Value.Reference.EEClass;
 
-		public MetaType Canon => Value.Reference.Canon;
+//		public MetaType Canon => Value.Reference.Canon;
 
 		public Pointer<byte> PerInstInfo => Value.Reference.PerInstInfo;
 
 		public MetaType ElementTypeHandle => (Pointer<MethodTable>) Value.Reference.ElementTypeHandle;
-
+		public ElementType ArrayElementType => EEClass.Value.ArrayElementType;
 		public Pointer<byte> InterfaceMap => Value.Reference.InterfaceMap;
 
 		public Type RuntimeType { get; }
