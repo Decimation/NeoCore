@@ -95,7 +95,7 @@ namespace NeoCore.Memory.Pointers
 		/// Default increment/decrement/element count for <see cref="Pointer{T}"/>
 		/// </summary>
 		private const int DEF_ELEM_CNT = 1;
-		
+
 		#region Implicit / explicit conversions
 
 		public static explicit operator Pointer<T>(ulong ul) => new Pointer<T>((void*) ul);
@@ -287,6 +287,16 @@ namespace NeoCore.Memory.Pointers
 		public ref T AsRef(int elemOffset = DEF_OFFSET) => ref Unsafe.AsRef<T>(Offset(elemOffset));
 
 		/// <summary>
+		/// Zeros <paramref name="elemCnt"/> elements.
+		/// </summary>
+		/// <param name="elemCnt">Number of elements to zero</param>
+		public void Clear(int elemCnt = DEF_ELEM_CNT)
+		{
+			for (int i = 0; i < elemCnt; i++)
+				this[i] = default;
+		}
+		
+		/// <summary>
 		///     Writes all elements of <paramref name="rg" /> to the current pointer.
 		/// </summary>
 		/// <param name="rg">Values to write</param>
@@ -296,6 +306,7 @@ namespace NeoCore.Memory.Pointers
 				this[j] = rg[j];
 			}
 		}
+
 		#region Any
 
 		private MethodInfo GetMethod(Type t, string name, out object ptr)
@@ -318,7 +329,7 @@ namespace NeoCore.Memory.Pointers
 		}
 
 		#endregion
-		
+
 
 		#region Pointer
 
@@ -407,7 +418,7 @@ namespace NeoCore.Memory.Pointers
 		/// <returns>A native <c>void*</c> pointer</returns>
 		[Pure]
 		public void* ToPointer() => m_value;
-		
+
 		public object CastAny(Type type)
 		{
 			var cast = GetType().GetMethods().First(f => f.Name == nameof(Cast) && f.IsGenericMethod);

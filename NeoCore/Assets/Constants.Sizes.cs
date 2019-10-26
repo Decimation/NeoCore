@@ -28,7 +28,7 @@ namespace NeoCore.Assets
 			///             <description>+ <see cref="ObjHeaderSize" />: <see cref="ObjHeader" /></description>
 			///         </item>
 			///         <item>
-			///             <description>+ <see cref="Mem.PointerSize" />: <see cref="TypeHandle"/></description>
+			///             <description>+ <see cref="Mem.Size" />: <see cref="TypeHandle"/></description>
 			///         </item>
 			///     </list>
 			/// </summary>
@@ -37,13 +37,13 @@ namespace NeoCore.Assets
 			/// <summary>
 			///     <para>Minimum GC object heap size</para>
 			/// </summary>
-			public static readonly int MinObjectSize = (Mem.PointerSize * 2) + ObjHeaderSize;
+			public static readonly int MinObjectSize = (Mem.Size * 2) + ObjHeaderSize;
 
 
 			/// <summary>
 			///     Size of the length field and padding (x64)
 			/// </summary>
-			public static readonly int ArrayOverhead = Mem.PointerSize;
+			public static readonly int ArrayOverhead = Mem.Size;
 
 			/// <summary>
 			///     Size of the length field and first character

@@ -118,7 +118,7 @@ namespace NeoCore.CoreClr.Meta
 		public bool FieldsArePacked => EEClass.Reference.FieldsArePacked;
 
 		public int FixedEEClassFields => EEClass.Reference.FixedEEClassFields;
-
+		
 		/// <summary>
 		/// Size of the padding in <see cref="BaseSize"/>
 		/// </summary>

@@ -7,6 +7,7 @@ using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
 // ReSharper disable InconsistentNaming
+#pragma warning disable 649
 
 namespace NeoCore.CoreClr
 {
@@ -31,3 +32,5 @@ namespace NeoCore.CoreClr
 		public static readonly MetaHeap GCHeap;
 	}
 }
+
+#pragma warning restore 649

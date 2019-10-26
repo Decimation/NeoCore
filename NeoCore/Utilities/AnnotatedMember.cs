@@ -7,7 +7,7 @@ namespace NeoCore.Utilities
 	/// Contains a <see cref="Attribute"/> and its accompanying <see cref="MemberInfo"/>
 	/// </summary>
 	/// <typeparam name="TAttr"><see cref="Attribute"/> type</typeparam>
-	public struct AnnotatedMember<TAttr> where TAttr : Attribute
+	public readonly struct AnnotatedMember<TAttr> where TAttr : Attribute
 	{
 		/// <summary>
 		/// Decorated member.

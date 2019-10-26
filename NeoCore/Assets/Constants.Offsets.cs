@@ -16,17 +16,17 @@ namespace NeoCore.Assets
 			///     Heap offset to the first field.
 			///     <list type="bullet">
 			///         <item>
-			///             <description>+ <see cref="Mem.PointerSize" /> for <see cref="TypeHandle" /></description>
+			///             <description>+ <see cref="Mem.Size" /> for <see cref="TypeHandle" /></description>
 			///         </item>
 			///     </list>
 			/// </summary>
-			public static readonly int OffsetToData = Mem.PointerSize;
+			public static readonly int OffsetToData = Mem.Size;
 
 			/// <summary>
 			///     Heap offset to the first array element.
 			///     <list type="bullet">
 			///         <item>
-			///             <description>+ <see cref="Mem.PointerSize" /> for <see cref="TypeHandle" /></description>
+			///             <description>+ <see cref="Mem.Size" /> for <see cref="TypeHandle" /></description>
 			///         </item>
 			///         <item>
 			///             <description>+ 4 for length (<see cref="uint" />) </description>
@@ -41,7 +41,7 @@ namespace NeoCore.Assets
 			/// <summary>
 			///     Heap offset to the first string character.
 			/// On 64 bit platforms, this should be 12 (8 + 4) and on 32 bit 8 (4 + 4).
-			/// (<see cref="Mem.PointerSize"/> + <see cref="int"/>)
+			/// (<see cref="Mem.Size"/> + <see cref="int"/>)
 			/// </summary>
 			public static readonly int OffsetToStringData = RuntimeHelpers.OffsetToStringData;
 		}

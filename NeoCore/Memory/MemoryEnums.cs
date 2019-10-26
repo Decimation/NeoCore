@@ -4,6 +4,7 @@ using System.Runtime.InteropServices;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
+using NeoCore.CoreClr.VM.EE;
 
 namespace NeoCore.Memory
 {
@@ -126,13 +127,13 @@ namespace NeoCore.Memory
 		///         <para>This includes field padding.</para>
 		///     </remarks>
 		/// </summary>
-		/// <returns><see cref="Offsets.MinObjectSize" /> if type is an array, fields size otherwise</returns>
+		/// <returns><see cref="Constants.Sizes.MinObjectSize" /> if type is an array, fields size otherwise</returns>
 		BaseFields,
 
 		/// <summary>
 		///     <para>Returns the base instance size according to the TypeHandle (<c>MethodTable</c>).</para>
 		///     <para>This is the minimum heap size of a type.</para>
-		///     <para>By default, this equals <see cref="Offsets.MinObjectSize" /> (<c>24</c> (x64) or <c>12</c> (x84)).</para>
+		///     <para>By default, this equals <see cref="Constants.Sizes.MinObjectSize" /> (<c>24</c> (x64) or <c>12</c> (x84)).</para>
 		/// </summary>
 		/// <remarks>
 		/// <para>Only a type parameter is needed, or a value can be supplied</para>
@@ -155,7 +156,7 @@ namespace NeoCore.Memory
 		///         <item>
 		///             <description>
 		///                 <see cref="MetaType.BaseSize" /> = The base instance size of a type
-		///                 (<c>24</c> (x64) or <c>12</c> (x86) by default) (<see cref="Offsets.MinObjectSize" />)
+		///                 (<c>24</c> (x64) or <c>12</c> (x86) by default) (<see cref="Constants.Sizes.MinObjectSize" />)
 		///             </description>
 		///         </item>
 		///         <item>
@@ -185,13 +186,21 @@ namespace NeoCore.Memory
 
 		/// <summary>
 		/// Requires a value.
-		/// <para><see cref="Unsafe.SizeOfData{T}"/></para>
+		/// Returns the size of the data in the value. If the type is a reference type,
+		/// this returns the size of the value not occupied by the <see cref="MethodTable" /> pointer and the
+		/// <see cref="ObjHeader" />.
+		/// If the type is a value type, this returns <see cref="Unsafe.SizeOf{T}()" />.
 		/// </summary>
 		Data,
 
 		/// <summary>
 		/// Does not require a value.
-		/// <para><see cref="Unsafe.BaseSizeOfData"/></para>
+		/// Returns the base size of the data in the type specified by the value. If the value is a
+		/// reference type,
+		/// this returns the size of data not occupied by the <see cref="MethodTable" /> pointer, <see cref="ObjHeader" />,
+		/// padding, and overhead.
+		/// If the value is a value type, this returns <see cref="Unsafe.SizeOf{T}()" />.
+		/// 
 		/// </summary>
 		BaseData,
 	}

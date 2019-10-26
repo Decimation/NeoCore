@@ -27,25 +27,10 @@ namespace Test
 {
 	internal static unsafe class Program
 	{
-		interface IInterface
-		{
-			string Name { get; }
-		}
-
-		public struct TestObject : IInterface
-		{
-			private string Field { get; }
-
-			public void Hello() { }
-
-			public string Name => "Foo";
-		}
-
-
+		
 		private static void Main(string[] args)
 		{
-			var t = new MetaType(typeof(TestObject));
-			Console.WriteLine(t);
+			
 		}
 	}
 }

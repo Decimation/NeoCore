@@ -19,12 +19,12 @@ namespace NeoCore.Memory
 		/// <summary>
 		/// Size of a pointer. Equals <see cref="IntPtr.Size"/>.
 		/// </summary>
-		public static readonly int PointerSize = IntPtr.Size;
+		public static readonly int Size = IntPtr.Size;
 
 		/// <summary>
 		/// Determines whether this process is 64-bit.
 		/// </summary>
-		public static bool Is64Bit => PointerSize == sizeof(long) && Environment.Is64BitProcess;
+		public static readonly bool Is64Bit = Size == sizeof(long) && Environment.Is64BitProcess;
 
 		/// <summary>
 		/// Represents a <c>null</c> <see cref="Pointer{T}"/>. Equivalent to <see cref="IntPtr.Zero"/>.
@@ -60,19 +60,16 @@ namespace NeoCore.Memory
 		public static void Destroy<T>(ref T value)
 		{
 			if (!Runtime.Info.IsStruct(value)) {
-				/*int           size = Unsafe.SizeOf(value, SizeOfOptions.Data);
+				int           size = Unsafe.SizeOf(value, SizeOfOptions.Data);
 				Pointer<byte> ptr  = Unsafe.AddressOfFields(ref value);
-				ptr.ClearBytes(size);*/
-				throw new NotImplementedException();
+				ptr.Cast().Clear(size);
 			}
 
 			value = default;
 		}
 
-		public static int OffsetOf<TClr>(string name, OffsetOfType type, bool isProperty = false)
-		{
-			return Mem.OffsetOf(typeof(TClr), name, type, isProperty);
-		}
+		public static int OffsetOf<T>(string name, OffsetOfType type, bool isProperty = false) =>
+			OffsetOf(typeof(T), name, type, isProperty);
 
 		public static int OffsetOf(Type t, string name, OffsetOfType type, bool isProperty = false)
 		{
@@ -89,8 +86,6 @@ namespace NeoCore.Memory
 				default:
 					throw new ArgumentOutOfRangeException(nameof(type), type, null);
 			}
-
-			return Constants.INVALID_VALUE;
 		}
 	}
 }
