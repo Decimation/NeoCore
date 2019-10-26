@@ -1,15 +1,13 @@
 // ReSharper disable InconsistentNaming
 
-using NeoCore.Assets;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
-namespace NeoCore.CoreClr
+namespace NeoCore.CoreClr.Components
 {
 	[ImportNamespace(WKS_NAMESPACE)]
 	public unsafe struct GCHeap : IClrStructure

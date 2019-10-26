@@ -1,7 +1,6 @@
 using System.Reflection;
 using System.Text;
 using NeoCore.Assets;
-using NeoCore.CoreClr.Support;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 

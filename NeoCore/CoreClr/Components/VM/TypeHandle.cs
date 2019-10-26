@@ -1,14 +1,13 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
 
-namespace NeoCore.CoreClr.VM
+namespace NeoCore.CoreClr.Components.VM
 {
 	[ImportNamespace]
 	[NativeStructure]
@@ -23,7 +22,9 @@ namespace NeoCore.CoreClr.VM
 		private void* Union1 { get; }
 
 		private MethodTable* AsMethodTable => (MethodTable*) Union1;
-
+		
+		private ulong AsTAddr => (ulong) Union1;
+		
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
 
@@ -36,6 +37,8 @@ namespace NeoCore.CoreClr.VM
 			}
 		}
 
+//		internal bool IsTypeDesc => (AsTAddr & 2) != 0;
+		
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

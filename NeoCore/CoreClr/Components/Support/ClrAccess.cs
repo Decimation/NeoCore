@@ -1,10 +1,7 @@
-using System;
-using System.Runtime.InteropServices;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
-using NeoCore.Utilities;
 
-namespace NeoCore.CoreClr.Support
+namespace NeoCore.CoreClr.Components.Support
 {
 	internal static unsafe class ClrAccess
 	{

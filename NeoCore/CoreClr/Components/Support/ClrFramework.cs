@@ -2,7 +2,7 @@ using System;
 using System.IO;
 using NeoCore.Utilities;
 
-namespace NeoCore.CoreClr.Support
+namespace NeoCore.CoreClr.Components.Support
 {
 	/// <summary>
 	/// Contains possible CLR framework types.

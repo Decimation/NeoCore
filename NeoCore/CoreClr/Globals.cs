@@ -1,4 +1,5 @@
 using NeoCore.Assets;
+using NeoCore.CoreClr.Components;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;

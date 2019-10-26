@@ -1,6 +1,6 @@
 using System;
 using NeoCore.CoreClr;
-using NeoCore.CoreClr.Support;
+using NeoCore.CoreClr.Components.Support;
 
 namespace NeoCore.Assets
 {

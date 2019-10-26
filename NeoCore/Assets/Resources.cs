@@ -1,9 +1,10 @@
 using System;
 using System.Runtime.CompilerServices;
 using NeoCore.CoreClr;
-using NeoCore.CoreClr.Support;
-using NeoCore.CoreClr.VM;
-using NeoCore.CoreClr.VM.EE;
+using NeoCore.CoreClr.Components;
+using NeoCore.CoreClr.Components.Support;
+using NeoCore.CoreClr.Components.VM;
+using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.Import;
 using NeoCore.Interop;
 using NeoCore.Model;
@@ -30,7 +31,7 @@ namespace NeoCore.Assets
 		 * - <Company>.(<Product>|<Technology>)[.<Feature>][.<Subnamespace>]
 		 */
 
-		private static bool IsSetup { get; set; } = false;
+		private static bool IsSetup { get; set; }
 		
 		static Resources()
 		{

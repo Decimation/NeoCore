@@ -1,18 +1,17 @@
 using System.Runtime.InteropServices;
+using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.Support;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
-using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.VM
+namespace NeoCore.CoreClr.Components.VM
 {
 	[ImportNamespace]
 	[NativeStructure]

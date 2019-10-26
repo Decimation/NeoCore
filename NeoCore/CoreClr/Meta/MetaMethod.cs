@@ -1,13 +1,13 @@
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.VM;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
-using ParameterInfo = NeoCore.CoreClr.VM.ParameterInfo;
+using ParameterInfo = NeoCore.CoreClr.Components.VM.ParameterInfo;
 // ReSharper disable SuggestBaseTypeForParameter
 
 // ReSharper disable InconsistentNaming

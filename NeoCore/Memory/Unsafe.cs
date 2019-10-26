@@ -7,8 +7,8 @@ using System.Runtime.InteropServices;
 using InlineIL;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
+using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
-using NeoCore.CoreClr.VM;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
@@ -184,7 +184,7 @@ namespace NeoCore.Memory
 					return mt.InstanceFieldsSize;
 
 				case SizeOfOptions.BaseInstance:
-					Guard.Assert(!Runtime.StaticInfo.IsStruct<T>());
+					Guard.Assert(!Runtime.Info.IsCompileStruct<T>());
 					return mt.BaseSize;
 
 				case SizeOfOptions.Heap:

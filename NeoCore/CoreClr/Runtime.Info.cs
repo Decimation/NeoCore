@@ -8,8 +8,9 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using InlineIL;
 using JetBrains.Annotations;
+using NeoCore.CoreClr.Components.Support;
+using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
-using NeoCore.CoreClr.Support;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
@@ -61,11 +62,93 @@ namespace NeoCore.CoreClr
 				return (typeof(T).IsInterface || typeof(T) == typeof(object)) && value != null && IsStruct(value);
 			}
 
+			private const ElementType PRIMITIVE_TABLE_SIZE = ElementType.String;
+
+			private const int PT_Primitive = 0x01000000;
+
+			/// <summary>
+			/// <para>The Attributes Table</para>
+			/// <para>20 bits for built in types and 12 bits for Properties</para>
+			/// <para>The properties are followed by the widening mask. All types widen to themselves.</para>
+			/// <para>https://github.com/dotnet/coreclr/blob/master/src/vm/invokeutil.cpp</para>
+			/// <para>https://github.com/dotnet/coreclr/blob/master/src/vm/invokeutil.h</para>
+			/// </summary>
+			private static readonly int[] PrimitiveAttributes =
+			{
+				0x00,                  // ELEMENT_TYPE_END
+				0x00,                  // ELEMENT_TYPE_VOID
+				PT_Primitive | 0x0004, // ELEMENT_TYPE_BOOLEAN
+				PT_Primitive | 0x3F88, // ELEMENT_TYPE_CHAR (W = U2, CHAR, I4, U4, I8, U8, R4, R8) (U2 == Char)
+				PT_Primitive | 0x3550, // ELEMENT_TYPE_I1   (W = I1, I2, I4, I8, R4, R8) 
+				PT_Primitive | 0x3FE8, // ELEMENT_TYPE_U1   (W = CHAR, U1, I2, U2, I4, U4, I8, U8, R4, R8)
+				PT_Primitive | 0x3540, // ELEMENT_TYPE_I2   (W = I2, I4, I8, R4, R8)
+				PT_Primitive | 0x3F88, // ELEMENT_TYPE_U2   (W = U2, CHAR, I4, U4, I8, U8, R4, R8)
+				PT_Primitive | 0x3500, // ELEMENT_TYPE_I4   (W = I4, I8, R4, R8)
+				PT_Primitive | 0x3E00, // ELEMENT_TYPE_U4   (W = U4, I8, R4, R8)
+				PT_Primitive | 0x3400, // ELEMENT_TYPE_I8   (W = I8, R4, R8)
+				PT_Primitive | 0x3800, // ELEMENT_TYPE_U8   (W = U8, R4, R8)
+				PT_Primitive | 0x3000, // ELEMENT_TYPE_R4   (W = R4, R8)
+				PT_Primitive | 0x2000, // ELEMENT_TYPE_R8   (W = R8) 
+			};
+
+			public static bool IsPrimitiveType(ElementType type)
+			{
+				// if (type >= PRIMITIVE_TABLE_SIZE)
+				// {
+				//     if (ELEMENT_TYPE_I==type || ELEMENT_TYPE_U==type)
+				//     {
+				//         return TRUE;
+				//     }
+				//     return 0;
+				// }
+
+				// return (PT_Primitive & PrimitiveAttributes[type]);
+
+				if (type >= PRIMITIVE_TABLE_SIZE) {
+					if (ElementType.I == type || ElementType.U == type) {
+						return true;
+					}
+
+					return false;
+				}
+
+				return (PT_Primitive & PrimitiveAttributes[(int) type]) != 0;
+			}
+
 			public static bool IsPinnable<T>(T value) where T : class
 			{
-				// https://github.com/dotnet/coreclr/blob/master/src/vm/marshalnative.cpp#L257
+				// https://github.com/dotnet/coreclr/blob/master/src/vm/marshalnative.cpp#L280
+				
+				if (IsNil(value)) {
+					return true;
+				}
 
-				throw new NotImplementedException();
+				var mt = ReadTypeHandle(value);
+
+
+				if (IsString(value)) {
+					return true;
+				}
+
+				if (mt.IsArray) {
+					var isPrimitiveElem = IsPrimitiveType(mt.ElementTypeHandle.NormType);
+
+					if (isPrimitiveElem) {
+						return true;
+					}
+
+					var th = mt.ElementTypeHandle;
+
+					if (th.IsTypeDesc) {
+						if (mt.IsStruct && mt.IsBlittable) {
+							return true;
+						}
+					}
+
+					return false;
+				}
+
+				return mt.IsBlittable;
 			}
 
 			internal static AuxiliaryProperties ReadProperties(Type t)
@@ -173,7 +256,7 @@ namespace NeoCore.CoreClr
 			public static bool ImplementsInterface(Type type, string name) => type.GetInterface(name) != null;
 
 			/// <summary>
-			/// Whether the value of <paramref name="value"/> is <c>default</c> or <c>null</c> bytes,
+			/// Determines whether the value of <paramref name="value"/> is <c>default</c> or <c>null</c> bytes,
 			/// or <paramref name="value"/> is <c>null</c>
 			///
 			/// <remarks>"Nil" is <c>null</c> or <c>default</c>.</remarks>
@@ -194,11 +277,50 @@ namespace NeoCore.CoreClr
 				return IL.Return<bool>();
 			}
 
+			/// <summary>
+			/// Determines whether or not <paramref name="value"/> is a runtime <see cref="string"/>.
+			/// </summary>
+			/// <param name="value">Value to test</param>
+			/// <typeparam name="T">Type to test</typeparam>
+			/// <returns><c>true</c> if <paramref name="value"/> is a <see cref="string"/>; <c>false</c> otherwise</returns>
 			internal static bool IsString<T>(T value) => value is string;
 
+			/// <summary>
+			/// Determines whether or not <paramref name="value"/> is a runtime <see cref="Array"/>.
+			/// </summary>
+			/// <param name="value">Value to test</param>
+			/// <typeparam name="T">Type to test</typeparam>
+			/// <returns><c>true</c> if <paramref name="value"/> is an <see cref="Array"/>; <c>false</c> otherwise</returns>
 			internal static bool IsArray<T>(T value) => value is Array;
 
+			/// <summary>
+			/// Determines whether or not <paramref name="value"/> is a runtime value type.
+			/// </summary>
+			/// <param name="value">Value to test</param>
+			/// <typeparam name="T">Type to test</typeparam>
+			/// <returns><c>true</c> if <paramref name="value"/> is a value type; <c>false</c> otherwise</returns>
 			internal static bool IsStruct<T>(T value) => value.GetType().IsValueType;
+
+			/// <summary>
+			/// Determines whether or not <typeparamref name="T"/> is a compile-time <see cref="string"/>.
+			/// </summary>
+			/// <typeparam name="T">Type to test</typeparam>
+			/// <returns><c>true</c> if <typeparamref name="T"/> is a <see cref="string"/>; <c>false</c> otherwise</returns>
+			internal static bool IsCompileString<T>() => typeof(T) == typeof(string);
+
+			/// <summary>
+			/// Determines whether or not <typeparamref name="T"/> is a compile-time <see cref="Array"/>.
+			/// </summary>
+			/// <typeparam name="T">Type to test</typeparam>
+			/// <returns><c>true</c> if <typeparamref name="T"/> is an <see cref="Array"/>; <c>false</c> otherwise</returns>
+			internal static bool IsCompileArray<T>() => typeof(T).IsArray || typeof(T) == typeof(Array);
+
+			/// <summary>
+			/// Determines whether or not <typeparamref name="T"/> is a compile-time value type.
+			/// </summary>
+			/// <typeparam name="T">Type to test</typeparam>
+			/// <returns><c>true</c> if <typeparamref name="T"/> is a value type; <c>false</c> otherwise</returns>
+			internal static bool IsCompileStruct<T>() => typeof(T).IsValueType;
 		}
 	}
 }

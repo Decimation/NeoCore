@@ -1,5 +1,3 @@
-using NeoCore.CoreClr.Support;
-
 namespace NeoCore.CoreClr.Meta.Base
 {
 	/// <summary>

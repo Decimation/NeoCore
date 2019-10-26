@@ -1,6 +1,6 @@
 using System.Runtime.CompilerServices;
 using NeoCore.CoreClr;
-using NeoCore.CoreClr.VM;
+using NeoCore.CoreClr.Components.VM;
 using NeoCore.Memory;
 
 namespace NeoCore.Assets

@@ -3,7 +3,7 @@ using System.Reflection;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.VM
+namespace NeoCore.CoreClr.Components.VM
 {
 	[Flags]
 	public enum SyncBlockFlags : uint

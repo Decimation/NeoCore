@@ -1,14 +1,13 @@
 using System;
-using System.Runtime.InteropServices;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.VM;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
+
 // ReSharper disable BuiltInTypeReferenceStyle
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 
-namespace NeoCore.CoreClr.Support
+namespace NeoCore.CoreClr.Components.Support
 {
 	using DWORD = UInt32;
 	

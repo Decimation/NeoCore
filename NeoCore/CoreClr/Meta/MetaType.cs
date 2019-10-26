@@ -1,14 +1,14 @@
 using System;
 using System.Reflection;
+using NeoCore.CoreClr.Components.VM;
+using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.CoreClr.VM;
-using NeoCore.CoreClr.VM.EE;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
-using TypeInfo = NeoCore.CoreClr.VM.TypeInfo;
+using TypeInfo = NeoCore.CoreClr.Components.VM.TypeInfo;
 // ReSharper disable SuggestBaseTypeForParameter
 
 // ReSharper disable InconsistentNaming
@@ -39,7 +39,14 @@ namespace NeoCore.CoreClr.Meta
 		#region Accessors
 
 		protected override Type[] AdditionalSources => new[] {typeof(EEClass), typeof(TypeHandle)};
-		
+
+		public bool IsTypeDesc {
+			get {
+				var th = Value.ToInt64();
+
+				return (th & 2) != 0;
+			}
+		}
 		
 		public override MemberInfo Info => RuntimeType;
 		
@@ -94,6 +101,7 @@ namespace NeoCore.CoreClr.Meta
 		public Pointer<byte> InterfaceMap => Value.Reference.InterfaceMap;
 
 		public Type RuntimeType { get; }
+		
 
 		#endregion
 

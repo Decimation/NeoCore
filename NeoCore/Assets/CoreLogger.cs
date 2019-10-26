@@ -10,6 +10,7 @@ using Serilog.Context;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+// ReSharper disable MemberCanBeMadeStatic.Global
 
 namespace NeoCore.Assets
 {

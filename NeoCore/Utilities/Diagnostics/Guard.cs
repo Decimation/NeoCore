@@ -58,9 +58,8 @@ namespace NeoCore.Utilities.Diagnostics
 		/// </summary>
 		internal static void AssertCompatibility()
 		{
-			Assert(Runtime.Info.IsWindowsPlatform
-			       && Runtime.Info.IsWorkstationGC
-			       && !Runtime.Info.IsMonoRuntime);
+			Assert(Runtime.Info.IsWindowsPlatform && Runtime.Info.IsWorkstationGC 
+			                                      && !Runtime.Info.IsMonoRuntime);
 		}
 
 		#endregion

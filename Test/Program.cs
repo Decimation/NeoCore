@@ -10,8 +10,6 @@ using NeoCore;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
-using NeoCore.CoreClr.Support;
-using NeoCore.CoreClr.VM;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Memory;
@@ -30,7 +28,13 @@ namespace Test
 		
 		private static void Main(string[] args)
 		{
-			
+			Console.WriteLine(Runtime.Info.IsPinnable("foo"));
+			Console.WriteLine(Runtime.Info.IsPinnable<object>(null));
+
+			var rg = new[] {"foo"};
+			Console.WriteLine(Runtime.Info.IsPinnable(rg));
+
+			GCHandle.Alloc(rg, GCHandleType.Pinned);
 		}
 	}
 }
