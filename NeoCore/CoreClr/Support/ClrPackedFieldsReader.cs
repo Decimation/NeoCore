@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
@@ -15,7 +16,7 @@ namespace NeoCore.CoreClr.Support
 	/// Packed DWORD fields
 	/// </summary>
 	[NativeStructure]
-	internal readonly struct PackedFieldsReader
+	internal readonly struct ClrPackedFieldsReader : IClrStructure
 	{
 		private const int PACKED_FIELDS_RG_LEN = 1;
 		private const int MAX_LENGTH_BITS = 5;
@@ -43,7 +44,7 @@ namespace NeoCore.CoreClr.Support
 		/// </summary>
 		private Pointer<DWORD> UnpackedFields => m_ptr;
 
-		internal PackedFieldsReader(Pointer<DWORD> p, int l)
+		internal ClrPackedFieldsReader(Pointer<DWORD> p, int l)
 		{
 			m_ptr = p;
 			m_unpackedFieldsLength = l;
@@ -115,5 +116,7 @@ namespace NeoCore.CoreClr.Support
 
 			return dwReturn;
 		}
+
+		public ClrStructureType Type => ClrStructureType.Utility;
 	}
 }

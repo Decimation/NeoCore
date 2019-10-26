@@ -1,6 +1,7 @@
 using System;
 using JetBrains.Annotations;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Extensions;
 
 namespace NeoCore.Import.Attributes
 {
@@ -10,7 +11,7 @@ namespace NeoCore.Import.Attributes
 	{
 		internal const AttributeTargets METHOD_TARGETS = AttributeTargets.Method | AttributeTargets.Property;
 
-		public ImportCallOptions CallOptions { get; set; } = ImportCallOptions.Bind;
+		public ImportCallOptions CallOptions { get; set; } = ImportCallOptions.Map;
 		
 		public ImportCallAttribute() { }
 

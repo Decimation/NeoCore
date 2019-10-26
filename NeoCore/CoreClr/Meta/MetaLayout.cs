@@ -14,7 +14,7 @@ namespace NeoCore.CoreClr.Meta
 	///         <item><description>CLR structure: <see cref="EEClassLayoutInfo"/></description></item>
 	///     </list>
 	/// </summary>
-	public unsafe class MetaLayout : AnonymousClrStructure<EEClassLayoutInfo>
+	public sealed unsafe class MetaLayout : AnonymousClrStructure<EEClassLayoutInfo>
 	{
 		#region Constructors
 
@@ -22,7 +22,7 @@ namespace NeoCore.CoreClr.Meta
 
 		#endregion
 
-		protected override Type[] AdditionalSources => Array.Empty<Type>();
+		protected override Type[] AdditionalSources => null;
 		
 		#region Accessors
 

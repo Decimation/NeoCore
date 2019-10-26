@@ -1,22 +1,17 @@
 namespace NeoCore.Utilities
 {
-	public struct BitArray
+	public readonly struct BitArray
 	{
-		public uint Value { get; }
+		public int Value { get; }
 
-		public BitArray(uint value) => Value = value;
+		public BitArray(int value) => Value = value;
 		
-		public uint this[int index, int bits = 1] {
-			get { return (uint) Bits.ReadBits(Value, index, bits); }
-		}
-		
-		public static implicit operator BitArray(uint value) => new BitArray(value);
+		public uint this[int index, int bits = 1] => (uint) Bits.ReadBits(Value, index, bits);
 
-		public static explicit operator uint(BitArray value) => value.Value;
+		public static implicit operator BitArray(int value) => new BitArray(value);
 
-		public override string ToString()
-		{
-			return Value.ToString();
-		}
+		public static explicit operator int(BitArray value) => value.Value;
+
+		public override string ToString() => Value.ToString();
 	}
 }

@@ -3,12 +3,13 @@ using System.Reflection;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;
-using NeoCore.FastReflection;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+using NeoCore.Utilities.Extensions;
 using TypeInfo = NeoCore.CoreClr.VM.TypeInfo;
+// ReSharper disable SuggestBaseTypeForParameter
 
 // ReSharper disable InconsistentNaming
 
@@ -28,7 +29,7 @@ namespace NeoCore.CoreClr.Meta
 		public MetaType(Pointer<MethodTable> mt) : base(mt)
 		{
 			RuntimeType = Runtime.ResolveType(mt.Cast());
-			TypeProperties = ReadProperties(RuntimeType);
+			AuxiliaryProperties = Runtime.Info.ReadProperties(RuntimeType);
 		}
 
 		public MetaType(Type t) : this(Runtime.ResolveHandle(t)) { }
@@ -39,47 +40,25 @@ namespace NeoCore.CoreClr.Meta
 
 		protected override Type[] AdditionalSources => new[] {typeof(EEClass), typeof(TypeHandle)};
 		
-		private static MetaTypeProperties ReadProperties(Type t)
-		{
-			var mp = new MetaTypeProperties();
-
-			if (Runtime.Info.IsInteger(t)) {
-				mp |= MetaTypeProperties.Integer;
-			}
-			
-			if (Runtime.Info.IsReal(t)) {
-				mp |= MetaTypeProperties.Real;
-			}
-			
-			if (Runtime.Info.IsStruct(t)) {
-				mp |= MetaTypeProperties.Struct;
-			}
-			
-			if (Runtime.Info.IsUnmanaged(t)) {
-				mp |= MetaTypeProperties.Unmanaged;
-			}
-			
-			if (Runtime.Info.IsEnumerableType(t)) {
-				mp |= MetaTypeProperties.Enumerable;
-			}
-			
-			if (Runtime.Info.IsAnyPointer(t)) {
-				mp |= MetaTypeProperties.AnyPointer;
-			}
-			
-			if (t.IsPointer) {
-				mp |= MetaTypeProperties.Pointer;
-			}
-			
-			return mp;
-		}
 		
 		public override MemberInfo Info => RuntimeType;
 		
-		public MetaTypeProperties TypeProperties { get; }
+		public AuxiliaryProperties AuxiliaryProperties { get; }
 
-		public bool IsAnyPointer => TypeProperties.HasFlag(MetaTypeProperties.AnyPointer);
-
+		public bool IsAnyPointer => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.AnyPointer);
+		
+		public bool IsReal => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Real);
+		
+		public bool IsNumeric => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Numeric);
+		
+		public bool IsInteger => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Integer);
+		
+		public bool IsEnumerable => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Enumerable);
+		
+		public bool IsStruct => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Struct);
+		
+		public bool IsUnmanaged => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Unmanaged);
+		
 		#region MethodTable
 
 		public short ComponentSize => Value.Reference.ComponentSize;
@@ -190,6 +169,7 @@ namespace NeoCore.CoreClr.Meta
 				throw new NotImplementedException();
 			}
 		}
+		
 		
 		public MetaField this[string name] => GetField(name);
 		

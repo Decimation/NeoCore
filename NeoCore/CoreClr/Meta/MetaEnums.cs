@@ -6,7 +6,7 @@ namespace NeoCore.CoreClr.Meta
 	/// Additional type properties.
 	/// </summary>
 	[Flags]
-	public enum MetaTypeProperties
+	public enum AuxiliaryProperties
 	{
 		None = 0,
 		
@@ -26,4 +26,6 @@ namespace NeoCore.CoreClr.Meta
 		
 		Numeric = Integer & Real
 	}
+	
+	
 }

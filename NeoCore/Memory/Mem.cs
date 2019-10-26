@@ -3,10 +3,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.Interop;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Extensions;
 
 namespace NeoCore.Memory
 {
@@ -45,7 +47,7 @@ namespace NeoCore.Memory
 			// (void*) (((long) m_value) + (elemOffset * ElementSize))
 			return elemCnt * elemSize;
 		}
-		
+
 		public static string ReadString(sbyte* first, int len)
 		{
 			if (first == null || len <= 0) {
@@ -55,7 +57,7 @@ namespace NeoCore.Memory
 			return new string(first, 0, len);
 		}
 
-		public static void Delete<T>(ref T value)
+		public static void Destroy<T>(ref T value)
 		{
 			if (!Runtime.Info.IsStruct(value)) {
 				/*int           size = Unsafe.SizeOf(value, SizeOfOptions.Data);
@@ -67,13 +69,28 @@ namespace NeoCore.Memory
 			value = default;
 		}
 
-		public static int OffsetOf(Type t, string name, bool isProperty = false)
+		public static int OffsetOf<TClr>(string name, OffsetOfType type, bool isProperty = false)
+		{
+			return Mem.OffsetOf(typeof(TClr), name, type, isProperty);
+		}
+
+		public static int OffsetOf(Type t, string name, OffsetOfType type, bool isProperty = false)
 		{
 			if (isProperty) {
 				name = Format.GetBackingFieldName(name);
 			}
 
-			return (int) Marshal.OffsetOf(t, name);
+			switch (type) {
+				case OffsetOfType.Marshal:
+					return (int) Marshal.OffsetOf(t, name);
+				case OffsetOfType.Managed:
+					var mt = t.AsMetaType();
+					return mt[name].Offset;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(type), type, null);
+			}
+
+			return Constants.INVALID_VALUE;
 		}
 	}
 }

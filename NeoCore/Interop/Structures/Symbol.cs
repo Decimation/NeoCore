@@ -8,35 +8,34 @@ namespace NeoCore.Interop.Structures
 	/// </summary>
 	public unsafe class Symbol
 	{
-		internal Symbol(DebugSymbol* pSymInfo, string name)
+		internal Symbol(DebugSymbol* pSymInfo)
 		{
-			Name = name;
+			Name = pSymInfo->ReadSymbolName();
 
-			SizeOfStruct = pSymInfo->SizeOfStruct;
-			TypeIndex    = pSymInfo->TypeIndex;
-			Index        = pSymInfo->Index;
-			Size         = pSymInfo->Size;
+			SizeOfStruct = (int) pSymInfo->SizeOfStruct;
+			TypeIndex    = (int) pSymInfo->TypeIndex;
+			Index        = (int) pSymInfo->Index;
+			Size         = (int) pSymInfo->Size;
 			ModBase      = pSymInfo->ModBase;
 			Flags        = pSymInfo->Flags;
 			Value        = pSymInfo->Value;
 			Address      = pSymInfo->Address;
-			Register     = pSymInfo->Register;
-			Scope        = pSymInfo->Scope;
+			Register     = (int) pSymInfo->Register;
+			Scope        = (int) pSymInfo->Scope;
 			Tag          = pSymInfo->Tag;
 		}
 
-		internal Symbol(IntPtr pSym) : this((DebugSymbol*) pSym, Native.DebugHelp.GetSymbolName(pSym)) { }
-
+		internal Symbol(IntPtr pSym) : this((DebugSymbol*) pSym) { }
 
 		public string Name { get; }
 
-		public uint SizeOfStruct { get; }
+		public int SizeOfStruct { get; }
 
-		public uint TypeIndex { get; }
+		public int TypeIndex { get; }
 
-		public uint Index { get; }
+		public int Index { get; }
 
-		public uint Size { get; }
+		public int Size { get; }
 
 		public ulong ModBase { get; }
 
@@ -44,9 +43,9 @@ namespace NeoCore.Interop.Structures
 
 		public ulong Address { get; }
 
-		public uint Register { get; }
+		public int Register { get; }
 
-		public uint Scope { get; }
+		public int Scope { get; }
 
 		public SymbolTag Tag { get; }
 
@@ -54,12 +53,6 @@ namespace NeoCore.Interop.Structures
 
 		public long Offset => (long) (Address - ModBase);
 
-
-		private static int GetSymbolInfoSize(DebugSymbol* pSym)
-		{
-			// SizeOfStruct + (MaxNameLen - 1) * sizeof(TCHAR)
-			return (int) (pSym->SizeOfStruct + (pSym->MaxNameLen - 1) * sizeof(byte));
-		}
 
 		public override string ToString()
 		{

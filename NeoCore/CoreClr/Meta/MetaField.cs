@@ -7,6 +7,8 @@ using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+using NeoCore.Utilities.Extensions;
+// ReSharper disable SuggestBaseTypeForParameter
 
 // ReSharper disable InconsistentNaming
 
@@ -26,15 +28,9 @@ namespace NeoCore.CoreClr.Meta
 
 		#region Constructors
 
-		public MetaField(Pointer<FieldDesc> ptr) : base(ptr)
-		{
-			
-		}
+		public MetaField(Pointer<FieldDesc> ptr) : base(ptr) { }
 
-		public MetaField(FieldInfo info) : base(info)
-		{
-			
-		}
+		public MetaField(FieldInfo info) : base(info) { }
 
 		#endregion
 
@@ -82,7 +78,7 @@ namespace NeoCore.CoreClr.Meta
 
 		#endregion
 
-		protected override Type[] AdditionalSources => Array.Empty<Type>();
+		protected override Type[] AdditionalSources => null;
 
 		public Pointer<byte> GetValueAddress<T>(ref T value)
 		{

@@ -16,7 +16,7 @@ namespace NeoCore.CoreClr.Meta
 	{
 		internal MetaHeap(Pointer<GCHeap> ptr) : base(ptr) { }
 
-		protected override Type[] AdditionalSources => Array.Empty<Type>();
+		protected override Type[] AdditionalSources => null;
 		
 		public int GCCount => Value.Reference.GCCount;
 

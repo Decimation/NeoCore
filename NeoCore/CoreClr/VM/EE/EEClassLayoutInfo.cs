@@ -46,5 +46,7 @@ namespace NeoCore.CoreClr.VM.EE
 		internal void* FieldMarshalers { get; }
 
 		#endregion
+		
+		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

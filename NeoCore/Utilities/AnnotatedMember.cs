@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
 
-namespace NeoCore.FastReflection
+namespace NeoCore.Utilities
 {
 	/// <summary>
 	/// Contains a <see cref="Attribute"/> and its accompanying <see cref="MemberInfo"/>

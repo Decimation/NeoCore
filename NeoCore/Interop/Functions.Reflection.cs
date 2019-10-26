@@ -1,7 +1,7 @@
 using System;
 using System.Reflection;
-using NeoCore.FastReflection;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Extensions;
 
 namespace NeoCore.Interop
 {

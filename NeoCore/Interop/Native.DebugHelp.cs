@@ -46,29 +46,18 @@ namespace NeoCore.Interop
 				                       fileSize, IntPtr.Zero, default);
 			}
 
-
-			internal static string GetSymbolName(IntPtr sym)
-			{
-				var pSym = (DebugSymbol*) sym;
-				return Mem.ReadString(&pSym->Name, (int) pSym->NameLen);
-			}
+			
 
 			internal static Symbol GetSymbol(IntPtr hProc, string name)
 			{
-				var sz = (int) (StructureSize + MaxSymbolNameLength * sizeof(byte)
-				                              + sizeof(ulong) - 1 / sizeof(ulong));
-
-				byte* byteBuffer = stackalloc byte[sz];
+				byte* byteBuffer = stackalloc byte[DebugSymbol.FullSize];
 				var   buffer     = (DebugSymbol*) byteBuffer;
 
-				buffer->SizeOfStruct = (uint) StructureSize;
-				buffer->MaxNameLen   = MaxSymbolNameLength;
-
-
+				buffer->SizeOfStruct = (uint) DebugSymbol.SizeOf;
+				buffer->MaxNameLen   = DebugSymbol.MaxNameLength;
+				
 				if (SymFromName(hProc, name, (IntPtr) buffer)) {
-					var firstChar = &buffer->Name;
-					var symName   = Mem.ReadString(firstChar, (int) buffer->NameLen);
-					return new Symbol(buffer, symName);
+					return new Symbol(buffer);
 				}
 
 				throw new NativeException(String.Format("Symbol \"{0}\" not found", name));

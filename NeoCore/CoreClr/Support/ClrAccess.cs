@@ -42,7 +42,7 @@ namespace NeoCore.CoreClr.Support
 		internal static Pointer<byte> FieldOffset<TClr, TField>(TField* field, string name, bool isProperty = false) 
 			where TField : unmanaged
 		{
-			return FieldOffset(field, Mem.OffsetOf<TClr>(name, isProperty));
+			return FieldOffset(field, Mem.OffsetOf<TClr>(name, OffsetOfType.Marshal , isProperty));
 		}
 	}
 }

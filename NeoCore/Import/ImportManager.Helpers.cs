@@ -3,11 +3,11 @@ using System.Reflection;
 using JetBrains.Annotations;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
-using NeoCore.FastReflection;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+using NeoCore.Utilities.Extensions;
 
 namespace NeoCore.Import
 {
@@ -124,7 +124,7 @@ namespace NeoCore.Import
 				            && callAttr.Options == IdentifierOptions.UseAccessorName;
 
 				if (warn) {
-					CoreLog.Value.WriteWarning(null, "Use {Name} on member {Member} in {Type}",
+					CoreLogger.Value.WriteWarning(null, "Use {Name} on member {Member} in {Type}",
 					                          nameof(ImportAccessorAttribute),
 					                          mem.Name, mem.DeclaringType?.Name);
 				}

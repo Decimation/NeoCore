@@ -7,6 +7,9 @@ using System.Runtime.InteropServices;
 using InlineIL;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
+using NeoCore.CoreClr.Meta;
+using NeoCore.CoreClr.VM;
+using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
@@ -32,6 +35,8 @@ namespace NeoCore.Memory
 	/// </summary>
 	public static unsafe class Unsafe
 	{
+		// todo: integrate advanced SizeOf
+		
 		/// <summary>
 		///     <para>Returns the address of <paramref name="value" />.</para>
 		/// </summary>
@@ -139,6 +144,213 @@ namespace NeoCore.Memory
 		}
 		
 
+		#region Sizes
+
+		public static int SizeOf<T>(SizeOfOptions options) => SizeOf<T>(default, options);
+
+		public static int SizeOf<T>(T value, SizeOfOptions options = SizeOfOptions.Intrinsic)
+		{
+			MetaType mt = typeof(T);
+
+			if (options == SizeOfOptions.Auto) {
+				// Break into the next switch branch which will go to resolved case
+				options = Runtime.Info.IsStruct(value) ? SizeOfOptions.Intrinsic : SizeOfOptions.Heap;
+			}
+
+			// If a value was supplied
+			if (!Runtime.Info.IsNil(value)) {
+				mt = new MetaType(value.GetType());
+
+				switch (options) {
+					case SizeOfOptions.BaseFields:   return mt.InstanceFieldsSize;
+					case SizeOfOptions.BaseInstance: return mt.BaseSize;
+					case SizeOfOptions.Heap:         return HeapSizeInternal(value);
+					case SizeOfOptions.Data:         return SizeOfData(value);
+					case SizeOfOptions.BaseData:     return BaseSizeOfData(mt.RuntimeType);
+				}
+			}
+
+
+			switch (options) {
+				// Note: Arrays native size == 0
+				case SizeOfOptions.Native: return mt.NativeSize;
+
+				// Note: Arrays have no layout
+				case SizeOfOptions.Managed:
+				{
+					return mt.HasLayout ? mt.LayoutInfo.ManagedSize : Constants.INVALID_VALUE;
+				}
+
+				case SizeOfOptions.Intrinsic:  return SizeOf<T>();
+				case SizeOfOptions.BaseFields: return mt.InstanceFieldsSize;
+
+				case SizeOfOptions.BaseInstance:
+				{
+					Guard.Assert(!Runtime.StaticInfo.IsStruct<T>());
+					return mt.BaseSize;
+				}
+
+				case SizeOfOptions.Heap:
+				case SizeOfOptions.Data:
+					throw new ArgumentException($"A value must be supplied to use {options}");
+			}
+
+
+			return Constants.INVALID_VALUE;
+		}
+
+
+		#region HeapSize
+
+		/// <summary>
+		///     <para>Calculates the complete size of a reference type in heap memory.</para>
+		///     <para>This is the most accurate size calculation.</para>
+		///     <para>
+		///         This follows the size formula of: (<see cref="MethodTable.BaseSize" />) + (length) *
+		///         (<see cref="MethodTable.ComponentSize" />)
+		///     </para>
+		///     <para>where:</para>
+		///     <list type="bullet">
+		///         <item>
+		///             <description>
+		///                 <see cref="MethodTable.BaseSize" /> = The base instance size of a type
+		///                 (<c>24</c> (x64) or <c>12</c> (x86) by default) (<see cref="Constants.Offsets.MinObjectSize" />)
+		///             </description>
+		///         </item>
+		///         <item>
+		///             <description>length	= array or string length; <c>1</c> otherwise</description>
+		///         </item>
+		///         <item>
+		///             <description><see cref="MethodTable.ComponentSize" /> = element size, if available; <c>0</c> otherwise</description>
+		///         </item>
+		///     </list>
+		/// </summary>
+		/// <remarks>
+		///     <para>Source: /src/vm/object.inl: 45</para>
+		///     <para>Equals the Son Of Strike "!do" command.</para>
+		///     <para>
+		///         Equals <see cref="SizeOf{T}(T,SizeOfOptions)" /> with <see cref="SizeOfOptions.BaseInstance" /> for objects
+		///         that aren't arrays or strings.
+		///     </para>
+		///     <para>Note: This also includes padding and overhead (<see cref="ObjHeader" /> and <see cref="MethodTable" /> ptr.)</para>
+		/// </remarks>
+		/// <returns>The size of the type in heap memory, in bytes</returns>
+		public static int HeapSize<T>(T value) where T : class
+			=> HeapSizeInternal(value);
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		private static int HeapSizeInternal<T>(T value)
+		{
+			// Sanity check
+			Guard.Assert(!Runtime.Info.IsStruct(value));
+
+			if (Runtime.Info.IsNil(value)) {
+				return Constants.INVALID_VALUE;
+			}
+
+			// By manually reading the MethodTable*, we can calculate the size correctly if the reference
+			// is boxed or cloaked
+			var methodTable = Runtime.ReadTypeHandle(value);
+
+			// Value of GetSizeField()
+			int length = 0;
+
+			/**
+			 * Type			x86 size				x64 size
+			 *
+			 * object		12						24
+			 * object[]		16 + length * 4			32 + length * 8
+			 * int[]		12 + length * 4			28 + length * 4
+			 * byte[]		12 + length				24 + length
+			 * string		14 + length * 2			26 + length * 2
+			 */
+
+			// From object.h line 65:
+
+			/* 	  The size of the object in the heap must be able to be computed
+			 *    very, very quickly for GC purposes.   Restrictions on the layout
+			 *    of the object guarantee this is possible.
+			 *
+			 *    Any object that inherits from Object must be able to
+			 *    compute its complete size by using the first 4 bytes of
+			 *    the object following the Object part and constants
+			 *    reachable from the MethodTable...
+			 *
+			 *    The formula used for this calculation is:
+			 *        MT->GetBaseSize() + ((OBJECTTYPEREF->GetSizeField() * MT->GetComponentSize())
+			 *
+			 *    So for Object, since this is of fixed size, the ComponentSize is 0, which makes the right side
+			 *    of the equation above equal to 0 no matter what the value of GetSizeField(), so the size is just the base size.
+			 *
+			 */
+
+			if (Runtime.Info.IsArray(value)) {
+				var arr = value as Array;
+
+				// ReSharper disable once PossibleNullReferenceException
+				// We already know it's not null because the type is an array.
+				length = arr.Length;
+
+				// Sanity check
+				Guard.Assert(!Runtime.Info.IsString(value));
+			}
+			else if (Runtime.Info.IsString(value)) {
+				string str = value as string;
+
+				// Sanity check
+				Guard.Assert(!Runtime.Info.IsArray(value));
+				Guard.AssertNotNull(str, nameof(str));
+
+				length = str.Length;
+			}
+
+			return methodTable.BaseSize + length * methodTable.ComponentSize;
+		}
+
+		#endregion
+
+		#region Size of data
+
+		/// <summary>
+		///     Returns the size of the data in <paramref name="value" />. If <typeparamref name="T" /> is a reference type,
+		///     this returns the size of <paramref name="value" /> not occupied by the <see cref="MethodTable" /> pointer and the
+		///     <see cref="ObjHeader" />.
+		///     If <typeparamref name="T" /> is a value type, this returns <see cref="SizeOf{T}()" />.
+		/// </summary>
+		private static int SizeOfData<T>(T value)
+		{
+			if (Runtime.Info.IsStruct(value)) {
+				return SizeOf<T>();
+			}
+
+			// Subtract the size of the ObjHeader and MethodTable*
+			return HeapSizeInternal(value) - Constants.Sizes.ObjectBaseSize;
+		}
+
+
+		/// <summary>
+		///     Returns the base size of the data in the type specified by <paramref name="t" />. If <paramref name="t" /> is a
+		///     reference type,
+		///     this returns the size of data not occupied by the <see cref="MethodTable" /> pointer, <see cref="ObjHeader" />,
+		///     padding, and overhead.
+		///     If <paramref name="t" /> is a value type, this returns <see cref="SizeOf{T}()" />.
+		/// </summary>
+		private static int BaseSizeOfData(Type t)
+		{
+			var mt = (MetaType) t;
+
+			if (mt.IsStruct) {
+				return (int) Functions.Reflection.CallGeneric(typeof(Unsafe).GetMethod(nameof(SizeOf)), t, null);
+			}
+
+			// Subtract the size of the ObjHeader and MethodTable*
+			return mt.InstanceFieldsSize;
+		}
+
+		#endregion
+
+		#endregion
+		
 		#region Unsafe
 
 		// https://github.com/ltrzesniewski/InlineIL.Fody/blob/master/src/InlineIL.Examples/Unsafe.cs

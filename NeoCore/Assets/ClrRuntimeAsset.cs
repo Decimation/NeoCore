@@ -4,7 +4,7 @@ using NeoCore.CoreClr.Support;
 
 namespace NeoCore.Assets
 {
-	public class ClrRuntimeAsset : RuntimeAsset
+	public sealed class ClrRuntimeAsset : RuntimeAsset
 	{
 		/// <summary>
 		/// The framework type.

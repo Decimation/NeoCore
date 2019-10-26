@@ -19,9 +19,9 @@ namespace NeoCore.CoreClr.VM
 		{
 			ImportManager.Value.Load(typeof(TypeHandle), Resources.Clr.Imports);
 		}
-		
+
 		private void* Union1 { get; }
-		
+
 		private MethodTable* AsMethodTable => (MethodTable*) Union1;
 
 		[ImportMapField]
@@ -35,5 +35,7 @@ namespace NeoCore.CoreClr.VM
 				}
 			}
 		}
+
+		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

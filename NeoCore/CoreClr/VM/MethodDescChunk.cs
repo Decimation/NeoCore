@@ -12,6 +12,7 @@ namespace NeoCore.CoreClr.VM
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MethodDescChunk : IClrStructure
 	{
+		
 		/// <summary>
 		/// <see cref="RelativeFixupPointer{T}"/>
 		/// </summary>
@@ -44,5 +45,7 @@ namespace NeoCore.CoreClr.VM
 				return ClrAccess.FieldOffset(MethodTableStub.NativeValue, MT_FIELD_OFS);
 			}
 		}
+		
+		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

@@ -11,12 +11,12 @@ namespace NeoCore.Interop
 	using As = MarshalAsAttribute;
 	using Types = UnmanagedType;
 
-	internal static unsafe partial class Native
+	internal static partial class Native
 	{
 		/// <summary>
 		/// Functions from <see cref="KERNEL32_DLL"/>
 		/// </summary>
-		internal static unsafe class Kernel32
+		internal static class Kernel32
 		{
 			private const string KERNEL32_DLL = "kernel32.dll";
 

@@ -16,6 +16,7 @@ namespace NeoCore.CoreClr.VM
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MethodTable : IClrStructure
 	{
+		
 		internal short ComponentSize { get; }
 
 		internal GenericInfo GenericFlags { get; }
@@ -102,5 +103,7 @@ namespace NeoCore.CoreClr.VM
 				return (UnionType) (l & UNION_MASK);
 			}
 		}
+		
+		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

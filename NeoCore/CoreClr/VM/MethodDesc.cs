@@ -141,5 +141,7 @@ namespace NeoCore.CoreClr.VM
 		internal Pointer<MethodTable> MethodTable => MethodDescChunk.Reference.MethodTable;
 
 		#endregion
+		
+		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

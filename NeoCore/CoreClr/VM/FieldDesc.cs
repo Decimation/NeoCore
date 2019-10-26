@@ -7,6 +7,7 @@ using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Extensions;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable InconsistentNaming
@@ -102,5 +103,7 @@ namespace NeoCore.CoreClr.VM
 				return ClrAccess.FieldOffset(EnclosingMethodTableStub.NativeValue, MT_FIELD_OFS);
 			}
 		}
+
+		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

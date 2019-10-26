@@ -6,7 +6,9 @@ using NeoCore.CoreClr.VM;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Extensions;
 using ParameterInfo = NeoCore.CoreClr.VM.ParameterInfo;
+// ReSharper disable SuggestBaseTypeForParameter
 
 // ReSharper disable InconsistentNaming
 

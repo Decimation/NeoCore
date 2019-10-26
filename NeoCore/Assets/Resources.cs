@@ -24,6 +24,11 @@ namespace NeoCore.Assets
 		 * - Add/improve missing features from RazorSharp
 		 * - Clean up
 		 */
+		
+		/**
+		 * - https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces?redirectedfrom=MSDN
+		 * - <Company>.(<Product>|<Technology>)[.<Feature>][.<Subnamespace>]
+		 */
 
 		private static bool IsSetup { get; set; } = false;
 		
@@ -51,7 +56,7 @@ namespace NeoCore.Assets
 		{
 			SymbolManager.Value,
 			ImportManager.Value,
-			CoreLog.Value, 
+			CoreLogger.Value, 
 		};
 		
 		internal static RuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(ClrFrameworks.Core);

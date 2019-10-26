@@ -8,11 +8,10 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using InlineIL;
 using JetBrains.Annotations;
+using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Support;
 using NeoCore.Interop.Attributes;
-using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
-using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
 // ReSharper disable InconsistentNaming
@@ -69,7 +68,42 @@ namespace NeoCore.CoreClr
 				throw new NotImplementedException();
 			}
 
-			internal static bool IsInteger(Type t)
+			internal static AuxiliaryProperties ReadProperties(Type t)
+			{
+				var mp = new AuxiliaryProperties();
+
+				if (IsInteger(t)) {
+					mp |= AuxiliaryProperties.Integer;
+				}
+
+				if (IsReal(t)) {
+					mp |= AuxiliaryProperties.Real;
+				}
+
+				if (IsStruct(t)) {
+					mp |= AuxiliaryProperties.Struct;
+				}
+
+				if (IsUnmanaged(t)) {
+					mp |= AuxiliaryProperties.Unmanaged;
+				}
+
+				if (IsEnumerableType(t)) {
+					mp |= AuxiliaryProperties.Enumerable;
+				}
+
+				if (IsAnyPointer(t)) {
+					mp |= AuxiliaryProperties.AnyPointer;
+				}
+
+				if (t.IsPointer) {
+					mp |= AuxiliaryProperties.Pointer;
+				}
+
+				return mp;
+			}
+
+			private static bool IsInteger(Type t)
 			{
 				return Type.GetTypeCode(t) switch
 				{
@@ -85,7 +119,7 @@ namespace NeoCore.CoreClr
 				};
 			}
 
-			internal static bool IsReal(Type t)
+			private static bool IsReal(Type t)
 			{
 				return Type.GetTypeCode(t) switch
 				{
@@ -106,7 +140,7 @@ namespace NeoCore.CoreClr
 			/// <summary>
 			/// Determines whether this type fits the <c>unmanaged</c> type constraint.
 			/// </summary>
-			internal static bool IsUnmanaged(Type t)
+			private static bool IsUnmanaged(Type t)
 			{
 				try {
 					// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
@@ -118,28 +152,25 @@ namespace NeoCore.CoreClr
 				}
 			}
 
-			internal static bool IsAnyPointer(Type t)
+			#endregion
+
+			private static bool IsAnyPointer(Type t)
 			{
-				bool isIPointer =ImplementsGenericInterface(t, typeof(IPointer<>));
-				bool isIntPtr = t == typeof(IntPtr) || t == typeof(UIntPtr);
-				
+				bool isIPointer = ImplementsGenericInterface(t, typeof(IPointer<>));
+				bool isIntPtr   = t == typeof(IntPtr) || t == typeof(UIntPtr);
+
 				return t.IsPointer || isIPointer || isIntPtr;
 			}
 
-			internal static bool IsEnumerableType(Type type) => ImplementsInterface(type, nameof(IEnumerable));
-			
+			private static bool IsEnumerableType(Type type) => ImplementsInterface(type, nameof(IEnumerable));
+
 			public static bool ImplementsGenericInterface(Type type, Type interfaceType)
 			{
-				return type.GetInterfaces().Any(x => x.IsGenericType 
+				return type.GetInterfaces().Any(x => x.IsGenericType
 				                                     && x.GetGenericTypeDefinition() == interfaceType);
 			}
-			
+
 			public static bool ImplementsInterface(Type type, string name) => type.GetInterface(name) != null;
-
-			
-
-			#endregion
-
 
 			/// <summary>
 			/// Whether the value of <paramref name="value"/> is <c>default</c> or <c>null</c> bytes,

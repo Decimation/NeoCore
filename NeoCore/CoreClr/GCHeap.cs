@@ -42,5 +42,7 @@ namespace NeoCore.CoreClr
 				                                         value, p.ToPointer(), smallHeapOnly);
 			}
 		}
+		
+		public ClrStructureType Type => ClrStructureType.Memory;
 	}
 }

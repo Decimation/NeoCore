@@ -16,8 +16,10 @@ namespace NeoCore.Assets
 	/// <summary>
 	/// Contains the logger for NeoCore.
 	/// </summary>
-	internal sealed class CoreLog : Releasable
+	internal sealed class CoreLogger : Releasable
 	{
+		// todo: remove Serilog from Release build
+		
 		#region Logger
 
 		private const string CONTEXT_PROP = "Context";
@@ -38,13 +40,13 @@ namespace NeoCore.Assets
 		#endregion
 
 		
-		protected override string Id => nameof(CoreLog);
+		protected override string Id => nameof(CoreLogger);
 
 		#region Singleton
 
-		internal static CoreLog Value { get; private set; } = new CoreLog();
+		internal static CoreLogger Value { get; private set; } = new CoreLogger();
 		
-		private CoreLog()
+		private CoreLogger()
 		{
 #if DEBUG
 			var levelSwitch = new LoggingLevelSwitch
@@ -57,6 +59,7 @@ namespace NeoCore.Assets
 			     .MinimumLevel.ControlledBy(levelSwitch)
 			     .WriteTo.Console(outputTemplate: OUTPUT_TEMPLATE_ALT_12_HR, theme: SystemConsoleTheme.Colored)
 			     .CreateLogger();
+			
 #else
 //			SuppressLogger();
 #endif
@@ -65,26 +68,11 @@ namespace NeoCore.Assets
 
 		#endregion
 
-		#region Debug logger
-
-		[StringFormatMethod(Constants.STRING_FMT_ARG)]
-		[Conditional(Constants.COND_DEBUG)]
-		internal static void WriteLine(string msg, params object[] args)
-		{
-			Debug.WriteLine(msg, args: args);
-		}
-
-		#endregion
-
 
 		#region Serilog logger extensions
 
 #if DEBUG
-		/**
-		 * Note: be careful with the logger, as Serilog is only used in debug, and isn't included in
-		 * the Release build.
-		 */
-
+		
 		[Conditional(Constants.COND_DEBUG)]
 		internal void SuppressLogger()
 		{
@@ -203,6 +191,7 @@ namespace NeoCore.Assets
 			if (Log is Logger logger) {
 				logger.Dispose();
 			}
+			
 
 			Log = null;
 #endif

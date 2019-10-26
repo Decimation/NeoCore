@@ -17,6 +17,7 @@ namespace NeoCore.CoreClr.VM.EE
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct EEClass : IClrStructure
 	{
+		
 		#region Fields
 
 		internal void* GuidInfo { get; }
@@ -136,7 +137,7 @@ namespace NeoCore.CoreClr.VM.EE
 		private int GetPackableField(EEClassFieldId eField)
 		{
 			var u = (uint) eField;
-			var pf = new PackedFieldsReader(PackedFields,(int) EEClassFieldId.COUNT);
+			var pf = new ClrPackedFieldsReader(PackedFields,(int) EEClassFieldId.COUNT);
 			return (int) (FieldsArePacked ? pf.GetPackedField(u) : pf.GetUnpackedField(u));
 		}
 
@@ -150,6 +151,8 @@ namespace NeoCore.CoreClr.VM.EE
 		}
 		
 		#endregion
+
+		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
@@ -160,5 +163,7 @@ namespace NeoCore.CoreClr.VM.EE
 		//		 so I'll just offset the pointer by 72 bytes
 		[FieldOffset(0)]
 		internal EEClassLayoutInfo m_LayoutInfo;
+		
+		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

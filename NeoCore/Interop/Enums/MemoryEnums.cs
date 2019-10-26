@@ -109,7 +109,7 @@ namespace NeoCore.Interop.Enums
 	///     </a>
 	/// </summary>
 	[Flags]
-	public enum MemType
+	public enum MemoryType
 	{
 		/// <summary>
 		///     Indicates that the memory pages within the region are mapped into the view of an image section.
@@ -133,7 +133,7 @@ namespace NeoCore.Interop.Enums
 	///     </a>
 	/// </summary>
 	[Flags]
-	public enum MemState
+	public enum MemoryState
 	{
 		/// <summary>
 		///     Indicates committed pages for which physical storage has been allocated, either in memory or in the paging file on

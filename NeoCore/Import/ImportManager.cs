@@ -7,7 +7,6 @@ using System.Text;
 using JetBrains.Annotations;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
-using NeoCore.FastReflection;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Memory;
@@ -15,6 +14,7 @@ using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+using NeoCore.Utilities.Extensions;
 using Unsafe = NeoCore.Memory.Unsafe;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
@@ -203,7 +203,7 @@ namespace NeoCore.Import
 
 			m_boundTypes.Remove(type);
 
-			CoreLog.Value.WriteInformation(null, "Unloaded {Name}", type.Name);
+			CoreLogger.Value.WriteInformation(null, "Unloaded {Name}", type.Name);
 		}
 
 		public void Unload<T>(ref T value)
@@ -212,7 +212,7 @@ namespace NeoCore.Import
 
 			Unload(type);
 
-			Mem.Delete(ref value);
+			Mem.Destroy(ref value);
 		}
 
 		public void UnloadAll(Type[] t)
@@ -329,7 +329,7 @@ namespace NeoCore.Import
 
 			m_boundTypes.Add(type);
 
-			CoreLog.Value.WriteInformation(null, "Loaded {Name}", type.Name);
+			CoreLogger.Value.WriteInformation(null, "Loaded {Name}", type.Name);
 			return value;
 		}
 
@@ -375,7 +375,7 @@ namespace NeoCore.Import
 
 			object fieldValue;
 
-			CoreLog.Value.WriteDebug(null, "Loading field {Id} with {Option}",
+			CoreLogger.Value.WriteDebug(null, "Loading field {Id} with {Option}",
 			                        field.Name, options);
 
 			switch (options) {
@@ -409,7 +409,7 @@ namespace NeoCore.Import
 			CheckOptions(options, out var bind, out var addToMap);
 
 			if (bind) {
-				CoreLog.Value.WriteWarning("Binding {Name}", method.Name);
+				CoreLogger.Value.WriteWarning("Binding {Name}", method.Name);
 				FunctionFactory.Managed.SetEntryPoint(method, addr);
 			}
 

@@ -115,7 +115,7 @@ namespace NeoCore.Import
 		{
 			string img = m_pdb.FullName;
 
-			CoreLog.Value.WriteVerbose(Id, "Loading image {Img}", m_pdb.Name);
+			CoreLogger.Value.WriteVerbose(Id, "Loading image {Img}", m_pdb.Name);
 
 			UnloadModule();
 			
@@ -193,9 +193,9 @@ namespace NeoCore.Import
 
 		#region Callbacks
 
-		private bool AddSymByNameCallback(IntPtr sym, uint symSize, IntPtr userCtx)
+		private unsafe bool AddSymByNameCallback(IntPtr sym, uint symSize, IntPtr userCtx)
 		{
-			string symName = Native.DebugHelp.GetSymbolName(sym);
+			string symName = ((DebugSymbol*) sym)->ReadSymbolName();
 
 			if (symName.Contains(m_singleNameBuffer)) {
 				m_symBuffer.Add(new Symbol(sym));

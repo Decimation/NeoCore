@@ -1,26 +1,27 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+// ReSharper disable ReturnTypeCanBeEnumerable.Global
 
-namespace NeoCore.FastReflection
+namespace NeoCore.Utilities.Extensions
 {
 	/// <summary>
 	/// Provides utilities for accessing members of a type.
 	/// </summary>
-	internal static class Members
+	internal static class ReflectionExtensions
 	{
 		#region Flags
 
 		/// <summary>
 		///     <see cref="ALL_INSTANCE_FLAGS" /> and <see cref="BindingFlags.Static" />
 		/// </summary>
-		public const BindingFlags ALL_FLAGS = ALL_INSTANCE_FLAGS | BindingFlags.Static;
+		private const BindingFlags ALL_FLAGS = ALL_INSTANCE_FLAGS | BindingFlags.Static;
 
 		/// <summary>
 		///     <see cref="BindingFlags.Public" />, <see cref="BindingFlags.Instance" />,
 		///     and <see cref="BindingFlags.NonPublic" />
 		/// </summary>
-		public const BindingFlags ALL_INSTANCE_FLAGS =
+		private const BindingFlags ALL_INSTANCE_FLAGS =
 			BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
 
 		#endregion
@@ -54,16 +55,14 @@ namespace NeoCore.FastReflection
 
 		#region Attributes
 
-		internal static AnnotatedMember<TAttr> GetFirstAnnotated<TAttr>(this Type t)
-			where TAttr : Attribute
+		internal static AnnotatedMember<TAttr> GetFirstAnnotated<TAttr>(this Type t) where TAttr : Attribute
 		{
-			var rg = t.GetAnnotated<TAttr>();
+			AnnotatedMember<TAttr>[] rg = t.GetAnnotated<TAttr>();
 
 			return rg.Length == default ? new AnnotatedMember<TAttr>() : rg[0];
 		}
 
-		internal static AnnotatedMember<TAttr>[] GetAnnotated<TAttr>(this Type t)
-			where TAttr : Attribute
+		internal static AnnotatedMember<TAttr>[] GetAnnotated<TAttr>(this Type t) where TAttr : Attribute
 		{
 			var components = new List<AnnotatedMember<TAttr>>();
 
