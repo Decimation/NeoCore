@@ -128,21 +128,26 @@ namespace NeoCore.CoreClr
 				}
 			}
 
-			public static bool IsPinnable(object value)
+			public static bool IsPinnableSlow(object value)
 			{
+				return !FunctionThrows<ArgumentException>(() =>
+				{
+					var gc = GCHandle.Alloc(value, GCHandleType.Pinned);
+					gc.Free();
+				});
+			}
+
+			public static bool IsPinnable([CanBeNull] object value)
+			{
+				// https://github.com/dotnet/coreclr/blob/master/src/vm/marshalnative.cpp#L280
+
 				/*var throws = !CheckFunctionThrow<ArgumentException>(() =>
 				{
 					var gc = GCHandle.Alloc(value, GCHandleType.Pinned);
 					gc.Free();
 				});*/
 
-				return Functions.Clr.IsPinnable(value);
-			}
-
-			[Obsolete]
-			public static bool IsPinnableFast(object value)
-			{
-				// https://github.com/dotnet/coreclr/blob/master/src/vm/marshalnative.cpp#L280
+				// return Functions.Clr.IsPinnable(value);
 
 				if (value == null) {
 					return true;
@@ -150,26 +155,14 @@ namespace NeoCore.CoreClr
 
 				var mt = ReadTypeHandle(value);
 
-
 				if (IsString(value)) {
 					return true;
 				}
 
 				if (mt.IsArray) {
-					var rg = value as Array;
-					//var rgElemType = rg.GetType().GetElementType();
-
-					var corType = mt.ElementTypeHandle.NormType;
-					
-					
-					//var corType = rgElemType.AsMetaType().NormType;
-
-					// todo
-					
-
+					var corType         = mt.ElementTypeHandle.NormType;
 					var isPrimitiveElem = IsPrimitiveType(corType);
-					//var isPrimitiveElem =rg.GetType().GetElementType().IsPrimitive;
-					
+
 					if (isPrimitiveElem) {
 						return true;
 					}
@@ -177,9 +170,7 @@ namespace NeoCore.CoreClr
 					var th = mt.ElementTypeHandle;
 
 					if (!th.IsTypeDesc) {
-						
-						if (th.RuntimeType.IsValueType && th.IsBlittable) {
-							
+						if (th.IsStruct && th.IsBlittable) {
 							return true;
 						}
 					}
@@ -202,7 +193,7 @@ namespace NeoCore.CoreClr
 					mp |= AuxiliaryProperties.Real;
 				}
 
-				if (IsStruct(t)) {
+				if (t.IsValueType) {
 					mp |= AuxiliaryProperties.Struct;
 				}
 

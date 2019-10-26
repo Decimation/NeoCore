@@ -35,15 +35,7 @@ namespace Test
 		private static void Main(string[] args)
 		{
 			
-			var b = new BlittableStruct();
-			var rg = new[] {new BlittableStruct()};
 			
-			Console.WriteLine(Runtime.Info.IsPinnableFast(b));
-			Console.WriteLine(Runtime.Info.IsPinnableFast(new[]{1}));
-			Console.WriteLine(Runtime.Info.IsPinnableFast(rg));
-			
-			var h=GCHandle.Alloc(rg, GCHandleType.Pinned);
-			Console.WriteLine(h.IsAllocated);
 		}
 	}
 }
