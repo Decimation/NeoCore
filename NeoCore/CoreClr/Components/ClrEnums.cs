@@ -611,6 +611,16 @@ namespace NeoCore.CoreClr.Components.VM
 		Pinned      = 0x45
 	}
 
+	public static class ClrEnumExtensions
+	{
+		public static bool IsPrimitive(this ElementType cet)
+		{
+			return cet >= ElementType.Boolean && cet <= ElementType.R8
+			       || cet == ElementType.I || cet == ElementType.U
+			       || cet == ElementType.Ptr || cet == ElementType.FnPtr;
+		}
+	}
+
 	/// <summary>
 	/// Alias: CorTokenType
 	/// </summary>

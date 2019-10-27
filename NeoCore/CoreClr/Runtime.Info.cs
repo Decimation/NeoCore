@@ -92,6 +92,8 @@ namespace NeoCore.CoreClr
 				PT_Primitive | 0x3000, // ELEMENT_TYPE_R4   (W = R4, R8)
 				PT_Primitive | 0x2000, // ELEMENT_TYPE_R8   (W = R8) 
 			};
+			
+			
 
 			public static bool IsPrimitiveType(ElementType type)
 			{
