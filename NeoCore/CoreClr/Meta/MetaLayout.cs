@@ -1,4 +1,5 @@
 using System;
+using NeoCore.CoreClr.Components;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Meta.Base;

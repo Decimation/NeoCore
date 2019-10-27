@@ -1,5 +1,6 @@
 using System;
 using System.Reflection;
+using NeoCore.CoreClr.Components;
 using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Components.VM.EE;
@@ -9,7 +10,7 @@ using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
-using TypeInfo = NeoCore.CoreClr.Components.VM.TypeInfo;
+using TypeInfo = NeoCore.CoreClr.Components.TypeInfo;
 // ReSharper disable SuggestBaseTypeForParameter
 
 // ReSharper disable InconsistentNaming
@@ -79,7 +80,7 @@ namespace NeoCore.CoreClr.Meta
 		
 		public OptionalSlots SlotFlags => Value.Reference.SlotFlags;
 
-		public override int Token => Tokens.TokenFromRid(Value.Reference.RawToken, TokenType.TypeDef);
+		public override int Token => ClrSigs.TokenFromRid(Value.Reference.RawToken, TokenType.TypeDef);
 
 		public short VirtualsCount => Value.Reference.NumVirtuals;
 

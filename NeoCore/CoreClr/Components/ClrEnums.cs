@@ -1,9 +1,10 @@
 using System;
 using System.Reflection;
+using NeoCore.CoreClr.Components.VM;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Components.VM
+namespace NeoCore.CoreClr.Components
 {
 	[Flags]
 	public enum SyncBlockFlags : uint
@@ -609,16 +610,6 @@ namespace NeoCore.CoreClr.Components.VM
 		Modifier    = 0x40,
 		Sentinel    = 0x41,
 		Pinned      = 0x45
-	}
-
-	public static class ClrEnumExtensions
-	{
-		public static bool IsPrimitive(this ElementType cet)
-		{
-			return cet >= ElementType.Boolean && cet <= ElementType.R8
-			       || cet == ElementType.I || cet == ElementType.U
-			       || cet == ElementType.Ptr || cet == ElementType.FnPtr;
-		}
 	}
 
 	/// <summary>

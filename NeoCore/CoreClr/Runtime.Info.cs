@@ -64,61 +64,6 @@ namespace NeoCore.CoreClr
 				return (typeof(T).IsInterface || typeof(T) == typeof(object)) && value != null && IsStruct(value);
 			}
 
-			private const ElementType PRIMITIVE_TABLE_SIZE = ElementType.String;
-
-			private const int PT_Primitive = 0x01000000;
-
-			/// <summary>
-			/// <para>The Attributes Table</para>
-			/// <para>20 bits for built in types and 12 bits for Properties</para>
-			/// <para>The properties are followed by the widening mask. All types widen to themselves.</para>
-			/// <para>https://github.com/dotnet/coreclr/blob/master/src/vm/invokeutil.cpp</para>
-			/// <para>https://github.com/dotnet/coreclr/blob/master/src/vm/invokeutil.h</para>
-			/// </summary>
-			private static readonly int[] PrimitiveAttributes =
-			{
-				0x00,                  // ELEMENT_TYPE_END
-				0x00,                  // ELEMENT_TYPE_VOID
-				PT_Primitive | 0x0004, // ELEMENT_TYPE_BOOLEAN
-				PT_Primitive | 0x3F88, // ELEMENT_TYPE_CHAR (W = U2, CHAR, I4, U4, I8, U8, R4, R8) (U2 == Char)
-				PT_Primitive | 0x3550, // ELEMENT_TYPE_I1   (W = I1, I2, I4, I8, R4, R8) 
-				PT_Primitive | 0x3FE8, // ELEMENT_TYPE_U1   (W = CHAR, U1, I2, U2, I4, U4, I8, U8, R4, R8)
-				PT_Primitive | 0x3540, // ELEMENT_TYPE_I2   (W = I2, I4, I8, R4, R8)
-				PT_Primitive | 0x3F88, // ELEMENT_TYPE_U2   (W = U2, CHAR, I4, U4, I8, U8, R4, R8)
-				PT_Primitive | 0x3500, // ELEMENT_TYPE_I4   (W = I4, I8, R4, R8)
-				PT_Primitive | 0x3E00, // ELEMENT_TYPE_U4   (W = U4, I8, R4, R8)
-				PT_Primitive | 0x3400, // ELEMENT_TYPE_I8   (W = I8, R4, R8)
-				PT_Primitive | 0x3800, // ELEMENT_TYPE_U8   (W = U8, R4, R8)
-				PT_Primitive | 0x3000, // ELEMENT_TYPE_R4   (W = R4, R8)
-				PT_Primitive | 0x2000, // ELEMENT_TYPE_R8   (W = R8) 
-			};
-			
-			
-
-			public static bool IsPrimitiveType(ElementType type)
-			{
-				// if (type >= PRIMITIVE_TABLE_SIZE)
-				// {
-				//     if (ELEMENT_TYPE_I==type || ELEMENT_TYPE_U==type)
-				//     {
-				//         return TRUE;
-				//     }
-				//     return 0;
-				// }
-
-				// return (PT_Primitive & PrimitiveAttributes[type]);
-
-				if (type >= PRIMITIVE_TABLE_SIZE) {
-					if (ElementType.I == type || ElementType.U == type) {
-						return true;
-					}
-
-					return false;
-				}
-
-				return (PT_Primitive & PrimitiveAttributes[(byte) type]) != 0;
-			}
-
 			public static bool FunctionThrows<TException>(Action action) where TException : Exception
 			{
 				try {
@@ -163,7 +108,7 @@ namespace NeoCore.CoreClr
 
 				if (mt.IsArray) {
 					var corType         = mt.ElementTypeHandle.NormType;
-					var isPrimitiveElem = IsPrimitiveType(corType);
+					var isPrimitiveElem = ClrSigs.IsPrimitiveType(corType);
 
 					if (isPrimitiveElem) {
 						return true;
@@ -268,21 +213,13 @@ namespace NeoCore.CoreClr
 
 			private static bool IsAnyPointer(Type t)
 			{
-				bool isIPointer = ImplementsGenericInterface(t, typeof(IPointer<>));
+				bool isIPointer = t.ImplementsGenericInterface(typeof(IPointer<>));
 				bool isIntPtr   = t == typeof(IntPtr) || t == typeof(UIntPtr);
 
 				return t.IsPointer || isIPointer || isIntPtr;
 			}
 
-			private static bool IsEnumerableType(Type type) => ImplementsInterface(type, nameof(IEnumerable));
-
-			public static bool ImplementsGenericInterface(Type type, Type interfaceType)
-			{
-				return type.GetInterfaces().Any(x => x.IsGenericType
-				                                     && x.GetGenericTypeDefinition() == interfaceType);
-			}
-
-			public static bool ImplementsInterface(Type type, string name) => type.GetInterface(name) != null;
+			private static bool IsEnumerableType(Type type) => type.ImplementsInterface(nameof(IEnumerable));
 
 			/// <summary>
 			/// Determines whether the value of <paramref name="value"/> is <c>default</c> or <c>null</c> bytes,

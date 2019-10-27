@@ -1,12 +1,15 @@
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
-using NeoCore.CoreClr.Components.VM;
 
-namespace NeoCore.Assets
+namespace NeoCore.CoreClr.Components.Support
 {
 	internal struct SigParser
 	{
+		// https://github.com/microsoft/clrmd/blob/master/src/Microsoft.Diagnostics.Runtime/src/Common/ClrElementTypeExtensions.cs
+		// https://github.com/dotnet/coreclr/blob/master/src/inc/sigparser.h
+		// https://github.com/microsoft/clrmd/blob/master/src/Microsoft.Diagnostics.Runtime/src/Utilities/SigParser/SigParser.cs
+		
 		private byte[] _sig;
 		private int    _len;
 		private int    _offs;
@@ -190,52 +193,52 @@ namespace NeoCore.Assets
 			if (!sigTemp.GetByte(out byte bElementType))
 				return false;
 
-			switch (bElementType) {
-				case ELEMENT_TYPE_I8:
-				case ELEMENT_TYPE_U8:
-				case ELEMENT_TYPE_R8:
+			switch ((ElementType)bElementType) {
+				case ElementType.I8:
+				case ElementType.U8:
+				case ElementType.R8:
 					pSize = 8;
 					break;
 
-				case ELEMENT_TYPE_I4:
-				case ELEMENT_TYPE_U4:
-				case ELEMENT_TYPE_R4:
+				case ElementType.I4:
+				case ElementType.U4:
+				case ElementType.R4:
 					pSize = 4;
 					break;
 
-				case ELEMENT_TYPE_I2:
-				case ELEMENT_TYPE_U2:
-				case ELEMENT_TYPE_CHAR:
+				case ElementType.I2:
+				case ElementType.U2:
+				case ElementType.Char:
 					pSize = 2;
 					break;
 
-				case ELEMENT_TYPE_I1:
-				case ELEMENT_TYPE_U1:
-				case ELEMENT_TYPE_BOOLEAN:
+				case ElementType.I1:
+				case ElementType.U1:
+				case ElementType.Boolean:
 					pSize = 1;
 					break;
 
-				case ELEMENT_TYPE_I:
-				case ELEMENT_TYPE_U:
-				case ELEMENT_TYPE_STRING:
-				case ELEMENT_TYPE_PTR:
-				case ELEMENT_TYPE_BYREF:
-				case ELEMENT_TYPE_CLASS:
-				case ELEMENT_TYPE_OBJECT:
-				case ELEMENT_TYPE_FNPTR:
-				case ELEMENT_TYPE_TYPEDBYREF:
-				case ELEMENT_TYPE_ARRAY:
-				case ELEMENT_TYPE_SZARRAY:
+				case ElementType.I:
+				case ElementType.U:
+				case ElementType.String:
+				case ElementType.Ptr:
+				case ElementType.ByRef:
+				case ElementType.Class:
+				case ElementType.Object:
+				case ElementType.FnPtr:
+				case ElementType.TypedByRef:
+				case ElementType.Array:
+				case ElementType.SzArray:
 					pSize = IntPtr.Size;
 					break;
 
-				case ELEMENT_TYPE_VOID:
+				case ElementType.Void:
 					break;
 
-				case ELEMENT_TYPE_END:
-				case ELEMENT_TYPE_CMOD_REQD:
-				case ELEMENT_TYPE_CMOD_OPT:
-				case ELEMENT_TYPE_VALUETYPE:
+				case ElementType.End:
+				case ElementType.CModReqd:
+				case ElementType.CModOpt:
+				case ElementType.ValueType:
 					Debug.Fail("Asked for the size of an element that doesn't have a size!");
 					return false;
 
@@ -245,14 +248,12 @@ namespace NeoCore.Assets
 			}
 
 			return true;
-
-			;
 		}
 
 		private bool AtSentinel()
 		{
 			if (_len > 0)
-				return _sig[_offs] == ELEMENT_TYPE_SENTINEL;
+				return _sig[_offs] == (int) ElementType.Sentinel;
 
 			return false;
 		}
@@ -356,45 +357,45 @@ namespace NeoCore.Assets
 				return false;
 
 			if (!((ElementType) typ).IsPrimitive()) {
-				switch (typ) {
+				switch ((ElementType)typ) {
 					default:
 						return false;
 
-					case ELEMENT_TYPE_VAR:
-					case ELEMENT_TYPE_MVAR:
+					case ElementType.Var:
+					case ElementType.MVar:
 						if (!GetData(out _))
 							return false;
 
 						break;
 
-					case ELEMENT_TYPE_OBJECT:
-					case ELEMENT_TYPE_STRING:
-					case ELEMENT_TYPE_TYPEDBYREF:
+					case ElementType.Object:
+					case ElementType.String:
+					case ElementType.TypedByRef:
 						break;
 
-					case ELEMENT_TYPE_BYREF:
-					case ELEMENT_TYPE_PTR:
-					case ELEMENT_TYPE_PINNED:
-					case ELEMENT_TYPE_SZARRAY:
+					case ElementType.ByRef:
+					case ElementType.Ptr:
+					case ElementType.Pinned:
+					case ElementType.SzArray:
 						if (!SkipExactlyOne())
 							return false;
 
 						break;
 
-					case ELEMENT_TYPE_VALUETYPE:
-					case ELEMENT_TYPE_CLASS:
+					case ElementType.ValueType:
+					case ElementType.Class:
 						if (!GetToken(out _))
 							return false;
 
 						break;
 
-					case ELEMENT_TYPE_FNPTR:
+					case ElementType.FnPtr:
 						if (!SkipSignature())
 							return false;
 
 						break;
 
-					case ELEMENT_TYPE_ARRAY:
+					case ElementType.Array:
 						// Skip element type
 						if (!SkipExactlyOne())
 							return false;
@@ -422,17 +423,17 @@ namespace NeoCore.Assets
 
 						break;
 
-					case ELEMENT_TYPE_SENTINEL:
+					case ElementType.Sentinel:
 						// Should be unreachable since GetElem strips it
 						break;
 
-					case ELEMENT_TYPE_INTERNAL:
+					case ElementType.Internal:
 						if (!GetData(out _))
 							return false;
 
 						break;
 
-					case ELEMENT_TYPE_GENERICINST:
+					case ElementType.GenericInst:
 						// Skip generic type
 						if (!SkipExactlyOne())
 							return false;
@@ -497,7 +498,7 @@ namespace NeoCore.Assets
 			if (!UncompressData(out token, out size))
 				return false;
 
-			int tkType = s_tkCorEncodeToken[token & 3];
+			int tkType = CorEncodeToken[token & 3];
 			token = (token >> 2) | tkType;
 			return true;
 		}
@@ -566,39 +567,39 @@ namespace NeoCore.Assets
 			return true;
 		}
 
-		private const int mdtModule                 = 0x00000000; //
-		private const int mdtTypeRef                = 0x01000000; //
-		private const int mdtTypeDef                = 0x02000000; //
-		private const int mdtFieldDef               = 0x04000000; //
-		private const int mdtMethodDef              = 0x06000000; //
-		private const int mdtParamDef               = 0x08000000; //
-		private const int mdtInterfaceImpl          = 0x09000000; //
-		private const int mdtMemberRef              = 0x0a000000; //
-		private const int mdtCustomAttribute        = 0x0c000000; //
-		private const int mdtPermission             = 0x0e000000; //
-		private const int mdtSignature              = 0x11000000; //
-		private const int mdtEvent                  = 0x14000000; //
-		private const int mdtProperty               = 0x17000000; //
-		private const int mdtMethodImpl             = 0x19000000; //
-		private const int mdtModuleRef              = 0x1a000000; //
-		private const int mdtTypeSpec               = 0x1b000000; //
-		private const int mdtAssembly               = 0x20000000; //
-		private const int mdtAssemblyRef            = 0x23000000; //
-		private const int mdtFile                   = 0x26000000; //
-		private const int mdtExportedType           = 0x27000000; //
-		private const int mdtManifestResource       = 0x28000000; //
-		private const int mdtGenericParam           = 0x2a000000; //
-		private const int mdtMethodSpec             = 0x2b000000; //
-		private const int mdtGenericParamConstraint = 0x2c000000;
+		// todo: switch to enums
 
-		private const int mdtString = 0x70000000; //
-		private const int mdtName   = 0x71000000; //
+		private const int MDT_MODULE                   = 0x00000000; //
+		private const int MDT_TYPE_REF                 = 0x01000000; //
+		private const int MDT_TYPE_DEF                 = 0x02000000; //
+		private const int MDT_FIELD_DEF                = 0x04000000; //
+		private const int MDT_METHOD_DEF               = 0x06000000; //
+		private const int MDT_PARAM_DEF                = 0x08000000; //
+		private const int MDT_INTERFACE_IMPL           = 0x09000000; //
+		private const int MDT_MEMBER_REF               = 0x0a000000; //
+		private const int MDT_CUSTOM_ATTRIBUTE         = 0x0c000000; //
+		private const int MDT_PERMISSION               = 0x0e000000; //
+		private const int MDT_SIGNATURE                = 0x11000000; //
+		private const int MDT_EVENT                    = 0x14000000; //
+		private const int MDT_PROPERTY                 = 0x17000000; //
+		private const int MDT_METHOD_IMPL              = 0x19000000; //
+		private const int MDT_MODULE_REF               = 0x1a000000; //
+		private const int MDT_TYPE_SPEC                = 0x1b000000; //
+		private const int MDT_ASSEMBLY                 = 0x20000000; //
+		private const int MDT_ASSEMBLY_REF             = 0x23000000; //
+		private const int MDT_FILE                     = 0x26000000; //
+		private const int MDT_EXPORTED_TYPE            = 0x27000000; //
+		private const int MDT_MANIFEST_RESOURCE        = 0x28000000; //
+		private const int MDT_GENERIC_PARAM            = 0x2a000000; //
+		private const int MDT_METHOD_SPEC              = 0x2b000000; //
+		private const int MDT_GENERIC_PARAM_CONSTRAINT = 0x2c000000;
+		private const int MDT_STRING = 0x70000000; //
+		private const int MDT_NAME   = 0x71000000; //
 
 		private const int
-			mdtBaseType =
-				0x72000000; // Leave this on the high end value. This does not correspond to metadata table
+			MDT_BASE_TYPE = 0x72000000; // Leave this on the high end value. This does not correspond to metadata table
 
-		private static readonly int[] s_tkCorEncodeToken = {mdtTypeDef, mdtTypeRef, mdtTypeSpec, mdtBaseType};
+		private static readonly int[] CorEncodeToken = {MDT_TYPE_DEF, MDT_TYPE_REF, MDT_TYPE_SPEC, MDT_BASE_TYPE};
 
 		private const int IMAGE_CEE_CS_CALLCONV_DEFAULT = 0x0;
 

@@ -55,9 +55,9 @@ namespace NeoCore.CoreClr.Components.VM
 				var rawToken = (int) (UInt1 & 0xFFFFFF);
 				// Check if this FieldDesc is using the packed mb layout
 				if (!Properties.HasFlagFast(FieldProperties.RequiresFullMBValue))
-					return Tokens.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, TokenType.FieldDef);
+					return ClrSigs.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, TokenType.FieldDef);
 
-				return Tokens.TokenFromRid(rawToken, TokenType.FieldDef);
+				return ClrSigs.TokenFromRid(rawToken, TokenType.FieldDef);
 			}
 		}
 
