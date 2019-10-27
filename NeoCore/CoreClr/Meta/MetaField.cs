@@ -39,7 +39,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public FieldInfo FieldInfo => (FieldInfo) Info;
 
-		public ElementType Element => Value.Reference.Element;
+		public CorElementType Element => Value.Reference.Element;
 
 		public AccessModifiers Access => Value.Reference.Access;
 

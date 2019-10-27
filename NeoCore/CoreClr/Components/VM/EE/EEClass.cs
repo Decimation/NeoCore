@@ -54,11 +54,11 @@ namespace NeoCore.CoreClr.Components.VM.EE
 			}
 		}
 
-		internal InterfaceType InterfaceType {
+		internal CorInterfaceType InterfaceType {
 			get {
 				fixed (EEClass* value = &this) {
 					Pointer<int> ptr = &value->m_union1;
-					return (InterfaceType) ptr.Reference;
+					return (CorInterfaceType) ptr.Reference;
 				}
 			}
 		}
@@ -72,7 +72,7 @@ namespace NeoCore.CoreClr.Components.VM.EE
 
 		internal VMFlags VMFlags { get; }
 
-		internal ElementType NormType { get; }
+		internal CorElementType NormType { get; }
 
 		internal bool FieldsArePacked { get; }
 
@@ -106,7 +106,7 @@ namespace NeoCore.CoreClr.Components.VM.EE
 			}
 		}
 
-		internal ElementType ArrayElementType => AsArrayClass.Reference.ElementType;
+		internal CorElementType ArrayElementType => AsArrayClass.Reference.ElementType;
 		
 		internal int ArrayRank => AsArrayClass.Reference.Rank;
 		

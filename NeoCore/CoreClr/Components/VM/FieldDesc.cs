@@ -55,19 +55,19 @@ namespace NeoCore.CoreClr.Components.VM
 				var rawToken = (int) (UInt1 & 0xFFFFFF);
 				// Check if this FieldDesc is using the packed mb layout
 				if (!Properties.HasFlagFast(FieldProperties.RequiresFullMBValue))
-					return ClrSigs.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, TokenType.FieldDef);
+					return ClrSigs.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, CorTokenType.FieldDef);
 
-				return ClrSigs.TokenFromRid(rawToken, TokenType.FieldDef);
+				return ClrSigs.TokenFromRid(rawToken, CorTokenType.FieldDef);
 			}
 		}
 
 		internal int Offset => (int) (UInt2 & 0x7FFFFFF);
 
-		internal ElementType Element => (ElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
+		internal CorElementType Element => (CorElementType) (int) ((UInt2 >> 27) & 0x7FFFFFF);
 
 		internal AccessModifiers Access => (AccessModifiers) (int) ((UInt1 >> 26) & 0x3FFFFFF);
 
-		internal bool IsPointer => Element == ElementType.Ptr;
+		internal bool IsPointer => Element == CorElementType.Ptr;
 
 		internal FieldProperties Properties => (FieldProperties) UInt1;
 

@@ -80,7 +80,7 @@ namespace NeoCore.CoreClr.Meta
 		
 		public OptionalSlots SlotFlags => Value.Reference.SlotFlags;
 
-		public override int Token => ClrSigs.TokenFromRid(Value.Reference.RawToken, TokenType.TypeDef);
+		public override int Token => ClrSigs.TokenFromRid(Value.Reference.RawToken, CorTokenType.TypeDef);
 
 		public short VirtualsCount => Value.Reference.NumVirtuals;
 
@@ -101,7 +101,7 @@ namespace NeoCore.CoreClr.Meta
 		public Pointer<byte> PerInstInfo => Value.Reference.PerInstInfo;
 
 		public MetaType ElementTypeHandle => (Pointer<MethodTable>) Value.Reference.ElementTypeHandle;
-		public ElementType ArrayElementType => EEClass.Value.ArrayElementType;
+		public CorElementType ArrayElementType => EEClass.Value.ArrayElementType;
 		public Pointer<byte> InterfaceMap => Value.Reference.InterfaceMap;
 
 		public Type RuntimeType { get; }
@@ -119,13 +119,13 @@ namespace NeoCore.CoreClr.Meta
 
 		public int NativeSize => (int) EEClass.Reference.NativeSize;
 
-		public InterfaceType InterfaceType => EEClass.Reference.InterfaceType;
+		public CorInterfaceType InterfaceType => EEClass.Reference.InterfaceType;
 
 		public TypeAttributes Attributes => EEClass.Reference.Attributes;
 
 		public VMFlags VMFlags => EEClass.Reference.VMFlags;
 
-		public ElementType NormType => EEClass.Reference.NormType;
+		public CorElementType NormType => EEClass.Reference.NormType;
 
 		public bool FieldsArePacked => EEClass.Reference.FieldsArePacked;
 

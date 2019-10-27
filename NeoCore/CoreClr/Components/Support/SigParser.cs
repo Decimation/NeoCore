@@ -120,7 +120,7 @@ namespace NeoCore.CoreClr.Components.Support
 			if (_len > 0) {
 				byte type = _sig[_offs];
 
-				if (type < ELEMENT_TYPE_CMOD_REQD) // fast path with no modifiers: single byte
+				if (type < (int) CorElementType.CModReqd) // fast path with no modifiers: single byte
 				{
 					etype = type;
 					SkipBytes(1);
@@ -151,7 +151,7 @@ namespace NeoCore.CoreClr.Components.Support
 		private bool GetCallingConv(out int data)
 		{
 			if (GetCallingConvInfo(out data)) {
-				data &= IMAGE_CEE_CS_CALLCONV_MASK;
+				data &= (int) CorCallingConvention.MASK;
 				return true;
 			}
 
@@ -173,7 +173,7 @@ namespace NeoCore.CoreClr.Components.Support
 		{
 			if (_len > 0) {
 				byte type = _sig[_offs];
-				if (type < ELEMENT_TYPE_CMOD_REQD) {
+				if (type < (int) CorElementType.CModReqd) {
 					etype = type;
 					return true;
 				}
@@ -193,52 +193,52 @@ namespace NeoCore.CoreClr.Components.Support
 			if (!sigTemp.GetByte(out byte bElementType))
 				return false;
 
-			switch ((ElementType)bElementType) {
-				case ElementType.I8:
-				case ElementType.U8:
-				case ElementType.R8:
+			switch ((CorElementType)bElementType) {
+				case CorElementType.I8:
+				case CorElementType.U8:
+				case CorElementType.R8:
 					pSize = 8;
 					break;
 
-				case ElementType.I4:
-				case ElementType.U4:
-				case ElementType.R4:
+				case CorElementType.I4:
+				case CorElementType.U4:
+				case CorElementType.R4:
 					pSize = 4;
 					break;
 
-				case ElementType.I2:
-				case ElementType.U2:
-				case ElementType.Char:
+				case CorElementType.I2:
+				case CorElementType.U2:
+				case CorElementType.Char:
 					pSize = 2;
 					break;
 
-				case ElementType.I1:
-				case ElementType.U1:
-				case ElementType.Boolean:
+				case CorElementType.I1:
+				case CorElementType.U1:
+				case CorElementType.Boolean:
 					pSize = 1;
 					break;
 
-				case ElementType.I:
-				case ElementType.U:
-				case ElementType.String:
-				case ElementType.Ptr:
-				case ElementType.ByRef:
-				case ElementType.Class:
-				case ElementType.Object:
-				case ElementType.FnPtr:
-				case ElementType.TypedByRef:
-				case ElementType.Array:
-				case ElementType.SzArray:
+				case CorElementType.I:
+				case CorElementType.U:
+				case CorElementType.String:
+				case CorElementType.Ptr:
+				case CorElementType.ByRef:
+				case CorElementType.Class:
+				case CorElementType.Object:
+				case CorElementType.FnPtr:
+				case CorElementType.TypedByRef:
+				case CorElementType.Array:
+				case CorElementType.SzArray:
 					pSize = IntPtr.Size;
 					break;
 
-				case ElementType.Void:
+				case CorElementType.Void:
 					break;
 
-				case ElementType.End:
-				case ElementType.CModReqd:
-				case ElementType.CModOpt:
-				case ElementType.ValueType:
+				case CorElementType.End:
+				case CorElementType.CModReqd:
+				case CorElementType.CModOpt:
+				case CorElementType.ValueType:
 					Debug.Fail("Asked for the size of an element that doesn't have a size!");
 					return false;
 
@@ -253,7 +253,7 @@ namespace NeoCore.CoreClr.Components.Support
 		private bool AtSentinel()
 		{
 			if (_len > 0)
-				return _sig[_offs] == (int) ElementType.Sentinel;
+				return _sig[_offs] == (int) CorElementType.Sentinel;
 
 			return false;
 		}
@@ -278,7 +278,7 @@ namespace NeoCore.CoreClr.Components.Support
 			if (!sigTemp.PeekByte(out byte bElementType))
 				return false;
 
-			while (ELEMENT_TYPE_CMOD_REQD == bElementType || ELEMENT_TYPE_CMOD_OPT == bElementType) {
+			while ((int) CorElementType.CModReqd == bElementType || (int) CorElementType.CModOpt == bElementType) {
 				sigTemp.SkipBytes(1);
 
 				if (!sigTemp.GetToken(out int token))
@@ -288,11 +288,11 @@ namespace NeoCore.CoreClr.Components.Support
 					return false;
 			}
 
-			// Following custom modifiers must be an element type value which is less than ELEMENT_TYPE_MAX, or one of the other element types
+			// Following custom modifiers must be an element type value which is less than (int) ElementType.Max, or one of the other element types
 			// that we support while parsing various signatures
-			if (bElementType >= ELEMENT_TYPE_MAX) {
+			if (bElementType >= (int) CorElementType.Max) {
 				switch (bElementType) {
-					case ELEMENT_TYPE_PINNED:
+					case (int) CorElementType.Pinned:
 						break;
 					default:
 						return false;
@@ -312,10 +312,10 @@ namespace NeoCore.CoreClr.Components.Support
 			if (!sigTemp.PeekByte(out byte bElementType))
 				return false;
 
-			while (ELEMENT_TYPE_CMOD_REQD == bElementType ||
-			       ELEMENT_TYPE_CMOD_OPT == bElementType ||
-			       ELEMENT_TYPE_MODIFIER == bElementType ||
-			       ELEMENT_TYPE_PINNED == bElementType) {
+			while ((int) CorElementType.CModReqd == bElementType ||
+			       (int) CorElementType.CModOpt == bElementType ||
+			       (int) CorElementType.Modifier == bElementType ||
+			       (int) CorElementType.Pinned == bElementType) {
 				sigTemp.SkipBytes(1);
 
 				if (!sigTemp.GetToken(out int token))
@@ -325,11 +325,11 @@ namespace NeoCore.CoreClr.Components.Support
 					return false;
 			}
 
-			// Following custom modifiers must be an element type value which is less than ELEMENT_TYPE_MAX, or one of the other element types
+			// Following custom modifiers must be an element type value which is less than (int) ElementType.Max, or one of the other element types
 			// that we support while parsing various signatures
-			if (bElementType >= ELEMENT_TYPE_MAX) {
+			if (bElementType >= (int) CorElementType.Max) {
 				switch (bElementType) {
-					case ELEMENT_TYPE_PINNED:
+					case (int) CorElementType.Pinned:
 						break;
 					default:
 						return false;
@@ -345,7 +345,7 @@ namespace NeoCore.CoreClr.Components.Support
 			if (!PeekByte(out byte bElementType))
 				return false;
 
-			if (bElementType == ELEMENT_TYPE_SENTINEL)
+			if (bElementType == (int) CorElementType.Sentinel)
 				SkipBytes(1);
 
 			return true;
@@ -356,46 +356,46 @@ namespace NeoCore.CoreClr.Components.Support
 			if (!GetElemType(out int typ))
 				return false;
 
-			if (!((ElementType) typ).IsPrimitive()) {
-				switch ((ElementType)typ) {
+			if (!((CorElementType) typ).IsPrimitive()) {
+				switch ((CorElementType)typ) {
 					default:
 						return false;
 
-					case ElementType.Var:
-					case ElementType.MVar:
+					case CorElementType.Var:
+					case CorElementType.MVar:
 						if (!GetData(out _))
 							return false;
 
 						break;
 
-					case ElementType.Object:
-					case ElementType.String:
-					case ElementType.TypedByRef:
+					case CorElementType.Object:
+					case CorElementType.String:
+					case CorElementType.TypedByRef:
 						break;
 
-					case ElementType.ByRef:
-					case ElementType.Ptr:
-					case ElementType.Pinned:
-					case ElementType.SzArray:
+					case CorElementType.ByRef:
+					case CorElementType.Ptr:
+					case CorElementType.Pinned:
+					case CorElementType.SzArray:
 						if (!SkipExactlyOne())
 							return false;
 
 						break;
 
-					case ElementType.ValueType:
-					case ElementType.Class:
+					case CorElementType.ValueType:
+					case CorElementType.Class:
 						if (!GetToken(out _))
 							return false;
 
 						break;
 
-					case ElementType.FnPtr:
+					case CorElementType.FnPtr:
 						if (!SkipSignature())
 							return false;
 
 						break;
 
-					case ElementType.Array:
+					case CorElementType.Array:
 						// Skip element type
 						if (!SkipExactlyOne())
 							return false;
@@ -423,17 +423,17 @@ namespace NeoCore.CoreClr.Components.Support
 
 						break;
 
-					case ElementType.Sentinel:
+					case CorElementType.Sentinel:
 						// Should be unreachable since GetElem strips it
 						break;
 
-					case ElementType.Internal:
+					case CorElementType.Internal:
 						if (!GetData(out _))
 							return false;
 
 						break;
 
-					case ElementType.GenericInst:
+					case CorElementType.GenericInst:
 						// Skip generic type
 						if (!SkipExactlyOne())
 							return false;
@@ -461,11 +461,11 @@ namespace NeoCore.CoreClr.Components.Support
 			if (!GetCallingConvInfo(out int uCallConv))
 				return false;
 
-			if (uCallConv == IMAGE_CEE_CS_CALLCONV_FIELD || uCallConv == IMAGE_CEE_CS_CALLCONV_LOCAL_SIG)
+			if (uCallConv == (int) CorCallingConvention.FIELD || uCallConv == (int) CorCallingConvention.LOCAL_SIG)
 				return false;
 
 			// Skip type parameter count
-			if ((uCallConv & IMAGE_CEE_CS_CALLCONV_GENERIC) == IMAGE_CEE_CS_CALLCONV_GENERIC)
+			if ((uCallConv & (int) CorCallingConvention.GENERIC) == (int) CorCallingConvention.GENERIC)
 				if (!GetData(out _))
 					return false;
 
@@ -567,97 +567,12 @@ namespace NeoCore.CoreClr.Components.Support
 			return true;
 		}
 
-		// todo: switch to enums
-
-		private const int MDT_MODULE                   = 0x00000000; //
-		private const int MDT_TYPE_REF                 = 0x01000000; //
-		private const int MDT_TYPE_DEF                 = 0x02000000; //
-		private const int MDT_FIELD_DEF                = 0x04000000; //
-		private const int MDT_METHOD_DEF               = 0x06000000; //
-		private const int MDT_PARAM_DEF                = 0x08000000; //
-		private const int MDT_INTERFACE_IMPL           = 0x09000000; //
-		private const int MDT_MEMBER_REF               = 0x0a000000; //
-		private const int MDT_CUSTOM_ATTRIBUTE         = 0x0c000000; //
-		private const int MDT_PERMISSION               = 0x0e000000; //
-		private const int MDT_SIGNATURE                = 0x11000000; //
-		private const int MDT_EVENT                    = 0x14000000; //
-		private const int MDT_PROPERTY                 = 0x17000000; //
-		private const int MDT_METHOD_IMPL              = 0x19000000; //
-		private const int MDT_MODULE_REF               = 0x1a000000; //
-		private const int MDT_TYPE_SPEC                = 0x1b000000; //
-		private const int MDT_ASSEMBLY                 = 0x20000000; //
-		private const int MDT_ASSEMBLY_REF             = 0x23000000; //
-		private const int MDT_FILE                     = 0x26000000; //
-		private const int MDT_EXPORTED_TYPE            = 0x27000000; //
-		private const int MDT_MANIFEST_RESOURCE        = 0x28000000; //
-		private const int MDT_GENERIC_PARAM            = 0x2a000000; //
-		private const int MDT_METHOD_SPEC              = 0x2b000000; //
-		private const int MDT_GENERIC_PARAM_CONSTRAINT = 0x2c000000;
-		private const int MDT_STRING = 0x70000000; //
-		private const int MDT_NAME   = 0x71000000; //
-
-		private const int
-			MDT_BASE_TYPE = 0x72000000; // Leave this on the high end value. This does not correspond to metadata table
-
-		private static readonly int[] CorEncodeToken = {MDT_TYPE_DEF, MDT_TYPE_REF, MDT_TYPE_SPEC, MDT_BASE_TYPE};
-
-		private const int IMAGE_CEE_CS_CALLCONV_DEFAULT = 0x0;
-
-		public const int IMAGE_CEE_CS_CALLCONV_VARARG       = 0x5;
-		public const int IMAGE_CEE_CS_CALLCONV_FIELD        = 0x6;
-		public const int IMAGE_CEE_CS_CALLCONV_LOCAL_SIG    = 0x7;
-		public const int IMAGE_CEE_CS_CALLCONV_PROPERTY     = 0x8;
-		public const int IMAGE_CEE_CS_CALLCONV_UNMGD        = 0x9;
-		public const int IMAGE_CEE_CS_CALLCONV_GENERICINST  = 0xa;
-		public const int IMAGE_CEE_CS_CALLCONV_NATIVEVARARG = 0xb;
-		public const int IMAGE_CEE_CS_CALLCONV_MAX          = 0xc;
-
-		public const int IMAGE_CEE_CS_CALLCONV_MASK         = 0x0f;
-		public const int IMAGE_CEE_CS_CALLCONV_HASTHIS      = 0x20;
-		public const int IMAGE_CEE_CS_CALLCONV_EXPLICITTHIS = 0x40;
-		public const int IMAGE_CEE_CS_CALLCONV_GENERIC      = 0x10;
-
-		private const int ELEMENT_TYPE_END     = 0x0;
-		private const int ELEMENT_TYPE_VOID    = 0x1;
-		private const int ELEMENT_TYPE_BOOLEAN = 0x2;
-		private const int ELEMENT_TYPE_CHAR    = 0x3;
-		private const int ELEMENT_TYPE_I1      = 0x4;
-		private const int ELEMENT_TYPE_U1      = 0x5;
-		private const int ELEMENT_TYPE_I2      = 0x6;
-		private const int ELEMENT_TYPE_U2      = 0x7;
-		private const int ELEMENT_TYPE_I4      = 0x8;
-		private const int ELEMENT_TYPE_U4      = 0x9;
-		private const int ELEMENT_TYPE_I8      = 0xa;
-		private const int ELEMENT_TYPE_U8      = 0xb;
-		private const int ELEMENT_TYPE_R4      = 0xc;
-		private const int ELEMENT_TYPE_R8      = 0xd;
-		private const int ELEMENT_TYPE_STRING  = 0xe;
-
-		private const int ELEMENT_TYPE_PTR   = 0xf;
-		private const int ELEMENT_TYPE_BYREF = 0x10;
-
-		private const int ELEMENT_TYPE_VALUETYPE   = 0x11;
-		private const int ELEMENT_TYPE_CLASS       = 0x12;
-		private const int ELEMENT_TYPE_VAR         = 0x13;
-		private const int ELEMENT_TYPE_ARRAY       = 0x14;
-		private const int ELEMENT_TYPE_GENERICINST = 0x15;
-		private const int ELEMENT_TYPE_TYPEDBYREF  = 0x16;
-
-		private const int ELEMENT_TYPE_I       = 0x18;
-		private const int ELEMENT_TYPE_U       = 0x19;
-		private const int ELEMENT_TYPE_FNPTR   = 0x1B;
-		private const int ELEMENT_TYPE_OBJECT  = 0x1C;
-		private const int ELEMENT_TYPE_SZARRAY = 0x1D;
-		private const int ELEMENT_TYPE_MVAR    = 0x1e;
-
-		private const int ELEMENT_TYPE_CMOD_REQD = 0x1F;
-		private const int ELEMENT_TYPE_CMOD_OPT  = 0x20;
-
-		private const int ELEMENT_TYPE_INTERNAL = 0x21;
-		private const int ELEMENT_TYPE_MAX      = 0x22;
-
-		private const int ELEMENT_TYPE_MODIFIER = 0x40;
-		private const int ELEMENT_TYPE_SENTINEL = 0x01 | ELEMENT_TYPE_MODIFIER;
-		private const int ELEMENT_TYPE_PINNED   = 0x05 | ELEMENT_TYPE_MODIFIER;
+		private static readonly int[] CorEncodeToken =
+		{
+			(int) CorTokenType.TypeDef, 
+			(int) CorTokenType.TypeRef, 
+			(int) CorTokenType.TypeSpec, 
+			(int) CorTokenType.BaseType,
+		};
 	}
 }

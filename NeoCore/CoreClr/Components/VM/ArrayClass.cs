@@ -15,7 +15,7 @@ namespace NeoCore.CoreClr.Components.VM
 		internal byte Rank { get; }
 
 		// todo: Doesn't seem to be correct
-		internal ElementType ElementType { get; }
+		internal CorElementType ElementType { get; }
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}

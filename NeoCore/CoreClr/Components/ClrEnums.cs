@@ -1,6 +1,10 @@
+#region
+
 using System;
 using System.Reflection;
 using NeoCore.CoreClr.Components.VM;
+
+#endregion
 
 // ReSharper disable InconsistentNaming
 
@@ -22,7 +26,7 @@ namespace NeoCore.CoreClr.Components
 	}
 
 	/// <summary>
-	/// Describes the type of <see cref="MethodDesc"/>
+	///     Describes the type of <see cref="MethodDesc" />
 	/// </summary>
 	public enum MethodClassification
 	{
@@ -82,7 +86,7 @@ namespace NeoCore.CoreClr.Components
 	}
 
 	/// <summary>
-	/// Describes the type and properties of a <see cref="MethodDesc"/>
+	///     Describes the type and properties of a <see cref="MethodDesc" />
 	/// </summary>
 	[Flags]
 	public enum MethodProperties : ushort
@@ -155,25 +159,25 @@ namespace NeoCore.CoreClr.Components
 	public enum ChunkFlags : ushort
 	{
 		/// <summary>
-		/// This must equal METHOD_TOKEN_RANGE_MASK calculated higher in this file.
-		/// These are seperate to allow the flags space available and used to be obvious here
-		/// and for the logic that splits the token to be algorithmically generated based on the #define
+		///     This must equal METHOD_TOKEN_RANGE_MASK calculated higher in this file.
+		///     These are seperate to allow the flags space available and used to be obvious here
+		///     and for the logic that splits the token to be algorithmically generated based on the #define
 		/// </summary>
 		TokenRangeMask = 0x03FF,
 
 		/// <summary>
-		/// Compact temporary entry points
+		///     Compact temporary entry points
 		/// </summary>
 		HasCompactEntryPoints = 0x4000,
 
 		/// <summary>
-		/// This chunk lives in NGen module
+		///     This chunk lives in NGen module
 		/// </summary>
-		IsZapped = 0x8000,
+		IsZapped = 0x8000
 	}
 
 	/// <summary>
-	/// Describes <see cref="MethodDesc"/> JIT/entry point status
+	///     Describes <see cref="MethodDesc" /> JIT/entry point status
 	/// </summary>
 	[Flags]
 	public enum CodeInfo : byte
@@ -203,7 +207,7 @@ namespace NeoCore.CoreClr.Components
 	}
 
 	/// <summary>
-	/// Describes <see cref="MethodDesc"/> parameters
+	///     Describes <see cref="MethodDesc" /> parameters
 	/// </summary>
 	[Flags]
 	public enum ParameterInfo : ushort
@@ -233,7 +237,7 @@ namespace NeoCore.CoreClr.Components
 
 	/// <summary>
 	///     <remarks>
-	/// <para>Alias: High flags</para>
+	///         <para>Alias: High flags</para>
 	///         <para>Use with <see cref="MethodTable.TypeFlags" /></para>
 	///     </remarks>
 	/// </summary>
@@ -350,7 +354,7 @@ namespace NeoCore.CoreClr.Components
 
 	/// <summary>
 	///     <remarks>
-	/// <para>Alias: flags 2</para>
+	///         <para>Alias: flags 2</para>
 	///         <para>Use with <see cref="MethodTable.SlotFlags" /></para>
 	///     </remarks>
 	/// </summary>
@@ -383,10 +387,9 @@ namespace NeoCore.CoreClr.Components
 
 	/// <summary>
 	///     <remarks>
-	/// 		<para>Alias: low flags</para>
-	/// <para>Use with <see cref="MethodTable.GenericFlags" /></para>
+	///         <para>Alias: low flags</para>
+	///         <para>Use with <see cref="MethodTable.GenericFlags" /></para>
 	///     </remarks>
-	/// 
 	/// </summary>
 	[Flags]
 	public enum GenericInfo : ushort
@@ -475,42 +478,38 @@ namespace NeoCore.CoreClr.Components
 		Indirection = 3
 	}
 
-	/// <summary>
-	/// Alias: CorInterfaceAttr
-	/// </summary>
+
 	[Flags]
-	public enum InterfaceType
+	public enum CorInterfaceType
 	{
 		/// <summary>
-		/// Interface derives from IDispatch.
+		///     Interface derives from IDispatch.
 		/// </summary>
 		Dual = 0,
 
 		/// <summary>
-		/// Interface derives from IUnknown.
+		///     Interface derives from IUnknown.
 		/// </summary>
 		VTable = 1,
 
 		/// <summary>
-		/// Interface is a dispinterface.
+		///     Interface is a dispinterface.
 		/// </summary>
 		Dispatch = 2,
 
 		/// <summary>
-		/// Interface derives from IInspectable.
+		///     Interface derives from IInspectable.
 		/// </summary>
 		Inspectable = 3,
 
 		/// <summary>
-		/// The last member of the enum.
+		///     The last member of the enum.
 		/// </summary>
-		Last = 4,
+		Last = 4
 	}
 
-	/// <summary>
-	/// Alias: CorElementType
-	/// </summary>
-	public enum ElementType : byte
+
+	public enum CorElementType : byte
 	{
 		End  = 0x00,
 		Void = 0x01,
@@ -612,10 +611,8 @@ namespace NeoCore.CoreClr.Components
 		Pinned      = 0x45
 	}
 
-	/// <summary>
-	/// Alias: CorTokenType
-	/// </summary>
-	public enum TokenType : uint
+
+	public enum CorTokenType : uint
 	{
 		Module                 = 0x00000000,
 		TypeRef                = 0x01000000,
@@ -661,6 +658,60 @@ namespace NeoCore.CoreClr.Components
 		NonGCThreadStaticFieldBytes,
 		NumNonVirtualSlots,
 		COUNT
+	}
+
+	[Flags]
+	public enum CorCallingConvention
+	{
+		// IMAGE_CEE_CS_CALLCONV
+
+		DEFAULT = 0x0,
+
+		VARARG    = 0x5,
+		FIELD     = 0x6,
+		LOCAL_SIG = 0x7,
+		PROPERTY  = 0x8,
+		UNMGD     = 0x9,
+
+		/// <summary>
+		///     Generic method instantiation
+		/// </summary>
+		GENERICINST = 0xa,
+
+		/// <summary>
+		///     Used ONLY for 64bit vararg PInvoke calls
+		/// </summary>
+		NATIVEVARARG = 0xb,
+
+		/// <summary>
+		///     First invalid calling convention
+		/// </summary>
+		MAX = 0xc,
+
+
+		// The high bits of the calling convention convey additional info
+
+		/// <summary>
+		///     Calling convention is bottom 4 bits
+		/// </summary>
+		MASK = 0x0f,
+
+		/// <summary>
+		///     Top bit indicates a 'this' parameter
+		/// </summary>
+		HASTHIS = 0x20,
+
+		/// <summary>
+		///     This parameter is explicitly in the signature
+		/// </summary>
+		EXPLICITTHIS = 0x40,
+
+		/// <summary>
+		///     Generic method sig with explicit number of type arguments (precedes ordinary parameter count)
+		/// </summary>
+		GENERIC = 0x10
+
+		// 0x80 is reserved for internal use
 	}
 
 	[Flags]
@@ -775,32 +826,32 @@ namespace NeoCore.CoreClr.Components
 	public enum AccessModifiers
 	{
 		/// <summary>
-		/// <see cref="FieldInfo.IsPrivate"/>
+		///     <see cref="FieldInfo.IsPrivate" />
 		/// </summary>
 		Private = 2,
 
 		/// <summary>
-		/// <see cref="FieldInfo.IsFamilyAndAssembly"/>
+		///     <see cref="FieldInfo.IsFamilyAndAssembly" />
 		/// </summary>
 		PrivateProtected = 4,
 
 		/// <summary>
-		/// <see cref="FieldInfo.IsAssembly"/>
+		///     <see cref="FieldInfo.IsAssembly" />
 		/// </summary>
 		Internal = 6,
 
 		/// <summary>
-		/// <see cref="FieldInfo.IsFamily"/>
+		///     <see cref="FieldInfo.IsFamily" />
 		/// </summary>
 		Protected = 8,
 
 		/// <summary>
-		/// <see cref="FieldInfo.IsFamilyOrAssembly"/>
+		///     <see cref="FieldInfo.IsFamilyOrAssembly" />
 		/// </summary>
 		ProtectedInternal = 10,
 
 		/// <summary>
-		/// <see cref="FieldInfo.IsPublic"/>
+		///     <see cref="FieldInfo.IsPublic" />
 		/// </summary>
 		Public = 12
 	}
@@ -830,7 +881,7 @@ namespace NeoCore.CoreClr.Components
 	}
 
 	/// <summary>
-	/// Packed MB layout masks
+	///     Packed MB layout masks
 	/// </summary>
 	internal enum PackedLayoutMask
 	{
