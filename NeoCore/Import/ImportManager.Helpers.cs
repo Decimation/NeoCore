@@ -15,7 +15,7 @@ namespace NeoCore.Import
 	{
 		private bool IsBound(Type t) => m_boundTypes.Contains(t);
 
-		private static bool IsAnnotated(Type t, out ImportNamespaceAttribute attr)
+		private static bool IsAnnotated(MemberInfo t, out ImportNamespaceAttribute attr)
 		{
 			attr = t.GetCustomAttribute<ImportNamespaceAttribute>();
 

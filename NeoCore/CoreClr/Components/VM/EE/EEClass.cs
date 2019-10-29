@@ -86,12 +86,6 @@ namespace NeoCore.CoreClr.Components.VM.EE
 
 		internal Pointer<FieldDesc> FieldList {
 			get {
-				// return m_pFieldDescList.GetValueMaybeNull(PTR_HOST_MEMBER_TADDR(EEClass, this, m_pFieldDescList));
-
-				// PTR_HOST_MEMBER_TADDR(EEClass, this, m_pFieldDescList)
-				// return (FieldDesc*) Runtime.HostMemberOffset(ref this, FD_LIST_FIELD_OFFSET, FieldDescListRaw);
-				
-				// Offset for the field
 				const int FD_LIST_FIELD_OFFSET = 24;
 				
 				return (FieldDesc*) ClrAccess.FieldOffsetAlt(ref this, FD_LIST_FIELD_OFFSET, FieldDescList);
@@ -108,14 +102,11 @@ namespace NeoCore.CoreClr.Components.VM.EE
 
 		internal CorElementType ArrayElementType => AsArrayClass.Reference.ElementType;
 		
-		internal int ArrayRank => AsArrayClass.Reference.Rank;
+		internal byte ArrayRank => AsArrayClass.Reference.Rank;
 		
 		internal Pointer<EEClassLayoutInfo> LayoutInfo {
 			get {
 				fixed (EEClass* value = &this) {
-					//void* thisptr = ((Pointer<byte>) value).Add(sizeof(EEClass)).ToPointer();
-					//return &((LayoutEEClass*) thisptr)->m_LayoutInfo;
-					
 					return Runtime.ReadSubStructure<EEClass, LayoutEEClass>(value)
 					              .Cast<EEClassLayoutInfo>();
 				}
@@ -144,8 +135,11 @@ namespace NeoCore.CoreClr.Components.VM.EE
 		#region Packed fields
 
 		internal int NumInstanceFields  => GetPackableField(EEClassFieldId.NumInstanceFields);
+		
 		internal int NumStaticFields    => GetPackableField(EEClassFieldId.NumStaticFields);
+		
 		internal int NumMethods         => GetPackableField(EEClassFieldId.NumMethods);
+		
 		internal int NumNonVirtualSlots => GetPackableField(EEClassFieldId.NumNonVirtualSlots);
 
 		private int GetPackableField(EEClassFieldId eField)
@@ -168,7 +162,7 @@ namespace NeoCore.CoreClr.Components.VM.EE
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
-
+	
 	[StructLayout(LayoutKind.Explicit)]
 	internal struct LayoutEEClass : IClrStructure, INativeInheritance<EEClass>
 	{

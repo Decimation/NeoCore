@@ -52,11 +52,7 @@ namespace NeoCore.CoreClr.Components.Support
 			// return (PT_Primitive & PrimitiveAttributes[type]);
 
 			if (type >= PRIMITIVE_TABLE_SIZE) {
-				if (CorElementType.I == type || CorElementType.U == type) {
-					return true;
-				}
-
-				return false;
+				return CorElementType.I == type || CorElementType.U == type;
 			}
 
 			return (PT_PRIMITIVE & PrimitiveAttributes[(byte) type]) != 0;

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -47,6 +48,22 @@ namespace NeoCore.Memory
 			// (void*) (((long) m_value) + (elemOffset * ElementSize))
 			return elemCnt * elemSize;
 		}
+		
+		/// <summary>
+		/// Reads in a block from a file and converts it to the struct
+		/// type specified by the template parameter
+		/// </summary>
+		public static T ReadStructure<T>(byte[] bytes) where T : struct
+		{
+			// Pin the managed memory while, copy it out the data, then unpin it
+			// todo: this can be done without a GCHandle
+			var handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
+			var value  = (T) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
+			handle.Free();
+
+			return value;
+		}
+		
 
 		public static string ReadString(sbyte* first, int len)
 		{

@@ -214,16 +214,16 @@ namespace NeoCore.Interop
 			/// </summary>
 			/// <param name="fn">Function address</param>
 			/// <param name="arg1">Argument #1</param>
-			/// <typeparam name="T1"><paramref name="arg1" /> type</typeparam>
+			/// <typeparam name="TArg1"><paramref name="arg1" /> type</typeparam>
 			[NativeFunction]
-			public static void CallVoid<T1>(void* fn, T1 arg1)
+			public static void CallVoid<TArg1>(void* fn, TArg1 arg1)
 			{
-				IL.Emit.Ldarg_1();                                       // Load arg "arg1"
-				IL.Emit.Ldarg_0();                                       // Load arg "fn"
-				IL.Emit.Conv_I();                                        // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,               // Calling convention
-				                              new TypeRef(typeof(void)), // Return type
-				                              new TypeRef(typeof(T1)))); // Arg "arg1" type #1
+				IL.Emit.Ldarg_1();                                          // Load arg "arg1"
+				IL.Emit.Ldarg_0();                                          // Load arg "fn"
+				IL.Emit.Conv_I();                                           // Convert arg "fn" to native
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,                  // Calling convention
+				                              new TypeRef(typeof(void)),    // Return type
+				                              new TypeRef(typeof(TArg1)))); // Arg "arg1" type #1
 			}
 
 			/// <summary>

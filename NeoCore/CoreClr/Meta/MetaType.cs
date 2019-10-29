@@ -11,6 +11,7 @@ using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
 using TypeInfo = NeoCore.CoreClr.Components.TypeInfo;
+
 // ReSharper disable SuggestBaseTypeForParameter
 
 // ReSharper disable InconsistentNaming
@@ -30,7 +31,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public MetaType(Pointer<MethodTable> mt) : base(mt)
 		{
-			RuntimeType = Runtime.ResolveType(mt.Cast());
+			RuntimeType         = Runtime.ResolveType(mt.Cast());
 			AuxiliaryProperties = Runtime.Info.ReadProperties(RuntimeType);
 		}
 
@@ -49,35 +50,34 @@ namespace NeoCore.CoreClr.Meta
 				return (th & 2) != 0;
 			}
 		}
-		
-		
-		
+
+
 		public override MemberInfo Info => RuntimeType;
-		
+
 		public AuxiliaryProperties AuxiliaryProperties { get; }
 
 		public bool IsAnyPointer => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.AnyPointer);
-		
+
 		public bool IsReal => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Real);
-		
+
 		public bool IsNumeric => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Numeric);
-		
+
 		public bool IsInteger => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Integer);
-		
+
 		public bool IsEnumerable => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Enumerable);
-		
+
 		public bool IsStruct => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Struct);
-		
+
 		public bool IsUnmanaged => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Unmanaged);
-		
+
 		#region MethodTable
 
 		public short ComponentSize => Value.Reference.ComponentSize;
-		
+
 		public int BaseSize => Value.Reference.BaseSize;
-		
+
 		public GenericInfo GenericFlags => Value.Reference.GenericFlags;
-		
+
 		public OptionalSlots SlotFlags => Value.Reference.SlotFlags;
 
 		public override int Token => ClrSigs.TokenFromRid(Value.Reference.RawToken, CorTokenType.TypeDef);
@@ -100,12 +100,15 @@ namespace NeoCore.CoreClr.Meta
 
 		public Pointer<byte> PerInstInfo => Value.Reference.PerInstInfo;
 
-		public MetaType ElementTypeHandle => (Pointer<MethodTable>) Value.Reference.ElementTypeHandle;
-		public CorElementType ArrayElementType => EEClass.Value.ArrayElementType;
+		public MetaType ElementTypeHandle => Value.Reference.ElementTypeHandle;
+
+		public byte ArrayRank => EEClass.Reference.ArrayRank;
+
+		public CorElementType ArrayElementType => EEClass.Reference.ArrayElementType;
+
 		public Pointer<byte> InterfaceMap => Value.Reference.InterfaceMap;
 
 		public Type RuntimeType { get; }
-		
 
 		#endregion
 
@@ -130,7 +133,7 @@ namespace NeoCore.CoreClr.Meta
 		public bool FieldsArePacked => EEClass.Reference.FieldsArePacked;
 
 		public int FixedEEClassFields => EEClass.Reference.FixedEEClassFields;
-		
+
 		/// <summary>
 		/// Size of the padding in <see cref="BaseSize"/>
 		/// </summary>
@@ -162,7 +165,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public int FieldsCount => EEClass.Reference.FieldListLength;
 
-		
+
 		public MetaField[] FieldList {
 			get {
 				// todo: fix
@@ -177,22 +180,22 @@ namespace NeoCore.CoreClr.Meta
 				}
 
 				return rg;*/
-				
+
 				throw new NotImplementedException();
 			}
 		}
-		
-		
+
+
 		public MetaField this[string name] => GetField(name);
-		
+
 		public MetaField GetField(string name) => RuntimeType.GetAnyField(name);
-		
+
 		public MetaMethod GetMethod(string name) => RuntimeType.GetAnyMethod(name);
-		
+
 //		public MemberInfo[] GetOriginalMember(string name) => RuntimeType.GetAnyMember(name);
-		
+
 //		public MemberInfo GetFirstOriginalMember(string name) => GetOriginalMember(name)[0];
-		
+
 		#region bool
 
 		/// <summary>
@@ -207,11 +210,11 @@ namespace NeoCore.CoreClr.Meta
 		public bool HasComponentSize => TypeFlags.HasFlagFast(TypeInfo.HasComponentSize);
 
 		public bool IsArray => TypeFlags.HasFlagFast(TypeInfo.Array);
-		
+
 		public bool IsStringOrArray => HasComponentSize;
 
 		public bool IsString => HasComponentSize && !IsArray;
-		
+
 		public bool ContainsPointers => TypeFlags.HasFlagFast(TypeInfo.ContainsPointers);
 
 		public bool IsReferenceOrContainsReferences => !RuntimeType.IsValueType || ContainsPointers;
@@ -219,7 +222,7 @@ namespace NeoCore.CoreClr.Meta
 		#endregion
 
 		#endregion
-		
+
 		#endregion
 
 		#region Operators

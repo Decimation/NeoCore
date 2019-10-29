@@ -76,7 +76,7 @@ namespace NeoCore.CoreClr.Components.VM
 
 		internal Pointer<byte> PerInstInfo => Union2;
 
-		internal Pointer<byte> ElementTypeHandle => Union2;
+		internal Pointer<MethodTable> ElementTypeHandle => Union2;
 
 		internal Pointer<byte> MultipurposeSlot1 => Union2;
 

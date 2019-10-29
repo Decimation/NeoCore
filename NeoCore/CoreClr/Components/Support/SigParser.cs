@@ -14,21 +14,21 @@ namespace NeoCore.CoreClr.Components.Support
 		private int    _len;
 		private int    _offs;
 
-		public SigParser(byte[] sig, int len)
+		internal SigParser(byte[] sig, int len)
 		{
 			_sig  = sig;
 			_len  = len;
 			_offs = 0;
 		}
 
-		public SigParser(SigParser rhs)
+		private SigParser(SigParser rhs)
 		{
 			_sig  = rhs._sig;
 			_len  = rhs._len;
 			_offs = rhs._offs;
 		}
 
-		public SigParser(IntPtr sig, int len)
+		internal SigParser(IntPtr sig, int len)
 		{
 			if (len != 0) {
 				_sig = new byte[len];
@@ -42,10 +42,9 @@ namespace NeoCore.CoreClr.Components.Support
 			_offs = 0;
 		}
 
-		public bool IsNull()
-		{
-			return _sig == null;
-		}
+		private SigParser Copy() => new SigParser(this);
+		
+		public bool IsNull() => _sig == null;
 
 		private void CopyFrom(SigParser rhs)
 		{
@@ -62,10 +61,7 @@ namespace NeoCore.CoreClr.Components.Support
 			Debug.Assert(_len <= 0 || _offs < _sig.Length);
 		}
 
-		private bool SkipInt()
-		{
-			return GetData(out int tmp);
-		}
+		private bool SkipInt() => GetData(out _);
 
 		public bool GetData(out int data)
 		{
@@ -100,12 +96,13 @@ namespace NeoCore.CoreClr.Components.Support
 			return true;
 		}
 
-		private bool GetElemTypeSlow(out int etype)
+		private bool GetElemTypeSlow(out CorElementType etype)
 		{
-			SigParser sigTemp = new SigParser(this);
+			var sigTemp = Copy();
+			
 			if (sigTemp.SkipCustomModifiers()) {
 				if (sigTemp.GetByte(out byte elemType)) {
-					etype = elemType;
+					etype = (CorElementType) elemType;
 					CopyFrom(sigTemp);
 					return true;
 				}
@@ -115,14 +112,14 @@ namespace NeoCore.CoreClr.Components.Support
 			return false;
 		}
 
-		public bool GetElemType(out int etype)
+		public bool GetElemType(out CorElementType etype)
 		{
 			if (_len > 0) {
 				byte type = _sig[_offs];
 
 				if (type < (int) CorElementType.CModReqd) // fast path with no modifiers: single byte
 				{
-					etype = type;
+					etype = (CorElementType) type;
 					SkipBytes(1);
 					return true;
 				}
@@ -163,18 +160,18 @@ namespace NeoCore.CoreClr.Components.Support
 			return UncompressData(out data, out int size);
 		}
 
-		private bool PeekElemTypeSlow(out int etype)
+		private bool PeekElemTypeSlow(out CorElementType etype)
 		{
-			SigParser sigTemp = new SigParser(this);
+			var sigTemp = Copy();
 			return sigTemp.GetElemType(out etype);
 		}
 
-		public bool PeekElemType(out int etype)
+		public bool PeekElemType(out CorElementType etype)
 		{
 			if (_len > 0) {
 				byte type = _sig[_offs];
 				if (type < (int) CorElementType.CModReqd) {
-					etype = type;
+					etype = (CorElementType) type;
 					return true;
 				}
 			}
@@ -185,7 +182,7 @@ namespace NeoCore.CoreClr.Components.Support
 		private bool PeekElemTypeSize(out int pSize)
 		{
 			pSize = 0;
-			SigParser sigTemp = new SigParser(this);
+			var sigTemp = Copy();
 
 			if (!sigTemp.SkipAnyVASentinel())
 				return false;
@@ -270,7 +267,7 @@ namespace NeoCore.CoreClr.Components.Support
 
 		public bool SkipCustomModifiers()
 		{
-			SigParser sigTemp = new SigParser(this);
+			var sigTemp = Copy();
 
 			if (!sigTemp.SkipAnyVASentinel())
 				return false;
@@ -303,9 +300,9 @@ namespace NeoCore.CoreClr.Components.Support
 			return true;
 		}
 
-		private bool SkipFunkyAndCustomModifiers()
+		private bool SkipAbnormalAndCustomModifiers()
 		{
-			SigParser sigTemp = new SigParser(this);
+			var sigTemp = Copy();
 			if (!sigTemp.SkipAnyVASentinel())
 				return false;
 
@@ -353,11 +350,11 @@ namespace NeoCore.CoreClr.Components.Support
 
 		public bool SkipExactlyOne()
 		{
-			if (!GetElemType(out int typ))
+			if (!GetElemType(out var typ))
 				return false;
 
-			if (!((CorElementType) typ).IsPrimitive()) {
-				switch ((CorElementType)typ) {
+			if (!typ.IsPrimitive()) {
+				switch (typ) {
 					default:
 						return false;
 
