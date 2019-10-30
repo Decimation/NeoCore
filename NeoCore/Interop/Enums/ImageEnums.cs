@@ -1,9 +1,11 @@
 using System;
 
+// ReSharper disable InconsistentNaming
+
 namespace NeoCore.Interop.Enums
 {
 	[Flags]
-	public enum DataSectionFlags : uint
+	public enum ImageSectionFlags : uint
 	{
 		/// <summary>
 		/// Reserved for future use.
@@ -214,5 +216,55 @@ namespace NeoCore.Interop.Enums
 		/// The section can be written to.
 		/// </summary>
 		MemoryWrite = 0x80000000
+	}
+
+	public enum ImageDllCharacteristics : ushort
+	{
+		DYNAMIC_BASE          = 0x0040,
+		FORCE_INTEGRITY       = 0x0080,
+		NX_COMPAT             = 0x0100,
+		NO_ISOLATION          = 0x0200,
+		NO_SEH                = 0x0400,
+		NO_BIND               = 0x0800,
+		WDM_DRIVER            = 0x2000,
+		TERMINAL_SERVER_AWARE = 0x8000
+	}
+
+
+	public enum ImageSubSystem : ushort
+	{
+		UNKNOWN                  = 0,
+		NATIVE                   = 1,
+		WINDOWS_GUID             = 2,
+		WINDOWS_CUI              = 3,
+		OS2_CUI                  = 5,
+		POSIX_CUI                = 7,
+		WINDOWS_CE_GUI           = 9,
+		EFI_APPLICATION          = 10,
+		EFI_BOOT_SERVICE_DRIVER  = 11,
+		EFI_RUNTIME_DRIVER       = 12,
+		EFI_ROM                  = 13,
+		XBOX                     = 14,
+		WINDOWS_BOOT_APPLICATION = 16
+	}
+
+	[Flags]
+	public enum ImageFileCharacteristics : ushort
+	{
+		RELOCS_STRIPPED         = 0x0001,
+		EXECUTABLE_IMAGE        = 0x0002,
+		LINE_NUMS_STRIPPED      = 0x0004,
+		LOCAL_SYMS_STRIPPED     = 0x0008,
+		AGGRESSIVE_WS_TRIM      = 0x0010,
+		LARGE_ADDRESS_AWARE     = 0x0020,
+		BYTES_RESERVED_IO       = 0x0080,
+		BIT32_MACHINE           = 0x0100,
+		DEBUG_STRIPPED          = 0x0200,
+		REMOVABLE_RUN_FROM_SWAP = 0x0400,
+		NET_RUN_FROM_SWAP       = 0x0800,
+		SYSTEM                  = 0x1000,
+		DLL                     = 0x2000,
+		UP_SYSTEM_ONLY          = 0x4000,
+		BYTES_RESERVED_HI       = 0x8000
 	}
 }

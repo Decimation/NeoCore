@@ -7,6 +7,7 @@ using NeoCore.Assets;
 using NeoCore.Interop;
 using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures;
+using NeoCore.Interop.Structures.Raw;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
@@ -195,7 +196,7 @@ namespace NeoCore.Import
 
 		private unsafe bool AddSymByNameCallback(IntPtr sym, uint symSize, IntPtr userCtx)
 		{
-			string symName = ((DebugSymbol*) sym)->ReadSymbolName();
+			string symName = ((SymbolInfo*) sym)->ReadSymbolName();
 
 			if (symName.Contains(m_singleNameBuffer)) {
 				m_symBuffer.Add(new Symbol(sym));

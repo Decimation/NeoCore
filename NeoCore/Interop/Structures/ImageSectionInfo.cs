@@ -1,5 +1,6 @@
 using System;
 using NeoCore.Interop.Enums;
+using NeoCore.Interop.Structures.Raw;
 using NeoCore.Memory.Pointers;
 
 namespace NeoCore.Interop.Structures
@@ -17,7 +18,7 @@ namespace NeoCore.Interop.Structures
 
 		public int Size { get; }
 
-		public DataSectionFlags Characteristics { get; }
+		public ImageSectionFlags Characteristics { get; }
 
 		internal ImageSectionInfo(ImageSectionHeader struc, int number, IntPtr address)
 		{

@@ -39,10 +39,17 @@ namespace Test
 
 		private static void Main(string[] args)
 		{
+			
 			var s = new PEHeaderReader(Resources.Clr.LibraryFile.FullName);
+
 			foreach (var header in s.ImageSectionHeaders) {
 				Console.WriteLine(header.SectionName);
 			}
+
+			Console.WriteLine(s.TimeStamp);
+			
+			var bs = new BlittableStruct();
+			bs.Hello();
 		}
 	}
 }

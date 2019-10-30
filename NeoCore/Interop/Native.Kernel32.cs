@@ -4,6 +4,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures;
+using NeoCore.Interop.Structures.Raw;
 using NeoCore.Memory;
 
 namespace NeoCore.Interop

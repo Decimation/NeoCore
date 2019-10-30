@@ -1,14 +1,15 @@
 using System;
 using NeoCore.Interop.Enums;
+using NeoCore.Interop.Structures.Raw;
 
 namespace NeoCore.Interop.Structures
 {
 	/// <summary>
-	///     Wraps a <see cref="DebugSymbol" />
+	///     Wraps a <see cref="SymbolInfo" />
 	/// </summary>
 	public unsafe class Symbol
 	{
-		internal Symbol(DebugSymbol* pSymInfo)
+		internal Symbol(SymbolInfo* pSymInfo)
 		{
 			Name = pSymInfo->ReadSymbolName();
 
@@ -25,7 +26,7 @@ namespace NeoCore.Interop.Structures
 			Tag          = pSymInfo->Tag;
 		}
 
-		internal Symbol(IntPtr pSym) : this((DebugSymbol*) pSym) { }
+		internal Symbol(IntPtr pSym) : this((SymbolInfo*) pSym) { }
 
 		public string Name { get; }
 
@@ -56,8 +57,8 @@ namespace NeoCore.Interop.Structures
 
 		public override string ToString()
 		{
-			return String.Format("Name: {0} | Offset: {1:X} | Address: {2:X} | Tag: {3} | Flags: {4}", Name, Offset,
-			                     Address, Tag, Flags);
+			return String.Format("Name: {0} | Offset: {1:X} | Address: {2:X} | Tag: {3} | Flags: {4}", 
+			                     Name, Offset, Address, Tag, Flags);
 		}
 	}
 }

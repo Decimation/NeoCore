@@ -18,4 +18,22 @@ namespace NeoCore.Interop.Enums
 		QueryLimitedInformation = 0x001000,
 		Synchronize             = 0x00100000
 	}
+	
+	public enum MachineArchitecture : ushort
+	{
+		/// <summary>
+		/// x86
+		/// </summary>
+		I386 = 0x014C,
+
+		/// <summary>
+		/// Intel Itanium
+		/// </summary>
+		IA64 = 0x0200,
+
+		/// <summary>
+		/// x64
+		/// </summary>
+		AMD64 = 0x8664
+	}
 }

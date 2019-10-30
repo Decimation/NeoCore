@@ -100,9 +100,8 @@ namespace NeoCore.Interop.Enums
 
 		// PAGE_TARGETS_NO_UPDATE 0x40000000
 	}
-	
-	
-	
+
+
 	/// <summary>
 	///     <a href="https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ns-winnt-_memory_basic_information">
 	///         Doc
@@ -126,7 +125,7 @@ namespace NeoCore.Interop.Enums
 		/// </summary>
 		Private = 0x20000
 	}
-	
+
 	/// <summary>
 	///     <a href="https://docs.microsoft.com/en-us/windows/desktop/api/winnt/ns-winnt-_memory_basic_information">
 	///         Doc

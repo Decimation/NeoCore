@@ -7,7 +7,7 @@ using NeoCore.Memory;
 
 #endregion
 
-namespace NeoCore.Interop.Structures
+namespace NeoCore.Interop.Structures.Raw
 {
 	#region
 
@@ -18,7 +18,7 @@ namespace NeoCore.Interop.Structures
 	/// </summary>
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	internal unsafe struct DebugSymbol
+	internal unsafe struct SymbolInfo
 	{
 		// https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info
 
@@ -109,19 +109,19 @@ namespace NeoCore.Interop.Structures
 
 
 		/// <summary>
-		///     Max string length for <see cref="DebugSymbol.Name" />
+		///     Max string length for <see cref="SymbolInfo.Name" />
 		/// </summary>
 		internal const int MaxNameLength = 2000;
 
 		/// <summary>
-		///     Size of <see cref="DebugSymbol" />
+		///     Size of <see cref="SymbolInfo" />
 		/// </summary>
-		internal static readonly int SizeOf = Marshal.SizeOf<DebugSymbol>();
+		internal static readonly int SizeOf = Marshal.SizeOf<SymbolInfo>();
 
 		internal static readonly int FullSize =
 			SizeOf + MaxNameLength * sizeof(byte) + sizeof(ulong) - 1 / sizeof(ulong);
 
-		internal static int GetSymbolInfoSize(DebugSymbol* pSym)
+		internal static int GetSymbolInfoSize(SymbolInfo* pSym)
 		{
 			// SizeOfStruct + (MaxNameLen - 1) * sizeof(TCHAR)
 			return (int) (pSym->SizeOfStruct + (pSym->MaxNameLen - 1) * sizeof(byte));
@@ -137,7 +137,7 @@ namespace NeoCore.Interop.Structures
 
 			Name = Marshal.PtrToStringUni( pNative, (int) native.NameLen );*/
 
-			fixed (DebugSymbol* pSym = &this) {
+			fixed (SymbolInfo* pSym = &this) {
 				sbyte* namePtr = pSym->Name;
 				return Mem.ReadString(namePtr, (int) pSym->NameLen);
 			}

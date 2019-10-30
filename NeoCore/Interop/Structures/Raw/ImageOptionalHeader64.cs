@@ -1,7 +1,8 @@
 using System.Runtime.InteropServices;
 using NeoCore.Interop.Attributes;
+using NeoCore.Interop.Enums;
 
-namespace NeoCore.Interop.Structures
+namespace NeoCore.Interop.Structures.Raw
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -9,135 +10,91 @@ namespace NeoCore.Interop.Structures
 	{
 		public ushort Magic;
 
-
 		public byte MajorLinkerVersion;
-
 
 		public byte MinorLinkerVersion;
 
-
 		public uint SizeOfCode;
-
 
 		public uint SizeOfInitializedData;
 
-
 		public uint SizeOfUninitializedData;
-
 
 		public uint AddressOfEntryPoint;
 
-
 		public uint BaseOfCode;
-
 
 		public ulong ImageBase;
 
-
 		public uint SectionAlignment;
-
 
 		public uint FileAlignment;
 
-
 		public ushort MajorOperatingSystemVersion;
-
 
 		public ushort MinorOperatingSystemVersion;
 
-
 		public ushort MajorImageVersion;
-
 
 		public ushort MinorImageVersion;
 
-
 		public ushort MajorSubsystemVersion;
-
 
 		public ushort MinorSubsystemVersion;
 
-
 		public uint Win32VersionValue;
-
 
 		public uint SizeOfImage;
 
-
 		public uint SizeOfHeaders;
-
 
 		public uint CheckSum;
 
+		public ImageSubSystem Subsystem;
 
-		public ushort Subsystem;
-
-
-		public ushort DllCharacteristics;
-
+		public ImageDllCharacteristics DllCharacteristics;
 
 		public ulong SizeOfStackReserve;
 
-
 		public ulong SizeOfStackCommit;
-
 
 		public ulong SizeOfHeapReserve;
 
-
 		public ulong SizeOfHeapCommit;
-
 
 		public uint LoaderFlags;
 
-
 		public uint NumberOfRvaAndSizes;
-
 
 		public ImageDataDirectory ExportTable;
 
-
 		public ImageDataDirectory ImportTable;
-
 
 		public ImageDataDirectory ResourceTable;
 
-
 		public ImageDataDirectory ExceptionTable;
-
 
 		public ImageDataDirectory CertificateTable;
 
-
 		public ImageDataDirectory BaseRelocationTable;
-
 
 		public ImageDataDirectory Debug;
 
-
 		public ImageDataDirectory Architecture;
-
 
 		public ImageDataDirectory GlobalPtr;
 
-
 		public ImageDataDirectory TLSTable;
-
 
 		public ImageDataDirectory LoadConfigTable;
 
-
 		public ImageDataDirectory BoundImport;
-
 
 		public ImageDataDirectory IAT;
 
-
 		public ImageDataDirectory DelayImportDescriptor;
 
-
 		public ImageDataDirectory CLRRuntimeHeader;
-
 
 		public ImageDataDirectory Reserved;
 	}

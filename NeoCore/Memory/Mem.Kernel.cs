@@ -17,9 +17,9 @@ namespace NeoCore.Memory
 
 			public static T ReadProcessMemory<T>(Process proc, Pointer<byte> ptrBase)
 			{
-				T   t    = default;
-				int size = Unsafe.SizeOf<T>();
-				var ptr  = Unsafe.AddressOf(ref t);
+				T          t    = default;
+				int        size = Unsafe.SizeOf<T>();
+				Pointer<T> ptr  = Unsafe.AddressOf(ref t);
 
 				ReadProcessMemory(proc, ptrBase.Address, ptr.Address, size);
 
@@ -32,7 +32,7 @@ namespace NeoCore.Memory
 			public static void WriteProcessMemory<T>(Process proc, Pointer<byte> ptrBase, T value)
 			{
 				int dwSize = Unsafe.SizeOf<T>();
-				var ptr    = Unsafe.AddressOf(ref value);
+				Pointer<T> ptr    = Unsafe.AddressOf(ref value);
 
 				WriteProcessMemory(proc, ptrBase.Address, ptr.Address, dwSize);
 			}
@@ -137,7 +137,5 @@ namespace NeoCore.Memory
 
 			#endregion
 		}
-
-		
 	}
 }

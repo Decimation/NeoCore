@@ -1,13 +1,14 @@
 using System.Runtime.InteropServices;
 using NeoCore.Interop.Attributes;
+using NeoCore.Interop.Enums;
 
-namespace NeoCore.Interop.Structures
+namespace NeoCore.Interop.Structures.Raw
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct ImageFileHeader
 	{
-		public ushort Machine { get; }
+		public MachineArchitecture Machine { get; }
 
 		public ushort NumberOfSections { get; }
 
@@ -19,6 +20,6 @@ namespace NeoCore.Interop.Structures
 
 		public ushort SizeOfOptionalHeader { get; }
 
-		public ushort Characteristics { get; }
+		public ImageFileCharacteristics Characteristics { get; }
 	}
 }

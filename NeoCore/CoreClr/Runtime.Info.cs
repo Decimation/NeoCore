@@ -75,6 +75,7 @@ namespace NeoCore.CoreClr
 				}
 			}
 
+			[Obsolete]
 			public static bool IsPinnableSlow(object value)
 			{
 				return !FunctionThrows<ArgumentException>(() =>
@@ -107,8 +108,8 @@ namespace NeoCore.CoreClr
 				}
 
 				if (mt.IsArray) {
-					var corType         = mt.ElementTypeHandle.NormType;
-					var isPrimitiveElem = ClrSigs.IsPrimitiveType(corType);
+					var  corType         = mt.ElementTypeHandle.NormType;
+					bool isPrimitiveElem = ClrSigs.IsPrimitiveType(corType);
 
 					if (isPrimitiveElem) {
 						return true;

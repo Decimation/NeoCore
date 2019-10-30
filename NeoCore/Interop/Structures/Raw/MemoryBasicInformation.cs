@@ -7,7 +7,7 @@ using NeoCore.Interop.Enums;
 
 #endregion
 
-namespace NeoCore.Interop.Structures
+namespace NeoCore.Interop.Structures.Raw
 {
 	/// <summary>
 	///     Contains information about a range of pages in the virtual address space of a process.

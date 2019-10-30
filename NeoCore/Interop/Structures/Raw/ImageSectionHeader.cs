@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 using NeoCore.Interop.Attributes;
 using NeoCore.Interop.Enums;
 
-namespace NeoCore.Interop.Structures
+namespace NeoCore.Interop.Structures.Raw
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Explicit)]
@@ -16,7 +16,7 @@ namespace NeoCore.Interop.Structures
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
 		public char[] Name;
 
-		public string SectionName => new String(Name);
+		public string SectionName => new string(Name);
 
 
 		[FieldOffset(8)]
@@ -49,9 +49,9 @@ namespace NeoCore.Interop.Structures
 
 		[FieldOffset(34)]
 		public ushort NumberOfLinenumbers;
-		
-		
+
+
 		[FieldOffset(36)]
-		public DataSectionFlags Characteristics;
+		public ImageSectionFlags Characteristics;
 	}
 }

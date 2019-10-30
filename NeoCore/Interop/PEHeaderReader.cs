@@ -1,7 +1,9 @@
 using System;
 using System.IO;
 using System.Reflection;
+using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures;
+using NeoCore.Interop.Structures.Raw;
 using NeoCore.Memory;
 using NeoCore.Utilities.Extensions;
 
@@ -36,10 +38,10 @@ namespace NeoCore.Interop
 			DOSHeader = reader.ReadStructure<ImageDOSHeader>();
 
 			// Add 4 bytes to the offset
-			stream.Seek(DOSHeader.ELfanew, SeekOrigin.Begin);
+			stream.Seek(DOSHeader.Lfanew, SeekOrigin.Begin);
 
 			// NT Headers signature
-			_ = reader.ReadUInt32();
+			reader.ReadUInt32();
 
 			FileHeader = reader.ReadStructure<ImageFileHeader>();
 
@@ -61,28 +63,32 @@ namespace NeoCore.Interop
 		/// Gets the header of the .NET assembly that called this function
 		/// </summary>
 		/// <returns></returns>
-		public static PEHeaderReader GetCallingAssemblyHeader()
+		public static PEHeaderReader CallingAssemblyHeader
 		{
-			// Get the path to the calling assembly, which is the path to the
-			// DLL or EXE that we want the time of
-			string filePath = Assembly.GetCallingAssembly().Location;
+			get {
+				// Get the path to the calling assembly, which is the path to the
+				// DLL or EXE that we want the time of
+				string filePath = Assembly.GetCallingAssembly().Location;
 
-			// Get and return the timestamp
-			return new PEHeaderReader(filePath);
+				// Get and return the timestamp
+				return new PEHeaderReader(filePath);
+			}
 		}
 
 		/// <summary>
 		/// Gets the header of the .NET assembly that called this function
 		/// </summary>
 		/// <returns></returns>
-		public static PEHeaderReader GetAssemblyHeader()
+		public static PEHeaderReader AssemblyHeader
 		{
-			// Get the path to the calling assembly, which is the path to the
-			// DLL or EXE that we want the time of
-			string filePath = Assembly.GetAssembly(typeof(PEHeaderReader)).Location;
+			get {
+				// Get the path to the calling assembly, which is the path to the
+				// DLL or EXE that we want the time of
+				string filePath = Assembly.GetAssembly(typeof(PEHeaderReader)).Location;
 
-			// Get and return the timestamp
-			return new PEHeaderReader(filePath);
+				// Get and return the timestamp
+				return new PEHeaderReader(filePath);
+			}
 		}
 
 		#endregion Public Methods
@@ -92,12 +98,7 @@ namespace NeoCore.Interop
 		/// <summary>
 		/// Gets if the file header is 32 bit or not
 		/// </summary>
-		public bool Is32BitHeader {
-			get {
-				const ushort IMAGE_FILE_32BIT_MACHINE = 0x0100;
-				return (IMAGE_FILE_32BIT_MACHINE & FileHeader.Characteristics) == IMAGE_FILE_32BIT_MACHINE;
-			}
-		}
+		public bool Is32BitHeader => FileHeader.Characteristics.HasFlag(ImageFileCharacteristics.BIT32_MACHINE);
 
 		public ImageDOSHeader DOSHeader { get; }
 
@@ -127,14 +128,16 @@ namespace NeoCore.Interop
 		public DateTime TimeStamp {
 			get {
 				// Timestamp is a date offset from 1970
-				var date = new DateTime(1970, 1, 1, 0, 0, 0);
+				var date = DateTime.UnixEpoch;
+				
 
 				// Add in the number of seconds since 1970/1/1
 				date = date.AddSeconds(FileHeader.TimeDateStamp);
 
 				// Adjust to local timezone
-				date += TimeZone.CurrentTimeZone.GetUtcOffset(date);
-
+				date += TimeZoneInfo.Local.GetUtcOffset(date);
+				//date += TimeZone.CurrentTimeZone.GetUtcOffset(date);
+				
 				return date;
 			}
 		}

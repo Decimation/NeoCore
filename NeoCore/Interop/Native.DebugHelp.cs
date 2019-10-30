@@ -4,6 +4,7 @@ using System.Security;
 using NeoCore.CoreClr;
 using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures;
+using NeoCore.Interop.Structures.Raw;
 using NeoCore.Memory;
 using NeoCore.Utilities.Diagnostics;
 using static NeoCore.Assets.Constants;
@@ -50,11 +51,11 @@ namespace NeoCore.Interop
 
 			internal static Symbol GetSymbol(IntPtr hProc, string name)
 			{
-				byte* byteBuffer = stackalloc byte[DebugSymbol.FullSize];
-				var   buffer     = (DebugSymbol*) byteBuffer;
+				byte* byteBuffer = stackalloc byte[SymbolInfo.FullSize];
+				var   buffer     = (SymbolInfo*) byteBuffer;
 
-				buffer->SizeOfStruct = (uint) DebugSymbol.SizeOf;
-				buffer->MaxNameLen   = DebugSymbol.MaxNameLength;
+				buffer->SizeOfStruct = (uint) SymbolInfo.SizeOf;
+				buffer->MaxNameLen   = SymbolInfo.MaxNameLength;
 				
 				if (SymFromName(hProc, name, (IntPtr) buffer)) {
 					return new Symbol(buffer);
@@ -135,7 +136,7 @@ namespace NeoCore.Interop
 
 
 			[DllImport(DBGHELP_DLL)]
-			private static extern bool SymFromAddr(IntPtr hProc, ulong addr, ulong* displacement, DebugSymbol* pSym);
+			private static extern bool SymFromAddr(IntPtr hProc, ulong addr, ulong* displacement, SymbolInfo* pSym);
 
 			#endregion
 

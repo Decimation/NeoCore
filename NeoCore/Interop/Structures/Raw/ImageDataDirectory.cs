@@ -1,7 +1,7 @@
 using System.Runtime.InteropServices;
 using NeoCore.Interop.Attributes;
 
-namespace NeoCore.Interop.Structures
+namespace NeoCore.Interop.Structures.Raw
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]

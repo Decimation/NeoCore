@@ -99,7 +99,9 @@ namespace NeoCore.Memory.Pointers
 		#region Implicit / explicit conversions
 
 		public static explicit operator Pointer<T>(ulong ul) => new Pointer<T>((void*) ul);
-
+		
+		public static explicit operator IntPtr(Pointer<T> ptr) => ptr.Address;
+		
 		public static explicit operator void*(Pointer<T> ptr) => ptr.ToPointer();
 
 		public static explicit operator long(Pointer<T> ptr) => ptr.ToInt64();

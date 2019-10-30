@@ -48,22 +48,23 @@ namespace NeoCore.Memory
 			// (void*) (((long) m_value) + (elemOffset * ElementSize))
 			return elemCnt * elemSize;
 		}
-		
-		/// <summary>
-		/// Reads in a block from a file and converts it to the struct
-		/// type specified by the template parameter
-		/// </summary>
+
 		public static T ReadStructure<T>(byte[] bytes) where T : struct
 		{
 			// Pin the managed memory while, copy it out the data, then unpin it
-			// todo: this can be done without a GCHandle
-			var handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-			var value  = (T) Marshal.PtrToStructure(handle.AddrOfPinnedObject(), typeof(T));
-			handle.Free();
+
+			//	|            Method |     Mean |   Error |  StdDev |
+			//	|------------------ |---------:|--------:|--------:|
+			//	|     ReadStructure | 166.8 ns | 2.02 ns | 1.89 ns |
+			//	| ReadStructureFast | 113.3 ns | 1.03 ns | 0.91 ns |
+
+			byte* handle = stackalloc byte[bytes.Length];
+			Marshal.Copy(bytes, 0, (IntPtr) handle, bytes.Length);
+			
+			var value = (T) Marshal.PtrToStructure((IntPtr) handle, typeof(T));
 
 			return value;
 		}
-		
 
 		public static string ReadString(sbyte* first, int len)
 		{
