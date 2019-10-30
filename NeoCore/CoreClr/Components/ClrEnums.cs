@@ -40,7 +40,6 @@ namespace NeoCore.CoreClr.Components
 		/// </summary>
 		FCall = 1,
 
-
 		/// <summary>
 		///     N/Direct
 		/// </summary>

@@ -1,6 +1,6 @@
 using System;
 
-namespace NeoCore.Interop.Enums
+namespace NeoCore.Interop.Structures.Raw.Enums
 {
 	/// <summary>
 	///     <a href="https://docs.microsoft.com/en-us/windows/desktop/memory/memory-protection-constants">Doc</a>

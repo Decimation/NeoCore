@@ -2,7 +2,7 @@ using System;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.Interop.Enums
+namespace NeoCore.Interop.Structures.Raw.Enums
 {
 	[Flags]
 	public enum ImageSectionFlags : uint

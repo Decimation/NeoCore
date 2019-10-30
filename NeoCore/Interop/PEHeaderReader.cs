@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 using System.Reflection;
-using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures;
 using NeoCore.Interop.Structures.Raw;
+using NeoCore.Interop.Structures.Raw.Enums;
 using NeoCore.Memory;
 using NeoCore.Utilities.Extensions;
 

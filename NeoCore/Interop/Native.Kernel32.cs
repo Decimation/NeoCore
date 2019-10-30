@@ -2,9 +2,9 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures;
 using NeoCore.Interop.Structures.Raw;
+using NeoCore.Interop.Structures.Raw.Enums;
 using NeoCore.Memory;
 
 namespace NeoCore.Interop

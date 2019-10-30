@@ -2,7 +2,7 @@
 
 using System.Runtime.InteropServices;
 using NeoCore.Interop.Attributes;
-using NeoCore.Interop.Enums;
+using NeoCore.Interop.Structures.Raw.Enums;
 using NeoCore.Memory;
 
 #endregion

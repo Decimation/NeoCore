@@ -1,6 +1,6 @@
 using System;
-using NeoCore.Interop.Enums;
 using NeoCore.Interop.Structures.Raw;
+using NeoCore.Interop.Structures.Raw.Enums;
 
 namespace NeoCore.Interop.Structures
 {

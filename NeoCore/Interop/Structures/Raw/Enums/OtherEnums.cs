@@ -1,6 +1,6 @@
 using System;
 
-namespace NeoCore.Interop.Enums
+namespace NeoCore.Interop.Structures.Raw.Enums
 {
 	[Flags]
 	public enum ProcessAccess : uint
