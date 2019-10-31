@@ -1,7 +1,4 @@
 namespace NeoCore.Interop
 {
-	public static partial class Functions
-	{
-		
-	}
+	public static partial class Functions { }
 }

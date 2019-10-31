@@ -16,7 +16,7 @@ namespace NeoCore.Utilities
 
 			return true;
 		}
-		
+
 		internal static FileInfo GetRuntimeFile(string fileName)
 		{
 			string path = RuntimeEnvironment.GetRuntimeDirectory() + fileName;

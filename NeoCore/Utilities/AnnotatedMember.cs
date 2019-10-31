@@ -18,13 +18,13 @@ namespace NeoCore.Utilities
 		/// Attribute decorating <see cref="Member"/>
 		/// </summary>
 		public TAttr Attribute { get; }
-		
+
 		public bool IsNull { get; }
 
 		public AnnotatedMember(MemberInfo memberInfo, TAttr attribute)
 		{
 			(Member, Attribute) = (memberInfo, attribute);
-			IsNull = Attribute == null && Member == null;
+			IsNull              = Attribute == null && Member == null;
 		}
 	}
 }

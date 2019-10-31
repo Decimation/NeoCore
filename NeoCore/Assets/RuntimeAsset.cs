@@ -36,7 +36,7 @@ namespace NeoCore.Assets
 			Module      = Modules.GetModule(dllFile.Name);
 			Imports     = new ModuleImport(SymbolsFile, Module);
 		}
-		
+
 		public override string ToString()
 		{
 			var sb = new StringBuilder();

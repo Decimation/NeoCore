@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 
 namespace NeoCore.Utilities.Extensions
@@ -77,7 +78,7 @@ namespace NeoCore.Utilities.Extensions
 		}
 
 		#endregion
-		
+
 		public static bool ImplementsGenericInterface(this Type type, Type interfaceType)
 		{
 			return type.GetInterfaces().Any(x => x.IsGenericType

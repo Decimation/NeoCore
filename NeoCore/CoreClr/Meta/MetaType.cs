@@ -10,7 +10,6 @@ using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
-using TypeInfo = NeoCore.CoreClr.Components.TypeInfo;
 
 // ReSharper disable SuggestBaseTypeForParameter
 
@@ -45,7 +44,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public bool IsTypeDesc {
 			get {
-				var th = Value.ToInt64();
+				long th = Value.ToInt64();
 
 				return (th & 2) != 0;
 			}
@@ -76,9 +75,9 @@ namespace NeoCore.CoreClr.Meta
 
 		public int BaseSize => Value.Reference.BaseSize;
 
-		public GenericInfo GenericFlags => Value.Reference.GenericFlags;
+		public GenericsFlags GenericFlags => Value.Reference.GenericsFlags;
 
-		public OptionalSlots SlotFlags => Value.Reference.SlotFlags;
+		public OptionalSlotsFlags SlotFlags => Value.Reference.SlotsFlags;
 
 		public override int Token => ClrSigs.TokenFromRid(Value.Reference.RawToken, CorTokenType.TypeDef);
 
@@ -92,7 +91,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public Pointer<byte> WriteableData => Value.Reference.WriteableData;
 
-		public TypeInfo TypeFlags => Value.Reference.TypeFlags;
+		public TypeFlags TypeFlags => Value.Reference.TypeFlags;
 
 		private Pointer<EEClass> EEClass => Value.Reference.EEClass;
 
@@ -104,7 +103,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public byte ArrayRank => EEClass.Reference.ArrayRank;
 
-		public CorElementType ArrayElementType => EEClass.Reference.ArrayElementType;
+//		public CorElementType ArrayElementType => EEClass.Reference.ArrayElementType;
 
 		public Pointer<byte> InterfaceMap => Value.Reference.InterfaceMap;
 
@@ -207,15 +206,15 @@ namespace NeoCore.CoreClr.Meta
 
 		public bool IsBlittable => HasLayout && LayoutInfo.Flags.HasFlagFast(LayoutFlags.Blittable);
 
-		public bool HasComponentSize => TypeFlags.HasFlagFast(TypeInfo.HasComponentSize);
+		public bool HasComponentSize => TypeFlags.HasFlagFast(TypeFlags.HasComponentSize);
 
-		public bool IsArray => TypeFlags.HasFlagFast(TypeInfo.Array);
+		public bool IsArray => TypeFlags.HasFlagFast(TypeFlags.Array);
 
 		public bool IsStringOrArray => HasComponentSize;
 
 		public bool IsString => HasComponentSize && !IsArray;
 
-		public bool ContainsPointers => TypeFlags.HasFlagFast(TypeInfo.ContainsPointers);
+		public bool ContainsPointers => TypeFlags.HasFlagFast(TypeFlags.ContainsPointers);
 
 		public bool IsReferenceOrContainsReferences => !RuntimeType.IsValueType || ContainsPointers;
 

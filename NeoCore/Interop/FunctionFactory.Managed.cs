@@ -43,7 +43,7 @@ namespace NeoCore.Interop
 
 				Restore(mi);
 
-				return Functions.Native.Call<bool>((void*) Imports[nameof(SetEntryPoint)], 
+				return Functions.Native.Call<bool>((void*) Imports[nameof(SetEntryPoint)],
 				                                   mi.MethodHandle.Value.ToPointer(), ptr.ToPointer());
 			}
 		}

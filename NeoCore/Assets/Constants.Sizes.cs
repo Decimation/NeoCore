@@ -8,7 +8,7 @@ namespace NeoCore.Assets
 		public static unsafe class Sizes
 		{
 			// https://github.com/dotnet/coreclr/blob/master/src/vm/object.h
-			
+
 			/// <summary>
 			/// <list type="bullet">
 			///         <item>

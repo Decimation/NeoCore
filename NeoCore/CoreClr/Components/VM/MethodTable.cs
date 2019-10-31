@@ -24,11 +24,11 @@ namespace NeoCore.CoreClr.Components.VM
 
 		internal short ComponentSize { get; }
 
-		internal GenericInfo GenericFlags { get; }
+		internal GenericsFlags GenericsFlags { get; }
 
 		internal int BaseSize { get; }
 
-		internal OptionalSlots SlotFlags { get; }
+		internal OptionalSlotsFlags SlotsFlags { get; }
 
 		internal short RawToken { get; }
 
@@ -42,10 +42,10 @@ namespace NeoCore.CoreClr.Components.VM
 
 		internal void* WriteableData { get; }
 
-		internal TypeInfo TypeFlags {
+		internal TypeFlags TypeFlags {
 			get {
 				fixed (MethodTable* ptr = &this) {
-					return (TypeInfo) (*(int*) ptr);
+					return (TypeFlags) (*(int*) ptr);
 				}
 			}
 		}

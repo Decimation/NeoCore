@@ -54,7 +54,7 @@ namespace NeoCore.CoreClr.Components.Support
 
 			FileSystem.TryGetRuntimeFile(filenameStub + DLL_EXT, out m_libraryFile);
 			FileSystem.TryGetRuntimeFile(filenameStub + PDB_EXT, out m_symbolFile);
-			
+
 			IsValid = (m_symbolFile != null && m_symbolFile.Exists)
 			          && (m_libraryFile != null && m_libraryFile.Exists)
 			          && filenameStub != null;

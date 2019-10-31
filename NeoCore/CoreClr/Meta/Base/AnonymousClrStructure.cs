@@ -38,7 +38,7 @@ namespace NeoCore.CoreClr.Meta.Base
 		protected AnonymousClrStructure(Pointer<TClr> ptr)
 		{
 			Value = ptr;
-			
+
 			LoadSources();
 		}
 
@@ -58,8 +58,6 @@ namespace NeoCore.CoreClr.Meta.Base
 			if (AdditionalSources != null && AdditionalSources.Length > 0) {
 				ImportManager.Value.LoadAll(AdditionalSources, Resources.Clr.Imports);
 			}
-
-			
 		}
 
 

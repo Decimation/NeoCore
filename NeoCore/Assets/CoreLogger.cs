@@ -10,6 +10,7 @@ using Serilog.Context;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Sinks.SystemConsole.Themes;
+
 // ReSharper disable MemberCanBeMadeStatic.Global
 
 namespace NeoCore.Assets
@@ -20,7 +21,7 @@ namespace NeoCore.Assets
 	internal sealed class CoreLogger : Releasable
 	{
 		// todo: remove Serilog from Release build
-		
+
 		#region Logger
 
 		private const string CONTEXT_PROP = "Context";
@@ -40,13 +41,13 @@ namespace NeoCore.Assets
 
 		#endregion
 
-		
+
 		protected override string Id => nameof(CoreLogger);
 
 		#region Singleton
 
 		internal static CoreLogger Value { get; private set; } = new CoreLogger();
-		
+
 		private CoreLogger()
 		{
 #if DEBUG
@@ -60,7 +61,7 @@ namespace NeoCore.Assets
 			     .MinimumLevel.ControlledBy(levelSwitch)
 			     .WriteTo.Console(outputTemplate: OUTPUT_TEMPLATE_ALT_12_HR, theme: SystemConsoleTheme.Colored)
 			     .CreateLogger();
-			
+
 #else
 //			SuppressLogger();
 #endif
@@ -73,7 +74,7 @@ namespace NeoCore.Assets
 		#region Serilog logger extensions
 
 #if DEBUG
-		
+
 		[Conditional(Constants.COND_DEBUG)]
 		internal void SuppressLogger()
 		{
@@ -93,7 +94,6 @@ namespace NeoCore.Assets
 			}
 		}
 
-		
 
 		/// <summary>
 		/// Write a log event with the Debug level, associated exception, and context property.
@@ -174,7 +174,7 @@ namespace NeoCore.Assets
 		}
 
 		#endregion
-		
+
 		public override void Setup()
 		{
 			Console.OutputEncoding = Encoding.Unicode;
@@ -192,7 +192,7 @@ namespace NeoCore.Assets
 			if (Log is Logger logger) {
 				logger.Dispose();
 			}
-			
+
 
 			Log = null;
 #endif

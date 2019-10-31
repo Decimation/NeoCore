@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -17,12 +18,14 @@ using NeoCore.CoreClr.Meta;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
+using NeoCore.Interop.Structures.Raw.Enums;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
+using Serilog.Core;
 
 #endregion
 
@@ -32,24 +35,24 @@ namespace Test
 	{
 		public struct BlittableStruct
 		{
-			public int IntField;
-
-			public void Hello() { }
+			public        int  IntField;
+			public static int  StaticIntField = 1;
+			public        void Hello() { }
 		}
+
 
 		private static void Main(string[] args)
 		{
-			
-			var s = new PEHeaderReader(Resources.Clr.LibraryFile.FullName);
+			string s = "foo";
+			var   t  = Runtime.ReadTypeHandle(s);
+			Console.WriteLine(t.NativeSize);
 
-			foreach (var header in s.ImageSectionHeaders) {
-				Console.WriteLine(header.SectionName);
-			}
-
-			Console.WriteLine(s.TimeStamp);
+			bool b = true;
+			var t2 = Runtime.ReadTypeHandle(b);
+			Console.WriteLine(sizeof(bool));
+			Console.WriteLine(t2.NativeSize);
+			Console.WriteLine(Marshal.SizeOf<bool>());
 			
-			var bs = new BlittableStruct();
-			bs.Hello();
 		}
 	}
 }

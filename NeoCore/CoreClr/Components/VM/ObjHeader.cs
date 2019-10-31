@@ -12,7 +12,6 @@ namespace NeoCore.CoreClr.Components.VM
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct ObjHeader : IClrStructure
 	{
-		
 		// https://github.com/dotnet/coreclr/blob/master/src/gc/env/gcenv.object.h
 
 		private IntPtr m_value;
@@ -41,7 +40,7 @@ namespace NeoCore.CoreClr.Components.VM
 				return (SyncBlockFlags) this[i];
 			}
 		}
-		
+
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

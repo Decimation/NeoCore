@@ -10,9 +10,9 @@ namespace NeoCore.Memory.Pointers
 		// https://github.com/dotnet/coreclr/blob/master/src/inc/fixuppointer.h
 
 		public ulong Value { get; }
-		
+
 		public T* NativeValue => (T*) Value;
-		
+
 		/// <summary>
 		/// Returns value of the encoded pointer. Assumes that the pointer is not NULL.
 		/// </summary>
@@ -38,13 +38,12 @@ namespace NeoCore.Memory.Pointers
 			return (Pointer<T>) addr;
 		}
 
-		
 
 		public static explicit operator void*(RelativeFixupPointer<T> p)
 		{
-			return (void*)p.Value;
+			return (void*) p.Value;
 		}
-		
+
 		public override string ToString()
 		{
 			return String.Format("{0:X} d", Value);

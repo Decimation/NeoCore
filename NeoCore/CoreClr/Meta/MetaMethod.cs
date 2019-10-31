@@ -8,7 +8,7 @@ using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
-using ParameterInfo = NeoCore.CoreClr.Components.ParameterInfo;
+
 // ReSharper disable SuggestBaseTypeForParameter
 
 // ReSharper disable InconsistentNaming
@@ -49,7 +49,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public bool HasILHeader => IsIL && !IsUnboxingStub && RVA > default(long);
 
-		private bool IsUnboxingStub => Code.HasFlagFast(CodeInfo.IsUnboxingStub);
+		private bool IsUnboxingStub => Code.HasFlagFast(CodeFlags.IsUnboxingStub);
 
 		public bool IsIL => MethodClassification.IL == Classification ||
 		                    MethodClassification.Instantiated == Classification;
@@ -60,8 +60,8 @@ namespace NeoCore.CoreClr.Meta
 
 		public MethodClassification Classification => Value.Reference.Classification;
 		public MethodProperties     Properties     => Value.Reference.Properties;
-		public CodeInfo             Code           => Value.Reference.Code;
-		public ParameterInfo        ParameterTypes => Value.Reference.Flags3AndTokenRemainder;
+		public CodeFlags             Code           => Value.Reference.Code;
+		public ParamFlags        ParameterTypes => Value.Reference.Flags3AndTokenRemainder;
 		public MethodAttributes     Attributes     => MethodInfo.Attributes;
 
 		#endregion

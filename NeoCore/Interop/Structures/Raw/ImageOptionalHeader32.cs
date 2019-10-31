@@ -64,7 +64,7 @@ namespace NeoCore.Interop.Structures.Raw
 		public uint SizeOfHeapReserve;
 
 		public uint SizeOfHeapCommit;
-		
+
 		public uint LoaderFlags;
 
 		public uint NumberOfRvaAndSizes;

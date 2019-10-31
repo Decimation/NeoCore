@@ -10,7 +10,7 @@ namespace NeoCore.Assets
 		/// The framework type.
 		/// </summary>
 		public ClrFramework Framework { get; }
-		
+
 		/// <summary>
 		///     The <see cref="System.Version" /> of this asset
 		/// </summary>
@@ -26,10 +26,10 @@ namespace NeoCore.Assets
 
 			// .NET Core
 			// symchk "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\3.0.0\coreclr.dll" /s SRV*C:\Users\Deci\Desktop\clr.pdb*http://msdl.microsoft.com/download/symbols
-			
+
 			// Version = new Version(4, 0, 30319, 42000);
 
-			Version = null;
+			Version   = null;
 			Framework = framework;
 		}
 	}

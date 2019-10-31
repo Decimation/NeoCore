@@ -13,17 +13,17 @@ namespace NeoCore.Interop
 			static Clr()
 			{
 				ReadTypeFromHandle = Reflection.FindFunction<GetTypeFromHandleFunc>();
-				IsPinnable = Reflection.FindFunction<IsPinnableFunc>();
+				IsPinnable         = Reflection.FindFunction<IsPinnableFunc>();
 			}
-			
-			[ReflectionFunction(typeof(Marshal),"IsPinnable")]
+
+			[ReflectionFunction(typeof(Marshal), "IsPinnable")]
 			internal delegate bool IsPinnableFunc([CanBeNull] object handle);
-			
-			[ReflectionFunction(typeof(Type),"GetTypeFromHandleUnsafe")]
+
+			[ReflectionFunction(typeof(Type), "GetTypeFromHandleUnsafe")]
 			internal delegate Type GetTypeFromHandleFunc(IntPtr handle);
 
 			internal static GetTypeFromHandleFunc ReadTypeFromHandle { get; }
-			
+
 			internal static IsPinnableFunc IsPinnable { get; }
 		}
 	}

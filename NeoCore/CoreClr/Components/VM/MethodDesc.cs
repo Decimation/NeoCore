@@ -23,11 +23,11 @@ namespace NeoCore.CoreClr.Components.VM
 
 		#region Fields
 
-		internal ParameterInfo Flags3AndTokenRemainder { get; }
+		internal ParamFlags Flags3AndTokenRemainder { get; }
 
 		internal byte ChunkIndex { get; }
 
-		internal CodeInfo Code { get; }
+		internal CodeFlags Code { get; }
 
 		internal ushort SlotNumber { get; }
 
@@ -141,7 +141,7 @@ namespace NeoCore.CoreClr.Components.VM
 		internal Pointer<MethodTable> MethodTable => MethodDescChunk.Reference.MethodTable;
 
 		#endregion
-		
+
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

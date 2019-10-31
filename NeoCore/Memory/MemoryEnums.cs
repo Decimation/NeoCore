@@ -14,13 +14,13 @@ namespace NeoCore.Memory
 		/// <see cref="System.Runtime.InteropServices.Marshal.OffsetOf(Type,String)"/>
 		/// </summary>
 		Marshal,
-		
+
 		/// <summary>
 		/// <see cref="MetaField.Offset"/>
 		/// </summary>
 		Managed
 	}
-	
+
 	/// <summary>
 	///     Offset options for <see cref="Unsafe.AddressOfHeap{T}(T,OffsetOptions)" />
 	/// </summary>
@@ -65,7 +65,7 @@ namespace NeoCore.Memory
 		/// </summary>
 		None
 	}
-	
+
 	/// <summary>
 	/// Specifies how sizes are calculated
 	/// </summary>

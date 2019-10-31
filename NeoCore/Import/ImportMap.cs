@@ -18,7 +18,7 @@ namespace NeoCore.Import
 		internal void Add(string key, Pointer<byte> value) => m_imports.Add(key, value);
 
 		internal void Clear() => m_imports.Clear();
-		
+
 		public const string FIELD_NAME = "Imports";
 	}
 }

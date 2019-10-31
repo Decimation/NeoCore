@@ -99,18 +99,18 @@ namespace NeoCore.Import
 				if (isMethod && isCtor) {
 					CheckConstructorOptions(options);
 
-					return Format.Combine(enclosingNamespace, enclosingNamespace);
+					return Format.Combine(new []{enclosingNamespace, enclosingNamespace}, Format.SCOPE_RESOLUTION_OPERATOR);
 				}
 			}
 
 
 			if (!options.HasFlagFast(IdentifierOptions.IgnoreEnclosingNamespace)) {
-				resolvedId = Format.Combine(enclosingNamespace, resolvedId);
+				resolvedId = Format.Combine(new []{enclosingNamespace, resolvedId}, Format.SCOPE_RESOLUTION_OPERATOR);
 			}
 
 			if (!options.HasFlagFast(IdentifierOptions.IgnoreNamespace)) {
 				if (nameSpace != null) {
-					resolvedId = Format.Combine(nameSpace, resolvedId);
+					resolvedId = Format.Combine(new []{nameSpace, resolvedId}, Format.SCOPE_RESOLUTION_OPERATOR);
 				}
 			}
 
@@ -291,8 +291,6 @@ namespace NeoCore.Import
 			fieldAddr.WriteAll(memCpy);
 		}
 
-		
-
 		#endregion
 
 		/// <summary>
@@ -366,17 +364,17 @@ namespace NeoCore.Import
 			Pointer<byte> ptr       = ip.GetAddress(identifier);
 			var           options   = ifld.FieldOptions;
 			Pointer<byte> fieldAddr = field.GetValueAddress(ref value);
-			
+
 
 			if (ifld is ImportGlobalFieldAttribute) {
 				CheckGlobalField(field);
 			}
-			
+
 
 			object fieldValue;
 
 			CoreLogger.Value.WriteDebug(null, "Loading field {Id} with {Option}",
-			                        field.Name, options);
+			                            field.Name, options);
 
 			switch (options) {
 				case ImportFieldOptions.Proxy:
@@ -396,7 +394,7 @@ namespace NeoCore.Import
 				ptr.WriteAny(field.FieldType.RuntimeType, fieldValue);
 			}
 		}
-		
+
 		private static void LoadMethodComponent(ImportAttribute             attr,
 		                                        MethodInfo                  method,
 		                                        Pointer<byte>               addr,
@@ -459,7 +457,7 @@ namespace NeoCore.Import
 					case MemberTypes.Method:
 
 						FindOptimization(attr, mem);
-						
+
 						LoadMethodComponent(attr, (MethodInfo) mem, addr, importMaps);
 						break;
 					case MemberTypes.Field:

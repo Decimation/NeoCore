@@ -153,6 +153,30 @@ namespace NeoCore.CoreClr.Components
 		RequiresFullSlotNumber = 0x8000
 	}
 
+	/// <summary>
+	/// Additional type properties.
+	/// </summary>
+	[Flags]
+	public enum AuxiliaryProperties
+	{
+		None = 0,
+
+		Integer = 1,
+
+		Real = 1 << 1,
+
+		Struct = 1 << 2,
+
+		Pointer = 1 << 3,
+
+		Unmanaged = 1 << 4,
+
+		Enumerable = 1 << 5,
+
+		AnyPointer = 1 << 6,
+
+		Numeric = Integer & Real
+	}
 
 	[Flags]
 	public enum ChunkFlags : ushort
@@ -179,7 +203,7 @@ namespace NeoCore.CoreClr.Components
 	///     Describes <see cref="MethodDesc" /> JIT/entry point status
 	/// </summary>
 	[Flags]
-	public enum CodeInfo : byte
+	public enum CodeFlags : byte
 	{
 		/// <summary>
 		///     The method entry point is stable (either precode or actual code)
@@ -209,7 +233,7 @@ namespace NeoCore.CoreClr.Components
 	///     Describes <see cref="MethodDesc" /> parameters
 	/// </summary>
 	[Flags]
-	public enum ParameterInfo : ushort
+	public enum ParamFlags : ushort
 	{
 		TokenRemainderMask = 0x3FFF,
 
@@ -241,7 +265,7 @@ namespace NeoCore.CoreClr.Components
 	///     </remarks>
 	/// </summary>
 	[Flags]
-	public enum TypeInfo : uint
+	public enum TypeFlags : uint
 	{
 		Mask             = 0x000F0000,
 		Class            = 0x00000000,
@@ -354,11 +378,11 @@ namespace NeoCore.CoreClr.Components
 	/// <summary>
 	///     <remarks>
 	///         <para>Alias: flags 2</para>
-	///         <para>Use with <see cref="MethodTable.SlotFlags" /></para>
+	///         <para>Use with <see cref="MethodTable.SlotsFlags" /></para>
 	///     </remarks>
 	/// </summary>
 	[Flags]
-	public enum OptionalSlots : ushort
+	public enum OptionalSlotsFlags : ushort
 	{
 		MultipurposeSlotsMask    = 0x001F,
 		HasPerInstInfo           = 0x0001,
@@ -387,11 +411,11 @@ namespace NeoCore.CoreClr.Components
 	/// <summary>
 	///     <remarks>
 	///         <para>Alias: low flags</para>
-	///         <para>Use with <see cref="MethodTable.GenericFlags" /></para>
+	///         <para>Use with <see cref="MethodTable.GenericsFlags" /></para>
 	///     </remarks>
 	/// </summary>
 	[Flags]
-	public enum GenericInfo : ushort
+	public enum GenericsFlags : ushort
 	{
 		// We are overloading the low 2 bytes of m_dwFlags to be a component size for Strings
 		// and Arrays and some set of flags which we can be assured are of a specified state
@@ -822,41 +846,47 @@ namespace NeoCore.CoreClr.Components
 		MarshalingTypeStandard     = 0xc0000000
 	}
 
+	/// <summary>
+	/// Describes access modifiers for <see cref="FieldDesc.Access"/>
+	/// </summary>
 	public enum AccessModifiers
 	{
 		/// <summary>
-		///     <see cref="FieldInfo.IsPrivate" />
+		///     <remarks>Equals <see cref="FieldInfo.IsPrivate" /></remarks>
 		/// </summary>
 		Private = 2,
 
 		/// <summary>
-		///     <see cref="FieldInfo.IsFamilyAndAssembly" />
+		///     <remarks>Equals <see cref="FieldInfo.IsFamilyAndAssembly" /></remarks>
 		/// </summary>
 		PrivateProtected = 4,
 
 		/// <summary>
-		///     <see cref="FieldInfo.IsAssembly" />
+		///     <remarks>Equals <see cref="FieldInfo.IsAssembly" /></remarks>
 		/// </summary>
 		Internal = 6,
 
 		/// <summary>
-		///     <see cref="FieldInfo.IsFamily" />
+		///     <remarks>Equals <see cref="FieldInfo.IsFamily" /></remarks>
 		/// </summary>
 		Protected = 8,
 
 		/// <summary>
-		///     <see cref="FieldInfo.IsFamilyOrAssembly" />
+		///     <remarks>Equals <see cref="FieldInfo.IsFamilyOrAssembly" /></remarks>
 		/// </summary>
 		ProtectedInternal = 10,
 
 		/// <summary>
-		///     <see cref="FieldInfo.IsPublic" />
+		///     <remarks>Equals <see cref="FieldInfo.IsPublic" /></remarks>
 		/// </summary>
 		Public = 12
 	}
 
+	/// <summary>
+	/// Flags for <see cref="FieldDesc.UInt1"/>
+	/// </summary>
 	[Flags]
-	public enum FieldProperties
+	public enum FieldBitFlags
 	{
 		// <summary>
 		// <c>DWORD</c> #1

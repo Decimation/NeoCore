@@ -63,8 +63,7 @@ namespace NeoCore.Interop
 		/// Gets the header of the .NET assembly that called this function
 		/// </summary>
 		/// <returns></returns>
-		public static PEHeaderReader CallingAssemblyHeader
-		{
+		public static PEHeaderReader CallingAssemblyHeader {
 			get {
 				// Get the path to the calling assembly, which is the path to the
 				// DLL or EXE that we want the time of
@@ -79,8 +78,7 @@ namespace NeoCore.Interop
 		/// Gets the header of the .NET assembly that called this function
 		/// </summary>
 		/// <returns></returns>
-		public static PEHeaderReader AssemblyHeader
-		{
+		public static PEHeaderReader AssemblyHeader {
 			get {
 				// Get the path to the calling assembly, which is the path to the
 				// DLL or EXE that we want the time of
@@ -129,7 +127,7 @@ namespace NeoCore.Interop
 			get {
 				// Timestamp is a date offset from 1970
 				var date = DateTime.UnixEpoch;
-				
+
 
 				// Add in the number of seconds since 1970/1/1
 				date = date.AddSeconds(FileHeader.TimeDateStamp);
@@ -137,7 +135,7 @@ namespace NeoCore.Interop
 				// Adjust to local timezone
 				date += TimeZoneInfo.Local.GetUtcOffset(date);
 				//date += TimeZone.CurrentTimeZone.GetUtcOffset(date);
-				
+
 				return date;
 			}
 		}

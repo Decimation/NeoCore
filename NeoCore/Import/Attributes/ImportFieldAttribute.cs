@@ -12,7 +12,7 @@ namespace NeoCore.Import.Attributes
 	public class ImportFieldAttribute : ImportAttribute
 	{
 		internal const AttributeTargets FIELD_TARGETS = AttributeTargets.Field;
-		
+
 		/// <summary>
 		/// The <see cref="Type"/> to load this field as. If left unset, the field will be interpreted as
 		/// the target field's type.
@@ -34,7 +34,7 @@ namespace NeoCore.Import.Attributes
 
 		public ImportFieldAttribute(IdentifierOptions options) : base(options) { }
 
-		public ImportFieldAttribute(string id, IdentifierOptions options = IdentifierOptions.None) 
+		public ImportFieldAttribute(string id, IdentifierOptions options = IdentifierOptions.None)
 			: base(id, options) { }
 	}
 }

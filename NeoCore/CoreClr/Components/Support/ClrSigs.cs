@@ -90,7 +90,7 @@ namespace NeoCore.CoreClr.Components.Support
 			const uint TYPE_FROM_TOKEN = 0xFF000000;
 			return tk & TYPE_FROM_TOKEN;
 		}
-		
+
 		public static bool IsPrimitive(this CorElementType cet)
 		{
 			return cet >= CorElementType.Boolean && cet <= CorElementType.R8

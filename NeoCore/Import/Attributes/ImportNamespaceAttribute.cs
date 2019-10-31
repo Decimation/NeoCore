@@ -4,7 +4,6 @@ using NeoCore.Interop.Attributes;
 
 namespace NeoCore.Import.Attributes
 {
-	
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 	public sealed class ImportNamespaceAttribute : Attribute
 	{

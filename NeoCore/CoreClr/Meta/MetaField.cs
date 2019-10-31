@@ -9,6 +9,7 @@ using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
+
 // ReSharper disable SuggestBaseTypeForParameter
 
 // ReSharper disable InconsistentNaming
@@ -49,10 +50,11 @@ namespace NeoCore.CoreClr.Meta
 
 		public MetaType FieldType => FieldInfo.FieldType;
 
-		public override MetaType EnclosingType {
-			get { return Value.Reference.ApproxEnclosingMethodTable; }
-		}
+		public override MetaType EnclosingType => Value.Reference.ApproxEnclosingMethodTable;
 
+		/// <summary>
+		/// <remarks>Equals <see cref="System.Reflection.FieldInfo.MetadataToken"/></remarks>
+		/// </summary>
 		public override int Token => Value.Reference.Token;
 
 		public FieldAttributes Attributes => FieldInfo.Attributes;
@@ -61,11 +63,9 @@ namespace NeoCore.CoreClr.Meta
 
 		public bool IsPointer => Value.Reference.IsPointer;
 
-		public FieldProperties Properties => Value.Reference.Properties;
+		public FieldBitFlags BitFlags => Value.Reference.BitFlags;
 
-		public bool IsStatic => Properties.HasFlagFast(FieldProperties.Static);
-
-		public bool IsLiteral => FieldInfo.IsLiteral;
+		public bool IsStatic => BitFlags.HasFlagFast(FieldBitFlags.Static);
 
 		#endregion
 
@@ -73,6 +73,9 @@ namespace NeoCore.CoreClr.Meta
 
 		public int Size => Value.Reference.LoadSize();
 
+		/// <summary>
+		/// <remarks>Ensure the enclosing type is loaded!</remarks>
+		/// </summary>
 		public Pointer<byte> GetStaticAddress() => Value.Reference.GetCurrentStaticAddress();
 
 		#endregion
@@ -81,30 +84,21 @@ namespace NeoCore.CoreClr.Meta
 
 		protected override Type[] AdditionalSources => null;
 
-		public Pointer<byte> GetValueAddress<T>(ref T value)
-		{
-			return IsStatic ? GetStaticAddress() : GetAddress(ref value);
-		}
+		public Pointer<byte> GetValueAddress<T>(ref T value) => IsStatic ? GetStaticAddress() : GetAddress(ref value);
 
 		public Pointer<byte> GetAddress<T>(ref T value)
 		{
 			Guard.Assert(!IsStatic, nameof(IsStatic));
 			Guard.Assert(Offset != FIELD_OFFSET_NEW_ENC);
 
-			var data = Unsafe.AddressOfFields(ref value) + Offset;
+			Pointer<byte> data = Unsafe.AddressOfFields(ref value) + Offset;
 
 			return data;
 		}
 
-		public object GetValue(object value)
-		{
-			return FieldInfo.GetValue(value);
-		}
+		public object GetValue(object value) => FieldInfo.GetValue(value);
 
-		public T GetValue<T>(T value)
-		{
-			return GetAddress(ref value).Cast<T>().Read();
-		}
+		public T GetValue<T>(T value) => GetAddress(ref value).Cast<T>().Read();
 
 
 		#region Operators

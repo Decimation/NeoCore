@@ -41,7 +41,7 @@ namespace NeoCore.Import
 		public Pointer<byte>[] GetAddresses(string[] names)
 		{
 			SymbolManager.Value.CurrentImage = SymbolFile;
-			var offsets = SymbolManager.Value.GetSymOffsets(names);
+			long[] offsets = SymbolManager.Value.GetSymOffsets(names);
 
 			var rg = new Pointer<byte>[offsets.Length];
 

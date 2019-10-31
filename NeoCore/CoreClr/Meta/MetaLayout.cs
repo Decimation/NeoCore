@@ -24,7 +24,7 @@ namespace NeoCore.CoreClr.Meta
 		#endregion
 
 		protected override Type[] AdditionalSources => null;
-		
+
 		#region Accessors
 
 		public int NativeSize => Value.Reference.NativeSize;

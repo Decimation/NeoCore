@@ -103,7 +103,7 @@ namespace NeoCore.Interop.Structures.Raw.Enums
 		/// </summary>
 		VIRTUAL = 0x00001000,
 	}
-	
+
 	[Flags]
 	public enum SymbolOptions : uint
 	{
@@ -159,7 +159,7 @@ namespace NeoCore.Interop.Structures.Raw.Enums
 
 		UNDNAME = 0x00000002,
 	}
-	
+
 	public enum SymbolTag
 	{
 		Null,

@@ -23,9 +23,9 @@ namespace NeoCore.CoreClr.Components.VM
 		private void* Union1 { get; }
 
 		private MethodTable* AsMethodTable => (MethodTable*) Union1;
-		
+
 		private ulong AsTAddr => (ulong) Union1;
-		
+
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
 
@@ -39,7 +39,7 @@ namespace NeoCore.CoreClr.Components.VM
 		}
 
 //		internal bool IsTypeDesc => (AsTAddr & 2) != 0;
-		
+
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using System.Security;
+using Microsoft.VisualBasic;
 using NeoCore.CoreClr;
 using NeoCore.Interop.Structures;
 using NeoCore.Interop.Structures.Raw;
@@ -47,7 +48,6 @@ namespace NeoCore.Interop
 				                       fileSize, IntPtr.Zero, default);
 			}
 
-			
 
 			internal static Symbol GetSymbol(IntPtr hProc, string name)
 			{
@@ -56,12 +56,11 @@ namespace NeoCore.Interop
 
 				buffer->SizeOfStruct = (uint) SymbolInfo.SizeOf;
 				buffer->MaxNameLen   = SymbolInfo.MaxNameLength;
-				
-				if (SymFromName(hProc, name, (IntPtr) buffer)) {
-					return new Symbol(buffer);
-				}
 
-				throw new NativeException(String.Format("Symbol \"{0}\" not found", name));
+				Guard.Assert<NativeException>(SymFromName(hProc, name, (IntPtr) buffer),
+				                              "Symbol \"{0}\" not found", name);
+
+				return new Symbol(buffer);
 			}
 
 			#endregion
@@ -79,14 +78,14 @@ namespace NeoCore.Interop
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode, EntryPoint = nameof(SymCleanup))]
 			internal static extern bool SymCleanup(IntPtr hProcess);
 
-			
+
 			/// <param name="symInfo">SYMBOL_INFO</param>
 			internal delegate bool SymEnumSymbolsCallback(IntPtr symInfo, uint symbolSize, IntPtr pUserContext);
 
 			#endregion
 
 			#region Sym enum types
-			
+
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
 			private static extern bool SymEnumTypesByName(IntPtr                 hProcess,
 			                                              ulong                  modBase,
@@ -110,8 +109,8 @@ namespace NeoCore.Interop
 			/// <param name="pUserContext">A used-defined context can be passed here, if necessary</param>
 			[DllImport(DBGHELP_DLL, SetLastError = true, CharSet = CharSet.Unicode)]
 			private static extern bool SymEnumSymbols(IntPtr hProcess, ulong                  modBase,
-			                                           string mask,     SymEnumSymbolsCallback callback,
-			                                           IntPtr pUserContext);
+			                                          string mask,     SymEnumSymbolsCallback callback,
+			                                          IntPtr pUserContext);
 
 			#endregion
 

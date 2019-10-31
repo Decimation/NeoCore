@@ -38,7 +38,7 @@ namespace NeoCore.CoreClr
 				_ => throw new InvalidOperationException()
 			};
 		}
-		
+
 		internal static MetaType ReadTypeHandle<T>(T value)
 		{
 			// Value types do not have a MethodTable ptr, but they do have a TypeHandle.
@@ -61,15 +61,8 @@ namespace NeoCore.CoreClr
 
 		internal static ObjHeader ReadObjHeader<T>(T value) where T : class
 		{
-			var ptr = Unsafe.AddressOfHeap(value, OffsetOptions.Header).Cast<ObjHeader>();
+			Pointer<ObjHeader> ptr = Unsafe.AddressOfHeap(value, OffsetOptions.Header).Cast<ObjHeader>();
 			return ptr.Value;
 		}
-
-		internal static Pointer<TSub> ReadSubStructure<TSuper, TSub>(Pointer<TSuper> super) 
-			where TSub : INativeInheritance<TSuper>
-		{
-			var size = Unsafe.SizeOf<TSuper>();
-			return super.Add(size).Cast<TSub>();
-		} 
 	}
 }

@@ -3,6 +3,7 @@ using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
+using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
 namespace NeoCore.CoreClr.Components.VM
@@ -12,7 +13,6 @@ namespace NeoCore.CoreClr.Components.VM
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MethodDescChunk : IClrStructure
 	{
-		
 		/// <summary>
 		/// <see cref="RelativeFixupPointer{T}"/>
 		/// </summary>
@@ -42,10 +42,10 @@ namespace NeoCore.CoreClr.Components.VM
 				// for MDC: m_methodTable.GetValue(PTR_HOST_MEMBER_TADDR(MethodDescChunk, this, m_methodTable));
 
 				const int MT_FIELD_OFS = 0;
-				return ClrAccess.FieldOffset(MethodTableStub.NativeValue, MT_FIELD_OFS);
+				return Structures.FieldOffset(MethodTableStub.NativeValue, MT_FIELD_OFS);
 			}
 		}
-		
+
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

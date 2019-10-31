@@ -1,10 +1,13 @@
+using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
+using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Utilities;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 
@@ -17,7 +20,6 @@ namespace NeoCore.CoreClr.Components.VM.EE
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct EEClass : IClrStructure
 	{
-		
 		#region Fields
 
 		internal void* GuidInfo { get; }
@@ -41,25 +43,21 @@ namespace NeoCore.CoreClr.Components.VM.EE
 		///     <para><see cref="NativeSize" /></para>
 		///     <para><see cref="InterfaceType" /></para>
 		/// </summary>
-		private void* m_union1;
+		private void* Union1 { get; }
 
-		internal void* ObjectHandleDelegate => m_union1;
+		internal void* ObjectHandleDelegate => Union1;
 
 		internal uint NativeSize {
 			get {
-				fixed (EEClass* value = &this) {
-					Pointer<uint> ptr = &value->m_union1;
-					return ptr.Reference;
-				}
+				var ul = (ulong) Union1;
+				return (uint) ul;
 			}
 		}
 
 		internal CorInterfaceType InterfaceType {
 			get {
-				fixed (EEClass* value = &this) {
-					Pointer<int> ptr = &value->m_union1;
-					return (CorInterfaceType) ptr.Reference;
-				}
+				var ul = (ulong) Union1;
+				return (CorInterfaceType) (uint) ul;
 			}
 		}
 
@@ -87,27 +85,27 @@ namespace NeoCore.CoreClr.Components.VM.EE
 		internal Pointer<FieldDesc> FieldList {
 			get {
 				const int FD_LIST_FIELD_OFFSET = 24;
-				
-				return (FieldDesc*) ClrAccess.FieldOffsetAlt(ref this, FD_LIST_FIELD_OFFSET, FieldDescList);
+
+				return (FieldDesc*) Structures.FieldOffsetAlt(ref this, FD_LIST_FIELD_OFFSET, FieldDescList);
 			}
 		}
 
 		internal Pointer<ArrayClass> AsArrayClass {
 			get {
 				fixed (EEClass* value = &this) {
-					return Runtime.ReadSubStructure<EEClass, ArrayClass>(value);
+					return Structures.ReadSubStructure<EEClass, ArrayClass>(value);
 				}
 			}
 		}
 
 		internal CorElementType ArrayElementType => AsArrayClass.Reference.ElementType;
-		
+
 		internal byte ArrayRank => AsArrayClass.Reference.Rank;
-		
+
 		internal Pointer<EEClassLayoutInfo> LayoutInfo {
 			get {
 				fixed (EEClass* value = &this) {
-					return Runtime.ReadSubStructure<EEClass, LayoutEEClass>(value)
+					return Structures.ReadSubStructure<EEClass, LayoutEEClass>(value)
 					              .Cast<EEClassLayoutInfo>();
 				}
 			}
@@ -134,18 +132,18 @@ namespace NeoCore.CoreClr.Components.VM.EE
 
 		#region Packed fields
 
-		internal int NumInstanceFields  => GetPackableField(EEClassFieldId.NumInstanceFields);
-		
-		internal int NumStaticFields    => GetPackableField(EEClassFieldId.NumStaticFields);
-		
-		internal int NumMethods         => GetPackableField(EEClassFieldId.NumMethods);
-		
+		internal int NumInstanceFields => GetPackableField(EEClassFieldId.NumInstanceFields);
+
+		internal int NumStaticFields => GetPackableField(EEClassFieldId.NumStaticFields);
+
+		internal int NumMethods => GetPackableField(EEClassFieldId.NumMethods);
+
 		internal int NumNonVirtualSlots => GetPackableField(EEClassFieldId.NumNonVirtualSlots);
 
 		private int GetPackableField(EEClassFieldId eField)
 		{
-			var u = (uint) eField;
-			var pf = new ClrPackedFieldsReader(PackedFields,(int) EEClassFieldId.COUNT);
+			var u  = (uint) eField;
+			var pf = new ClrPackedFieldsReader(PackedFields, (int) EEClassFieldId.COUNT);
 			return (int) (FieldsArePacked ? pf.GetPackedField(u) : pf.GetUnpackedField(u));
 		}
 
@@ -157,21 +155,21 @@ namespace NeoCore.CoreClr.Components.VM.EE
 				}
 			}
 		}
-		
+
 		#endregion
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
-	
+
 	[StructLayout(LayoutKind.Explicit)]
 	internal struct LayoutEEClass : IClrStructure, INativeInheritance<EEClass>
 	{
 		// Note: This offset should be 72 or sizeof(EEClass)
 		// 		 but I'm keeping it at 0 to minimize size usage,
 		//		 so I'll just offset the pointer by 72 bytes
-		[FieldOffset(0)]
-		internal EEClassLayoutInfo m_LayoutInfo;
-		
+		[field: FieldOffset(0)]
+		internal EEClassLayoutInfo LayoutInfo { get; }
+
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}
 }

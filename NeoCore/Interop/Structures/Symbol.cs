@@ -57,7 +57,7 @@ namespace NeoCore.Interop.Structures
 
 		public override string ToString()
 		{
-			return String.Format("Name: {0} | Offset: {1:X} | Address: {2:X} | Tag: {3} | Flags: {4}", 
+			return String.Format("Name: {0} | Offset: {1:X} | Address: {2:X} | Tag: {3} | Flags: {4}",
 			                     Name, Offset, Address, Tag, Flags);
 		}
 	}

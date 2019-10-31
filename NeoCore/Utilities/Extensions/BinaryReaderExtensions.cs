@@ -10,7 +10,7 @@ namespace NeoCore.Utilities.Extensions
 		{
 			// Read in a byte array
 			byte[] bytes = reader.ReadBytes(Marshal.SizeOf<T>());
-			
+
 			return Mem.ReadStructure<T>(bytes);
 		}
 	}

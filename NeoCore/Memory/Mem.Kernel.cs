@@ -1,8 +1,10 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
+using NeoCore.CoreClr.Components.Support;
 using NeoCore.Interop;
 using NeoCore.Memory.Pointers;
+using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Memory
 {
@@ -31,7 +33,7 @@ namespace NeoCore.Memory
 
 			public static void WriteProcessMemory<T>(Process proc, Pointer<byte> ptrBase, T value)
 			{
-				int dwSize = Unsafe.SizeOf<T>();
+				int        dwSize = Unsafe.SizeOf<T>();
 				Pointer<T> ptr    = Unsafe.AddressOf(ref value);
 
 				WriteProcessMemory(proc, ptrBase.Address, ptr.Address, dwSize);
@@ -54,9 +56,7 @@ namespace NeoCore.Memory
 				                                                     ptrBuffer.Address, cb,
 				                                                     out int numberOfBytesRead));
 
-				if (numberOfBytesRead != cb || !ok) {
-					throw new Win32Exception();
-				}
+				Guard.AssertWin32(numberOfBytesRead == cb && ok);
 
 				// Close the handle
 				Native.Kernel32.CloseHandle(hProc);
@@ -76,15 +76,11 @@ namespace NeoCore.Memory
 
 			#region Current process
 
-			public static byte[] ReadCurrentProcessMemory(Pointer<byte> ptrBase, int cb)
-			{
-				return ReadProcessMemory(Process.GetCurrentProcess(), ptrBase, cb);
-			}
+			public static byte[] ReadCurrentProcessMemory(Pointer<byte> ptrBase, int cb) =>
+				ReadProcessMemory(Process.GetCurrentProcess(), ptrBase, cb);
 
-			public static void ReadCurrentProcessMemory(Pointer<byte> ptrBase, Pointer<byte> ptrBuffer, int cb)
-			{
+			public static void ReadCurrentProcessMemory(Pointer<byte> ptrBase, Pointer<byte> ptrBuffer, int cb) =>
 				ReadProcessMemory(Process.GetCurrentProcess(), ptrBase, ptrBuffer, cb);
-			}
 
 			#endregion
 
@@ -94,16 +90,12 @@ namespace NeoCore.Memory
 
 			#region Current process
 
-			public static void WriteCurrentProcessMemory(Pointer<byte> ptrBase, byte[] value)
-			{
+			public static void WriteCurrentProcessMemory(Pointer<byte> ptrBase, byte[] value) =>
 				WriteProcessMemory(Process.GetCurrentProcess(), ptrBase, value);
-			}
 
 			public static void WriteCurrentProcessMemory(Pointer<byte> ptrBase, Pointer<byte> ptrBuffer,
-			                                             int           dwSize)
-			{
+			                                             int           dwSize) =>
 				WriteProcessMemory(Process.GetCurrentProcess(), ptrBase, ptrBuffer, dwSize);
-			}
 
 			#endregion
 
@@ -117,9 +109,7 @@ namespace NeoCore.Memory
 				                                                      dwSize, out int numberOfBytesWritten));
 
 
-				if (numberOfBytesWritten != dwSize || !ok) {
-					throw new Win32Exception();
-				}
+				Guard.AssertWin32(numberOfBytesWritten == dwSize && ok);
 
 
 				// Close the handle

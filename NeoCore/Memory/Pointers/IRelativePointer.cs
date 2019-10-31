@@ -4,9 +4,9 @@ namespace NeoCore.Memory.Pointers
 	{
 		// => (T*) Value;
 		T* NativeValue { get; }
-		
+
 		ulong Value { get; }
-		
+
 		Pointer<T> GetValue(ulong value);
 	}
 }

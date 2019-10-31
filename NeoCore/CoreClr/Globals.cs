@@ -23,7 +23,7 @@ namespace NeoCore.CoreClr
 			ImportManager.Value.Load(typeof(Globals), Resources.Clr.Imports);
 			GCHeap = new MetaHeap(g_pGCHeap);
 		}
-		
+
 		[ImportGlobalField(ImportFieldOptions.Fast)]
 		private static readonly Pointer<GCHeap> g_pGCHeap;
 

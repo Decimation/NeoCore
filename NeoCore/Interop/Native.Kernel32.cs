@@ -2,7 +2,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using NeoCore.Interop.Structures;
 using NeoCore.Interop.Structures.Raw;
 using NeoCore.Interop.Structures.Raw.Enums;
 using NeoCore.Memory;
@@ -24,6 +23,24 @@ namespace NeoCore.Interop
 
 			#region Abstraction
 
+			internal static bool EnableConsoleProcessing()
+			{
+				var iStdOut = GetStdHandle(HandleOption.STD_OUTPUT_HANDLE);
+
+				if (!GetConsoleMode(iStdOut, out var outConsoleMode)) {
+					return false;
+				}
+
+				outConsoleMode |= OutputMode.ENABLE_VIRTUAL_TERMINAL_PROCESSING |
+				                  OutputMode.DISABLE_NEWLINE_AUTO_RETURN;
+
+				if (!SetConsoleMode(iStdOut, outConsoleMode)) {
+					return false;
+				}
+
+				return true;
+			}
+
 			#region File
 
 			private static IntPtr CreateFile(string   fileName, FileAccess     access, FileShare share,
@@ -37,7 +54,7 @@ namespace NeoCore.Interop
 			{
 				var hFile = CreateFile(pFileName, FileAccess.Read, FileShare.Read, FileMode.Open, 0);
 
-				fileSize = (ulong) GetFileSize(hFile, IntPtr.Zero);
+				fileSize = GetFileSize(hFile, IntPtr.Zero);
 
 				CloseHandle(hFile);
 			}
@@ -101,6 +118,19 @@ namespace NeoCore.Interop
 
 			[DllImport(KERNEL32_DLL, SetLastError = true)]
 			internal static extern IntPtr GetCurrentProcess();
+
+			#region Console
+
+			[DllImport(KERNEL32_DLL)]
+			internal static extern bool GetConsoleMode(IntPtr hConsoleHandle, out OutputMode lpMode);
+
+			[DllImport(KERNEL32_DLL)]
+			internal static extern bool SetConsoleMode(IntPtr hConsoleHandle, OutputMode dwMode);
+
+			[DllImport(KERNEL32_DLL, SetLastError = true)]
+			internal static extern IntPtr GetStdHandle(HandleOption nStdHandle);
+
+			#endregion
 
 			#region File
 

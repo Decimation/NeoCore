@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
+using NeoCore.CoreClr.Components.Support;
 using NeoCore.Interop;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
@@ -60,7 +61,7 @@ namespace NeoCore.Memory
 
 			byte* handle = stackalloc byte[bytes.Length];
 			Marshal.Copy(bytes, 0, (IntPtr) handle, bytes.Length);
-			
+
 			var value = (T) Marshal.PtrToStructure((IntPtr) handle, typeof(T));
 
 			return value;
@@ -84,26 +85,6 @@ namespace NeoCore.Memory
 			}
 
 			value = default;
-		}
-
-		public static int OffsetOf<T>(string name, OffsetOfType type, bool isProperty = false) =>
-			OffsetOf(typeof(T), name, type, isProperty);
-
-		public static int OffsetOf(Type t, string name, OffsetOfType type, bool isProperty = false)
-		{
-			if (isProperty) {
-				name = Format.GetBackingFieldName(name);
-			}
-
-			switch (type) {
-				case OffsetOfType.Marshal:
-					return (int) Marshal.OffsetOf(t, name);
-				case OffsetOfType.Managed:
-					var mt = t.AsMetaType();
-					return mt[name].Offset;
-				default:
-					throw new ArgumentOutOfRangeException(nameof(type), type, null);
-			}
 		}
 	}
 }

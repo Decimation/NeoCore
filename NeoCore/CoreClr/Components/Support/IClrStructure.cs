@@ -12,7 +12,7 @@ namespace NeoCore.CoreClr.Components.Support
 		/// </summary>
 		ClrStructureType Type { get; }
 	}
-	
+
 	/// <summary>
 	/// Designates the type of CLR structure.
 	/// </summary>
@@ -22,12 +22,12 @@ namespace NeoCore.CoreClr.Components.Support
 		/// The structure contains metadata.
 		/// </summary>
 		Metadata,
-		
+
 		/// <summary>
 		/// The structure deals with memory management (e.g. GC).
 		/// </summary>
 		Memory,
-		
+
 		/// <summary>
 		/// The structure is a utility/helper tool.
 		/// </summary>

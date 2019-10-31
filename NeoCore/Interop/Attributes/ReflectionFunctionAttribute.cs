@@ -6,18 +6,15 @@ namespace NeoCore.Interop.Attributes
 	public sealed class ReflectionFunctionAttribute : Attribute
 	{
 		public Type DeclaringType { get; set; }
-		
+
 		public string Name { get; set; }
-		
+
 		public ReflectionFunctionAttribute(Type t, string name)
 		{
 			DeclaringType = t;
-			Name = name;
+			Name          = name;
 		}
 
-		public ReflectionFunctionAttribute()
-		{
-			
-		}
+		public ReflectionFunctionAttribute() { }
 	}
 }

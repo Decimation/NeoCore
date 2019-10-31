@@ -4,8 +4,5 @@ namespace NeoCore.CoreClr.Components.Support
 	/// Specifies implicit native inheritance.
 	/// </summary>
 	/// <typeparam name="TSuper">Base structure</typeparam>
-	public interface INativeInheritance<TSuper>
-	{
-		
-	}
+	public interface INativeInheritance<TSuper> { }
 }

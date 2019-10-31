@@ -5,8 +5,5 @@ namespace NeoCore.Interop.Attributes
 {
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct)]
 	[MeansImplicitUse(ImplicitUseTargetFlags.WithMembers)]
-	public class NativeStructureAttribute : NativeAttribute
-	{
-		
-	}
+	public class NativeStructureAttribute : NativeAttribute { }
 }

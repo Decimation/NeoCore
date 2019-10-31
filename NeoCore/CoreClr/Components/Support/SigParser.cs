@@ -9,7 +9,7 @@ namespace NeoCore.CoreClr.Components.Support
 		// https://github.com/microsoft/clrmd/blob/master/src/Microsoft.Diagnostics.Runtime/src/Common/ClrElementTypeExtensions.cs
 		// https://github.com/dotnet/coreclr/blob/master/src/inc/sigparser.h
 		// https://github.com/microsoft/clrmd/blob/master/src/Microsoft.Diagnostics.Runtime/src/Utilities/SigParser/SigParser.cs
-		
+
 		private byte[] _sig;
 		private int    _len;
 		private int    _offs;
@@ -43,7 +43,7 @@ namespace NeoCore.CoreClr.Components.Support
 		}
 
 		private SigParser Copy() => new SigParser(this);
-		
+
 		public bool IsNull() => _sig == null;
 
 		private void CopyFrom(SigParser rhs)
@@ -99,7 +99,7 @@ namespace NeoCore.CoreClr.Components.Support
 		private bool GetElemTypeSlow(out CorElementType etype)
 		{
 			var sigTemp = Copy();
-			
+
 			if (sigTemp.SkipCustomModifiers()) {
 				if (sigTemp.GetByte(out byte elemType)) {
 					etype = (CorElementType) elemType;
@@ -190,7 +190,7 @@ namespace NeoCore.CoreClr.Components.Support
 			if (!sigTemp.GetByte(out byte bElementType))
 				return false;
 
-			switch ((CorElementType)bElementType) {
+			switch ((CorElementType) bElementType) {
 				case CorElementType.I8:
 				case CorElementType.U8:
 				case CorElementType.R8:
@@ -566,9 +566,9 @@ namespace NeoCore.CoreClr.Components.Support
 
 		private static readonly int[] CorEncodeToken =
 		{
-			(int) CorTokenType.TypeDef, 
-			(int) CorTokenType.TypeRef, 
-			(int) CorTokenType.TypeSpec, 
+			(int) CorTokenType.TypeDef,
+			(int) CorTokenType.TypeRef,
+			(int) CorTokenType.TypeSpec,
 			(int) CorTokenType.BaseType,
 		};
 	}

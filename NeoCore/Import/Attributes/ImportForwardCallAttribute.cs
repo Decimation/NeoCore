@@ -14,7 +14,7 @@ namespace NeoCore.Import.Attributes
 	{
 		public ImportForwardCallAttribute(string nameSpace, string id, ImportCallOptions options)
 		{
-			Identifier  = Format.Combine(nameSpace, id);
+			Identifier  = Format.Combine(new []{nameSpace, id}, Format.SCOPE_RESOLUTION_OPERATOR);
 			Options     = IdentifierOptions.FullyQualified;
 			CallOptions = options;
 		}

@@ -45,12 +45,12 @@ namespace NeoCore.Interop
 				Guard.AssertNotNull(attr);
 				return FindFunction<TDelegate>(attr.DeclaringType, attr.Name);
 			}
-			
+
 			public static TDelegate FindFunction<TDelegate, TSource>(string name) where TDelegate : Delegate
 			{
 				return FindFunction<TDelegate>(typeof(TSource), name);
 			}
-			
+
 			public static TDelegate FindFunction<TDelegate>(Type type, string name) where TDelegate : Delegate
 			{
 				var method = type.GetAnyMethod(name);

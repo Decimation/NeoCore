@@ -26,7 +26,7 @@ namespace NeoCore.Import
 		{
 			components = type.GetAnnotated<ImportAttribute>();
 
-			return components!= null && components.Length > 0;
+			return components != null && components.Length > 0;
 		}
 
 		private static bool IsImportMapQualified(FieldInfo mapField)
@@ -56,16 +56,17 @@ namespace NeoCore.Import
 			Guard.AssertDebug(!m_typeImportMaps.ContainsKey(t));
 			//Guard.AssertDebug(mapField.GetValue(null) == null);
 		}
-		
+
 		[AssertionMethod]
 		private static void CheckAnnotations(MemberInfo                   member,
 		                                     bool                         nameSpace,
 		                                     out ImportNamespaceAttribute nameSpaceAttr)
 		{
 			var t = nameSpace ? member.DeclaringType : (Type) member;
-			
+
 			if (!IsAnnotated(t, out nameSpaceAttr)) {
-				string namespaceError = $"Type \"{t?.Name}\" must be decorated with \"{nameof(ImportNamespaceAttribute)}\"";
+				string namespaceError =
+					$"Type \"{t?.Name}\" must be decorated with \"{nameof(ImportNamespaceAttribute)}\"";
 				Guard.Fail(namespaceError);
 			}
 		}
@@ -125,8 +126,8 @@ namespace NeoCore.Import
 
 				if (warn) {
 					CoreLogger.Value.WriteWarning(null, "Use {Name} on member {Member} in {Type}",
-					                          nameof(ImportAccessorAttribute),
-					                          mem.Name, mem.DeclaringType?.Name);
+					                              nameof(ImportAccessorAttribute),
+					                              mem.Name, mem.DeclaringType?.Name);
 				}
 			}
 		}

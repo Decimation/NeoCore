@@ -99,9 +99,9 @@ namespace NeoCore.Memory.Pointers
 		#region Implicit / explicit conversions
 
 		public static explicit operator Pointer<T>(ulong ul) => new Pointer<T>((void*) ul);
-		
+
 		public static explicit operator IntPtr(Pointer<T> ptr) => ptr.Address;
-		
+
 		public static explicit operator void*(Pointer<T> ptr) => ptr.ToPointer();
 
 		public static explicit operator long(Pointer<T> ptr) => ptr.ToInt64();
@@ -297,7 +297,7 @@ namespace NeoCore.Memory.Pointers
 			for (int i = 0; i < elemCnt; i++)
 				this[i] = default;
 		}
-		
+
 		/// <summary>
 		///     Writes all elements of <paramref name="rg" /> to the current pointer.
 		/// </summary>
@@ -439,7 +439,7 @@ namespace NeoCore.Memory.Pointers
 
 		public override string ToString()
 		{
-			return Format.AsHex(m_value);
+			return Format.ToHexString(m_value);
 		}
 	}
 }

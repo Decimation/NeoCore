@@ -31,7 +31,7 @@ namespace NeoCore.Interop.Structures
 
 		public override string ToString()
 		{
-			return String.Format("Number: {0} | Name: {1} | Address: {2} | Size: {3} | Characteristics: {4}", 
+			return String.Format("Number: {0} | Name: {1} | Address: {2} | Size: {3} | Characteristics: {4}",
 			                     Number, Name, Address, Size, Characteristics);
 		}
 	}

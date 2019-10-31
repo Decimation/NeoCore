@@ -119,11 +119,11 @@ namespace NeoCore.Import
 			CoreLogger.Value.WriteVerbose(Id, "Loading image {Img}", m_pdb.Name);
 
 			UnloadModule();
-			
+
 			Guard.Assert(IsSetup);
 
 			Native.Kernel32.GetFileParams(img, out ulong baseAddr, out ulong fileSize);
-			
+
 			m_modBase = Native.DebugHelp.SymLoadModuleEx(m_proc, img, baseAddr, (uint) fileSize);
 
 			CheckModule();

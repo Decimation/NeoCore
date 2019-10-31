@@ -5,6 +5,7 @@ using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
+using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Extensions;
 
@@ -54,7 +55,7 @@ namespace NeoCore.CoreClr.Components.VM
 			get {
 				var rawToken = (int) (UInt1 & 0xFFFFFF);
 				// Check if this FieldDesc is using the packed mb layout
-				if (!Properties.HasFlagFast(FieldProperties.RequiresFullMBValue))
+				if (!BitFlags.HasFlagFast(FieldBitFlags.RequiresFullMBValue))
 					return ClrSigs.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, CorTokenType.FieldDef);
 
 				return ClrSigs.TokenFromRid(rawToken, CorTokenType.FieldDef);
@@ -69,7 +70,7 @@ namespace NeoCore.CoreClr.Components.VM
 
 		internal bool IsPointer => Element == CorElementType.Ptr;
 
-		internal FieldProperties Properties => (FieldProperties) UInt1;
+		internal FieldBitFlags BitFlags => (FieldBitFlags) UInt1;
 
 		#endregion
 
@@ -98,8 +99,8 @@ namespace NeoCore.CoreClr.Components.VM
 				// m_pMTOfEnclosingClass.GetValue(PTR_HOST_MEMBER_TADDR(FieldDesc, this, m_pMTOfEnclosingClass));
 
 				const int MT_FIELD_OFS = 0;
-				
-				return ClrAccess.FieldOffset(EnclosingMethodTableStub.NativeValue, MT_FIELD_OFS);
+
+				return Structures.FieldOffset(EnclosingMethodTableStub.NativeValue, MT_FIELD_OFS);
 			}
 		}
 
