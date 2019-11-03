@@ -8,11 +8,13 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
+using System.Threading;
 using NeoCore;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Components;
 using NeoCore.CoreClr.Components.Support;
+using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Import;
@@ -40,18 +42,9 @@ namespace Test
 			public        void Hello() { }
 		}
 
-
 		private static void Main(string[] args)
 		{
-			string s = "foo";
-			var   t  = Runtime.ReadTypeHandle(s);
-			Console.WriteLine(t.NativeSize);
-
-			bool b = true;
-			var t2 = Runtime.ReadTypeHandle(b);
-			Console.WriteLine(sizeof(bool));
-			Console.WriteLine(t2.NativeSize);
-			Console.WriteLine(Marshal.SizeOf<bool>());
+			
 			
 		}
 	}

@@ -26,7 +26,7 @@ namespace NeoCore.CoreClr.Components
 				}
 			}
 		}
-
+		
 		internal bool IsHeapPointer<T>(T value, bool smallHeapOnly = false)
 		{
 			return Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr) &&

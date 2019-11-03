@@ -336,7 +336,30 @@ namespace NeoCore.Interop
 				return IL.ReturnPointer();
 			}
 
+			/// <summary>
+			///     Calls a native function with the <c>calli</c> instruction.
+			/// </summary>
+			/// <param name="fn">Function address</param>
+			/// <param name="arg1">Argument #1</param>
+			/// <param name="arg2">Argument #2</param>
+			/// <param name="arg3">Argument #3</param>
+			[NativeFunction]
+			public static void* CallReturnPointer<TArg3>(void* fn, void* arg1, void* arg2, TArg3 arg3)
+			{
+				IL.Emit.Ldarg_1();                                          // Load arg "arg1"
+				IL.Emit.Ldarg_2();                                          // Load arg "arg2"
+				IL.Emit.Ldarg_3(); 											// Load arg "arg3"
+				IL.Emit.Ldarg_0();                                          // Load arg "fn"
+				IL.Emit.Conv_I();                                           // Convert arg "fn" to native
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,                  // Calling convention
+				                              new TypeRef(typeof(void*)),   // Return type
+				                              new TypeRef(typeof(void*)),   // Arg "arg1" type #1
+				                              new TypeRef(typeof(void*)), // Arg "arg2" type #2
+					                              new TypeRef(typeof(TArg3)))); // Arg "arg3" type #3
+				return IL.ReturnPointer();
+			}
 			#endregion
 		}
+		
 	}
 }

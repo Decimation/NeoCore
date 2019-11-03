@@ -39,7 +39,7 @@ namespace NeoCore.CoreClr
 			};
 		}
 
-		internal static MetaType ReadTypeHandle<T>(T value)
+		public static MetaType ReadTypeHandle<T>(T value)
 		{
 			// Value types do not have a MethodTable ptr, but they do have a TypeHandle.
 			if (Runtime.Info.IsStruct(value))
@@ -52,7 +52,7 @@ namespace NeoCore.CoreClr
 			return new MetaType(handle.MethodTable);
 		}
 
-		internal static MetaType ReadTypeHandle(Type t)
+		public static MetaType ReadTypeHandle(Type t)
 		{
 			var handle          = t.TypeHandle.Value;
 			var typeHandleValue = *(TypeHandle*) &handle;

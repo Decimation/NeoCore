@@ -95,7 +95,7 @@ namespace NeoCore.CoreClr.Meta
 
 		private Pointer<EEClass> EEClass => Value.Reference.EEClass;
 
-//		public MetaType Canon => Value.Reference.Canon;
+		public MetaType Canon => Value.Reference.CanonicalMethodTable;
 
 		public Pointer<byte> PerInstInfo => Value.Reference.PerInstInfo;
 

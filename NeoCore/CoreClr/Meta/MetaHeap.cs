@@ -14,14 +14,14 @@ namespace NeoCore.CoreClr.Meta
 	///         <item><description>CLR structure: <see cref="GCHeap"/></description></item>
 	///     </list>
 	/// </summary>
-	public sealed class MetaHeap : AnonymousClrStructure<GCHeap>
+	public sealed unsafe class MetaHeap : AnonymousClrStructure<GCHeap>
 	{
 		internal MetaHeap(Pointer<GCHeap> ptr) : base(ptr) { }
 
 		protected override Type[] AdditionalSources => null;
 
 		public int GCCount => Value.Reference.GCCount;
-
+		
 		public bool IsHeapPointer<T>(T v, bool smallHeapOnly = false)
 		{
 			return Value.Reference.IsHeapPointer(v, smallHeapOnly);

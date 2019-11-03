@@ -55,12 +55,20 @@ namespace NeoCore.CoreClr.Components.VM
 		/// <summary>
 		///     <para>Union 1</para>
 		///     <para><see cref="EEClass" /></para>
-		///     <para><see cref="Canon" /></para>
+		///     <para><see cref="CanonicalMethodTable" /></para>
 		/// </summary>
 		private void* Union1 { get; }
 
-		[Obsolete]
-		internal Pointer<MethodTable> Canon => (MethodTable*) Union1;
+
+		internal Pointer<MethodTable> CanonicalMethodTable {
+			[ImportAccessor]
+			get {
+				fixed (MethodTable* ptr = &this) {
+					return Functions.Native.CallReturnPointer(Imports[nameof(CanonicalMethodTable)].ToPointer(),
+					                                          ptr);
+				}
+			}
+		}
 
 		#endregion
 
@@ -104,7 +112,8 @@ namespace NeoCore.CoreClr.Components.VM
 		internal UnionType UnionType {
 			get {
 				const long UNION_MASK = 3;
-				long       l          = (long) Union1;
+
+				long l = (long) Union1;
 				return (UnionType) (l & UNION_MASK);
 			}
 		}
