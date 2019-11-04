@@ -58,7 +58,7 @@ namespace NeoCore.CoreClr.Components.VM
 		internal void Reset()
 		{
 			fixed (MethodDesc* value = &this) {
-				Functions.Native.CallVoid((void*) Imports[nameof(Reset)], value);
+				Imports.CallVoid<ulong>(nameof(Reset), (ulong) value);
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace NeoCore.CoreClr.Components.VM
 		internal bool IsPointingToNativeCode()
 		{
 			fixed (MethodDesc* value = &this) {
-				return Functions.Native.Call<bool>((void*) Imports[nameof(IsPointingToNativeCode)], value);
+				return Imports.Call<bool, ulong>(nameof(IsPointingToNativeCode), (ulong) value);
 			}
 		}
 
@@ -75,7 +75,7 @@ namespace NeoCore.CoreClr.Components.VM
 			[ImportAccessor]
 			get {
 				fixed (MethodDesc* value = &this) {
-					return Functions.Native.CallReturnPointer((void*) Imports[nameof(NativeCode)], value);
+					return Imports.CallReturnPointer(nameof(NativeCode), (ulong)value);
 				}
 			}
 		}
@@ -84,8 +84,8 @@ namespace NeoCore.CoreClr.Components.VM
 		internal bool SetNativeCodeInterlocked(long p)
 		{
 			fixed (MethodDesc* value = &this) {
-				return Functions.Native.Call<bool>((void*) Imports[nameof(SetNativeCodeInterlocked)],
-				                                   value, (void*) p);
+				return Imports.Call<bool, ulong, ulong>(nameof(SetNativeCodeInterlocked), 
+				                                        (ulong) value, (ulong)p);
 			}
 		}
 
@@ -93,7 +93,7 @@ namespace NeoCore.CoreClr.Components.VM
 			[ImportCall("GetMemberDef", ImportCallOptions.Map)]
 			get {
 				fixed (MethodDesc* value = &this) {
-					return Functions.Native.Call<int>((void*) Imports[nameof(Token)], value);
+					return Imports.Call<int, ulong>(nameof(Token), (ulong) value);
 				}
 			}
 		}
@@ -104,7 +104,7 @@ namespace NeoCore.CoreClr.Components.VM
 		internal void* GetILHeader(int fAllowOverrides)
 		{
 			fixed (MethodDesc* value = &this) {
-				return Functions.Native.CallReturnPointer((void*) Imports[nameof(GetILHeader)], value, fAllowOverrides);
+				return Imports.CallReturnPointer(nameof(GetILHeader), (ulong) value, fAllowOverrides);
 			}
 		}
 
@@ -113,7 +113,7 @@ namespace NeoCore.CoreClr.Components.VM
 			[ImportAccessor]
 			get {
 				fixed (MethodDesc* value = &this) {
-					return Functions.Native.Call<long>((void*) Imports[nameof(RVA)], value);
+					return Imports.Call<long, ulong>(nameof(RVA), (ulong) value);
 				}
 			}
 		}

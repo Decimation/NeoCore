@@ -63,9 +63,8 @@ namespace NeoCore.CoreClr.Components.VM
 		internal Pointer<MethodTable> CanonicalMethodTable {
 			[ImportAccessor]
 			get {
-				fixed (MethodTable* ptr = &this) {
-					return Functions.Native.CallReturnPointer(Imports[nameof(CanonicalMethodTable)].ToPointer(),
-					                                          ptr);
+				fixed (MethodTable* value = &this) {
+					return Imports.CallReturnPointer(nameof(CanonicalMethodTable), (ulong) value);
 				}
 			}
 		}
@@ -121,8 +120,8 @@ namespace NeoCore.CoreClr.Components.VM
 		internal Pointer<EEClass> EEClass {
 			[ImportCall("GetClass_NoLogging")]
 			get {
-				fixed (MethodTable* ptr = &this) {
-					return Functions.Native.CallReturnPointer(Imports[nameof(EEClass)].ToPointer(), ptr);
+				fixed (MethodTable* value = &this) {
+					return Imports.CallReturnPointer(nameof(EEClass), (ulong) value);
 				}
 			}
 		}

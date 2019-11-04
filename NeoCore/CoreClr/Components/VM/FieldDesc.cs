@@ -80,7 +80,7 @@ namespace NeoCore.CoreClr.Components.VM
 		internal int LoadSize()
 		{
 			fixed (FieldDesc* value = &this) {
-				return Functions.Native.Call<int>((void*) Imports[nameof(LoadSize)], value);
+				return Imports.Call<int, ulong>(nameof(LoadSize), (ulong) value);
 			}
 		}
 
@@ -88,7 +88,7 @@ namespace NeoCore.CoreClr.Components.VM
 		internal void* GetCurrentStaticAddress()
 		{
 			fixed (FieldDesc* value = &this) {
-				return Functions.Native.CallReturnPointer((void*) Imports[nameof(GetCurrentStaticAddress)], value);
+				return Imports.CallReturnPointer(nameof(GetCurrentStaticAddress), (ulong) value);
 			}
 		}
 

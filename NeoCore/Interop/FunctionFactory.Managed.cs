@@ -24,7 +24,7 @@ namespace NeoCore.Interop
 			[ImportForwardCall(typeof(MethodDesc), nameof(MethodDesc.Reset), ImportCallOptions.Map)]
 			internal static void Restore(MethodInfo mi)
 			{
-				Functions.Native.CallVoid((void*) Imports[nameof(Restore)], Runtime.ResolveHandle(mi).ToPointer());
+				Imports.CallVoid(nameof(Restore), Runtime.ResolveHandle(mi).ToUInt64());
 			}
 
 			/// <summary>
@@ -43,8 +43,8 @@ namespace NeoCore.Interop
 
 				Restore(mi);
 
-				return Functions.Native.Call<bool>((void*) Imports[nameof(SetEntryPoint)],
-				                                   mi.MethodHandle.Value.ToPointer(), ptr.ToPointer());
+				return Imports.Call<bool,long,long>(nameof(SetEntryPoint),mi.MethodHandle.Value.ToInt64(), 
+				                                    ptr.ToInt64());
 			}
 		}
 	}

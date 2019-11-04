@@ -148,7 +148,7 @@ namespace NeoCore.CoreClr.Components.Support
 		private bool GetCallingConv(out int data)
 		{
 			if (GetCallingConvInfo(out data)) {
-				data &= (int) CorCallingConvention.MASK;
+				data &= (int) CorCallingConvention.Mask;
 				return true;
 			}
 
@@ -458,11 +458,11 @@ namespace NeoCore.CoreClr.Components.Support
 			if (!GetCallingConvInfo(out int uCallConv))
 				return false;
 
-			if (uCallConv == (int) CorCallingConvention.FIELD || uCallConv == (int) CorCallingConvention.LOCAL_SIG)
+			if (uCallConv == (int) CorCallingConvention.Field || uCallConv == (int) CorCallingConvention.LocalSig)
 				return false;
 
 			// Skip type parameter count
-			if ((uCallConv & (int) CorCallingConvention.GENERIC) == (int) CorCallingConvention.GENERIC)
+			if ((uCallConv & (int) CorCallingConvention.Generic) == (int) CorCallingConvention.Generic)
 				if (!GetData(out _))
 					return false;
 

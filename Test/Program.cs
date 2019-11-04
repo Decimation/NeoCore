@@ -35,13 +35,7 @@ namespace Test
 {
 	internal static unsafe class Program
 	{
-		public struct BlittableStruct
-		{
-			public        int  IntField;
-			public static int  StaticIntField = 1;
-			public        void Hello() { }
-		}
-
+		
 		private static void Main(string[] args)
 		{
 			

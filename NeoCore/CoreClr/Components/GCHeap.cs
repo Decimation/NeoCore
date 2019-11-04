@@ -22,11 +22,11 @@ namespace NeoCore.CoreClr.Components
 			[ImportCall("GetGcCount", ImportCallOptions.Map)]
 			get {
 				fixed (GCHeap* value = &this) {
-					return Functions.Native.Call<int>((void*) Imports[nameof(GCCount)], value);
+					return Imports.Call<int, ulong>(nameof(GCCount), (ulong) value);
 				}
 			}
 		}
-		
+
 		internal bool IsHeapPointer<T>(T value, bool smallHeapOnly = false)
 		{
 			return Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr) &&
@@ -37,8 +37,10 @@ namespace NeoCore.CoreClr.Components
 		internal bool IsHeapPointer(Pointer<byte> p, bool smallHeapOnly = false)
 		{
 			fixed (GCHeap* value = &this) {
-				return Functions.Native.Call<bool, bool>((void*) Imports[nameof(IsHeapPointer)],
-				                                         value, p.ToPointer(), smallHeapOnly);
+				return Imports.Call<bool, ulong, ulong, bool>(nameof(IsHeapPointer),
+				                                                       (ulong) value, 
+				                                                       p.ToUInt64(), 
+				                                                       smallHeapOnly);
 			}
 		}
 

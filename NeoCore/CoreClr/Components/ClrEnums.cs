@@ -183,7 +183,7 @@ namespace NeoCore.CoreClr.Components
 	{
 		/// <summary>
 		///     This must equal METHOD_TOKEN_RANGE_MASK calculated higher in this file.
-		///     These are seperate to allow the flags space available and used to be obvious here
+		///     These are separate to allow the flags space available and used to be obvious here
 		///     and for the logic that splits the token to be algorithmically generated based on the #define
 		/// </summary>
 		TokenRangeMask = 0x03FF,
@@ -475,8 +475,8 @@ namespace NeoCore.CoreClr.Components
 	///         Use with <see cref="UnionType" />
 	///     </remarks>
 	/// </summary>
-	[Flags]
-	public enum UnionType
+//	[Flags]
+	internal enum UnionType
 	{
 		/// <summary>
 		///     0 - pointer to <see cref="EEClass" />
@@ -502,7 +502,7 @@ namespace NeoCore.CoreClr.Components
 	}
 
 
-	[Flags]
+//	[Flags]
 	public enum CorInterfaceType
 	{
 		/// <summary>
@@ -688,28 +688,28 @@ namespace NeoCore.CoreClr.Components
 	{
 		// IMAGE_CEE_CS_CALLCONV
 
-		DEFAULT = 0x0,
+		Default = 0x0,
 
-		VARARG    = 0x5,
-		FIELD     = 0x6,
-		LOCAL_SIG = 0x7,
-		PROPERTY  = 0x8,
-		UNMGD     = 0x9,
+		Vararg    = 0x5,
+		Field     = 0x6,
+		LocalSig  = 0x7,
+		Property  = 0x8,
+		Unmanaged = 0x9,
 
 		/// <summary>
 		///     Generic method instantiation
 		/// </summary>
-		GENERICINST = 0xa,
+		GenericInst = 0xa,
 
 		/// <summary>
 		///     Used ONLY for 64bit vararg PInvoke calls
 		/// </summary>
-		NATIVEVARARG = 0xb,
+		NativeVararg = 0xb,
 
 		/// <summary>
 		///     First invalid calling convention
 		/// </summary>
-		MAX = 0xc,
+		Max = 0xc,
 
 
 		// The high bits of the calling convention convey additional info
@@ -717,22 +717,22 @@ namespace NeoCore.CoreClr.Components
 		/// <summary>
 		///     Calling convention is bottom 4 bits
 		/// </summary>
-		MASK = 0x0f,
+		Mask = 0x0f,
 
 		/// <summary>
 		///     Top bit indicates a 'this' parameter
 		/// </summary>
-		HASTHIS = 0x20,
+		HasThis = 0x20,
 
 		/// <summary>
 		///     This parameter is explicitly in the signature
 		/// </summary>
-		EXPLICITTHIS = 0x40,
+		ExplicitThis = 0x40,
 
 		/// <summary>
 		///     Generic method sig with explicit number of type arguments (precedes ordinary parameter count)
 		/// </summary>
-		GENERIC = 0x10
+		Generic = 0x10
 
 		// 0x80 is reserved for internal use
 	}

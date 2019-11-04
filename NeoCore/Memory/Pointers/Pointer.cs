@@ -106,7 +106,7 @@ namespace NeoCore.Memory.Pointers
 
 		public static explicit operator long(Pointer<T> ptr) => ptr.ToInt64();
 
-		public static explicit operator ulong(Pointer<T> ptr) => (ulong) ptr.ToInt64();
+		public static explicit operator ulong(Pointer<T> ptr) => ptr.ToUInt64();
 
 		public static explicit operator Pointer<byte>(Pointer<T> ptr) => ptr.ToPointer();
 
@@ -428,13 +428,18 @@ namespace NeoCore.Memory.Pointers
 			return ptr;
 		}
 
-
+		[Pure]
+		public ulong ToUInt64() => (ulong) m_value;
+		
 		[Pure]
 		public long ToInt64() => (long) m_value;
 
 		[Pure]
 		public int ToInt32() => (int) m_value;
-
+		
+		[Pure]
+		public uint ToUInt32() => (uint) m_value;
+		
 		#endregion
 
 		public override string ToString()

@@ -33,7 +33,7 @@ namespace NeoCore.CoreClr.Components.VM
 			[ImportAccessor]
 			get {
 				fixed (TypeHandle* value = &this) {
-					return Functions.Native.CallReturnPointer((void*) Imports[nameof(MethodTable)], value);
+					return Imports.CallReturnPointer(nameof(MethodTable), (ulong) value);
 				}
 			}
 		}
