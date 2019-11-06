@@ -4,8 +4,10 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using InlineIL;
 using JetBrains.Annotations;
 using NeoCore.Interop;
+using NeoCore.Interop.Attributes;
 using NeoCore.Utilities;
 
 #endregion
@@ -279,7 +281,22 @@ namespace NeoCore.Memory.Pointers
 		/// <returns>The value read from the offset <see cref="Address" />.</returns>
 		[Pure]
 		public T Read(int elemOffset = DEF_OFFSET) => Unsafe.Read<T>(Offset(elemOffset));
-
+		
+		/*[NativeFunction]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public T ReadFast(int elemOfs)
+		{
+			IL.Emit.Ldarg(nameof(elemOfs));
+			IL.Emit.Sizeof(typeof(T));
+			IL.Emit.Mul();
+//			IL.Push(ref this);
+			IL.Emit.Ldarg_0();
+			IL.Emit.Ldfld(new FieldRef(typeof(Pointer<T>), nameof(m_value)));
+			IL.Emit.Add();
+			IL.Emit.Ldobj(typeof(T));
+			return IL.Return<T>();
+		}*/
+		
 		/// <summary>
 		///     Reinterprets <see cref="Address" /> as a reference to a value of type <typeparamref name="T" />.
 		/// </summary>

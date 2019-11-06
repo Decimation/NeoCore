@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Threading;
 using NeoCore;
@@ -20,6 +21,7 @@ using NeoCore.CoreClr.Meta;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
+using NeoCore.Interop.Attributes;
 using NeoCore.Interop.Structures.Raw.Enums;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
@@ -28,6 +30,7 @@ using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
 using Serilog.Core;
+using Unsafe = NeoCore.Memory.Unsafe;
 
 #endregion
 
@@ -38,8 +41,8 @@ namespace Test
 		
 		private static void Main(string[] args)
 		{
-			
-			
+			var rg = new[] {"foo", "bar"};
+			var p = Unsafe.AddressOfHeap(rg, OffsetOptions.ArrayData).Cast<string>();
 		}
 	}
 }

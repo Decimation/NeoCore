@@ -4,10 +4,12 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using InlineIL;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Components.Support;
 using NeoCore.Interop;
+using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
@@ -66,6 +68,19 @@ namespace NeoCore.Memory
 
 			return value;
 		}
+		
+		/*[NativeFunction]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T ReadFast<T>(void* source, int elemOfs)
+		{
+			IL.Emit.Ldarg(nameof(elemOfs));
+			IL.Emit.Sizeof(typeof(T));
+			IL.Emit.Mul();
+			IL.Emit.Ldarg(nameof(source));
+			IL.Emit.Add();
+			IL.Emit.Ldobj(typeof(T));
+			return IL.Return<T>();
+		}*/
 
 		public static string ReadString(sbyte* first, int len)
 		{
