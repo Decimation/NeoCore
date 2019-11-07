@@ -18,8 +18,6 @@ namespace NeoCore.Interop
 
 	public static unsafe partial class Functions
 	{
-		// todo: reformat
-
 		/// <summary>
 		/// Provides methods for calling native functions using the IL <c>calli</c> opcode.
 		/// </summary>
@@ -126,10 +124,10 @@ namespace NeoCore.Interop
 			[NativeFunction]
 			public static void CallVoid(void* fn)
 			{
-				IL.Emit.Ldarg_0();                                       // Load arg "fn"
-				IL.Emit.Conv_I();                                        // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,               // Calling convention
-				                              new TypeRef(typeof(void))));	// Return type
+				IL.Emit.Ldarg_0();                                       		// Load arg "fn"
+				IL.Emit.Conv_I();                                        		// Convert arg "fn" to native
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,       				// Calling convention
+				                              new TypeRef(typeof(void))));		// Return type
 			}
 			
 			/// <summary>
@@ -141,12 +139,12 @@ namespace NeoCore.Interop
 			[NativeFunction]
 			public static void CallVoid<T1>(void* fn, T1 arg1)
 			{
-				IL.Emit.Ldarg_1();                                       // Load arg "arg1"
-				IL.Emit.Ldarg_0();                                       // Load arg "fn"
-				IL.Emit.Conv_I();                                        // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,               // Calling convention
-				                              new TypeRef(typeof(void)), // Return type
-				                              new TypeRef(typeof(T1)))); // Arg "arg1" type #1
+				IL.Emit.Ldarg_1();                                       		// Load arg "arg1"
+				IL.Emit.Ldarg_0();                                       		// Load arg "fn"
+				IL.Emit.Conv_I();                                        		// Convert arg "fn" to native
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,       				// Calling convention
+				                              new TypeRef(typeof(void)), 		// Return type
+				                              new TypeRef(typeof(T1)))); 		// Arg "arg1" type #1
 			}
 
 			/// <summary>
@@ -158,14 +156,14 @@ namespace NeoCore.Interop
 			[NativeFunction]
 			public static void CallVoid<T1, T2>(void* fn, T1 arg1, T2 arg2)
 			{
-				IL.Emit.Ldarg_1();                                       // Load arg "arg1"
-				IL.Emit.Ldarg_2();                                       // Load arg "arg2"
-				IL.Emit.Ldarg_0();                                       // Load arg "fn"
-				IL.Emit.Conv_I();                                        // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,               // Calling convention
-				                              new TypeRef(typeof(void)), // Return type
-				                              new TypeRef(typeof(T1)),   // Arg "arg1" type #1
-				                              new TypeRef(typeof(T2)))); // Arg "arg2" type #2
+				IL.Emit.Ldarg_1();                                       		// Load arg "arg1"
+				IL.Emit.Ldarg_2();                                       		// Load arg "arg2"
+				IL.Emit.Ldarg_0();                                       		// Load arg "fn"
+				IL.Emit.Conv_I();                                        		// Convert arg "fn" to native
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,       				// Calling convention
+				                              new TypeRef(typeof(void)), 		// Return type
+				                              new TypeRef(typeof(T1)),   		// Arg "arg1" type #1
+				                              new TypeRef(typeof(T2)))); 		// Arg "arg2" type #2
 			}
 
 			#endregion

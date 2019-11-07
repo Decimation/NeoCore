@@ -54,6 +54,20 @@ namespace NeoCore.CoreClr.Meta
 		public bool IsIL => MethodClassification.IL == Classification ||
 		                    MethodClassification.Instantiated == Classification;
 
+		public bool IsInlined {
+			get {
+				
+				// https://github.com/dotnet/coreclr/blob/master/src/jit/inline.def
+				// https://github.com/dotnet/coreclr/blob/master/src/jit/inline.cpp
+				// https://github.com/dotnet/coreclr/blob/master/src/jit/inline.h
+				// https://github.com/dotnet/coreclr/blob/master/src/jit/inlinepolicy.cpp
+				// https://github.com/dotnet/coreclr/blob/master/src/jit/inlinepolicy.h
+				// https://mattwarren.org/2016/03/09/adventures-in-benchmarking-method-inlining/
+				
+				throw new NotImplementedException();
+			}
+		}
+
 		#endregion
 
 		#region Flags
@@ -95,6 +109,15 @@ namespace NeoCore.CoreClr.Meta
 		public void Reset() => Value.Reference.Reset();
 
 		public bool IsPointingToNativeCode => Value.Reference.IsPointingToNativeCode();
+		
+		public MetaIL ILHeader {
+			get {
+				
+				// bool
+				const int ALLOW_OVERRIDES_PARAM = 0;
+				return new MetaIL(Value.Reference.GetILHeader(ALLOW_OVERRIDES_PARAM));
+			}
+		}
 
 		#endregion
 

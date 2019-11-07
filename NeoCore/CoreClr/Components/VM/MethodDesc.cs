@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.CoreClr.Components.Support;
+using NeoCore.CoreClr.Components.VM.Jit;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
@@ -98,13 +99,12 @@ namespace NeoCore.CoreClr.Components.VM
 			}
 		}
 
-
-		[Obsolete]
+		
 		[ImportCall(ImportCallOptions.Map)]
-		internal void* GetILHeader(int fAllowOverrides)
+		internal CorMethod* GetILHeader(int fAllowOverrides)
 		{
 			fixed (MethodDesc* value = &this) {
-				return Imports.CallReturnPointer(nameof(GetILHeader), (ulong) value, fAllowOverrides);
+				return (CorMethod*) Imports.CallReturnPointer(nameof(GetILHeader), (ulong) value, fAllowOverrides);
 			}
 		}
 

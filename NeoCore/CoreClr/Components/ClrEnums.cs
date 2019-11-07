@@ -775,6 +775,29 @@ namespace NeoCore.CoreClr.Components
 		R8HFA = 0x20
 	}
 
+	/***********************************************************************************/
+	// Legal values for
+	// * code:IMAGE_COR_ILMETHOD_FAT::Flags or
+	// * code:IMAGE_COR_ILMETHOD_TINY::Flags_CodeSize fields.
+	//
+	// The only semantic flag at present is CorILMethod_InitLocals
+	[Flags]
+	public enum CorILMethodFlags : ushort
+	{
+		InitLocals = 0x0010, // call default constructor on all local vars
+		MoreSects  = 0x0008, // there is another attribute after this one
+
+		CompressedIL = 0x0040, // Not used.
+
+		// Indicates the format for the COR_ILMETHOD header
+		FormatShift = 3,
+		FormatMask  = ((1 << FormatShift) - 1),
+		TinyFormat  = 0x0002, // use this code if the code size is even
+		SmallFormat = 0x0000,
+		FatFormat   = 0x0003,
+		TinyFormat1 = 0x0006, // use this code if the code size is odd
+	}
+
 	[Flags]
 	public enum VMFlags : uint
 	{

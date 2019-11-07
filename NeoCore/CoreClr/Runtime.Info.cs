@@ -130,6 +130,8 @@ namespace NeoCore.CoreClr
 				return mt.IsBlittable;
 			}
 
+			
+			
 			internal static AuxiliaryProperties ReadProperties(Type t)
 			{
 				var mp = new AuxiliaryProperties();

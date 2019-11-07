@@ -17,6 +17,7 @@ using NeoCore.CoreClr.Components;
 using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Components.VM.EE;
+using NeoCore.CoreClr.Components.VM.Jit;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
@@ -38,11 +39,21 @@ namespace Test
 {
 	internal static unsafe class Program
 	{
-		
+		static int Add(int a, int b)
+		{
+			return a + b;
+		}
+
 		private static void Main(string[] args)
 		{
-			var rg = new[] {"foo", "bar"};
-			var p = Unsafe.AddressOfHeap(rg, OffsetOptions.ArrayData).Cast<string>();
+			Console.WriteLine(sizeof(CorMethodTiny));
+			var m  = typeof(Program).GetAnyMethod(nameof(Add)).AsMetaMethod();
+			var il = m.ILHeader;
+			var s = il.Value.Reference.Tiny->CodeSize;
+			var p = il.Value.Reference.Tiny->Code;
+			Console.WriteLine(Format.Collections.ToString(m.MethodInfo.GetMethodBody().GetILAsByteArray()));
+			Console.WriteLine(Format.Collections.ToString(p.Copy(s)));
+			
 		}
 	}
 }

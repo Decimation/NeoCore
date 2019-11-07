@@ -91,12 +91,12 @@ namespace NeoCore.Memory.Pointers
 		/// <summary>
 		/// Default offset for <see cref="Pointer{T}"/>
 		/// </summary>
-		private const int DEF_OFFSET = 0;
+		private const int OFFSET = 0;
 
 		/// <summary>
 		/// Default increment/decrement/element count for <see cref="Pointer{T}"/>
 		/// </summary>
-		private const int DEF_ELEM_CNT = 1;
+		private const int ELEM_CNT = 1;
 
 		#region Implicit / explicit conversions
 
@@ -178,15 +178,9 @@ namespace NeoCore.Memory.Pointers
 		[Pure]
 		public Pointer<T> Subtract(long byteCnt = 1) => Add(-byteCnt);
 
-		public static Pointer<T> operator +(Pointer<T> left, long right)
-		{
-			return (void*) (left.ToInt64() + right);
-		}
+		public static Pointer<T> operator +(Pointer<T> left, long right) => (void*) (left.ToInt64() + right);
 
-		public static Pointer<T> operator -(Pointer<T> left, long right)
-		{
-			return (void*) (left.ToInt64() - right);
-		}
+		public static Pointer<T> operator -(Pointer<T> left, long right) => (void*) (left.ToInt64() - right);
 
 		[Pure]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -205,7 +199,7 @@ namespace NeoCore.Memory.Pointers
 		///     A new <see cref="Pointer{T}"/> with <paramref name="elemCnt"/> elements incremented
 		/// </returns>
 		[Pure]
-		public Pointer<T> Increment(int elemCnt = DEF_ELEM_CNT) => Offset(elemCnt);
+		public Pointer<T> Increment(int elemCnt = ELEM_CNT) => Offset(elemCnt);
 
 
 		/// <summary>
@@ -216,7 +210,7 @@ namespace NeoCore.Memory.Pointers
 		///     A new <see cref="Pointer{T}"/> with <paramref name="elemCnt"/> elements decremented
 		/// </returns>
 		[Pure]
-		public Pointer<T> Decrement(int elemCnt = DEF_ELEM_CNT) => Increment(-elemCnt);
+		public Pointer<T> Decrement(int elemCnt = ELEM_CNT) => Increment(-elemCnt);
 
 		/// <summary>
 		///     Increments the <see cref="Address" /> by the specified number of elements.
@@ -271,7 +265,7 @@ namespace NeoCore.Memory.Pointers
 		/// </summary>
 		/// <param name="value">Value to write.</param>
 		/// <param name="elemOffset">Element offset (in terms of type <typeparamref name="T" />).</param>
-		public void Write(T value, int elemOffset = DEF_OFFSET) => Unsafe.Write(Offset(elemOffset), value);
+		public void Write(T value, int elemOffset = OFFSET) => Unsafe.Write(Offset(elemOffset), value);
 
 
 		/// <summary>
@@ -280,8 +274,8 @@ namespace NeoCore.Memory.Pointers
 		/// <param name="elemOffset">Element offset (in terms of type <typeparamref name="T" />).</param>
 		/// <returns>The value read from the offset <see cref="Address" />.</returns>
 		[Pure]
-		public T Read(int elemOffset = DEF_OFFSET) => Unsafe.Read<T>(Offset(elemOffset));
-		
+		public T Read(int elemOffset = OFFSET) => Unsafe.Read<T>(Offset(elemOffset));
+
 		/*[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public T ReadFast(int elemOfs)
@@ -296,20 +290,20 @@ namespace NeoCore.Memory.Pointers
 			IL.Emit.Ldobj(typeof(T));
 			return IL.Return<T>();
 		}*/
-		
+
 		/// <summary>
 		///     Reinterprets <see cref="Address" /> as a reference to a value of type <typeparamref name="T" />.
 		/// </summary>
 		/// <param name="elemOffset">Element offset (in terms of type <typeparamref name="T" />).</param>
 		/// <returns>A reference to a value of type <typeparamref name="T" />.</returns>
 		[Pure]
-		public ref T AsRef(int elemOffset = DEF_OFFSET) => ref Unsafe.AsRef<T>(Offset(elemOffset));
+		public ref T AsRef(int elemOffset = OFFSET) => ref Unsafe.AsRef<T>(Offset(elemOffset));
 
 		/// <summary>
 		/// Zeros <paramref name="elemCnt"/> elements.
 		/// </summary>
 		/// <param name="elemCnt">Number of elements to zero</param>
-		public void Clear(int elemCnt = DEF_ELEM_CNT)
+		public void Clear(int elemCnt = ELEM_CNT)
 		{
 			for (int i = 0; i < elemCnt; i++)
 				this[i] = default;
@@ -335,13 +329,13 @@ namespace NeoCore.Memory.Pointers
 			return fn;
 		}
 
-		public void WriteAny(Type type, object value, int elemOffset = DEF_OFFSET)
+		public void WriteAny(Type type, object value, int elemOffset = OFFSET)
 		{
 			var fn = GetMethod(type, nameof(Write), out var ptr);
 			fn.Invoke(ptr, new object[] {value, elemOffset});
 		}
 
-		public object ReadAny(Type type, int elemOffset = DEF_OFFSET)
+		public object ReadAny(Type type, int elemOffset = OFFSET)
 		{
 			var fn = GetMethod(type, nameof(Read), out var ptr);
 			return fn.Invoke(ptr, new object[] {elemOffset});
@@ -353,18 +347,15 @@ namespace NeoCore.Memory.Pointers
 		#region Pointer
 
 		[Pure]
-		public Pointer<byte> ReadPointer(int elemOffset = DEF_OFFSET) => ReadPointer<byte>(elemOffset);
+		public Pointer<byte> ReadPointer(int elemOffset = OFFSET) =>
+			ReadPointer<byte>(elemOffset);
 
 		[Pure]
-		public Pointer<TType> ReadPointer<TType>(int elemOffset = DEF_OFFSET)
-		{
-			return Cast<Pointer<TType>>().Read(elemOffset);
-		}
+		public Pointer<TType> ReadPointer<TType>(int elemOffset = OFFSET) =>
+			Cast<Pointer<TType>>().Read(elemOffset);
 
-		public void WritePointer<TType>(Pointer<TType> ptr, int elemOffset = DEF_OFFSET)
-		{
+		public void WritePointer<TType>(Pointer<TType> ptr, int elemOffset = OFFSET) =>
 			Cast<Pointer<TType>>().Write(ptr, elemOffset);
-		}
 
 		#endregion
 
@@ -447,21 +438,21 @@ namespace NeoCore.Memory.Pointers
 
 		[Pure]
 		public ulong ToUInt64() => (ulong) m_value;
-		
+
 		[Pure]
 		public long ToInt64() => (long) m_value;
 
 		[Pure]
 		public int ToInt32() => (int) m_value;
-		
+
 		[Pure]
 		public uint ToUInt32() => (uint) m_value;
-		
+
 		#endregion
 
 		public override string ToString()
 		{
-			return Format.ToHexString(m_value);
+			return Format.Hex.ToHexString(m_value);
 		}
 	}
 }

@@ -12,32 +12,6 @@ namespace NeoCore.Utilities
 	/// </summary>
 	public static partial class Format
 	{
-		private const string HEX_FORMAT_SPECIFIER = "X";
-
-		private const string HEX_PREFIX = "0x";
-
-		public static unsafe string ToHexString(void* value, HexOptions options = HexOptions.Default) =>
-			ToHexString((IntPtr) value, options);
-
-		public static string ToHexString(IntPtr value, HexOptions options = HexOptions.Default)
-		{
-			var sb = new StringBuilder();
-
-			if (options.HasFlagFast(HexOptions.Prefix)) {
-				sb.Append(HEX_PREFIX);
-			}
-
-			string hexStr = value.ToInt64().ToString(HEX_FORMAT_SPECIFIER);
-
-			if (options.HasFlagFast(HexOptions.Lowercase)) {
-				hexStr = hexStr.ToLower();
-			}
-
-			sb.Append(hexStr);
-
-			return sb.ToString();
-		}
-		
 		public static string GetBackingFieldName(string name)
 		{
 			return String.Format("<{0}>k__BackingField", name);
