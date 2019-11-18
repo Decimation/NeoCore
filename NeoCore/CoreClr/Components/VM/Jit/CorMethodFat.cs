@@ -2,14 +2,16 @@ using System.Runtime.InteropServices;
 using NeoCore.CoreClr.Components.Support;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
+using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+// ReSharper disable InconsistentNaming
 
 namespace NeoCore.CoreClr.Components.VM.Jit
 {
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public unsafe struct CorMethodFat : IClrStructure
+	public unsafe struct CorMethodFat : ICorMethodStructure
 	{
 		// IMAGE_COR_ILMETHOD_FAT
 		// COR_ILMETHOD_FAT
@@ -31,8 +33,7 @@ namespace NeoCore.CoreClr.Components.VM.Jit
 		internal bool IsFat {
 			get {
 				fixed (CorMethodFat* value = &this) {
-					return (*(byte*) value & (int) CorILMethodFlags.FatFormat) ==
-					       (int) CorILMethodFlags.FatFormat;
+					return (*(byte*) value & (int) CorILMethodFlags.FatFormat) == (int) CorILMethodFlags.FatFormat;
 				}
 			}
 		}
@@ -46,7 +47,9 @@ namespace NeoCore.CoreClr.Components.VM.Jit
 			}
 		}
 
-		internal Pointer<byte> Code {
+		public int CodeSize => Mem.Val32(m_codeSize);
+
+		public Pointer<byte> Code {
 			get {
 				fixed (CorMethodFat* value = &this) {
 					var p = (byte*) value;
@@ -54,6 +57,19 @@ namespace NeoCore.CoreClr.Components.VM.Jit
 				}
 			}
 		}
+
+		public int MaxStackSize {
+			get {
+				// return VAL16(*(USHORT*)((BYTE*)this+2));
+				fixed (CorMethodFat* value = &this) {
+					return Mem.Val16(*(short*)((byte*)value+2));
+				}
+			}
+		}
+
+		public int LocalVarSigToken => Mem.Val32(m_localVarSigTok);
+
+		public byte[] CodeIL => Code.Copy(CodeSize);
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
 	}

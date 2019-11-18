@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 
-namespace NeoCore.CoreClr.Components.Support
+namespace NeoCore.CoreClr.Components.Support.Parsing
 {
 	internal struct SigParser
 	{

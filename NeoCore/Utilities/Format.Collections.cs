@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using static NeoCore.Utilities.Format.Constants;
 
 namespace NeoCore.Utilities
 {
@@ -13,8 +14,7 @@ namespace NeoCore.Utilities
 		/// </summary>
 		public static class Collections
 		{
-			private const string JOIN_COMMA = ", ";
-
+			
 
 			/// <summary>
 			/// Concatenates the strings returned by <paramref name="toString"/>

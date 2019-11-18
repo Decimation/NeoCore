@@ -10,6 +10,7 @@ using InlineIL;
 using JetBrains.Annotations;
 using NeoCore.CoreClr.Components;
 using NeoCore.CoreClr.Components.Support;
+using NeoCore.CoreClr.Components.Support.Parsing;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Interop;

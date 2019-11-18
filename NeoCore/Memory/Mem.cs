@@ -30,6 +30,8 @@ namespace NeoCore.Memory
 		/// </summary>
 		public static readonly bool Is64Bit = Size == sizeof(long) && Environment.Is64BitProcess;
 
+		public static readonly bool IsBigEndian = !BitConverter.IsLittleEndian;
+
 		/// <summary>
 		/// Represents a <c>null</c> <see cref="Pointer{T}"/>. Equivalent to <see cref="IntPtr.Zero"/>.
 		/// </summary>
@@ -68,7 +70,7 @@ namespace NeoCore.Memory
 
 			return value;
 		}
-		
+
 		/*[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T ReadFast<T>(void* source, int elemOfs)
@@ -81,6 +83,16 @@ namespace NeoCore.Memory
 			IL.Emit.Ldobj(typeof(T));
 			return IL.Return<T>();
 		}*/
+
+		public static int Val32(int i)
+		{
+			return i;
+		}
+
+		public static short Val16(short i)
+		{
+			return i;
+		}
 
 		public static string ReadString(sbyte* first, int len)
 		{

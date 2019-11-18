@@ -36,7 +36,8 @@ namespace NeoCore.CoreClr.Components.VM
 
 		public SyncBlockFlags SyncBlock {
 			get {
-				int i = !Mem.Is64Bit ? 0 : 1;
+				//int i = !Mem.Is64Bit ? 0 : 1;
+				int i = Convert.ToInt32(Mem.Is64Bit);
 				return (SyncBlockFlags) this[i];
 			}
 		}

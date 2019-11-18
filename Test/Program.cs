@@ -46,13 +46,6 @@ namespace Test
 
 		private static void Main(string[] args)
 		{
-			Console.WriteLine(sizeof(CorMethodTiny));
-			var m  = typeof(Program).GetAnyMethod(nameof(Add)).AsMetaMethod();
-			var il = m.ILHeader;
-			var s = il.Value.Reference.Tiny->CodeSize;
-			var p = il.Value.Reference.Tiny->Code;
-			Console.WriteLine(Format.Collections.ToString(m.MethodInfo.GetMethodBody().GetILAsByteArray()));
-			Console.WriteLine(Format.Collections.ToString(p.Copy(s)));
 			
 		}
 	}

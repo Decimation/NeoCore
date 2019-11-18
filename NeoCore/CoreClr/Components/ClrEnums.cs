@@ -784,18 +784,39 @@ namespace NeoCore.CoreClr.Components
 	[Flags]
 	public enum CorILMethodFlags : ushort
 	{
-		InitLocals = 0x0010, // call default constructor on all local vars
-		MoreSects  = 0x0008, // there is another attribute after this one
+		/// <summary>
+		/// Call default constructor on all local vars
+		/// </summary>
+		InitLocals = 0x0010,
+		
+		/// <summary>
+		/// There is another attribute after this one
+		/// </summary>
+		MoreSects  = 0x0008,
 
-		CompressedIL = 0x0040, // Not used.
+		/// <summary>
+		/// Not used/
+		/// </summary>
+		CompressedIL = 0x0040,
 
 		// Indicates the format for the COR_ILMETHOD header
 		FormatShift = 3,
+		
 		FormatMask  = ((1 << FormatShift) - 1),
-		TinyFormat  = 0x0002, // use this code if the code size is even
+		
+		/// <summary>
+		/// Use this code if the code size is even
+		/// </summary>
+		TinyFormat  = 0x0002,
+		
 		SmallFormat = 0x0000,
+		
 		FatFormat   = 0x0003,
-		TinyFormat1 = 0x0006, // use this code if the code size is odd
+		
+		/// <summary>
+		/// Use this code if the code size is odd
+		/// </summary>
+		TinyFormat1 = 0x0006,
 	}
 
 	[Flags]

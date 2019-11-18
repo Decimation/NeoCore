@@ -37,10 +37,8 @@ namespace NeoCore.CoreClr.Components
 		internal bool IsHeapPointer(Pointer<byte> p, bool smallHeapOnly = false)
 		{
 			fixed (GCHeap* value = &this) {
-				return Imports.Call<bool, ulong, ulong, bool>(nameof(IsHeapPointer),
-				                                                       (ulong) value, 
-				                                                       p.ToUInt64(), 
-				                                                       smallHeapOnly);
+				return Imports.Call<bool, ulong, ulong, bool>(nameof(IsHeapPointer), (ulong) value,
+				                                              p.ToUInt64(), smallHeapOnly);
 			}
 		}
 

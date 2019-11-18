@@ -1,8 +1,7 @@
 using System;
 using NeoCore.Assets;
-using NeoCore.CoreClr.Components.VM;
 
-namespace NeoCore.CoreClr.Components.Support
+namespace NeoCore.CoreClr.Components.Support.Parsing
 {
 	internal static class ClrSigs
 	{
@@ -58,10 +57,7 @@ namespace NeoCore.CoreClr.Components.Support
 			return (PT_PRIMITIVE & PrimitiveAttributes[(byte) type]) != 0;
 		}
 
-		internal static bool IsNilToken(int tk)
-		{
-			return RidFromToken(tk) == 0;
-		}
+		internal static bool IsNilToken(int tk) => RidFromToken(tk) == 0;
 
 		internal static int RidToToken(int rid, CorTokenType tktype)
 		{

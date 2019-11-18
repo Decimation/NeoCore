@@ -1,18 +1,14 @@
 #region
 
 using System;
-using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using InlineIL;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Interop;
-using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
-using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
 #endregion
@@ -21,7 +17,8 @@ namespace NeoCore.Memory
 {
 	/// <summary>
 	///     Provides utilities for manipulating pointers, memory, and types. This class has
-	/// CompilerServices.Unsafe built in.
+	///     <seealso cref="System.Runtime.CompilerServices.Unsafe" /> built in.
+	///     Also see JitHelpers from CompilerServices.
 	///     <seealso cref="BitConverter" />
 	///     <seealso cref="System.Convert" />
 	///     <seealso cref="MemoryMarshal" />
@@ -31,7 +28,7 @@ namespace NeoCore.Memory
 	///     <seealso cref="Buffer" />
 	///     <seealso cref="Mem" />
 	///     <seealso cref="System.Runtime.CompilerServices.Unsafe" />
-	/// 	<seealso cref="System.Runtime.CompilerServices.JitHelpers" />
+	///     <seealso cref="System.Runtime.CompilerServices" />
 	/// </summary>
 	public static unsafe partial class Unsafe
 	{
@@ -65,7 +62,7 @@ namespace NeoCore.Memory
 		}
 
 		/// <summary>
-		///     Returns the address of the data of <paramref name="value"/>. If <typeparamref name="T" /> is a value type,
+		///     Returns the address of the data of <paramref name="value" />. If <typeparamref name="T" /> is a value type,
 		///     this will return <see cref="AddressOf{T}" />. If <typeparamref name="T" /> is a reference type,
 		///     this will return the equivalent of <see cref="AddressOfHeap{T}(T, OffsetOptions)" /> with
 		///     <see cref="OffsetOptions.Fields" />.
@@ -110,7 +107,7 @@ namespace NeoCore.Memory
 			// Strings have their data offset by Offsets.OffsetToStringData
 			// Arrays have their data offset by IntPtr.Size * 2 bytes (may be different for 32 bit)
 
-			var offsetValue = 0;
+			int offsetValue = 0;
 
 			switch (offset) {
 				case OffsetOptions.StringData:
