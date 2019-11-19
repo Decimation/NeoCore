@@ -1,4 +1,6 @@
 # NeoCore
+[![nuget](https://img.shields.io/nuget/v/NeoCore.svg?logo=NuGet)](https://www.nuget.org/packages/NeoCore/)
+[![nuget dl](https://img.shields.io/nuget/dt/NeoCore.svg?logo=NuGet)](https://www.nuget.org/packages/NeoCore/)
 
 ![Icon](https://github.com/Decimation/NeoCore/raw/master/icon64.png)
 
