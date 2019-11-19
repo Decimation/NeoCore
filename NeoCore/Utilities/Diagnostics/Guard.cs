@@ -5,6 +5,7 @@ using System.IO;
 using JetBrains.Annotations;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
+using NeoCore.CoreClr.Components.Support;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
@@ -59,7 +60,8 @@ namespace NeoCore.Utilities.Diagnostics
 		/// </summary>
 		internal static void AssertCompatibility()
 		{
-			Assert(Runtime.IsWindowsPlatform && Runtime.IsWorkstationGC && !Runtime.IsMonoRuntime);
+			Assert(Runtime.IsWindowsPlatform
+			       && Runtime.IsWorkstationGC && Runtime.CurrentFramework == ClrFrameworks.Core);
 		}
 
 		#endregion

@@ -6,25 +6,29 @@ using NeoCore.Interop.Attributes;
 
 namespace NeoCore.Interop
 {
-	public static unsafe partial class Functions
+	public static partial class Functions
 	{
+		/// <summary>
+		/// Contains delegates for managed internal System functions which interact between the managed-unmanaged
+		/// (System-CLR) boundary.
+		/// </summary>
 		internal static class Clr
 		{
 			static Clr()
 			{
-				ReadTypeFromHandle = Reflection.FindFunction<GetTypeFromHandleFunc>();
-				IsPinnable         = Reflection.FindFunction<IsPinnableFunc>();
+				GetTypeFromHandle = Reflection.FindFunction<GetTypeFromHandleDelegate>();
+				IsPinnable        = Reflection.FindFunction<IsPinnableDelegate>();
 			}
 
 			[ReflectionFunction(typeof(Marshal), "IsPinnable")]
-			internal delegate bool IsPinnableFunc([CanBeNull] object handle);
+			internal delegate bool IsPinnableDelegate([CanBeNull] object handle);
+
+			internal static IsPinnableDelegate IsPinnable { get; }
 
 			[ReflectionFunction(typeof(Type), "GetTypeFromHandleUnsafe")]
-			internal delegate Type GetTypeFromHandleFunc(IntPtr handle);
+			internal delegate Type GetTypeFromHandleDelegate(IntPtr handle);
 
-			internal static GetTypeFromHandleFunc ReadTypeFromHandle { get; }
-
-			internal static IsPinnableFunc IsPinnable { get; }
+			internal static GetTypeFromHandleDelegate GetTypeFromHandle { get; }
 		}
 	}
 }

@@ -61,7 +61,7 @@ namespace NeoCore.CoreClr
 			/// </summary>
 			private static bool IsUnmanaged(Type t)
 			{
-				return !Functions.Inspector.FunctionThrows<Exception>(() =>
+				return !Functions.Inspection.FunctionThrows<Exception>(() =>
 				{
 					// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
 					typeof(U<>).MakeGenericType(t);

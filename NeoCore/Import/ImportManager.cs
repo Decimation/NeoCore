@@ -168,18 +168,14 @@ namespace NeoCore.Import
 				var mem  = components[i].Member;
 				var attr = components[i].Attribute;
 
-				bool wasBound = attr is ImportCallAttribute callAttr &&
-				                callAttr.CallOptions.HasFlagFast(ImportCallOptions.Bind);
+				
 
 				switch (mem.MemberType) {
 					case MemberTypes.Property:
 						var propInfo = (PropertyInfo) mem;
 						var get      = propInfo.GetMethod;
 
-						// Calling the function will now result in an access violation
-						if (wasBound) {
-							FunctionFactory.Managed.Restore(get);
-						}
+						
 
 						break;
 					case MemberTypes.Field:
@@ -192,10 +188,7 @@ namespace NeoCore.Import
 						break;
 					case MemberTypes.Method:
 
-						// Calling the function will now result in an access violation
-						if (wasBound) {
-							FunctionFactory.Managed.Restore((MethodInfo) mem);
-						}
+						
 
 						break;
 					default:
@@ -406,12 +399,7 @@ namespace NeoCore.Import
 			var callAttr = (ImportCallAttribute) attr;
 			var options  = callAttr.CallOptions;
 
-			CheckOptions(options, out var bind, out var addToMap);
-
-			if (bind) {
-				CoreLogger.Value.WriteWarning("Binding {Name}", method.Name);
-				FunctionFactory.Managed.SetEntryPoint(method, addr);
-			}
+			CheckOptions(options, out bool addToMap);
 
 			if (addToMap) {
 				var enclosing = method.DeclaringType;

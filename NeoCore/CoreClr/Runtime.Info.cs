@@ -80,7 +80,7 @@ namespace NeoCore.CoreClr
 			[Obsolete]
 			public static bool IsPinnableSlow([CanBeNull] object value)
 			{
-				return !Functions.Inspector.FunctionThrows<ArgumentException>(() =>
+				return !Functions.Inspection.FunctionThrows<ArgumentException>(() =>
 				{
 					var gc = GCHandle.Alloc(value, GCHandleType.Pinned);
 					gc.Free();

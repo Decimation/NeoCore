@@ -9,6 +9,9 @@ namespace NeoCore.Interop
 {
 	public static unsafe partial class Functions
 	{
+		/// <summary>
+		/// Contains shortcuts for Reflection and utilities for working with managed functions.
+		/// </summary>
 		public static class Reflection
 		{
 			#region Generic

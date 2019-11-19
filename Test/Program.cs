@@ -48,7 +48,7 @@ namespace Test
 
 		private static void Main(string[] args)
 		{
-			Console.WriteLine(Runtime.Info.IsBlank<int>(default));
+			
 		}
 	}
 }

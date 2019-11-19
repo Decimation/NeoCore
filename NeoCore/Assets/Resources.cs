@@ -50,7 +50,6 @@ namespace NeoCore.Assets
 			typeof(EEClass),
 			typeof(EEClassLayoutInfo),
 			typeof(MethodDescChunk),
-			typeof(FunctionFactory),
 			typeof(Globals),
 		};
 

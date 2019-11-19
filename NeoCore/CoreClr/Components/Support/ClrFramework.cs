@@ -1,5 +1,7 @@
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using System.Reflection.Metadata.Ecma335;
 using NeoCore.Utilities;
 
 namespace NeoCore.CoreClr.Components.Support
@@ -12,57 +14,93 @@ namespace NeoCore.CoreClr.Components.Support
 		// https://docs.microsoft.com/en-us/dotnet/standard/frameworks
 		// https://docs.microsoft.com/en-us/dotnet/standard/clr
 
-		/// <summary>
-		///     .NET Standard
-		/// </summary>
-		public static readonly ClrFramework Standard = new ClrFramework(nameof(Standard), null);
-
 
 		/// <summary>
 		///     .NET Core
 		/// </summary>
-		public static readonly ClrFramework Core = new ClrFramework(nameof(Core), "coreclr");
+		public static readonly ClrFramework Core = new ClrFramework(nameof(Core))
+		{
+			FilenameRoot     = "coreclr",
+			PreprocessorName = "NETCOREAPP"
+		};
 
 		/// <summary>
 		///     .NET Framework
 		/// </summary>
-		public static readonly ClrFramework Framework = new ClrFramework(nameof(Framework), "clr");
+		public static readonly ClrFramework Framework = new ClrFramework(nameof(Framework))
+		{
+			FilenameRoot     = "clr",
+			PreprocessorName = "NETFRAMEWORK"
+		};
+
+		/// <summary>
+		///     .NET Native
+		/// </summary>
+		public static readonly ClrFramework Native = new ClrFramework(nameof(Native));
+
+		/// <summary>
+		///     .NET Standard
+		/// </summary>
+		public static readonly ClrFramework Standard = new ClrFramework(nameof(Standard))
+		{
+			PreprocessorName = "NETSTANDARD"
+		};
+
+		/// <summary>
+		///     Mono
+		/// </summary>
+		public static readonly ClrFramework Mono = new ClrFramework(nameof(Mono));
+
+		public static readonly ClrFramework[] AllFrameworks = {Core, Framework, Native, Standard, Mono};
 	}
 
 	/// <summary>
 	/// Represents a CLR framework type.
 	/// </summary>
-	public readonly struct ClrFramework
+	public struct ClrFramework
 	{
-		private readonly FileInfo m_symbolFile;
-		private readonly FileInfo m_libraryFile;
+		public FileInfo SymbolFile {
+			get {
+				const string PDB_EXT = ".pdb";
+				return FileSystem.GetRuntimeFile(FilenameRoot + PDB_EXT);
+			}
+		}
+
+		public FileInfo LibraryFile {
+			get {
+				const string DLL_EXT = ".dll";
+				return FileSystem.GetRuntimeFile(FilenameRoot + DLL_EXT);
+			}
+		}
 
 		public string Name { get; }
 
-		public FileInfo SymbolFile => m_symbolFile;
+		public string FullName { get; }
 
-		public FileInfo LibraryFile => m_libraryFile;
+		public string PreprocessorName { get; internal set; }
 
-		public bool IsValid { get; }
+		public string FilenameRoot { get; internal set; }
 
-		public ClrFramework(string name, string filenameStub)
+		public ClrFramework([NotNull] string name)
 		{
-			Name = name;
+			Name     = name;
+			FullName = String.Format(".NET {0}", Name);
 
-			const string PDB_EXT = ".pdb";
-			const string DLL_EXT = ".dll";
-
-			FileSystem.TryGetRuntimeFile(filenameStub + DLL_EXT, out m_libraryFile);
-			FileSystem.TryGetRuntimeFile(filenameStub + PDB_EXT, out m_symbolFile);
-
-			IsValid = (m_symbolFile != null && m_symbolFile.Exists)
-			          && (m_libraryFile != null && m_libraryFile.Exists)
-			          && filenameStub != null;
+			PreprocessorName = null;
+			FilenameRoot     = null;
 		}
 
-		public override string ToString()
-		{
-			return String.Format(".NET {0}", Name);
-		}
+		private bool Equals(ClrFramework other) => Name == other.Name;
+
+		public override bool Equals(object obj) =>
+			ReferenceEquals(this, obj) || obj is ClrFramework other && Equals(other);
+
+		public override int GetHashCode() => (Name != null ? Name.GetHashCode() : 0);
+
+		public static bool operator ==(ClrFramework left, ClrFramework right) => Equals(left, right);
+
+		public static bool operator !=(ClrFramework left, ClrFramework right) => !Equals(left, right);
+
+		public override string ToString() => FullName;
 	}
 }

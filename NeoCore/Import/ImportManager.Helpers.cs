@@ -107,18 +107,13 @@ namespace NeoCore.Import
 		}
 
 		[AssertionMethod]
-		private static void CheckOptions(ImportCallOptions options, out bool bind, out bool addToMap)
+		private static void CheckOptions(ImportCallOptions options, out bool addToMap)
 		{
 			if (options == ImportCallOptions.None) {
 				Guard.Fail("You must specify an option");
 			}
-
-			bind     = options.HasFlagFast(ImportCallOptions.Bind);
+			
 			addToMap = options.HasFlagFast(ImportCallOptions.Map);
-
-			if (bind && addToMap) {
-				Guard.Fail($"The option {ImportCallOptions.Bind} cannot be used with {ImportCallOptions.Map}");
-			}
 		}
 
 

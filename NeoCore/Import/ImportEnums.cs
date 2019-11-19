@@ -52,11 +52,6 @@ namespace NeoCore.Import
 		Constructor = 1,
 
 		/// <summary>
-		///     Sets the method entry point to the resolved address. This only works on 64 bit.
-		/// </summary>
-		Bind = 1 << 1,
-
-		/// <summary>
 		///     <para>
 		///         Adds the resolved address to an <see cref="ImportMap"/> in the enclosing type
 		///     </para>
@@ -66,7 +61,7 @@ namespace NeoCore.Import
 		///     </para>
 		///     <para>Best used in conjunction with the functions in <see cref="Functions.Native" /></para>
 		/// </summary>
-		Map = 1 << 2
+		Map = 1 << 1
 	}
 
 	/// <summary>

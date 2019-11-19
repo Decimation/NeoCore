@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime;
 using System.Runtime.InteropServices;
@@ -10,6 +11,7 @@ using NeoCore.Interop;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
+
 // ReSharper disable InconsistentNaming
 
 namespace NeoCore.CoreClr
@@ -25,31 +27,20 @@ namespace NeoCore.CoreClr
 
 		public static bool IsWorkstationGC => !GCSettings.IsServerGC;
 
-		public static bool IsMonoRuntime => Type.GetType("Mono.Runtime") != null;
-
 		public static ClrFramework CurrentFramework {
 			get {
-#if NETCOREAPP
-				return ClrFrameworks.Core;
-#endif
+				// Mono: https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Runtime.InteropServices.RuntimeInformation/RuntimeInformation.cs#L128
+				// Mono can also be checked with Type.GetType("Mono.Runtime") != null;
+				
+				var fwkName = RuntimeInformation.FrameworkDescription;
 
-#if NETFRAMEWORK
-				return ClrFrameworks.Framework;
-#endif
-
-#if NETSTANDARD
-				return ClrFrameworks.Standard;
-#endif
-#pragma warning disable 162
-				// ReSharper disable once HeuristicUnreachableCode
-				Guard.Fail();
-#pragma warning restore 162
+				return ClrFrameworks.AllFrameworks.First(f => fwkName.StartsWith(f.FullName));
 			}
 		}
-		
+
 		internal static Type ResolveType(Pointer<byte> handle)
 		{
-			return Functions.Clr.ReadTypeFromHandle(handle.Address);
+			return Functions.Clr.GetTypeFromHandle(handle.Address);
 		}
 
 		/// <summary>
