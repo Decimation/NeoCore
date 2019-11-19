@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using NeoCore.CoreClr.Components.Support;
+using NeoCore.Assets;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;

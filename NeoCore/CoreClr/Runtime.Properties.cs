@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.IO;
+using System.Runtime.InteropServices;
 using NeoCore.CoreClr.Components;
 using NeoCore.Interop;
 using NeoCore.Memory.Pointers;

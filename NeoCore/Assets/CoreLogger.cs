@@ -103,10 +103,8 @@ namespace NeoCore.Assets
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
 		[Conditional(Constants.COND_DEBUG)]
-		internal void WriteDebug(string ctx, string msg, params object[] args)
-		{
+		internal void WriteDebug(string ctx, string msg, params object[] args) => 
 			ContextLog(ctx, Log.Debug, msg, args);
-		}
 
 		/// <summary>
 		/// Write a log event with the Information level, associated exception, and context property.
@@ -116,10 +114,8 @@ namespace NeoCore.Assets
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
 		[Conditional(Constants.COND_DEBUG)]
-		internal void WriteInformation(string ctx, string msg, params object[] args)
-		{
+		internal void WriteInfo(string ctx, string msg, params object[] args) =>
 			ContextLog(ctx, Log.Information, msg, args);
-		}
 
 		/// <summary>
 		/// Write a log event with the Verbose level, associated exception, and context property.
@@ -129,10 +125,8 @@ namespace NeoCore.Assets
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
 		[Conditional(Constants.COND_DEBUG)]
-		internal void WriteVerbose(string ctx, string msg, params object[] args)
-		{
+		internal void WriteVerbose(string ctx, string msg, params object[] args) =>
 			ContextLog(ctx, Log.Verbose, msg, args);
-		}
 
 		/// <summary>
 		/// Write a log event with the Warning level, associated exception, and context property.
@@ -142,10 +136,8 @@ namespace NeoCore.Assets
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
 		[Conditional(Constants.COND_DEBUG)]
-		internal void WriteWarning(string ctx, string msg, params object[] args)
-		{
+		internal void WriteWarning(string ctx, string msg, params object[] args) =>
 			ContextLog(ctx, Log.Warning, msg, args);
-		}
 
 		/// <summary>
 		/// Write a log event with the Error level, associated exception, and context property.
@@ -155,10 +147,8 @@ namespace NeoCore.Assets
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
 		[Conditional(Constants.COND_DEBUG)]
-		internal void WriteError(string ctx, string msg, params object[] args)
-		{
+		internal void WriteError(string ctx, string msg, params object[] args) => 
 			ContextLog(ctx, Log.Error, msg, args);
-		}
 
 		/// <summary>
 		/// Write a log event with the Fatal level, associated exception, and context property.
@@ -168,10 +158,8 @@ namespace NeoCore.Assets
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
 		[Conditional(Constants.COND_DEBUG)]
-		internal void WriteFatal(string ctx, string msg, params object[] args)
-		{
+		internal void WriteFatal(string ctx, string msg, params object[] args) => 
 			ContextLog(ctx, Log.Fatal, msg, args);
-		}
 
 		#endregion
 

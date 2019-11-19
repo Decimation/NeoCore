@@ -7,7 +7,6 @@ using System.Runtime.InteropServices;
 using InlineIL;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
-using NeoCore.CoreClr.Components.Support;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;

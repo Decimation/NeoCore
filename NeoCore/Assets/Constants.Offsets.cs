@@ -10,7 +10,7 @@ namespace NeoCore.Assets
 		/// <summary>
 		///     Common runtime offsets.
 		/// </summary>
-		public static unsafe class Offsets
+		public static class Offsets
 		{
 			/// <summary>
 			///     Heap offset to the first field.

@@ -1,8 +1,7 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using NeoCore.CoreClr.Components.Support;
-using NeoCore.CoreClr.Components.Support.Parsing;
+using NeoCore.Assets;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;

@@ -1,10 +1,11 @@
 using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime;
 using System.Runtime.InteropServices;
-using NeoCore.CoreClr.Components.Support;
+using NeoCore.Assets;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Interop;
@@ -29,9 +30,8 @@ namespace NeoCore.CoreClr
 
 		public static ClrFramework CurrentFramework {
 			get {
-				// Mono: https://github.com/mono/mono/blob/master/mcs/class/corlib/System.Runtime.InteropServices.RuntimeInformation/RuntimeInformation.cs#L128
 				// Mono can also be checked with Type.GetType("Mono.Runtime") != null;
-				
+
 				var fwkName = RuntimeInformation.FrameworkDescription;
 
 				return ClrFrameworks.AllFrameworks.First(f => fwkName.StartsWith(f.FullName));
@@ -86,6 +86,12 @@ namespace NeoCore.CoreClr
 		{
 			Pointer<ObjHeader> ptr = Unsafe.AddressOfHeap(value, OffsetOptions.Header).Cast<ObjHeader>();
 			return ptr.Value;
+		}
+
+
+		internal static FileInfo GetRuntimeFile(string fileName)
+		{
+			return new FileInfo(RuntimeEnvironment.GetRuntimeDirectory() + fileName);
 		}
 	}
 }

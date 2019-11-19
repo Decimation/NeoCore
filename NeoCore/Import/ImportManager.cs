@@ -198,7 +198,7 @@ namespace NeoCore.Import
 
 			m_boundTypes.Remove(type);
 
-			CoreLogger.Value.WriteInformation(null, "Unloaded {Name}", type.Name);
+			CoreLogger.Value.WriteInfo(null, "Unloaded {Name}", type.Name);
 		}
 
 		public void Unload<T>(ref T value)
@@ -322,7 +322,7 @@ namespace NeoCore.Import
 
 			m_boundTypes.Add(type);
 
-			CoreLogger.Value.WriteInformation(null, "Loaded {Name}", type.Name);
+			CoreLogger.Value.WriteInfo(null, "Loaded {Name}", type.Name);
 			return value;
 		}
 

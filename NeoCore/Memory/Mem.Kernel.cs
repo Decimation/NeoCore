@@ -1,7 +1,6 @@
 using System;
 using System.ComponentModel;
 using System.Diagnostics;
-using NeoCore.CoreClr.Components.Support;
 using NeoCore.Interop;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;

@@ -1,10 +1,10 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Reflection.Metadata.Ecma335;
+using NeoCore.CoreClr;
 using NeoCore.Utilities;
 
-namespace NeoCore.CoreClr.Components.Support
+namespace NeoCore.Assets
 {
 	/// <summary>
 	/// Contains possible CLR framework types.
@@ -62,14 +62,14 @@ namespace NeoCore.CoreClr.Components.Support
 		public FileInfo SymbolFile {
 			get {
 				const string PDB_EXT = ".pdb";
-				return FileSystem.GetRuntimeFile(FilenameRoot + PDB_EXT);
+				return Runtime.GetRuntimeFile(FilenameRoot + PDB_EXT);
 			}
 		}
 
 		public FileInfo LibraryFile {
 			get {
 				const string DLL_EXT = ".dll";
-				return FileSystem.GetRuntimeFile(FilenameRoot + DLL_EXT);
+				return Runtime.GetRuntimeFile(FilenameRoot + DLL_EXT);
 			}
 		}
 

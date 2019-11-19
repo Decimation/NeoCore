@@ -1,7 +1,9 @@
+using NeoCore.Assets;
 using NeoCore.Memory.Pointers;
+
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Components.Support
+namespace NeoCore.CoreClr.Components.VM.Jit
 {
 	public interface ICorMethodStructure : IClrStructure
 	{

@@ -1,6 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
-using NeoCore.CoreClr.Components.Support;
+using NeoCore.Assets;
 using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;

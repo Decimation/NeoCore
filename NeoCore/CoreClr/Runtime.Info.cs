@@ -7,9 +7,8 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using InlineIL;
 using JetBrains.Annotations;
+using NeoCore.Assets;
 using NeoCore.CoreClr.Components;
-using NeoCore.CoreClr.Components.Support;
-using NeoCore.CoreClr.Components.Support.Parsing;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
@@ -59,10 +58,10 @@ namespace NeoCore.CoreClr
 						return true;
 					}
 				}
-				
+
 				// As for strings, IsNullOrWhiteSpace should always be true when
 				// IsNullOrEmpty is true, and vise versa
-				
+
 				return value switch
 				{
 					IList list => (list.Count == 0),
@@ -87,15 +86,15 @@ namespace NeoCore.CoreClr
 				});
 			}
 
+			/// <summary>
+			/// Determines whether <paramref name="value"/> is pinnable; that is, usable with
+			/// <see cref="GCHandle"/> and <see cref="GCHandleType.Pinned"/>
+			/// </summary>
+			/// <param name="value">Value to check for pinnability</param>
+			/// <returns><c>true</c> if <paramref name="value"/> is pinnable; <c>false</c> otherwise</returns>
 			public static bool IsPinnable([CanBeNull] object value)
 			{
 				// https://github.com/dotnet/coreclr/blob/master/src/vm/marshalnative.cpp#L280
-
-				/*var throws = !CheckFunctionThrow<ArgumentException>(() =>
-				{
-					var gc = GCHandle.Alloc(value, GCHandleType.Pinned);
-					gc.Free();
-				});*/
 
 				// return Functions.Clr.IsPinnable(value);
 
@@ -111,7 +110,7 @@ namespace NeoCore.CoreClr
 
 				if (mt.IsArray) {
 					var  corType         = mt.ElementTypeHandle.NormType;
-					bool isPrimitiveElem = ClrSigs.IsPrimitiveType(corType);
+					bool isPrimitiveElem = ClrSigReader.IsPrimitiveType(corType);
 
 					if (isPrimitiveElem) {
 						return true;

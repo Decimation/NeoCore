@@ -1,7 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
-using NeoCore.CoreClr.Components.Support;
 using NeoCore.Interop.Attributes;
 
 namespace NeoCore.Interop

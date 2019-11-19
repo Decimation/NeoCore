@@ -1,9 +1,9 @@
 using System;
-using NeoCore.Assets;
+using NeoCore.CoreClr.Components;
 
-namespace NeoCore.CoreClr.Components.Support.Parsing
+namespace NeoCore.Assets
 {
-	internal static class ClrSigs
+	internal static class ClrSigReader
 	{
 		// src/inc/corhdr.h
 

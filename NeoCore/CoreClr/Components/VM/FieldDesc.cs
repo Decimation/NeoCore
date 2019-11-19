@@ -1,6 +1,5 @@
 using System.Runtime.InteropServices;
-using NeoCore.CoreClr.Components.Support;
-using NeoCore.CoreClr.Components.Support.Parsing;
+using NeoCore.Assets;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
@@ -57,9 +56,9 @@ namespace NeoCore.CoreClr.Components.VM
 				var rawToken = (int) (UInt1 & 0xFFFFFF);
 				// Check if this FieldDesc is using the packed mb layout
 				if (!BitFlags.HasFlagFast(FieldBitFlags.RequiresFullMBValue))
-					return ClrSigs.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, CorTokenType.FieldDef);
+					return ClrSigReader.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, CorTokenType.FieldDef);
 
-				return ClrSigs.TokenFromRid(rawToken, CorTokenType.FieldDef);
+				return ClrSigReader.TokenFromRid(rawToken, CorTokenType.FieldDef);
 			}
 		}
 

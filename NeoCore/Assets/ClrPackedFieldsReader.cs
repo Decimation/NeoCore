@@ -1,12 +1,11 @@
 using System;
-using NeoCore.Assets;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
 
 // ReSharper disable BuiltInTypeReferenceStyle
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 
-namespace NeoCore.CoreClr.Components.Support.Parsing
+namespace NeoCore.Assets
 {
 	using DWORD = UInt32;
 
@@ -101,9 +100,8 @@ namespace NeoCore.CoreClr.Components.Support.Parsing
 			// can be at most DWORD-sized itself). For simplicity we'll simply break this into two separate
 			// non-spanning gets and stitch the result together from that. We can revisit this in the future
 			// if the perf is a problem.
-			DWORD dwInitialBits =
-				Constants.BITS_PER_DWORD -
-				dwOffset % Constants.BITS_PER_DWORD; // Number of bits to get in the first DWORD
+			DWORD dwInitialBits = Constants.BITS_PER_DWORD -
+			                      dwOffset % Constants.BITS_PER_DWORD; // Number of bits to get in the first DWORD
 			DWORD dwReturn;
 
 			// Get the initial (low-order) bits from the first DWORD.
@@ -111,7 +109,8 @@ namespace NeoCore.CoreClr.Components.Support.Parsing
 
 			// Get the remaining bits from the second DWORD. These bits will need to be shifted to the left
 			// (past the bits we've already read) before being OR'd into the result.
-			dwReturn |= BitVectorGet(dwOffset + dwInitialBits, dwLength - dwInitialBits) << (int) dwInitialBits;
+			dwReturn |= BitVectorGet(dwOffset + dwInitialBits, dwLength - dwInitialBits)
+			            << (int) dwInitialBits;
 
 			return dwReturn;
 		}

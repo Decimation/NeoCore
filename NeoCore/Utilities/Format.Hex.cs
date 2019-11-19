@@ -44,4 +44,18 @@ namespace NeoCore.Utilities
 				Hex.ToHexString((long) value, options);
 		}
 	}
+
+
+	[Flags]
+	public enum HexOptions
+	{
+		None = 0,
+
+		Prefix = 1,
+
+		Lowercase = 1 << 1,
+
+
+		Default = Prefix
+	}
 }

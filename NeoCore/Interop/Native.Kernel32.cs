@@ -34,11 +34,7 @@ namespace NeoCore.Interop
 				outConsoleMode |= OutputMode.ENABLE_VIRTUAL_TERMINAL_PROCESSING |
 				                  OutputMode.DISABLE_NEWLINE_AUTO_RETURN;
 
-				if (!SetConsoleMode(iStdOut, outConsoleMode)) {
-					return false;
-				}
-
-				return true;
+				return SetConsoleMode(iStdOut, outConsoleMode);
 			}
 
 			#region File

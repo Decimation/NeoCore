@@ -14,7 +14,6 @@ using NeoCore;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Components;
-using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Components.VM.Jit;

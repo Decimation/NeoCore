@@ -1,4 +1,4 @@
-namespace NeoCore.CoreClr.Components.Support
+namespace NeoCore.Assets
 {
 	/// <summary>
 	/// Designates a native CLR metadata source structure.

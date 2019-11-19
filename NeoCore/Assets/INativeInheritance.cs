@@ -1,4 +1,4 @@
-namespace NeoCore.CoreClr.Components.Support
+namespace NeoCore.Assets
 {
 	/// <summary>
 	/// Specifies implicit native inheritance.

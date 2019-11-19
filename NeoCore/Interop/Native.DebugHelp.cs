@@ -8,8 +8,6 @@ using NeoCore.Interop.Structures.Raw;
 using NeoCore.Interop.Structures.Raw.Enums;
 using NeoCore.Memory;
 using NeoCore.Utilities.Diagnostics;
-using static NeoCore.Assets.Constants;
-using static NeoCore.Assets.Constants.Native;
 
 namespace NeoCore.Interop
 {
