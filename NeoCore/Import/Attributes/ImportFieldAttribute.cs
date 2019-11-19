@@ -37,4 +37,21 @@ namespace NeoCore.Import.Attributes
 		public ImportFieldAttribute(string id, IdentifierOptions options = IdentifierOptions.None)
 			: base(id, options) { }
 	}
+	
+	
+	
+
+	/// <summary>
+	/// Specifies how the field will be loaded.
+	/// </summary>
+	public enum ImportFieldOptions
+	{
+		/// <summary>
+		/// Loads the value as the type specified by <see cref="ImportFieldAttribute.LoadAs"/>
+		/// (or the field type if the type isn't specified)
+		/// </summary>
+		Proxy,
+
+		Fast
+	}
 }

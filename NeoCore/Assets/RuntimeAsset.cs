@@ -24,17 +24,12 @@ namespace NeoCore.Assets
 		/// </summary>
 		public ProcessModule Module { get; }
 
-		/// <summary>
-		/// Asset symbol access
-		/// </summary>
-		public IImportProvider Imports { get; }
 
-		public RuntimeAsset(FileInfo dllFile, FileInfo symFile)
+		public RuntimeAsset(FileInfo libFile, FileInfo symFile)
 		{
-			LibraryFile = dllFile;
+			LibraryFile = libFile;
 			SymbolsFile = symFile;
-			Module      = Modules.GetModule(dllFile.Name);
-			Imports     = new ModuleImport(SymbolsFile, Module);
+			Module      = Resources.CurrentProcess[libFile.Name];
 		}
 
 		public override string ToString()
@@ -44,7 +39,7 @@ namespace NeoCore.Assets
 			sb.AppendFormat("Library: {0}\n", LibraryFile);
 			sb.AppendFormat("Symbol: {0}\n", SymbolsFile);
 			sb.AppendFormat("Module: {0}\n", Module.FileName);
-			sb.AppendFormat("Imports: {0}\n", ((ModuleImport) Imports).Address);
+			//sb.AppendFormat("Imports: {0}\n", ((ModuleImport) Imports).Address);
 
 			return sb.ToString();
 		}

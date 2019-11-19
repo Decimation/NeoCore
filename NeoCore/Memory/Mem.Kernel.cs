@@ -47,18 +47,18 @@ namespace NeoCore.Memory
 			public static void ReadProcessMemory(Process       proc,      Pointer<byte> ptrBase,
 			                                     Pointer<byte> ptrBuffer, int           cb)
 			{
-				var hProc = Native.Kernel32.OpenProcess(proc);
+				var hProc = Native.Kernel.OpenProcess(proc);
 
 
 				// Read the memory
-				bool ok = (Native.Kernel32.ReadProcessMemoryInternal(hProc, ptrBase.Address,
+				bool ok = (Native.Kernel.ReadProcessMemoryInternal(hProc, ptrBase.Address,
 				                                                     ptrBuffer.Address, cb,
 				                                                     out int numberOfBytesRead));
 
 				Guard.AssertWin32(numberOfBytesRead == cb && ok);
 
 				// Close the handle
-				Native.Kernel32.CloseHandle(hProc);
+				Native.Kernel.CloseHandle(hProc);
 			}
 
 			public static byte[] ReadProcessMemory(Process proc, Pointer<byte> ptrBase, int cb)
@@ -101,10 +101,10 @@ namespace NeoCore.Memory
 			public static void WriteProcessMemory(Process proc, Pointer<byte> ptrBase, Pointer<byte> ptrBuffer,
 			                                      int     dwSize)
 			{
-				var hProc = Native.Kernel32.OpenProcess(proc);
+				var hProc = Native.Kernel.OpenProcess(proc);
 
 				// Write the memory
-				bool ok = (Native.Kernel32.WriteProcessMemoryInternal(hProc, ptrBase.Address, ptrBuffer.Address,
+				bool ok = (Native.Kernel.WriteProcessMemoryInternal(hProc, ptrBase.Address, ptrBuffer.Address,
 				                                                      dwSize, out int numberOfBytesWritten));
 
 
@@ -112,7 +112,7 @@ namespace NeoCore.Memory
 
 
 				// Close the handle
-				Native.Kernel32.CloseHandle(hProc);
+				Native.Kernel.CloseHandle(hProc);
 			}
 
 			public static void WriteProcessMemory(Process proc, Pointer<byte> ptrBase, byte[] value)

@@ -1,6 +1,4 @@
 using System;
-using NeoCore.Interop.Structures.Raw;
-using NeoCore.Interop.Structures.Raw.Enums;
 using NeoCore.Memory.Pointers;
 
 namespace NeoCore.Interop.Structures

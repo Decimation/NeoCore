@@ -3,6 +3,7 @@ using NeoCore.CoreClr.Components;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Import;
+using NeoCore.Import.Attributes;
 
 namespace NeoCore.Utilities.Extensions
 {

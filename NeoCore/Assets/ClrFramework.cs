@@ -61,15 +61,15 @@ namespace NeoCore.Assets
 	{
 		public FileInfo SymbolFile {
 			get {
-				const string PDB_EXT = ".pdb";
-				return Runtime.GetRuntimeFile(FilenameRoot + PDB_EXT);
+				
+				return Runtime.GetRuntimeFile(FilenameRoot + Format.PDB_EXT);
 			}
 		}
 
 		public FileInfo LibraryFile {
 			get {
-				const string DLL_EXT = ".dll";
-				return Runtime.GetRuntimeFile(FilenameRoot + DLL_EXT);
+				
+				return Runtime.GetRuntimeFile(FilenameRoot + Format.DLL_EXT);
 			}
 		}
 

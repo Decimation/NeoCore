@@ -21,6 +21,8 @@ namespace NeoCore.Import
 
 		public const string FIELD_NAME = "Imports";
 
+		#region Call
+
 		public TRet Call<TRet>(string id) =>
 			Functions.Native.Call<TRet>(this[id].ToPointer());
 
@@ -53,5 +55,7 @@ namespace NeoCore.Import
 
 		public void* CallReturnPointer<T1, T2, T3>(string id, T1 arg1, T2 arg2, T3 arg3) =>
 			Functions.Native.CallReturnPointer(this[id].ToPointer(), arg1, arg2, arg3);
+
+		#endregion
 	}
 }

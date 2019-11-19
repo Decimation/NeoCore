@@ -2,6 +2,7 @@ using System;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.CoreClr;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Meta;
@@ -34,7 +35,7 @@ namespace NeoCore.Memory
 
 		/// <summary>
 		///     If the type is a <see cref="string" />, return the
-		///     pointer offset by <see cref="Constants.Offsets.OffsetToStringData" /> so it
+		///     pointer offset by <see cref="ClrInformation.OffsetToStringData" /> so it
 		///     points to the string's characters.
 		///     <remarks>
 		///         Note: Equal to <see cref="GCHandle.AddrOfPinnedObject" /> and <c>fixed</c>.
@@ -44,7 +45,7 @@ namespace NeoCore.Memory
 
 		/// <summary>
 		///     If the type is an array, return
-		///     the pointer offset by <see cref="Constants.Offsets.OffsetToArrayData" /> so it points
+		///     the pointer offset by <see cref="ClrInformation.OffsetToArrayData" /> so it points
 		///     to the array's elements.
 		///     <remarks>
 		///         Note: Equal to <see cref="GCHandle.AddrOfPinnedObject" /> and <c>fixed</c>
@@ -80,7 +81,7 @@ namespace NeoCore.Memory
 		///     <para> Equals <see cref="Marshal.SizeOf(Type)" /></para>
 		///     <para> Equals <see cref="StructLayoutAttribute.Size" /> when type isn't zero-sized.</para>
 		/// </remarks>
-		/// <returns>The native size if the type has a native representation; <see cref="Constants.INVALID_VALUE" /> otherwise</returns>
+		/// <returns>The native size if the type has a native representation; <see cref="ClrInformation.INVALID_VALUE" /> otherwise</returns>
 		Native,
 
 		/// <summary>
@@ -91,7 +92,7 @@ namespace NeoCore.Memory
 		///     <para>Returned from <see cref="EEClassLayoutInfo.ManagedSize" /></para>
 		/// </remarks>
 		/// <returns>
-		///     Managed size if the type has an <see cref="EEClassLayoutInfo" />; <see cref="Constants.INVALID_VALUE" />
+		///     Managed size if the type has an <see cref="EEClassLayoutInfo" />; <see cref="ClrInformation.INVALID_VALUE" />
 		///     otherwise
 		/// </returns>
 		Managed,
@@ -127,13 +128,13 @@ namespace NeoCore.Memory
 		///         <para>This includes field padding.</para>
 		///     </remarks>
 		/// </summary>
-		/// <returns><see cref="Constants.Sizes.MinObjectSize" /> if type is an array, fields size otherwise</returns>
+		/// <returns><see cref="ClrInformation.MinObjectSize" /> if type is an array, fields size otherwise</returns>
 		BaseFields,
 
 		/// <summary>
 		///     <para>Returns the base instance size according to the TypeHandle (<c>MethodTable</c>).</para>
 		///     <para>This is the minimum heap size of a type.</para>
-		///     <para>By default, this equals <see cref="Constants.Sizes.MinObjectSize" /> (<c>24</c> (x64) or <c>12</c> (x84)).</para>
+		///     <para>By default, this equals <see cref="ClrInformation.MinObjectSize" /> (<c>24</c> (x64) or <c>12</c> (x84)).</para>
 		/// </summary>
 		/// <remarks>
 		/// <para>Only a type parameter is needed, or a value can be supplied</para>
@@ -156,7 +157,7 @@ namespace NeoCore.Memory
 		///         <item>
 		///             <description>
 		///                 <see cref="MetaType.BaseSize" /> = The base instance size of a type
-		///                 (<c>24</c> (x64) or <c>12</c> (x86) by default) (<see cref="Constants.Sizes.MinObjectSize" />)
+		///                 (<c>24</c> (x64) or <c>12</c> (x86) by default) (<see cref="ClrInformation.MinObjectSize" />)
 		///             </description>
 		///         </item>
 		///         <item>

@@ -112,23 +112,23 @@ namespace NeoCore.Memory
 			switch (offset) {
 				case OffsetOptions.StringData:
 					Guard.Assert(Runtime.Properties.IsString(value));
-					offsetValue = Constants.Offsets.OffsetToStringData;
+					offsetValue = ClrInformation.OffsetToStringData;
 					break;
 
 				case OffsetOptions.ArrayData:
 					Guard.Assert(Runtime.Properties.IsArray(value));
-					offsetValue = Constants.Offsets.OffsetToArrayData;
+					offsetValue = ClrInformation.OffsetToArrayData;
 					break;
 
 				case OffsetOptions.Fields:
-					offsetValue = Constants.Offsets.OffsetToData;
+					offsetValue = ClrInformation.OffsetToData;
 					break;
 
 				case OffsetOptions.None:
 					break;
 
 				case OffsetOptions.Header:
-					offsetValue = -Constants.Offsets.OffsetToData;
+					offsetValue = -ClrInformation.OffsetToData;
 					break;
 
 				default:
@@ -173,7 +173,7 @@ namespace NeoCore.Memory
 					return mt.NativeSize;
 
 				case SizeOfOptions.Managed:
-					return mt.HasLayout ? mt.LayoutInfo.ManagedSize : Constants.INVALID_VALUE;
+					return mt.HasLayout ? mt.LayoutInfo.ManagedSize : ClrInformation.INVALID_VALUE;
 
 				case SizeOfOptions.Intrinsic:
 					return SizeOf<T>();
@@ -202,7 +202,7 @@ namespace NeoCore.Memory
 				}
 
 				// Subtract the size of the ObjHeader and MethodTable*
-				return HeapSizeOfInternal(data) - Constants.Sizes.ObjectBaseSize;
+				return HeapSizeOfInternal(data) - ClrInformation.ObjectBaseSize;
 			}
 
 			static int BaseSizeOfData(Type type)
@@ -219,7 +219,7 @@ namespace NeoCore.Memory
 			}
 
 
-			return Constants.INVALID_VALUE;
+			return ClrInformation.INVALID_VALUE;
 		}
 
 
@@ -237,7 +237,7 @@ namespace NeoCore.Memory
 		///         <item>
 		///             <description>
 		///                 <see cref="MethodTable.BaseSize" /> = The base instance size of a type
-		///                 (<c>24</c> (x64) or <c>12</c> (x86) by default) (<see cref="Constants.Sizes.MinObjectSize" />)
+		///                 (<c>24</c> (x64) or <c>12</c> (x86) by default) (<see cref="ClrInformation.MinObjectSize" />)
 		///             </description>
 		///         </item>
 		///         <item>
@@ -268,7 +268,7 @@ namespace NeoCore.Memory
 			Guard.Assert(!Runtime.Properties.IsStruct(value));
 
 			if (Runtime.Info.IsNil(value)) {
-				return Constants.INVALID_VALUE;
+				return ClrInformation.INVALID_VALUE;
 			}
 
 			// By manually reading the MethodTable*, we can calculate the size correctly if the reference

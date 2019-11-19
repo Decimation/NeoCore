@@ -2,14 +2,11 @@ using System;
 using System.IO;
 using System.Reflection;
 using NeoCore.Interop.Structures;
-using NeoCore.Interop.Structures.Raw;
-using NeoCore.Interop.Structures.Raw.Enums;
-using NeoCore.Memory;
 using NeoCore.Utilities.Extensions;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.Interop
+namespace NeoCore.Assets
 {
 	// Credits: John Stewien
 	// From: http://code.cheesydesign.com/?p=572
@@ -25,11 +22,11 @@ namespace NeoCore.Interop
 	/// Reads in the header information of the Portable Executable format.
 	/// Provides information such as the date the assembly was compiled.
 	/// </summary>
-	public class PEHeaderReader
+	public sealed class LibraryReader
 	{
 		#region Public Methods
 
-		public PEHeaderReader(string filePath)
+		public LibraryReader(string filePath)
 		{
 			// Read in the DLL or EXE and get the timestamp
 			using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -63,14 +60,14 @@ namespace NeoCore.Interop
 		/// Gets the header of the .NET assembly that called this function
 		/// </summary>
 		/// <returns></returns>
-		public static PEHeaderReader CallingAssemblyHeader {
+		public static LibraryReader CallingAssemblyHeader {
 			get {
 				// Get the path to the calling assembly, which is the path to the
 				// DLL or EXE that we want the time of
 				string filePath = Assembly.GetCallingAssembly().Location;
 
 				// Get and return the timestamp
-				return new PEHeaderReader(filePath);
+				return new LibraryReader(filePath);
 			}
 		}
 
@@ -78,14 +75,14 @@ namespace NeoCore.Interop
 		/// Gets the header of the .NET assembly that called this function
 		/// </summary>
 		/// <returns></returns>
-		public static PEHeaderReader AssemblyHeader {
+		public static LibraryReader AssemblyHeader {
 			get {
 				// Get the path to the calling assembly, which is the path to the
 				// DLL or EXE that we want the time of
-				string filePath = Assembly.GetAssembly(typeof(PEHeaderReader)).Location;
+				string filePath = Assembly.GetAssembly(typeof(LibraryReader)).Location;
 
 				// Get and return the timestamp
-				return new PEHeaderReader(filePath);
+				return new LibraryReader(filePath);
 			}
 		}
 

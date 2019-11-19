@@ -17,7 +17,7 @@ namespace NeoCore.Import
 
 		
 		internal static string ScopeJoin(string[] scopes) =>
-			String.Join(Format.Constants.SCOPE_RESOLUTION_OPERATOR, scopes);
+			String.Join(Format.JOIN_SCOPE, scopes);
 
 		private static bool IsAnnotated(MemberInfo t, out ImportNamespaceAttribute attr)
 		{

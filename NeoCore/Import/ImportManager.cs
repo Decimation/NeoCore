@@ -16,7 +16,6 @@ using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
 using static NeoCore.Utilities.Format;
-using Constants = NeoCore.Utilities.Format.Constants;
 using Unsafe = NeoCore.Memory.Unsafe;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
@@ -410,7 +409,7 @@ namespace NeoCore.Import
 
 				if (name.StartsWith(GET_PROPERTY_PREFIX)) {
 					// The nameof operator does not return the name with the get prefix
-					Format.Remove(ref name, GET_PROPERTY_PREFIX);
+					name = name.Replace(GET_PROPERTY_PREFIX, String.Empty);
 				}
 
 				importMaps[enclosing].Add(name, addr);

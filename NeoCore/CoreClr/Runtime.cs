@@ -9,6 +9,7 @@ using NeoCore.Assets;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Interop;
+using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
@@ -22,6 +23,11 @@ namespace NeoCore.CoreClr
 	/// </summary>
 	public static unsafe partial class Runtime
 	{
+		static Runtime()
+		{
+			GetTypeFromHandle = Functions.Reflection.FindFunction<GetTypeFromHandleDelegate>();
+		}
+
 		public static bool IsInDebugMode => Debugger.IsAttached;
 
 		public static bool IsWindowsPlatform => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
@@ -38,10 +44,13 @@ namespace NeoCore.CoreClr
 			}
 		}
 
-		internal static Type ResolveType(Pointer<byte> handle)
-		{
-			return Functions.Clr.GetTypeFromHandle(handle.Address);
-		}
+
+		[ReflectionFunction(typeof(Type), "GetTypeFromHandleUnsafe")]
+		private delegate Type GetTypeFromHandleDelegate(IntPtr handle);
+
+		private static readonly GetTypeFromHandleDelegate GetTypeFromHandle;
+
+		internal static Type ResolveType(Pointer<byte> handle) => GetTypeFromHandle(handle.Address);
 
 		/// <summary>
 		/// Returns a pointer to the internal CLR metadata structure of <paramref name="member"/>
@@ -65,7 +74,7 @@ namespace NeoCore.CoreClr
 		public static MetaType ReadTypeHandle<T>(T value)
 		{
 			// Value types do not have a MethodTable ptr, but they do have a TypeHandle.
-			if (Runtime.Properties.IsStruct(value))
+			if (Properties.IsStruct(value))
 				return ReadTypeHandle(value.GetType());
 
 			Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr);
@@ -82,16 +91,11 @@ namespace NeoCore.CoreClr
 			return new MetaType(typeHandleValue.MethodTable);
 		}
 
-		internal static ObjHeader ReadObjHeader<T>(T value) where T : class
-		{
-			Pointer<ObjHeader> ptr = Unsafe.AddressOfHeap(value, OffsetOptions.Header).Cast<ObjHeader>();
-			return ptr.Value;
-		}
+		internal static ObjHeader ReadObjHeader<T>(T value) where T : class =>
+			Unsafe.AddressOfHeap(value, OffsetOptions.Header).Cast<ObjHeader>().Value;
 
 
-		internal static FileInfo GetRuntimeFile(string fileName)
-		{
-			return new FileInfo(RuntimeEnvironment.GetRuntimeDirectory() + fileName);
-		}
+		internal static FileInfo GetRuntimeFile(string fileName) =>
+			new FileInfo(RuntimeEnvironment.GetRuntimeDirectory() + fileName);
 	}
 }

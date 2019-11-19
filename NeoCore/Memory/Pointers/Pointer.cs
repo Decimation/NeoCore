@@ -452,7 +452,7 @@ namespace NeoCore.Memory.Pointers
 
 		public override string ToString()
 		{
-			return Format.Hex.ToHexString(m_value);
+			return Format.ToHexString(m_value);
 		}
 	}
 }

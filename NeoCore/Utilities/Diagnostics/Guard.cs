@@ -20,11 +20,15 @@ namespace NeoCore.Utilities.Diagnostics
 
 		private const string UNCONDITIONAL_HALT = "=> halt";
 
+		internal const string COND_DEBUG = "DEBUG";
+
+		private const string STRING_FMT_ARG = "msg";
+
 		#region Assert
 
 		[AssertionMethod]
 		[ContractAnnotation(COND_FALSE_HALT)]
-		[Conditional(Constants.COND_DEBUG)]
+		[Conditional(COND_DEBUG)]
 		internal static void AssertDebug(bool condition) => Assert<GuardException>(condition);
 
 		[AssertionMethod]
@@ -33,7 +37,7 @@ namespace NeoCore.Utilities.Diagnostics
 
 		[AssertionMethod]
 		[ContractAnnotation(COND_FALSE_HALT)]
-		[StringFormatMethod(Constants.STRING_FMT_ARG)]
+		[StringFormatMethod(STRING_FMT_ARG)]
 		internal static void Assert<TException>(bool condition, string msg = null, params object[] args)
 			where TException : Exception, new()
 		{
@@ -44,13 +48,13 @@ namespace NeoCore.Utilities.Diagnostics
 
 		[AssertionMethod]
 		[ContractAnnotation(COND_FALSE_HALT)]
-		[StringFormatMethod(Constants.STRING_FMT_ARG)]
+		[StringFormatMethod(STRING_FMT_ARG)]
 		internal static void Assert(bool condition, string msg = null, params object[] args) =>
 			Assert<GuardException>(condition, msg, args);
 
 		[AssertionMethod]
 		[ContractAnnotation(COND_FALSE_HALT)]
-		[StringFormatMethod(Constants.STRING_FMT_ARG)]
+		[StringFormatMethod(STRING_FMT_ARG)]
 		internal static void AssertWin32(bool condition, string msg = null, params object[] args) =>
 			Assert<Win32Exception>(condition, msg, args);
 
@@ -86,7 +90,7 @@ namespace NeoCore.Utilities.Diagnostics
 
 		[AssertionMethod]
 		[ContractAnnotation(UNCONDITIONAL_HALT)]
-		[StringFormatMethod(Constants.STRING_FMT_ARG)]
+		[StringFormatMethod(STRING_FMT_ARG)]
 		internal static void Fail<TException>(string msg = null, params object[] args)
 			where TException : Exception, new()
 		{
@@ -101,7 +105,7 @@ namespace NeoCore.Utilities.Diagnostics
 
 		[AssertionMethod]
 		[ContractAnnotation(UNCONDITIONAL_HALT)]
-		[StringFormatMethod(Constants.STRING_FMT_ARG)]
+		[StringFormatMethod(STRING_FMT_ARG)]
 		internal static void Fail(string msg = null, params object[] args) => Fail<GuardException>(msg, args);
 
 		internal static string CreateErrorMessage(string template, string msg = null)

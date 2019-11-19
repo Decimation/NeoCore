@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Components;
@@ -18,13 +19,10 @@ namespace NeoCore.Assets
 	/// </summary>
 	internal static class Resources
 	{
-		/**
-		 * todo list
-		 *
-		 * - Compare with RazorSharp
-		 * - Add/improve missing features from RazorSharp
-		 * - Clean up
-		 */
+		/// <summary>
+		/// Name of this assembly.
+		/// </summary>
+		public const string NAME = "NeoCore";
 
 		/**
 		 * - https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces?redirectedfrom=MSDN
@@ -49,7 +47,7 @@ namespace NeoCore.Assets
 			typeof(EEClass),
 			typeof(EEClassLayoutInfo),
 			typeof(MethodDescChunk),
-			typeof(Globals),
+			typeof(ClrInformation),
 		};
 
 		private static readonly Closable[] CoreObjects =
@@ -59,7 +57,11 @@ namespace NeoCore.Assets
 			CoreLogger.Value,
 		};
 
-		internal static RuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(ClrFrameworks.Core);
+		internal static ClrFramework Framework => ClrFrameworks.Core;
+		
+		internal static NeoProcess CurrentProcess => Process.GetCurrentProcess();
+		
+		internal static RuntimeImportAsset Clr { get; private set; } = new ClrRuntimeAsset(Framework);
 
 		private static void SetupAll()
 		{

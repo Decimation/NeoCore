@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -22,7 +23,6 @@ using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
-using NeoCore.Interop.Structures.Raw.Enums;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
@@ -37,17 +37,14 @@ using Unsafe = NeoCore.Memory.Unsafe;
 namespace Test
 {
 	// nuget pack -Prop Configuration=Release
-	
-	internal static unsafe class Program
-	{
-		static int Add(int a, int b)
-		{
-			return a + b;
-		}
 
+	public static unsafe class Program
+	{
 		private static void Main(string[] args)
 		{
-			
+			var sym = Resources.Clr.Imports;
+			var s   = ((ModuleImport) sym).GetSymbol("JIT_GetRuntimeType");
+			Console.WriteLine(s);
 		}
 	}
 }

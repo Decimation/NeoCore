@@ -75,14 +75,14 @@ namespace NeoCore.Assets
 
 #if DEBUG
 
-		[Conditional(Constants.COND_DEBUG)]
+		[Conditional(Guard.COND_DEBUG)]
 		internal void SuppressLogger()
 		{
 			Log = Logger.None;
 		}
 #endif
 
-		[Conditional(Constants.COND_DEBUG)]
+		[Conditional(Guard.COND_DEBUG)]
 		private static void ContextLog(string ctx, Action<string, object[]> log, string msg, object[] args)
 		{
 			if (ctx == null) {
@@ -102,7 +102,7 @@ namespace NeoCore.Assets
 		/// <param name="ctx">Context property</param>
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
-		[Conditional(Constants.COND_DEBUG)]
+		[Conditional(Guard.COND_DEBUG)]
 		internal void WriteDebug(string ctx, string msg, params object[] args) => 
 			ContextLog(ctx, Log.Debug, msg, args);
 
@@ -113,7 +113,7 @@ namespace NeoCore.Assets
 		/// <param name="ctx">Context property</param>
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
-		[Conditional(Constants.COND_DEBUG)]
+		[Conditional(Guard.COND_DEBUG)]
 		internal void WriteInfo(string ctx, string msg, params object[] args) =>
 			ContextLog(ctx, Log.Information, msg, args);
 
@@ -124,7 +124,7 @@ namespace NeoCore.Assets
 		/// <param name="ctx">Context property</param>
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
-		[Conditional(Constants.COND_DEBUG)]
+		[Conditional(Guard.COND_DEBUG)]
 		internal void WriteVerbose(string ctx, string msg, params object[] args) =>
 			ContextLog(ctx, Log.Verbose, msg, args);
 
@@ -135,7 +135,7 @@ namespace NeoCore.Assets
 		/// <param name="ctx">Context property</param>
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
-		[Conditional(Constants.COND_DEBUG)]
+		[Conditional(Guard.COND_DEBUG)]
 		internal void WriteWarning(string ctx, string msg, params object[] args) =>
 			ContextLog(ctx, Log.Warning, msg, args);
 
@@ -146,7 +146,7 @@ namespace NeoCore.Assets
 		/// <param name="ctx">Context property</param>
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
-		[Conditional(Constants.COND_DEBUG)]
+		[Conditional(Guard.COND_DEBUG)]
 		internal void WriteError(string ctx, string msg, params object[] args) => 
 			ContextLog(ctx, Log.Error, msg, args);
 
@@ -157,7 +157,7 @@ namespace NeoCore.Assets
 		/// <param name="ctx">Context property</param>
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
-		[Conditional(Constants.COND_DEBUG)]
+		[Conditional(Guard.COND_DEBUG)]
 		internal void WriteFatal(string ctx, string msg, params object[] args) => 
 			ContextLog(ctx, Log.Fatal, msg, args);
 

@@ -13,8 +13,9 @@ namespace NeoCore.Import
 	/// </summary>
 	internal class ModuleImport : IImportProvider
 	{
-		public FileInfo      SymbolFile { get; }
-		public Pointer<byte> Address    { get; }
+		public FileInfo SymbolFile { get; }
+
+		public Pointer<byte> Address { get; }
 
 		internal ModuleImport(FileInfo pdb, ProcessModule module) : this(pdb, module.BaseAddress) { }
 
@@ -26,12 +27,12 @@ namespace NeoCore.Import
 			SymbolFile = pdb;
 		}
 
-		private Symbol GetSymbol(string name)
+		internal Symbol GetSymbol(string name)
 		{
 			SymbolManager.Value.CurrentImage = SymbolFile;
 			return SymbolManager.Value.GetSymbol(name);
 		}
-
+		
 		public Pointer<byte> GetAddress(string id)
 		{
 			long ofs = GetSymbol(id).Offset;
