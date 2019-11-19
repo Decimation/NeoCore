@@ -15,6 +15,8 @@ using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
+using static NeoCore.Utilities.Format;
+using Constants = NeoCore.Utilities.Format.Constants;
 using Unsafe = NeoCore.Memory.Unsafe;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
@@ -25,10 +27,10 @@ namespace NeoCore.Import
 	{
 		#region Constants
 
+		protected override string Id => nameof(ImportManager);
+
 		private const string GET_PROPERTY_PREFIX      = "get_";
 		private const string GET_PROPERTY_REPLACEMENT = "Get";
-
-		protected override string Id => nameof(ImportManager);
 
 		#endregion
 
@@ -99,18 +101,18 @@ namespace NeoCore.Import
 				if (isMethod && isCtor) {
 					CheckConstructorOptions(options);
 
-					return Format.Combine(new []{enclosingNamespace, enclosingNamespace}, Format.SCOPE_RESOLUTION_OPERATOR);
+					return ScopeJoin(new[] {enclosingNamespace, enclosingNamespace});
 				}
 			}
 
 
 			if (!options.HasFlagFast(IdentifierOptions.IgnoreEnclosingNamespace)) {
-				resolvedId = Format.Combine(new []{enclosingNamespace, resolvedId}, Format.SCOPE_RESOLUTION_OPERATOR);
+				resolvedId = ScopeJoin(new[] {enclosingNamespace, resolvedId});
 			}
 
 			if (!options.HasFlagFast(IdentifierOptions.IgnoreNamespace)) {
 				if (nameSpace != null) {
-					resolvedId = Format.Combine(new []{nameSpace, resolvedId}, Format.SCOPE_RESOLUTION_OPERATOR);
+					resolvedId = ScopeJoin(new[] {nameSpace, resolvedId});
 				}
 			}
 

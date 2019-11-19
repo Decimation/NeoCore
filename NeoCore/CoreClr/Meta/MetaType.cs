@@ -32,7 +32,7 @@ namespace NeoCore.CoreClr.Meta
 		public MetaType(Pointer<MethodTable> mt) : base(mt)
 		{
 			RuntimeType         = Runtime.ResolveType(mt.Cast());
-			AuxiliaryProperties = Runtime.Info.ReadProperties(RuntimeType);
+			AuxiliaryProperties = Runtime.Properties.ReadProperties(RuntimeType);
 		}
 
 		public MetaType(Type t) : this(Runtime.ResolveHandle(t)) { }

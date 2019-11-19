@@ -54,6 +54,9 @@ namespace NeoCore.Memory
 			return elemCnt * elemSize;
 		}
 
+		/// <summary>
+		/// Reads a simple structure using stack allocation.
+		/// </summary>
 		public static T ReadStructure<T>(byte[] bytes) where T : struct
 		{
 			// Pin the managed memory while, copy it out the data, then unpin it
@@ -86,11 +89,13 @@ namespace NeoCore.Memory
 
 		public static int Val32(int i)
 		{
+			// todo
 			return i;
 		}
 
 		public static short Val16(short i)
 		{
+			// todo
 			return i;
 		}
 
@@ -105,7 +110,7 @@ namespace NeoCore.Memory
 
 		public static void Destroy<T>(ref T value)
 		{
-			if (!Runtime.Info.IsStruct(value)) {
+			if (!Runtime.Properties.IsStruct(value)) {
 				int           size = Unsafe.SizeOf(value, SizeOfOptions.Data);
 				Pointer<byte> ptr  = Unsafe.AddressOfFields(ref value);
 				ptr.Cast().Clear(size);

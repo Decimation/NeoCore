@@ -1,5 +1,8 @@
 using System;
+using System.Diagnostics;
 using System.Reflection;
+using System.Runtime;
+using System.Runtime.InteropServices;
 using NeoCore.CoreClr.Components.Support;
 using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
@@ -7,6 +10,7 @@ using NeoCore.Interop;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
+// ReSharper disable InconsistentNaming
 
 namespace NeoCore.CoreClr
 {
@@ -15,6 +19,34 @@ namespace NeoCore.CoreClr
 	/// </summary>
 	public static unsafe partial class Runtime
 	{
+		public static bool IsInDebugMode => Debugger.IsAttached;
+
+		public static bool IsWindowsPlatform => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+		public static bool IsWorkstationGC => !GCSettings.IsServerGC;
+
+		public static bool IsMonoRuntime => Type.GetType("Mono.Runtime") != null;
+
+		public static ClrFramework CurrentFramework {
+			get {
+#if NETCOREAPP
+				return ClrFrameworks.Core;
+#endif
+
+#if NETFRAMEWORK
+				return ClrFrameworks.Framework;
+#endif
+
+#if NETSTANDARD
+				return ClrFrameworks.Standard;
+#endif
+#pragma warning disable 162
+				// ReSharper disable once HeuristicUnreachableCode
+				Guard.Fail();
+#pragma warning restore 162
+			}
+		}
+		
 		internal static Type ResolveType(Pointer<byte> handle)
 		{
 			return Functions.Clr.ReadTypeFromHandle(handle.Address);
@@ -42,7 +74,7 @@ namespace NeoCore.CoreClr
 		public static MetaType ReadTypeHandle<T>(T value)
 		{
 			// Value types do not have a MethodTable ptr, but they do have a TypeHandle.
-			if (Runtime.Info.IsStruct(value))
+			if (Runtime.Properties.IsStruct(value))
 				return ReadTypeHandle(value.GetType());
 
 			Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr);

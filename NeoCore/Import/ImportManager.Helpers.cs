@@ -15,6 +15,10 @@ namespace NeoCore.Import
 	{
 		private bool IsBound(Type t) => m_boundTypes.Contains(t);
 
+		
+		internal static string ScopeJoin(string[] scopes) =>
+			String.Join(Format.Constants.SCOPE_RESOLUTION_OPERATOR, scopes);
+
 		private static bool IsAnnotated(MemberInfo t, out ImportNamespaceAttribute attr)
 		{
 			attr = t.GetCustomAttribute<ImportNamespaceAttribute>();

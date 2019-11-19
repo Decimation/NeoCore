@@ -47,7 +47,7 @@ namespace NeoCore.Memory
 
 		public static bool TryGetAddressOfHeap<T>(T value, OffsetOptions options, out Pointer<byte> ptr)
 		{
-			if (Runtime.Info.IsStruct(value)) {
+			if (Runtime.Properties.IsStruct(value)) {
 				ptr = null;
 				return false;
 			}
@@ -71,7 +71,7 @@ namespace NeoCore.Memory
 		{
 			Pointer<T> addr = AddressOf(ref value);
 
-			return Runtime.Info.IsStruct(value) ? addr.Cast() : AddressOfHeapInternal(value, OffsetOptions.Fields);
+			return Runtime.Properties.IsStruct(value) ? addr.Cast() : AddressOfHeapInternal(value, OffsetOptions.Fields);
 		}
 
 
@@ -111,12 +111,12 @@ namespace NeoCore.Memory
 
 			switch (offset) {
 				case OffsetOptions.StringData:
-					Guard.Assert(Runtime.Info.IsString(value));
+					Guard.Assert(Runtime.Properties.IsString(value));
 					offsetValue = Constants.Offsets.OffsetToStringData;
 					break;
 
 				case OffsetOptions.ArrayData:
-					Guard.Assert(Runtime.Info.IsArray(value));
+					Guard.Assert(Runtime.Properties.IsArray(value));
 					offsetValue = Constants.Offsets.OffsetToArrayData;
 					break;
 
@@ -149,7 +149,7 @@ namespace NeoCore.Memory
 
 			if (options == SizeOfOptions.Auto) {
 				// Break into the next switch branch which will go to resolved case
-				options = Runtime.Info.IsStruct(value) ? SizeOfOptions.Intrinsic : SizeOfOptions.Heap;
+				options = Runtime.Properties.IsStruct(value) ? SizeOfOptions.Intrinsic : SizeOfOptions.Heap;
 			}
 
 			// If a value was supplied
@@ -181,7 +181,7 @@ namespace NeoCore.Memory
 					return mt.InstanceFieldsSize;
 
 				case SizeOfOptions.BaseInstance:
-					Guard.Assert(!Runtime.Info.IsCompileStruct<T>());
+					Guard.Assert(!Runtime.Properties.IsCompileStruct<T>());
 					return mt.BaseSize;
 
 				case SizeOfOptions.Heap:
@@ -197,7 +197,7 @@ namespace NeoCore.Memory
 
 			static int SizeOfData(T data)
 			{
-				if (Runtime.Info.IsStruct(data)) {
+				if (Runtime.Properties.IsStruct(data)) {
 					return SizeOf<T>();
 				}
 
@@ -265,7 +265,7 @@ namespace NeoCore.Memory
 		private static int HeapSizeOfInternal<T>(T value)
 		{
 			// Sanity check
-			Guard.Assert(!Runtime.Info.IsStruct(value));
+			Guard.Assert(!Runtime.Properties.IsStruct(value));
 
 			if (Runtime.Info.IsNil(value)) {
 				return Constants.INVALID_VALUE;
@@ -307,7 +307,7 @@ namespace NeoCore.Memory
 			 *
 			 */
 
-			if (Runtime.Info.IsArray(value)) {
+			if (Runtime.Properties.IsArray(value)) {
 				var arr = value as Array;
 
 				// ReSharper disable once PossibleNullReferenceException
@@ -315,13 +315,13 @@ namespace NeoCore.Memory
 				length = arr.Length;
 
 				// Sanity check
-				Guard.Assert(!Runtime.Info.IsString(value));
+				Guard.Assert(!Runtime.Properties.IsString(value));
 			}
-			else if (Runtime.Info.IsString(value)) {
+			else if (Runtime.Properties.IsString(value)) {
 				string str = value as string;
 
 				// Sanity check
-				Guard.Assert(!Runtime.Info.IsArray(value));
+				Guard.Assert(!Runtime.Properties.IsArray(value));
 				Guard.AssertNotNull(str, nameof(str));
 
 				length = str.Length;

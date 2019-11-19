@@ -12,26 +12,14 @@ namespace NeoCore.Utilities
 	/// </summary>
 	public static partial class Format
 	{
+		/// <summary>
+		/// Returns the internal metadata name of a property's backing field.
+		/// </summary>
+		/// <param name="name">Regular field name (name of the property)</param>
+		/// <returns>Actual name of the backing field.</returns>
 		public static string GetBackingFieldName(string name)
 		{
 			return String.Format("<{0}>k__BackingField", name);
-		}
-
-		internal const string SCOPE_RESOLUTION_OPERATOR = "::";
-
-		internal static string Combine(string[] args, string delim)
-		{
-			var sb = new StringBuilder();
-
-			for (int i = 0; i < args.Length; i++) {
-				sb.Append(args[i]);
-
-				if (i + 1 != args.Length) {
-					sb.Append(delim);
-				}
-			}
-
-			return sb.ToString();
 		}
 
 		public static void Remove(ref string value, string substring)

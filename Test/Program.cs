@@ -37,6 +37,8 @@ using Unsafe = NeoCore.Memory.Unsafe;
 
 namespace Test
 {
+	// nuget pack -Prop Configuration=Release
+	
 	internal static unsafe class Program
 	{
 		static int Add(int a, int b)
@@ -46,7 +48,7 @@ namespace Test
 
 		private static void Main(string[] args)
 		{
-			
+			Console.WriteLine(Runtime.Info.IsBlank<int>(default));
 		}
 	}
 }
