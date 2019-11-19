@@ -118,4 +118,15 @@ namespace NeoCore.Memory
 			value = default;
 		}
 	}
+	
+	public static class MemoryExtensions
+	{
+		public static T ReadStructure<T>(this BinaryReader reader) where T : struct
+		{
+			// Read in a byte array
+			byte[] bytes = reader.ReadBytes(Marshal.SizeOf<T>());
+
+			return Mem.ReadStructure<T>(bytes);
+		}
+	}
 }

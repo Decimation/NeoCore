@@ -10,8 +10,27 @@ namespace NeoCore.Utilities
 	/// <summary>
 	/// Contains utilities for formatting.
 	/// </summary>
-	public static partial class Format
+	public static class Format
 	{
+		public static string ColumnTable<T1, T2>(KeyValuePair<T1, T2>[] kv)
+		{
+			List<string> list   = kv.Select(pair => String.Format("{0}: {1}", pair.Key, pair.Value)).ToList();
+			int          maxLen = list.Max(s => s.Length);
+
+			for (int i = list.Count - 1; i >= 0; i--) {
+				string s = list[i];
+				list[i] = s.PadRight(maxLen) + " |";
+			}
+			
+			var sb = new StringBuilder();
+			
+			foreach (string s in list) {
+				sb.AppendLine(s);
+			}
+
+			return sb.ToString();
+		}
+
 		/// <summary>
 		/// Returns the internal metadata name of a property's backing field.
 		/// </summary>
@@ -21,8 +40,9 @@ namespace NeoCore.Utilities
 		{
 			return String.Format("<{0}>k__BackingField", name);
 		}
-		
+
 		public const string PDB_EXT = ".pdb";
+
 		public const string DLL_EXT = ".dll";
 
 		#region Join

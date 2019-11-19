@@ -59,4 +59,13 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		#endregion
 	}
+	
+	public static class MetaExtensions
+	{
+		public static MetaType AsMetaType(this Type t) => t;
+
+		public static MetaField AsMetaField(this FieldInfo t) => t;
+
+		public static MetaMethod AsMetaMethod(this MethodInfo t) => t;
+	}
 }

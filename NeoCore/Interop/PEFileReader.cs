@@ -2,6 +2,7 @@ using System;
 using System.IO;
 using System.Reflection;
 using NeoCore.Interop.Structures;
+using NeoCore.Memory;
 using NeoCore.Utilities.Extensions;
 
 // ReSharper disable InconsistentNaming

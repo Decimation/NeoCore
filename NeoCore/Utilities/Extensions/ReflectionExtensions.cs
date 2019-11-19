@@ -66,15 +66,9 @@ namespace NeoCore.Utilities.Extensions
 
 		internal static AnnotatedMember<TAttr>[] GetAnnotated<TAttr>(this Type t) where TAttr : Attribute
 		{
-			var components = new List<AnnotatedMember<TAttr>>();
-
-			foreach (var member in t.GetAllMembers()) {
-				if (Attribute.IsDefined(member, typeof(TAttr))) {
-					components.Add(new AnnotatedMember<TAttr>(member, member.GetCustomAttribute<TAttr>()));
-				}
-			}
-
-			return components.ToArray();
+			return (from member in t.GetAllMembers()
+			        where Attribute.IsDefined(member, typeof(TAttr))
+			        select new AnnotatedMember<TAttr>(member, member.GetCustomAttribute<TAttr>())).ToArray();
 		}
 
 		#endregion
