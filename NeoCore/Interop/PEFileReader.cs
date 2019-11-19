@@ -6,7 +6,7 @@ using NeoCore.Utilities.Extensions;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.Assets
+namespace NeoCore.Interop
 {
 	// Credits: John Stewien
 	// From: http://code.cheesydesign.com/?p=572
@@ -22,11 +22,11 @@ namespace NeoCore.Assets
 	/// Reads in the header information of the Portable Executable format.
 	/// Provides information such as the date the assembly was compiled.
 	/// </summary>
-	public sealed class LibraryReader
+	public sealed class PEFileReader
 	{
 		#region Public Methods
 
-		public LibraryReader(string filePath)
+		public PEFileReader(string filePath)
 		{
 			// Read in the DLL or EXE and get the timestamp
 			using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
@@ -56,18 +56,19 @@ namespace NeoCore.Assets
 			}
 		}
 
+
 		/// <summary>
 		/// Gets the header of the .NET assembly that called this function
 		/// </summary>
 		/// <returns></returns>
-		public static LibraryReader CallingAssemblyHeader {
+		public static PEFileReader CallingAssemblyHeader {
 			get {
 				// Get the path to the calling assembly, which is the path to the
 				// DLL or EXE that we want the time of
 				string filePath = Assembly.GetCallingAssembly().Location;
 
 				// Get and return the timestamp
-				return new LibraryReader(filePath);
+				return new PEFileReader(filePath);
 			}
 		}
 
@@ -75,14 +76,14 @@ namespace NeoCore.Assets
 		/// Gets the header of the .NET assembly that called this function
 		/// </summary>
 		/// <returns></returns>
-		public static LibraryReader AssemblyHeader {
+		public static PEFileReader AssemblyHeader {
 			get {
 				// Get the path to the calling assembly, which is the path to the
 				// DLL or EXE that we want the time of
-				string filePath = Assembly.GetAssembly(typeof(LibraryReader)).Location;
+				string filePath = Assembly.GetAssembly(typeof(PEFileReader)).Location;
 
 				// Get and return the timestamp
-				return new LibraryReader(filePath);
+				return new PEFileReader(filePath);
 			}
 		}
 

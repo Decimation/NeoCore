@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Interop.Attributes;
+using NeoCore.Memory.Pointers;
 
 
 // ReSharper disable InconsistentNaming
@@ -379,6 +380,48 @@ namespace NeoCore.Interop.Structures
 		public ImageDataDirectory Reserved;
 	}
 	
+	[NativeStructure]
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public struct ImageNtHeaders64
+	{
+		public uint Signature { get; }
+
+		public ImageFileHeader FileHeader { get; }
+
+		public ImageOptionalHeader64 OptionalHeader { get; }
+	}
+	
+	/// <summary>
+	/// Wraps an <see cref="ImageSectionHeader"/>
+	/// </summary>
+	public sealed class ImageSectionInfo
+	{
+		public string Name { get; }
+
+		public int Number { get; }
+
+		public Pointer<byte> Address { get; }
+
+		public int Size { get; }
+
+		public ImageSectionFlags Characteristics { get; }
+
+		internal ImageSectionInfo(ImageSectionHeader struc, int number, IntPtr address)
+		{
+			Number          = number;
+			Name            = new string(struc.Name);
+			Address         = address;
+			Size            = (int) struc.VirtualSize;
+			Characteristics = struc.Characteristics;
+		}
+
+		public override string ToString()
+		{
+			return String.Format("Number: {0} | Name: {1} | Address: {2} | Size: {3} | Characteristics: {4}",
+			                     Number, Name, Address, Size, Characteristics);
+		}
+	}
+	
 	[Flags]
 	public enum ImageSectionFlags : uint
 	{
@@ -593,6 +636,7 @@ namespace NeoCore.Interop.Structures
 		MemoryWrite = 0x80000000
 	}
 
+	[Flags]
 	public enum ImageDllCharacteristics : ushort
 	{
 		DYNAMIC_BASE          = 0x0040,

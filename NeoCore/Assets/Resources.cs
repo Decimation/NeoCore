@@ -58,10 +58,10 @@ namespace NeoCore.Assets
 		};
 
 		internal static ClrFramework Framework => ClrFrameworks.Core;
-		
+
 		internal static NeoProcess CurrentProcess => Process.GetCurrentProcess();
-		
-		internal static RuntimeImportAsset Clr { get; private set; } = new ClrRuntimeAsset(Framework);
+
+		internal static ClrRuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(Framework);
 
 		private static void SetupAll()
 		{

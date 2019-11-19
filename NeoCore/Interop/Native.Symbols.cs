@@ -22,6 +22,7 @@ namespace NeoCore.Interop
 		{
 			private const string SYM_PREFIX = "Sym";
 
+
 			#region Abstraction
 
 			internal static void Initialize(IntPtr hProcess) =>

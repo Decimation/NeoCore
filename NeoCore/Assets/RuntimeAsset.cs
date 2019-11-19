@@ -4,6 +4,7 @@ using System.IO;
 using System.Text;
 using NeoCore.Import;
 using NeoCore.Utilities;
+using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Assets
 {

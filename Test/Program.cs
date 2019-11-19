@@ -42,9 +42,13 @@ namespace Test
 	{
 		private static void Main(string[] args)
 		{
-			var sym = Resources.Clr.Imports;
-			var s   = ((ModuleImport) sym).GetSymbol("JIT_GetRuntimeType");
-			Console.WriteLine(s);
+			var m = Resources.Clr.Module;
+			
+			var x = Native.PE.ReadPESectionInfo(m.BaseAddress);
+			
+			foreach (var info in x) {
+				Console.WriteLine(info);
+			}
 		}
 	}
 }
