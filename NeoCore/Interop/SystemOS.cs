@@ -6,15 +6,18 @@ using System.IO;
 using System.Linq;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+// ReSharper disable ReturnTypeCanBeEnumerable.Global
+
+// ReSharper disable InconsistentNaming
 
 namespace NeoCore.Interop
 {
-	public static class OS
+	public static class SystemOS
 	{
 		public const string PDB_EXT = ".pdb";
 		public const string DLL_EXT = ".dll";
-		
-		public static FileInfo RunSymSrv(FileInfo dll, DirectoryInfo output)
+
+		public static FileInfo RunSymCheck(FileInfo dll, DirectoryInfo output)
 		{
 			// .NET Framework
 			// Version: 4.0.30319.42000
@@ -24,35 +27,32 @@ namespace NeoCore.Interop
 			// .NET Core
 			// symchk "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\3.0.0\coreclr.dll" /s SRV*C:\Users\Deci\Desktop\clr.pdb*http://msdl.microsoft.com/download/symbols
 
-			const string cmd       = "symchk";
-			const string serverArg = "http://msdl.microsoft.com/download/symbols";
+			const string SYMCHK_EXE = "symchk";
+
+			const string MSFT_SYM_SERVER = "http://msdl.microsoft.com/download/symbols";
 
 			string dllArg        = dll.FullName;
 			string outputArg     = output.FullName;
 			string outputPdbFile = Path.GetFileNameWithoutExtension(dll.Name) + PDB_EXT;
 
-			string fullCmd = String.Format("{0} \"{1}\" /s SRV*{2}\\{3}*{4}", cmd, dllArg,
-			                               outputArg, outputPdbFile, serverArg);
+			string fullCmd = String.Format("{0} \"{1}\" /s SRV*{2}\\{3}*{4}", SYMCHK_EXE, dllArg,
+			                               outputArg, outputPdbFile, MSFT_SYM_SERVER);
 
-			string[] stdOut  = ShellOutput(fullCmd);
-			bool     success = stdOut.Any(line => line.Contains("SYMCHK: PASSED + IGNORED files = 1"));
+			string[] stdOut = ShellOutput(fullCmd);
+
+			bool success = stdOut.Any(line => line.Contains("SYMCHK: PASSED + IGNORED files = 1"));
 
 			if (!success) {
 				throw new Win32Exception();
 			}
-			
-			var outputFolder = new DirectoryInfo(outputPdbFile);
 
-			Format.ListDirectory(outputFolder);
 
-			return null;
+			var outputRoot = new DirectoryInfo(Path.Combine(outputArg, outputPdbFile));
 
-			/*var subdirs = outputFolder.GetDirectories();
-			var nextFolder = subdirs.First(s => s.Name == outputPdbFile);
-			nextFolder = nextFolder.GetDirectories().First();
-			var pdbFile = nextFolder.GetFiles().First();
 
-			return pdbFile;*/
+			return outputRoot.GetDirectories().First()
+			                 .GetDirectories().First()
+			                 .GetFiles().First();
 		}
 
 		public static string[] ShellOutput(string cmd)

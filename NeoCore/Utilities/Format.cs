@@ -6,6 +6,8 @@ using System.Text;
 using Microsoft.VisualBasic;
 using NeoCore.Utilities.Extensions;
 
+// ReSharper disable StringCompareToIsCultureSpecific
+
 namespace NeoCore.Utilities
 {
 	/// <summary>
@@ -13,32 +15,13 @@ namespace NeoCore.Utilities
 	/// </summary>
 	public static class Format
 	{
-		public static string ColumnTable<T1, T2>(KeyValuePair<T1, T2>[] kv)
-		{
-			List<string> list   = kv.Select(pair => String.Format("{0}: {1}", pair.Key, pair.Value)).ToList();
-			int          maxLen = list.Max(s => s.Length);
-
-			for (int i = list.Count - 1; i >= 0; i--) {
-				string s = list[i];
-				list[i] = s.PadRight(maxLen) + " |";
-			}
-			
-			var sb = new StringBuilder();
-			
-			foreach (string s in list) {
-				sb.AppendLine(s);
-			}
-
-			return sb.ToString();
-		}
-
-		public static StringBuilder ListDirectory(DirectoryInfo dir, string delim = "")
+		public static StringBuilder CreateTreeString(DirectoryInfo dir, string delim = "")
 		{
 			// https://github.com/kddeisz/tree/blob/master/Tree.java
-			
+
 			var sb = new StringBuilder();
-			
-			var children = dir.GetFileSystemInfos();
+
+			FileSystemInfo[] children = dir.GetFileSystemInfos();
 			Array.Sort(children, (f1, f2) => f1.Name.CompareTo(f2.Name));
 
 			for (int i = 0; i < children.Length; i++) {
@@ -47,28 +30,28 @@ namespace NeoCore.Utilities
 				if (child.Name[0] == '.') {
 					continue;
 				}
-				
+
+				sb.Append(delim);
+
 				if (i == children.Length - 1) {
-					//sb.Append(delim).AppendFormat("└── ").Append(child.Name);
-					sb.AppendLine(String.Format("{0}{1}{2}",delim,"└── ",child.Name));
-					
+					sb.Append("└── ").AppendLine(child.Name);
+
 					if (child is DirectoryInfo d) {
-						sb.Append(ListDirectory(d, delim + "    "));
+						sb.Append(CreateTreeString(d, delim + "    "));
 					}
 				}
 				else {
-					//sb.Append(delim).AppendFormat("├── ").Append(child.Name);
-					sb.AppendLine(String.Format("{0}{1}{2}",delim,"├── ",child.Name));
-					
+					sb.Append("├── ").AppendLine(child.Name);
+
 					if (child is DirectoryInfo d) {
-						sb.Append(ListDirectory(d, delim + "│   "));
+						sb.Append(CreateTreeString(d, delim + "│   "));
 					}
 				}
 			}
 
 			return sb;
 		}
-		
+
 		/// <summary>
 		/// Returns the internal metadata name of a property's backing field.
 		/// </summary>

@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Threading;
 using NeoCore;
 using NeoCore.Assets;
@@ -42,9 +43,7 @@ namespace Test
 	{
 		private static void Main(string[] args)
 		{
-			Console.WriteLine(Format.ListDirectory(new DirectoryInfo(@"C:\Users\Deci\Desktop\coreclr.pdb")));
 			
-			//Console.WriteLine(OS.RunSymSrv(Resources.Clr.LibraryFile, new DirectoryInfo(@"C:\Users\Deci\Desktop")));
 		}
 	}
 }

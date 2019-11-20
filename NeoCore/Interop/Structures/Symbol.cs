@@ -190,9 +190,14 @@ namespace NeoCore.Interop.Structures
 
 			Name = Marshal.PtrToStringUni( pNative, (int) native.NameLen );*/
 
-			fixed (NativeSymbol* pSym = &this) {
+			/*fixed (NativeSymbol* pSym = &this) {
 				sbyte* namePtr = pSym->Name;
 				return Mem.ReadString(namePtr, (int) pSym->NameLen);
+			}*/
+
+			fixed (NativeSymbol* pSym = &this) {
+				sbyte* namePtr = pSym->Name;
+				return Marshal.PtrToStringUni((IntPtr) namePtr, (int) NameLen);
 			}
 		}
 	}
