@@ -3,11 +3,14 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using NeoCore.CoreClr.Components;
 using NeoCore.CoreClr.Components.VM;
+using NeoCore.CoreClr.Components.VM.Jit;
 using NeoCore.CoreClr.Meta.Base;
+using NeoCore.Interop;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
+// ReSharper disable ReturnTypeCanBeEnumerable.Global
 
 // ReSharper disable SuggestBaseTypeForParameter
 
@@ -118,6 +121,8 @@ namespace NeoCore.CoreClr.Meta
 				return new MetaIL(Value.Reference.GetILHeader(ALLOW_OVERRIDES_PARAM));
 			}
 		}
+
+		public Instruction[] Instructions => Functions.Inspection.ReadInstructions(MethodInfo);
 
 		#endregion
 

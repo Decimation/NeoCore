@@ -62,7 +62,7 @@ namespace NeoCore.Interop
 			var list   = new List<string>();
 
 			while (!stdOut.EndOfStream) {
-				var line = stdOut.ReadLine();
+				string line = stdOut.ReadLine();
 
 				if (line != null) {
 					list.Add(line);

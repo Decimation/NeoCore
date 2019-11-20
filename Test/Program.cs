@@ -20,6 +20,7 @@ using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Components.VM.Jit;
 using NeoCore.CoreClr.Meta;
+using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;
@@ -41,16 +42,16 @@ namespace Test
 
 	public static unsafe class Program
 	{
+		static int Add(int a, int b)
+		{
+			return a + b;
+		}
+		
 		private static void Main(string[] args)
 		{
-			
-			
-			var k32 = new FileInfo(@"C:\Users\Deci\Desktop\kernel32.dll");
-			var sym = SystemOS.RunSymCheck(k32, new DirectoryInfo(@"C:\Users\Deci\Desktop"));
-			SymbolManager.Value.CurrentImage = sym;
-			var s = SymbolManager.Value.GetSymbolsContainingName("M128A");
-			foreach (var symbol in s) {
-				Console.WriteLine(symbol);
+			var f = typeof(Program).GetAnyMethod(nameof(Add)).AsMetaMethod();
+			foreach (var op in f.Instructions) {
+				Console.WriteLine(op);
 			}
 		}
 	}

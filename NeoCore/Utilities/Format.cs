@@ -116,13 +116,7 @@ namespace NeoCore.Utilities
 
 		private const string HEX_PREFIX = "0x";
 
-		public static string ToHexString<T>(T value, HexOptions options = HexOptions.Default) where T : IFormattable
-		{
-			return ToHexString(value, null, options);
-		}
-
-		public static string ToHexString<T>(T          value, IFormatProvider provider = null,
-		                                    HexOptions options = HexOptions.Default) where T : IFormattable
+		public static string ToHexString<T>(T value, HexOptions options = HexOptions.Default)
 		{
 			var sb = new StringBuilder();
 
@@ -130,8 +124,16 @@ namespace NeoCore.Utilities
 				sb.Append(HEX_PREFIX);
 			}
 
-			string hexStr = value.ToString(HEX_FORMAT_SPECIFIER, provider);
-
+			string hexStr = null;
+			
+			if (value is IFormattable fmt) {
+				hexStr = fmt.ToString(HEX_FORMAT_SPECIFIER, null);
+			}
+			else {
+				throw new NotImplementedException();
+			}
+			
+			
 			if (options.HasFlagFast(HexOptions.Lowercase)) {
 				hexStr = hexStr.ToLower();
 			}

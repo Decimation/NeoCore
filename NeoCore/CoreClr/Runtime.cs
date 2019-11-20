@@ -38,7 +38,7 @@ namespace NeoCore.CoreClr
 			get {
 				// Mono can also be checked with Type.GetType("Mono.Runtime") != null;
 
-				var fwkName = RuntimeInformation.FrameworkDescription;
+				string fwkName = RuntimeInformation.FrameworkDescription;
 
 				return ClrFrameworks.AllFrameworks.First(f => fwkName.StartsWith(f.FullName));
 			}
