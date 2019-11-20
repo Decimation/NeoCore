@@ -44,6 +44,14 @@ namespace Test
 		private static void Main(string[] args)
 		{
 			
+			
+			var k32 = new FileInfo(@"C:\Users\Deci\Desktop\kernel32.dll");
+			var sym = SystemOS.RunSymCheck(k32, new DirectoryInfo(@"C:\Users\Deci\Desktop"));
+			SymbolManager.Value.CurrentImage = sym;
+			var s = SymbolManager.Value.GetSymbolsContainingName("M128A");
+			foreach (var symbol in s) {
+				Console.WriteLine(symbol);
+			}
 		}
 	}
 }
