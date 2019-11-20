@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using NeoCore.CoreClr;
+using NeoCore.Interop;
 using NeoCore.Utilities;
 
 namespace NeoCore.Assets
@@ -62,14 +63,14 @@ namespace NeoCore.Assets
 		public FileInfo SymbolFile {
 			get {
 				
-				return Runtime.GetRuntimeFile(FilenameRoot + Format.PDB_EXT);
+				return Runtime.GetRuntimeFile(FilenameRoot + OS.PDB_EXT);
 			}
 		}
 
 		public FileInfo LibraryFile {
 			get {
 				
-				return Runtime.GetRuntimeFile(FilenameRoot + Format.DLL_EXT);
+				return Runtime.GetRuntimeFile(FilenameRoot + OS.DLL_EXT);
 			}
 		}
 

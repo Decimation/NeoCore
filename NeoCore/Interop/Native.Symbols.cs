@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security;
 using Microsoft.VisualBasic;
@@ -6,6 +8,7 @@ using NeoCore.CoreClr;
 using NeoCore.Interop.Structures;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Interop

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Microsoft.VisualBasic;
 using NeoCore.Utilities.Extensions;
 
 namespace NeoCore.Utilities
@@ -31,6 +32,43 @@ namespace NeoCore.Utilities
 			return sb.ToString();
 		}
 
+		public static StringBuilder ListDirectory(DirectoryInfo dir, string delim = "")
+		{
+			// https://github.com/kddeisz/tree/blob/master/Tree.java
+			
+			var sb = new StringBuilder();
+			
+			var children = dir.GetFileSystemInfos();
+			Array.Sort(children, (f1, f2) => f1.Name.CompareTo(f2.Name));
+
+			for (int i = 0; i < children.Length; i++) {
+				var child = children[i];
+
+				if (child.Name[0] == '.') {
+					continue;
+				}
+				
+				if (i == children.Length - 1) {
+					//sb.Append(delim).AppendFormat("└── ").Append(child.Name);
+					sb.AppendLine(String.Format("{0}{1}{2}",delim,"└── ",child.Name));
+					
+					if (child is DirectoryInfo d) {
+						sb.Append(ListDirectory(d, delim + "    "));
+					}
+				}
+				else {
+					//sb.Append(delim).AppendFormat("├── ").Append(child.Name);
+					sb.AppendLine(String.Format("{0}{1}{2}",delim,"├── ",child.Name));
+					
+					if (child is DirectoryInfo d) {
+						sb.Append(ListDirectory(d, delim + "│   "));
+					}
+				}
+			}
+
+			return sb;
+		}
+		
 		/// <summary>
 		/// Returns the internal metadata name of a property's backing field.
 		/// </summary>
@@ -40,10 +78,6 @@ namespace NeoCore.Utilities
 		{
 			return String.Format("<{0}>k__BackingField", name);
 		}
-
-		public const string PDB_EXT = ".pdb";
-
-		public const string DLL_EXT = ".dll";
 
 		#region Join
 

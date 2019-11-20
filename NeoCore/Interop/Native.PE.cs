@@ -14,13 +14,13 @@ namespace NeoCore.Interop
 		/// </summary>
 		internal static class PE
 		{
-			[DllImport(DBGHELP_DLL, EntryPoint = "ImageNtHeader")]
-			private static extern ImageNtHeaders64* ImageNtHeader64(IntPtr hModule);
+			[DllImport(DBGHELP_DLL)]
+			private static extern ImageNtHeaders64* ImageNtHeader(IntPtr hModule);
 
 			internal static ImageSectionInfo[] ReadPESectionInfo(IntPtr hModule)
 			{
 				// get the location of the module's IMAGE_NT_HEADERS structure
-				ImageNtHeaders64* pNtHdr = ImageNtHeader64(hModule);
+				ImageNtHeaders64* pNtHdr = ImageNtHeader(hModule);
 
 				// section table immediately follows the IMAGE_NT_HEADERS
 				var pSectionHdr = (IntPtr) (pNtHdr + 1);

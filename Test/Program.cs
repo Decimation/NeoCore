@@ -42,9 +42,9 @@ namespace Test
 	{
 		private static void Main(string[] args)
 		{
-			var m = Resources.Clr.Module;
-
-			var x = Native.PE.ReadPESectionInfo(m.BaseAddress);
+			Console.WriteLine(Format.ListDirectory(new DirectoryInfo(@"C:\Users\Deci\Desktop\coreclr.pdb")));
+			
+			//Console.WriteLine(OS.RunSymSrv(Resources.Clr.LibraryFile, new DirectoryInfo(@"C:\Users\Deci\Desktop")));
 		}
 	}
 }

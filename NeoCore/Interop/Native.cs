@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace NeoCore.Interop
 {
@@ -8,14 +10,14 @@ namespace NeoCore.Interop
 		///     https://github.com/Microsoft/DbgShell/blob/master/DbgProvider/internal/Native/DbgHelp.cs
 		/// </summary>
 		private const string DBGHELP_DLL = "DbgHelp.dll";
-		
+
 		private const string KERNEL32_DLL = "kernel32.dll";
 	}
-	
+
 	/**
 	 * Enums that do not have an accompanying structure will be placed here
 	 */
-	
+
 	[Flags]
 	public enum ProcessAccess : uint
 	{

@@ -17,6 +17,8 @@ namespace NeoCore.Interop
 		{
 			#region Abstraction
 
+			
+
 			private static IntPtr CreateFile(string   fileName, FileAccess     access, FileShare share,
 			                                 FileMode mode,     FileAttributes attributes)
 			{
@@ -36,7 +38,7 @@ namespace NeoCore.Interop
 			{
 				// Is it .PDB file ?
 
-				if (pFileName.Contains(Format.PDB_EXT)) {
+				if (pFileName.Contains(OS.PDB_EXT)) {
 					// Yes, it is a .PDB file 
 
 					// Determine its size, and use a dummy base address 
