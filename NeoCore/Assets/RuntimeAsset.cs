@@ -3,6 +3,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using NeoCore.Import;
+using NeoCore.Interop;
+using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
@@ -31,6 +33,11 @@ namespace NeoCore.Assets
 			LibraryFile = libFile;
 			SymbolsFile = symFile;
 			Module      = Resources.CurrentProcess[libFile.Name];
+		}
+
+		public Pointer<byte> FindExport(string name)
+		{
+			return Native.Kernel.GetProcAddress(Module.BaseAddress, name);
 		}
 
 		public override string ToString()

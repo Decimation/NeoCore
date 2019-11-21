@@ -304,8 +304,8 @@ namespace NeoCore.Import
 
 			CheckAnnotations(type, false, out _);
 
-			if (!ContainsAnnotatedMembers(type, out var components)) {
-				//CoreLog.Value.WriteWarning(null, "Load: {Name} has no members to import", type.Name);
+			if (!ContainsAnnotatedMembers(type, out AnnotatedMember<ImportAttribute>[] components)) {
+				CoreLogger.Value.WriteWarning(null, "Load: {Name} has no members to import", type.Name);
 				return value;
 			}
 

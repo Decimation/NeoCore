@@ -14,17 +14,22 @@ namespace NeoCore.Assets
 	/// <summary>
 	/// Contains global CLR variables, offsets, sizes, and other constants.
 	/// </summary>
-	[ImportNamespace]
 	public static class ClrInformation
 	{
 		static ClrInformation()
 		{
-			ImportManager.Value.Load(typeof(ClrInformation), Resources.Clr.Imports);
-			GCHeap = new MetaHeap(g_pGCHeap);
-		}
+			var clr = Resources.Clr.Imports;
 
-		[ImportGlobalField(ImportFieldOptions.Fast)]
-		private static readonly Pointer<GCHeap> g_pGCHeap;
+			const string GLOBAL_GCHEAP_PTR = "g_pGCHeap";
+			const string GLOBAL_GCHEAP_LO = "g_lowest_address";
+			const string GLOBAL_GCHEAP_HI = "g_highest_address";
+			
+			Pointer<byte> gc = clr.GetAddress(GLOBAL_GCHEAP_PTR);
+			Pointer<byte> lo = clr.GetAddress(GLOBAL_GCHEAP_LO).ReadPointer();
+			Pointer<byte> hi = clr.GetAddress(GLOBAL_GCHEAP_HI).ReadPointer();
+
+			GCHeap = new MetaHeap(gc, lo, hi);
+		}
 
 		/// <summary>
 		/// Represents the global CLR GC heap.

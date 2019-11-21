@@ -45,9 +45,15 @@ namespace Test
 		
 		private static void Main(string[] args)
 		{
-			var k32 = new FileInfo(@"C:\Users\Deci\Desktop\kernel32.dll");
-			var sym = Cli.RunSymCheck(k32, new DirectoryInfo(@"C:\Users\Deci\Desktop"));
-			Console.WriteLine(sym);
+			var g = ClrInformation.GCHeap;
+			var s = "foo";
+			Console.WriteLine(Mem.IsAddressInRange(g.LowestAddress,g.LowestAddress,g.HighestAddress));
+			int i = 0;
+			Pointer<byte> x = &i;
+			Console.WriteLine(x);
+			Pointer<byte> sx = stackalloc int[2];
+			Console.WriteLine(sx);
+			
 		}
 	}
 }

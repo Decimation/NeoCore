@@ -13,6 +13,7 @@ using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
+using NeoCore.Interop.Structures;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
@@ -42,6 +43,36 @@ namespace NeoCore.Memory
 
 		#endregion
 
+
+		public static (Pointer<byte> Base, long Size) StackRegion {
+			get {
+				
+				var info = new MemoryBasicInformation();
+				var ptr  = new IntPtr(&info);
+				Native.Kernel.VirtualQuery(ptr, ref info, Marshal.SizeOf<MemoryBasicInformation>());
+
+				// todo: verify
+				long size = (info.BaseAddress.ToInt64() - info.AllocationBase.ToInt64()) + info.RegionSize.ToInt64();
+
+				return (info.AllocationBase, size);
+			}
+		}
+
+		/// <param name="p">Operand</param>
+		/// <param name="lo">Start address</param>
+		/// <param name="hi">End address</param>
+		public static bool IsAddressInRange(Pointer<byte> p, Pointer<byte> lo, Pointer<byte> hi)
+		{
+			// if ((ptrStack < stackBase) && (ptrStack > (stackBase - stackSize)))
+			// (p >= regionStart && p < regionStart + regionSize) ;
+			// return target >= start && target < end;
+			// return m_CacheStackLimit < addr && addr <= m_CacheStackBase;
+			// if (!((object < g_gc_highest_address) && (object >= g_gc_lowest_address)))
+			// return max.ToInt64() < p.ToInt64() && p.ToInt64() <= min.ToInt64();
+
+			return p.ToInt64() < hi.ToInt64() && p.ToInt64() >= lo.ToInt64();
+		}
+
 		/// <summary>
 		/// Calculates the total byte size of <paramref name="elemCnt"/> elements with
 		/// the size of <paramref name="elemSize"/>.
@@ -63,11 +94,6 @@ namespace NeoCore.Memory
 		public static T ReadStructure<T>(byte[] bytes) where T : struct
 		{
 			// Pin the managed memory while, copy it out the data, then unpin it
-
-			//	|            Method |     Mean |   Error |  StdDev |
-			//	|------------------ |---------:|--------:|--------:|
-			//	|     ReadStructure | 166.8 ns | 2.02 ns | 1.89 ns |
-			//	| ReadStructureFast | 113.3 ns | 1.03 ns | 0.91 ns |
 
 			byte* handle = stackalloc byte[bytes.Length];
 			Marshal.Copy(bytes, 0, (IntPtr) handle, bytes.Length);
@@ -122,7 +148,7 @@ namespace NeoCore.Memory
 			value = default;
 		}
 	}
-	
+
 	/// <summary>
 	///     Offset options for <see cref="Unsafe.AddressOfHeap{T}(T,OffsetOptions)" />
 	/// </summary>
@@ -306,7 +332,7 @@ namespace NeoCore.Memory
 		/// </summary>
 		BaseData,
 	}
-	
+
 	public static class MemoryExtensions
 	{
 		public static T ReadStructure<T>(this BinaryReader reader) where T : struct
