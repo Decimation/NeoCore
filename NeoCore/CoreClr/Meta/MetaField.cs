@@ -1,8 +1,7 @@
 using System;
 using System.Reflection;
-using NeoCore.CoreClr.Components;
-using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta.Base;
+using NeoCore.CoreClr.VM;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;

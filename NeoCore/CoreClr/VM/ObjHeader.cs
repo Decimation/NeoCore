@@ -1,12 +1,11 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
-using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Utilities.Diagnostics;
 
-namespace NeoCore.CoreClr.Components.VM
+namespace NeoCore.CoreClr.VM
 {
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]

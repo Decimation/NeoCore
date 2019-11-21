@@ -1,7 +1,6 @@
 using System.Runtime.CompilerServices;
-using NeoCore.CoreClr.Components;
-using NeoCore.CoreClr.Components.VM;
 using NeoCore.CoreClr.Meta;
+using NeoCore.CoreClr.VM;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Memory;

@@ -1,11 +1,10 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
-using NeoCore.CoreClr.Components.VM.EE;
-using NeoCore.CoreClr.Meta.Base;
+using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
 
-namespace NeoCore.CoreClr.Components.VM
+namespace NeoCore.CoreClr.VM
 {
 	[ImportNamespace]
 	[NativeStructure]

@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
@@ -74,5 +75,18 @@ namespace NeoCore.Memory
 
 		public static int OffsetOf<T>(string name, OffsetOfType type, bool isProperty = false) =>
 			Structures.OffsetOf(typeof(T), name, type, isProperty);
+	}
+	
+	public enum OffsetOfType
+	{
+		/// <summary>
+		/// <see cref="System.Runtime.InteropServices.Marshal.OffsetOf(Type,String)"/>
+		/// </summary>
+		Marshal,
+
+		/// <summary>
+		/// <see cref="MetaField.Offset"/>
+		/// </summary>
+		Managed
 	}
 }

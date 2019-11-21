@@ -1,5 +1,3 @@
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
 using NeoCore.Import.Attributes;
@@ -9,7 +7,7 @@ using NeoCore.Memory.Pointers;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Components.VM.Jit
+namespace NeoCore.CoreClr.VM.Jit
 {
 	[ImportNamespace]
 	[NativeStructure]

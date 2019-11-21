@@ -7,7 +7,7 @@ using NeoCore.Memory.Pointers;
 // ReSharper disable ArrangeAccessorOwnerBody
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Components.VM.Jit
+namespace NeoCore.CoreClr.VM.Jit
 {
 	[ImportNamespace]
 	[NativeStructure]

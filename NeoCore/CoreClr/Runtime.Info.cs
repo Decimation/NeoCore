@@ -10,7 +10,6 @@ using System.Runtime.InteropServices;
 using InlineIL;
 using JetBrains.Annotations;
 using NeoCore.Assets;
-using NeoCore.CoreClr.Components;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;

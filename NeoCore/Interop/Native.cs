@@ -12,6 +12,10 @@ namespace NeoCore.Interop
 		private const string DBGHELP_DLL = "DbgHelp.dll";
 
 		private const string KERNEL32_DLL = "kernel32.dll";
+
+		internal const string DLL_EXT = ".dll";
+
+		internal const string PDB_EXT = ".pdb";
 	}
 
 	/**

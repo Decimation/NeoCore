@@ -15,6 +15,8 @@ namespace NeoCore.Utilities
 	/// </summary>
 	public static class Format
 	{
+		public const char SPACE = ' ';
+		
 		public static StringBuilder CreateTreeString(DirectoryInfo dir, string delim = "")
 		{
 			// https://github.com/kddeisz/tree/blob/master/Tree.java
@@ -72,6 +74,8 @@ namespace NeoCore.Utilities
 		/// Scope resolution operator
 		/// </summary>
 		public const string JOIN_SCOPE = "::";
+
+		
 
 		/// <summary>
 		/// Concatenates the strings returned by <paramref name="toString"/>

@@ -63,14 +63,14 @@ namespace NeoCore.Assets
 		public FileInfo SymbolFile {
 			get {
 				
-				return Runtime.GetRuntimeFile(FilenameRoot + SystemOS.PDB_EXT);
+				return Runtime.GetRuntimeFile(FilenameRoot + Native.PDB_EXT);
 			}
 		}
 
 		public FileInfo LibraryFile {
 			get {
 				
-				return Runtime.GetRuntimeFile(FilenameRoot + SystemOS.DLL_EXT);
+				return Runtime.GetRuntimeFile(FilenameRoot + Native.DLL_EXT);
 			}
 		}
 

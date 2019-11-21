@@ -1,10 +1,9 @@
 using System;
 using System.Reflection;
 using NeoCore.Assets;
-using NeoCore.CoreClr.Components;
-using NeoCore.CoreClr.Components.VM;
-using NeoCore.CoreClr.Components.VM.EE;
 using NeoCore.CoreClr.Meta.Base;
+using NeoCore.CoreClr.VM;
+using NeoCore.CoreClr.VM.EE;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;

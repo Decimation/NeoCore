@@ -15,10 +15,6 @@ using System.Threading;
 using NeoCore;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
-using NeoCore.CoreClr.Components;
-using NeoCore.CoreClr.Components.VM;
-using NeoCore.CoreClr.Components.VM.EE;
-using NeoCore.CoreClr.Components.VM.Jit;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;
@@ -49,10 +45,9 @@ namespace Test
 		
 		private static void Main(string[] args)
 		{
-			var f = typeof(Program).GetAnyMethod(nameof(Add)).AsMetaMethod();
-			foreach (var op in f.Instructions) {
-				Console.WriteLine(op);
-			}
+			var k32 = new FileInfo(@"C:\Users\Deci\Desktop\kernel32.dll");
+			var sym = Cli.RunSymCheck(k32, new DirectoryInfo(@"C:\Users\Deci\Desktop"));
+			Console.WriteLine(sym);
 		}
 	}
 }

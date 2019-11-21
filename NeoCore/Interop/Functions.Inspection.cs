@@ -5,8 +5,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using NeoCore.CoreClr.Components.VM.Jit;
+using NeoCore.Assets;
+using NeoCore.CoreClr.VM.Jit;
+using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+
+// ReSharper disable ConvertSwitchStatementToSwitchExpression
+// ReSharper disable SwitchStatementMissingSomeCases
 
 #endregion
 
@@ -25,16 +30,16 @@ namespace NeoCore.Interop
 			/// </summary>
 			private static readonly Dictionary<short, OpCode> OpCodes;
 
+			/// <summary>
+			/// <para>Key: <see cref="OperandType"/></para>
+			/// <para>Value: size of operand</para>
+			/// </summary>
+			private static readonly Dictionary<OperandType, int> OperandBaseSizes;
+
 			static Inspection()
 			{
-				OpCodes = GetAllOpCodes();
-			}
-
-			public static Instruction[] ReadInstructions(MethodBase methodBase)
-			{
-				var methodBody = methodBase.GetMethodBody();
-
-				return methodBody == null ? null : ReadInstructions(methodBody.GetILAsByteArray());
+				OpCodes          = GetAllOpCodes();
+				OperandBaseSizes = GetOperandBaseSizes();
 			}
 
 			public static Instruction[] ReadInstructions(byte[] bytes)
@@ -52,8 +57,6 @@ namespace NeoCore.Interop
 						Offset = offset
 					};
 
-					int origOffset = offset;
-
 					short code = bytes[offset++];
 
 					if (code == CODE) {
@@ -62,26 +65,19 @@ namespace NeoCore.Interop
 
 					instruction.OpCode = OpCodes[code];
 
-					switch (instruction.OpCode.OperandType) {
+					var opType = instruction.OpCode.OperandType;
+
+					switch (opType) {
 						case OperandType.InlineI:
 							int value = BitConverter.ToInt32(bytes, offset);
 							instruction.Operand =  value;
-							offset              += sizeof(int);
-							break;
-
-						case OperandType.ShortInlineR:
-						case OperandType.InlineBrTarget:
-							offset += sizeof(int);
-							break;
-
-						case OperandType.InlineR:
-							offset += sizeof(long);
+							offset              += OperandBaseSizes[opType];
 							break;
 
 						case OperandType.InlineI8:
 							long lvalue = BitConverter.ToInt64(bytes, offset);
 							instruction.Operand =  lvalue;
-							offset              += sizeof(long);
+							offset              += OperandBaseSizes[opType];
 							break;
 
 						case OperandType.InlineTok:
@@ -91,43 +87,35 @@ namespace NeoCore.Interop
 						case OperandType.InlineMethod:
 							int token = BitConverter.ToInt32(bytes, offset);
 							instruction.Operand =  token;
-							offset              += sizeof(int);
+							offset              += OperandBaseSizes[opType];
 							break;
 
-						case OperandType.InlineNone:
-							break;
 
 						case OperandType.InlineString:
 							int mdString = BitConverter.ToInt32(bytes, offset);
-
 							instruction.Operand =  mdString;
-							offset              += sizeof(int);
+							offset              += OperandBaseSizes[opType];
 							break;
 
 						case OperandType.InlineSwitch:
 							int count = BitConverter.ToInt32(bytes, offset) + 1;
-							offset += sizeof(int) * count;
+							offset += OperandBaseSizes[opType] * count;
 							break;
 
-
+						case OperandType.InlineBrTarget:
+						case OperandType.InlineNone:
+						case OperandType.InlineR:
 						case OperandType.InlineVar:
-							offset += sizeof(short);
-							break;
-
-						case OperandType.ShortInlineVar:
 						case OperandType.ShortInlineBrTarget:
 						case OperandType.ShortInlineI:
-							offset += sizeof(byte);
+						case OperandType.ShortInlineR:
+						case OperandType.ShortInlineVar:
+							offset += OperandBaseSizes[opType];
 							break;
-						default: throw new NotImplementedException();
+
+						default:
+							throw new NotImplementedException();
 					}
-
-
-					int size = offset - origOffset;
-
-					byte[] raw = bytes.Skip(origOffset)
-					                  .Take(size)
-					                  .ToArray();
 
 					instructions.Add(instruction);
 				}
@@ -153,6 +141,58 @@ namespace NeoCore.Interop
 				}
 
 				return opCodes;
+			}
+
+			private static Dictionary<OperandType, int> GetOperandBaseSizes()
+			{
+				var dict = new Dictionary<OperandType, int>();
+
+				var intSize = new[]
+				{
+					OperandType.InlineField,
+					OperandType.InlineMethod,
+					OperandType.InlineString,
+					OperandType.InlineType,
+					OperandType.InlineSig,
+					OperandType.InlineTok,
+					OperandType.InlineSwitch,
+					OperandType.InlineBrTarget,
+					OperandType.ShortInlineR,
+					OperandType.InlineI
+				};
+
+
+				var longSize = new[]
+				{
+					OperandType.InlineR,
+					OperandType.InlineI8
+				};
+
+				var byteSize = new[]
+				{
+					OperandType.ShortInlineVar,
+					OperandType.ShortInlineBrTarget,
+					OperandType.ShortInlineI
+				};
+
+				dict.AddRange(intSize, sizeof(int));
+				dict.AddRange(longSize, sizeof(long));
+				dict.Add(OperandType.InlineVar, sizeof(short));
+				dict.AddRange(byteSize, sizeof(byte));
+				dict.Add(OperandType.InlineNone, 0);
+
+				return dict;
+			}
+
+			public static bool FunctionThrows(Action action)
+			{
+				try {
+					action();
+					return false;
+				}
+				catch {
+					return true;
+				}
 			}
 
 			/// <summary>

@@ -1,12 +1,11 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
-using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
 
 // ReSharper disable InconsistentNaming
 
-namespace NeoCore.CoreClr.Components.VM.EE
+namespace NeoCore.CoreClr.VM.EE
 {
 	[ImportNamespace]
 	[NativeStructure]

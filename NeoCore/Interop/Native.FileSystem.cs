@@ -36,7 +36,7 @@ namespace NeoCore.Interop
 			{
 				// Is it .PDB file ?
 
-				if (pFileName.Contains(SystemOS.PDB_EXT)) {
+				if (pFileName.Contains((string) Native.PDB_EXT)) {
 					// Yes, it is a .PDB file 
 
 					// Determine its size, and use a dummy base address 

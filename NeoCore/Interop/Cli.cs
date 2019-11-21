@@ -6,21 +6,23 @@ using System.IO;
 using System.Linq;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 
 // ReSharper disable InconsistentNaming
 
 namespace NeoCore.Interop
 {
-	public static class SystemOS
+	/// <summary>
+	/// Contains utilities for working with Windows CMD/CLI.
+	/// </summary>
+	public static class Cli
 	{
-		public const string PDB_EXT = ".pdb";
-		public const string DLL_EXT = ".dll";
-
 		public static FileInfo RunSymCheck(FileInfo dll, DirectoryInfo output)
 		{
+			// symchk "dll" /s SRV*output.pdb*http://msdl.microsoft.com/download/symbols
+			
 			// .NET Framework
-			// Version: 4.0.30319.42000
 			// symchk "C:\Windows\Microsoft.NET\Framework\v4.0.30319\clr.dll" /s SRV*C:\Users\Deci\Desktop\clr.pdb*http://msdl.microsoft.com/download/symbols
 			// symchk "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll" /s SRV*C:\Users\Deci\Desktop\clr.pdb*http://msdl.microsoft.com/download/symbols
 
@@ -31,12 +33,17 @@ namespace NeoCore.Interop
 
 			const string MSFT_SYM_SERVER = "http://msdl.microsoft.com/download/symbols";
 
-			string dllArg        = dll.FullName;
 			string outputArg     = output.FullName;
-			string outputPdbFile = Path.GetFileNameWithoutExtension(dll.Name) + PDB_EXT;
+			string outputPdbFile = Path.GetFileNameWithoutExtension(dll.Name) + Native.PDB_EXT;
+			
+			var cmdBuilder = new CommandBuilder(SYMCHK_EXE, "{dll} /s SRV*{out}\\{pdb}*{srv}");
 
-			string fullCmd = String.Format("{0} \"{1}\" /s SRV*{2}\\{3}*{4}", SYMCHK_EXE, dllArg,
-			                               outputArg, outputPdbFile, MSFT_SYM_SERVER);
+			string fullCmd = cmdBuilder.AddString("dll", dll.FullName)
+			                           .Add("out", outputArg)
+			                           .Add("pdb", outputPdbFile)
+			                           .Add("srv", MSFT_SYM_SERVER)
+			                           .ToString();
+
 
 			string[] stdOut = ShellOutput(fullCmd);
 

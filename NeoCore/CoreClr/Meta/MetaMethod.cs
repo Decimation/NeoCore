@@ -1,10 +1,9 @@
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using NeoCore.CoreClr.Components;
-using NeoCore.CoreClr.Components.VM;
-using NeoCore.CoreClr.Components.VM.Jit;
 using NeoCore.CoreClr.Meta.Base;
+using NeoCore.CoreClr.VM;
+using NeoCore.CoreClr.VM.Jit;
 using NeoCore.Interop;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
@@ -122,7 +121,12 @@ namespace NeoCore.CoreClr.Meta
 			}
 		}
 
-		public Instruction[] Instructions => Functions.Inspection.ReadInstructions(MethodInfo);
+		public Instruction[] Instructions {
+			get {
+				byte[] il = MethodInfo.GetMethodBody()?.GetILAsByteArray();
+				return Functions.Inspection.ReadInstructions(il);
+			}
+		}
 
 		#endregion
 

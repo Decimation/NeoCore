@@ -3,7 +3,7 @@ using System.Reflection;
 using System.Reflection.Emit;
 using NeoCore.Utilities;
 
-namespace NeoCore.CoreClr.Components.VM.Jit
+namespace NeoCore.CoreClr.VM.Jit
 {
 	/// <summary>
 	/// Represents an IL instruction.
