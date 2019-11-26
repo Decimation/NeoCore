@@ -428,7 +428,7 @@ namespace NeoCore.Import
 				return value;
 			}
 
-			for (var i = 0; i < lim; i++) {
+			for (int i = 0; i < lim; i++) {
 				var attr = components[i].Attribute;
 				var mem  = components[i].Member;
 

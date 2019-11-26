@@ -23,6 +23,9 @@ namespace NeoCore.Interop
 		/// </summary>
 		public static class Native
 		{
+			// CoreCLR seems to use entirely __fastcall
+			// todo: does this need to use HasThis when necessary?
+			
 			#region Call
 
 			/// <summary>

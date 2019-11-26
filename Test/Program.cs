@@ -42,18 +42,16 @@ namespace Test
 		{
 			return a + b;
 		}
-		
+
 		private static void Main(string[] args)
 		{
 			var g = ClrInformation.GCHeap;
 			var s = "foo";
-			Console.WriteLine(Mem.IsAddressInRange(g.LowestAddress,g.LowestAddress,g.HighestAddress));
-			int i = 0;
-			Pointer<byte> x = &i;
-			Console.WriteLine(x);
-			Pointer<byte> sx = stackalloc int[2];
-			Console.WriteLine(sx);
-			
+
+			fixed (byte* p = &Unsafe.GetPinHelper(s).Data) {
+				int i = *(int*) p;
+				Console.WriteLine(i);
+			}
 		}
 	}
 }

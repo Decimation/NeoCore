@@ -3,6 +3,7 @@
 using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
@@ -10,6 +11,7 @@ using NeoCore.CoreClr.VM;
 using NeoCore.Interop;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
+// ReSharper disable ClassCannotBeInstantiated
 
 #endregion
 
@@ -32,6 +34,36 @@ namespace NeoCore.Memory
 	/// </summary>
 	public static unsafe partial class Unsafe
 	{
+		/// <summary>
+		///     Used for unsafe pinning of arbitrary objects.
+		/// </summary>
+		public static PinHelper GetPinHelper(object value) => As<PinHelper>(value);
+
+
+		/// <summary>
+		///     <para>Helper class to assist with unsafe pinning of arbitrary objects. The typical usage pattern is:</para>
+		///     <code>
+		///  fixed (byte* pData = &amp;GetPinHelper(value).Data)
+		///  {
+		///  }
+		///  </code>
+		///     <remarks>
+		///         <para><c>pData</c> is what <c>Object::GetData()</c> returns in VM.</para>
+		///         <para><c>pData</c> is also equal to offsetting the pointer by <see cref="OffsetOptions.Fields" />. </para>
+		///         <para>From <see cref="System.Runtime.CompilerServices.JitHelpers" />. </para>
+		///     </remarks>
+		/// </summary>
+		[UsedImplicitly]
+		public sealed class PinHelper
+		{
+			/// <summary>
+			///     Represents the first field in an object, such as <see cref="OffsetOptions.Fields" />.
+			/// </summary>
+			public byte Data;
+
+			private PinHelper() { }
+		}
+
 		/// <summary>
 		///     <para>Returns the address of <paramref name="value" />.</para>
 		/// </summary>
@@ -71,7 +103,9 @@ namespace NeoCore.Memory
 		{
 			Pointer<T> addr = AddressOf(ref value);
 
-			return Runtime.Properties.IsStruct(value) ? addr.Cast() : AddressOfHeapInternal(value, OffsetOptions.Fields);
+			return Runtime.Properties.IsStruct(value)
+				? addr.Cast()
+				: AddressOfHeapInternal(value, OffsetOptions.Fields);
 		}
 
 
