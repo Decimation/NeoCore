@@ -16,7 +16,7 @@ namespace NeoCore.Interop
 	/// <summary>
 	/// Contains utilities for working with Windows CMD/CLI.
 	/// </summary>
-	public static class Cli
+	public static class Commands
 	{
 		public static FileInfo RunSymCheck(FileInfo dll, DirectoryInfo output)
 		{

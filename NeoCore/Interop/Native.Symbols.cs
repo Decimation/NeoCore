@@ -44,11 +44,11 @@ namespace NeoCore.Interop
 
 			internal static Symbol GetSymbol(IntPtr hProc, string name)
 			{
-				byte* byteBuffer = stackalloc byte[NativeSymbol.FullSize];
-				var   buffer     = (NativeSymbol*) byteBuffer;
+				byte* byteBuffer = stackalloc byte[DebugSymbol.FullSize];
+				var   buffer     = (DebugSymbol*) byteBuffer;
 
-				buffer->SizeOfStruct = (uint) NativeSymbol.SizeOf;
-				buffer->MaxNameLen   = NativeSymbol.MaxNameLength;
+				buffer->SizeOfStruct = (uint) DebugSymbol.SizeOf;
+				buffer->MaxNameLen   = DebugSymbol.MaxNameLength;
 
 				Guard.Assert<NativeException>(FromName(hProc, name, (IntPtr) buffer),
 				                              "Symbol \"{0}\" not found", name);

@@ -14,7 +14,6 @@ using System.Text;
 using System.Threading;
 using NeoCore;
 using NeoCore.Assets;
-using NeoCore.Assets.Representation;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;

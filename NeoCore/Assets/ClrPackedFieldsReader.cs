@@ -1,8 +1,8 @@
 using System;
-using NeoCore.Assets.Representation;
 using NeoCore.CoreClr;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
+using NeoCore.Model;
 
 // ReSharper disable BuiltInTypeReferenceStyle
 // ReSharper disable ConvertToAutoPropertyWhenPossible

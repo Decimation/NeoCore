@@ -2,9 +2,8 @@
 
 using System;
 using System.Runtime.InteropServices;
-using NeoCore.Assets;
-using NeoCore.Assets.Representation;
 using NeoCore.Interop.Attributes;
+using NeoCore.Model;
 
 #endregion
 

@@ -153,10 +153,10 @@ namespace NeoCore.CoreClr.VM
 	}
 
 	/// <summary>
-	/// Additional type properties.
+	/// Additional inspected type properties.
 	/// </summary>
 	[Flags]
-	public enum AuxiliaryProperties
+	public enum InspectionProperties
 	{
 		None = 0,
 

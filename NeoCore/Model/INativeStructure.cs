@@ -1,4 +1,4 @@
-namespace NeoCore.Assets.Representation
+namespace NeoCore.Model
 {
 	/// <summary>
 	/// Represents a structure from a native source.
@@ -8,6 +8,6 @@ namespace NeoCore.Assets.Representation
 		/// <summary>
 		/// Native name of this structure.
 		/// </summary>
-		string NativeName => GetType().Name;
+		string NativeName { get; }
 	}
 }

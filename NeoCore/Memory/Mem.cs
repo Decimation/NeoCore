@@ -139,7 +139,7 @@ namespace NeoCore.Memory
 
 		public static void Destroy<T>(ref T value)
 		{
-			if (!Runtime.Properties.IsStruct(value)) {
+			if (!Runtime.Inspection.IsStruct(value)) {
 				int           size = Unsafe.SizeOf(value, SizeOfOptions.Data);
 				Pointer<byte> ptr  = Unsafe.AddressOfFields(ref value);
 				ptr.Cast().Clear(size);

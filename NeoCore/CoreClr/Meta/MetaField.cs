@@ -21,7 +21,7 @@ namespace NeoCore.CoreClr.Meta
 	///         <item><description>Reflection structure: <see cref="FieldInfo"/></description></item>
 	///     </list>
 	/// </summary>
-	public unsafe class MetaField : EmbeddedClrStructure<FieldDesc>, IStructure
+	public unsafe class MetaField : EmbeddedClrStructure<FieldDesc>, IKnownStructure
 	{
 		private const int FIELD_OFFSET_MAX = (1 << 27) - 1;
 

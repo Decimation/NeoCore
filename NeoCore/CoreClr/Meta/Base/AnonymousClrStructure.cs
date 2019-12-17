@@ -2,10 +2,10 @@ using System;
 using System.Reflection;
 using System.Text;
 using NeoCore.Assets;
-using NeoCore.Assets.Representation;
 using NeoCore.Import;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Model;
 
 namespace NeoCore.CoreClr.Meta.Base
 {
@@ -13,7 +13,7 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// Describes a CLR structure that doesn't have an accompanying token or <see cref="MemberInfo"/>
 	/// </summary>
 	/// <typeparam name="TClr">CLR structure type</typeparam>
-	public abstract unsafe class AnonymousClrStructure<TClr> where TClr : unmanaged, IClrStructure
+	public abstract unsafe class AnonymousClrStructure<TClr> : IWrapper<TClr> where TClr : unmanaged, IClrStructure
 	{
 		#region Fields
 

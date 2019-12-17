@@ -92,7 +92,7 @@ namespace NeoCore.CoreClr
 					return false;
 				}
 
-				if (!Properties.IsCompileStruct<T>()) {
+				if (!Inspection.IsCompileStruct<T>()) {
 					// Null comparison should be equivalent to nil comparison,
 					// but this is a sanity check
 					if (value == null) {
@@ -122,7 +122,7 @@ namespace NeoCore.CoreClr
 			public static bool IsBoxed<T>([CanBeNull] T value)
 			{
 				return (typeof(T).IsInterface || typeof(T) == typeof(object)) && value != null &&
-				       Properties.IsStruct(value);
+				       Inspection.IsStruct(value);
 			}
 
 			/// <summary>
@@ -161,7 +161,7 @@ namespace NeoCore.CoreClr
 
 						var mt = ReadTypeHandle(value);
 
-						if (Properties.IsString(value)) {
+						if (Inspection.IsString(value)) {
 							return true;
 						}
 

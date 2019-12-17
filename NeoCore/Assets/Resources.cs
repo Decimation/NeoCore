@@ -22,11 +22,9 @@ namespace NeoCore.Assets
 		/// Name of this assembly.
 		/// </summary>
 		public const string NAME = "NeoCore";
-
-		/**
-		 * - https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces?redirectedfrom=MSDN
-		 * - <Company>.(<Product>|<Technology>)[.<Feature>][.<Subnamespace>]
-		 */
+		
+		// - https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces?redirectedfrom=MSDN
+		// - <Company>.(<Product>|<Technology>)[.<Feature>][.<Subnamespace>]
 
 		private static bool IsSetup { get; set; }
 

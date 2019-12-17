@@ -74,7 +74,7 @@ namespace NeoCore.CoreClr
 		public static MetaType ReadTypeHandle<T>(T value)
 		{
 			// Value types do not have a MethodTable ptr, but they do have a TypeHandle.
-			if (Properties.IsStruct(value))
+			if (Inspection.IsStruct(value))
 				return ReadTypeHandle(value.GetType());
 
 			Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr);

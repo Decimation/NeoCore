@@ -2,9 +2,9 @@ using System;
 using System.Reflection;
 using System.Text;
 using NeoCore.Assets;
-using NeoCore.Assets.Representation;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Model;
 
 namespace NeoCore.CoreClr.Meta.Base
 {
@@ -31,8 +31,7 @@ namespace NeoCore.CoreClr.Meta.Base
 		protected ClrStructure(MemberInfo member) : base(member) { }
 
 		#endregion
-
-
+		
 		#region ToString
 
 		public override string ToString()

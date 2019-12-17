@@ -2,19 +2,19 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
-using NeoCore.Assets.Representation;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Model;
 
 namespace NeoCore.Interop.Structures
 {
 	/// <summary>
-	///     Wraps a <see cref="NativeSymbol" />
+	///     Wraps a <see cref="DebugSymbol" />
 	/// </summary>
-	public unsafe class Symbol : IWrapper<NativeSymbol>
+	public unsafe class Symbol : IWrapper<DebugSymbol>
 	{
-		internal Symbol(NativeSymbol* pSymInfo)
+		internal Symbol(DebugSymbol* pSymInfo)
 		{
 			Name = pSymInfo->ReadSymbolName();
 
@@ -31,7 +31,7 @@ namespace NeoCore.Interop.Structures
 			Tag          = pSymInfo->Tag;
 		}
 
-		internal Symbol(IntPtr pSym) : this((NativeSymbol*) pSym) { }
+		internal Symbol(IntPtr pSym) : this((DebugSymbol*) pSym) { }
 
 		public string Name { get; }
 
@@ -72,7 +72,7 @@ namespace NeoCore.Interop.Structures
 	/// </summary>
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	internal unsafe struct NativeSymbol : INativeStructure
+	internal unsafe struct DebugSymbol : INativeStructure
 	{
 		public string NativeName => "SYMBOL_INFO";
 		
@@ -165,20 +165,20 @@ namespace NeoCore.Interop.Structures
 
 
 		/// <summary>
-		///     Max string length for <see cref="NativeSymbol.Name" />
+		///     Max string length for <see cref="DebugSymbol.Name" />
 		/// </summary>
 		internal const int MaxNameLength = 2000;
 
 		/// <summary>
-		///     Size of <see cref="NativeSymbol" />
+		///     Size of <see cref="DebugSymbol" />
 		/// </summary>
-		internal static readonly int SizeOf = Marshal.SizeOf<NativeSymbol>();
+		internal static readonly int SizeOf = Marshal.SizeOf<DebugSymbol>();
 
 		internal static readonly int FullSize =
 			SizeOf + MaxNameLength * sizeof(byte) + sizeof(ulong) - 1 / sizeof(ulong);
 
 		// !
-		internal static int GetSymbolInfoSize(NativeSymbol* pSym)
+		internal static int GetSymbolInfoSize(DebugSymbol* pSym)
 		{
 			// SizeOfStruct + (MaxNameLen - 1) * sizeof(TCHAR)
 			return (int) (pSym->SizeOfStruct + (pSym->MaxNameLen - 1) * sizeof(byte));
@@ -199,7 +199,7 @@ namespace NeoCore.Interop.Structures
 				return Mem.ReadString(namePtr, (int) pSym->NameLen);
 			}*/
 
-			fixed (NativeSymbol* pSym = &this) {
+			fixed (DebugSymbol* pSym = &this) {
 				sbyte* namePtr = pSym->Name;
 				return Marshal.PtrToStringUni((IntPtr) namePtr, (int) NameLen);
 			}

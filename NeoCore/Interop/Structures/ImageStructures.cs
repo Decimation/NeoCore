@@ -1,9 +1,9 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
-using NeoCore.Assets.Representation;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
+using NeoCore.Model;
 
 // ReSharper disable InconsistentNaming
 
@@ -202,7 +202,7 @@ namespace NeoCore.Interop.Structures
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct ImageOptionalHeader64 : INativeStructure
 	{
-		public string NativeName => "IMAGE_OPTIONAL_HEADER";
+		public string NativeName => "IMAGE_OPTIONAL_HEADER64";
 
 		public ushort Magic;
 
@@ -299,7 +299,7 @@ namespace NeoCore.Interop.Structures
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct ImageOptionalHeader32 : INativeStructure
 	{
-		public string NativeName => "IMAGE_OPTIONAL_HEADER";
+		public string NativeName => "IMAGE_OPTIONAL_HEADER32";
 
 		public ushort Magic;
 
@@ -398,7 +398,7 @@ namespace NeoCore.Interop.Structures
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct ImageNtHeaders64 : INativeStructure
 	{
-		public string NativeName => "IMAGE_NT_HEADERS";
+		public string NativeName => "IMAGE_NT_HEADERS64";
 
 		public uint Signature { get; }
 
@@ -422,11 +422,8 @@ namespace NeoCore.Interop.Structures
 
 		public ImageSectionFlags Characteristics { get; }
 
-		public ImageSectionHeader Value { get; }
-
 		internal ImageSectionInfo(ImageSectionHeader struc, int number, IntPtr address)
 		{
-			Value           = struc;
 			Number          = number;
 			Name            = new string(struc.Name);
 			Address         = address;
@@ -667,8 +664,7 @@ namespace NeoCore.Interop.Structures
 		WDMDriver           = 0x2000,
 		TerminalServerAware = 0x8000
 	}
-
-
+	
 	public enum ImageSubSystem : ushort
 	{
 		UNKNOWN                  = 0,

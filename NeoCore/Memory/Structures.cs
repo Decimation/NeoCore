@@ -1,10 +1,10 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
-using NeoCore.Assets.Representation;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Memory.Pointers;
+using NeoCore.Model;
 using NeoCore.Utilities;
 
 namespace NeoCore.Memory
@@ -51,6 +51,7 @@ namespace NeoCore.Memory
 
 		internal static Pointer<TSub> ReadSubStructure<TSuper, TSub>(Pointer<TSuper> super)
 			where TSub : INativeInheritance<TSuper>
+			where TSuper : INativeStructure
 		{
 			int size = Unsafe.SizeOf<TSuper>();
 			return super.Add(size).Cast<TSub>();

@@ -1,10 +1,8 @@
-namespace NeoCore.Assets.Representation
+namespace NeoCore.Model
 {
-	
-	
 	/// <summary>
 	/// Designates a native CLR metadata source structure.
-	/// <para>https://github.com/dotnet/coreclr</para>
+	/// <para>https://github.com/dotnet/runtime</para>
 	/// </summary>
 	public interface IClrStructure : INativeStructure
 	{

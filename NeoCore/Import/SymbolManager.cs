@@ -189,7 +189,7 @@ namespace NeoCore.Import
 
 		private unsafe bool AddSymByNameCallback(IntPtr sym, uint symSize, IntPtr userCtx)
 		{
-			string symName = ((NativeSymbol*) sym)->ReadSymbolName();
+			string symName = ((DebugSymbol*) sym)->ReadSymbolName();
 
 			if (symName.Contains(m_singleNameBuffer)) {
 				m_symBuffer.Add(new Symbol(sym));

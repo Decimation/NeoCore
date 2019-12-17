@@ -30,7 +30,7 @@ namespace NeoCore.CoreClr.Meta
 		public MetaType(Pointer<MethodTable> mt) : base(mt)
 		{
 			RuntimeType         = Runtime.ResolveType(mt.Cast());
-			AuxiliaryProperties = Runtime.Properties.ReadProperties(RuntimeType);
+			InspectionProperties = Runtime.Inspection.ReadProperties(RuntimeType);
 		}
 
 		public MetaType(Type t) : this(Runtime.ResolveHandle(t)) { }
@@ -52,21 +52,21 @@ namespace NeoCore.CoreClr.Meta
 
 		public override MemberInfo Info => RuntimeType;
 
-		public AuxiliaryProperties AuxiliaryProperties { get; }
+		public InspectionProperties InspectionProperties { get; }
 
-		public bool IsAnyPointer => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.AnyPointer);
+		public bool IsAnyPointer => InspectionProperties.HasFlagFast(InspectionProperties.AnyPointer);
 
-		public bool IsReal => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Real);
+		public bool IsReal => InspectionProperties.HasFlagFast(InspectionProperties.Real);
 
-		public bool IsNumeric => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Numeric);
+		public bool IsNumeric => InspectionProperties.HasFlagFast(InspectionProperties.Numeric);
 
-		public bool IsInteger => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Integer);
+		public bool IsInteger => InspectionProperties.HasFlagFast(InspectionProperties.Integer);
 
-		public bool IsEnumerable => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Enumerable);
+		public bool IsEnumerable => InspectionProperties.HasFlagFast(InspectionProperties.Enumerable);
 
-		public bool IsStruct => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Struct);
+		public bool IsStruct => InspectionProperties.HasFlagFast(InspectionProperties.Struct);
 
-		public bool IsUnmanaged => AuxiliaryProperties.HasFlagFast(AuxiliaryProperties.Unmanaged);
+		public bool IsUnmanaged => InspectionProperties.HasFlagFast(InspectionProperties.Unmanaged);
 
 		#region MethodTable
 

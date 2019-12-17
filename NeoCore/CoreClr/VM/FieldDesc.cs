@@ -1,11 +1,11 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
-using NeoCore.Assets.Representation;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Model;
 using NeoCore.Utilities.Extensions;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty

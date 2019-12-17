@@ -14,38 +14,38 @@ namespace NeoCore.CoreClr
 		/// <summary>
 		/// Contains utilities for inspecting <see cref="Type"/> properties.
 		/// </summary>
-		internal static class Properties
+		internal static class Inspection
 		{
-			internal static AuxiliaryProperties ReadProperties(Type t)
+			internal static InspectionProperties ReadProperties(Type t)
 			{
-				var mp = new AuxiliaryProperties();
+				var mp = new InspectionProperties();
 
 				if (IsInteger(t)) {
-					mp |= AuxiliaryProperties.Integer;
+					mp |= InspectionProperties.Integer;
 				}
 
 				if (IsReal(t)) {
-					mp |= AuxiliaryProperties.Real;
+					mp |= InspectionProperties.Real;
 				}
 
 				if (t.IsValueType) {
-					mp |= AuxiliaryProperties.Struct;
+					mp |= InspectionProperties.Struct;
 				}
 
 				if (IsUnmanaged(t)) {
-					mp |= AuxiliaryProperties.Unmanaged;
+					mp |= InspectionProperties.Unmanaged;
 				}
 
 				if (IsEnumerableType(t)) {
-					mp |= AuxiliaryProperties.Enumerable;
+					mp |= InspectionProperties.Enumerable;
 				}
 
 				if (IsAnyPointer(t)) {
-					mp |= AuxiliaryProperties.AnyPointer;
+					mp |= InspectionProperties.AnyPointer;
 				}
 
 				if (t.IsPointer) {
-					mp |= AuxiliaryProperties.Pointer;
+					mp |= InspectionProperties.Pointer;
 				}
 
 				return mp;

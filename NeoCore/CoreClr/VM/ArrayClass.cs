@@ -1,9 +1,9 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
-using NeoCore.Assets.Representation;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
+using NeoCore.Model;
 
 namespace NeoCore.CoreClr.VM
 {
