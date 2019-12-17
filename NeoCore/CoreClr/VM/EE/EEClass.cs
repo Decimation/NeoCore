@@ -1,6 +1,7 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
@@ -156,6 +157,7 @@ namespace NeoCore.CoreClr.VM.EE
 		#endregion
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
+		public string NativeName => nameof(EEClass);
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
@@ -168,5 +170,6 @@ namespace NeoCore.CoreClr.VM.EE
 		internal EEClassLayoutInfo LayoutInfo { get; }
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
+		public string NativeName => nameof(LayoutEEClass);
 	}
 }

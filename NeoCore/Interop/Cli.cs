@@ -22,21 +22,14 @@ namespace NeoCore.Interop
 		{
 			// symchk "dll" /s SRV*output.pdb*http://msdl.microsoft.com/download/symbols
 			
-			// .NET Framework
-			// symchk "C:\Windows\Microsoft.NET\Framework\v4.0.30319\clr.dll" /s SRV*C:\Users\Deci\Desktop\clr.pdb*http://msdl.microsoft.com/download/symbols
-			// symchk "C:\Windows\Microsoft.NET\Framework64\v4.0.30319\clr.dll" /s SRV*C:\Users\Deci\Desktop\clr.pdb*http://msdl.microsoft.com/download/symbols
-
-			// .NET Core
-			// symchk "C:\Program Files\dotnet\shared\Microsoft.NETCore.App\3.0.0\coreclr.dll" /s SRV*C:\Users\Deci\Desktop\clr.pdb*http://msdl.microsoft.com/download/symbols
-
-			const string SYMCHK_EXE = "symchk";
-
+			// See spreadsheet
+			
 			const string MSFT_SYM_SERVER = "http://msdl.microsoft.com/download/symbols";
 
 			string outputArg     = output.FullName;
 			string outputPdbFile = Path.GetFileNameWithoutExtension(dll.Name) + Native.PDB_EXT;
 			
-			var cmdBuilder = new CommandBuilder(SYMCHK_EXE, "{dll} /s SRV*{out}\\{pdb}*{srv}");
+			var cmdBuilder = new CommandBuilder(Native.SYMCHK_EXE, "{dll} /s SRV*{out}\\{pdb}*{srv}");
 
 			string fullCmd = cmdBuilder.AddString("dll", dll.FullName)
 			                           .Add("out", outputArg)
@@ -89,11 +82,9 @@ namespace NeoCore.Interop
 		/// <returns><c>cmd.exe</c> process</returns>
 		public static Process Shell(string cmd, bool autoStart = false)
 		{
-			const string CMD_EXE = "cmd.exe";
-
 			var startInfo = new ProcessStartInfo
 			{
-				FileName               = CMD_EXE,
+				FileName               = Native.CMD_EXE,
 				Arguments              = String.Format("/C {0}", cmd),
 				RedirectStandardOutput = true,
 				RedirectStandardError  = true,

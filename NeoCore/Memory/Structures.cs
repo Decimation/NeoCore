@@ -1,11 +1,11 @@
 using System;
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
-using NeoCore.Utilities.Extensions;
 
 namespace NeoCore.Memory
 {
@@ -46,7 +46,7 @@ namespace NeoCore.Memory
 		                                                               bool    isProperty = false)
 			where TField : unmanaged
 		{
-			return Structures.FieldOffset(field, OffsetOf<TClr>(name, OffsetOfType.Marshal, isProperty));
+			return FieldOffset(field, OffsetOf<TClr>(name, OffsetOfType.Marshal, isProperty));
 		}
 
 		internal static Pointer<TSub> ReadSubStructure<TSuper, TSub>(Pointer<TSuper> super)
@@ -74,7 +74,7 @@ namespace NeoCore.Memory
 		}
 
 		public static int OffsetOf<T>(string name, OffsetOfType type, bool isProperty = false) =>
-			Structures.OffsetOf(typeof(T), name, type, isProperty);
+			OffsetOf(typeof(T), name, type, isProperty);
 	}
 	
 	public enum OffsetOfType

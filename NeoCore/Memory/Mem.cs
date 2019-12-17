@@ -47,9 +47,9 @@ namespace NeoCore.Memory
 		public static (Pointer<byte> Base, long Size) StackRegion {
 			get {
 				
-				var info = new MemoryBasicInformation();
+				var info = new MemoryInfo();
 				var ptr  = new IntPtr(&info);
-				Native.Kernel.VirtualQuery(ptr, ref info, Marshal.SizeOf<MemoryBasicInformation>());
+				Native.Kernel.VirtualQuery(ptr, ref info, Marshal.SizeOf<MemoryInfo>());
 
 				// todo: verify
 				long size = (info.BaseAddress.ToInt64() - info.AllocationBase.ToInt64()) + info.RegionSize.ToInt64();

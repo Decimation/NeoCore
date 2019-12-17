@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
@@ -103,5 +104,7 @@ namespace NeoCore.CoreClr.VM
 		}
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
+		
+		public string NativeName => nameof(FieldDesc);
 	}
 }

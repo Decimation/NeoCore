@@ -51,7 +51,7 @@ namespace NeoCore.Memory
 
 
 				// Read the memory
-				bool ok = (Native.Kernel.ReadProcessMemoryInternal(hProc, ptrBase.Address,
+				bool ok = (Native.Kernel.ReadProcMemoryInternal(hProc, ptrBase.Address,
 				                                                     ptrBuffer.Address, cb,
 				                                                     out int numberOfBytesRead));
 
@@ -104,7 +104,7 @@ namespace NeoCore.Memory
 				var hProc = Native.Kernel.OpenProcess(proc);
 
 				// Write the memory
-				bool ok = (Native.Kernel.WriteProcessMemoryInternal(hProc, ptrBase.Address, ptrBuffer.Address,
+				bool ok = (Native.Kernel.WriteProcMemoryInternal(hProc, ptrBase.Address, ptrBuffer.Address,
 				                                                      dwSize, out int numberOfBytesWritten));
 
 

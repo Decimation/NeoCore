@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+// ReSharper disable InconsistentNaming
 
 namespace NeoCore.Interop
 {
@@ -16,11 +17,15 @@ namespace NeoCore.Interop
 		internal const string DLL_EXT = ".dll";
 
 		internal const string PDB_EXT = ".pdb";
+
+		internal const string CMD_EXE = "cmd.exe";
+
+		internal const string SYMCHK_EXE = "symchk";
 	}
 
-	/**
-	 * Enums that do not have an accompanying structure will be placed here
-	 */
+	
+	// Enums that do not have an accompanying structure will be placed here
+	 
 
 	[Flags]
 	public enum ProcessAccess : uint
@@ -60,31 +65,31 @@ namespace NeoCore.Interop
 	[Flags]
 	public enum ConsoleMode : ushort
 	{
-		ENABLE_ECHO_INPUT             = 0x0004,
-		ENABLE_EXTENDED_FLAGS         = 0x0080,
-		ENABLE_INSERT_MODE            = 0x0020,
-		ENABLE_LINE_INPUT             = 0x0002,
-		ENABLE_MOUSE_INPUT            = 0x0010,
-		ENABLE_PROCESSED_INPUT        = 0x0001,
-		ENABLE_QUICK_EDIT_MODE        = 0x0040,
-		ENABLE_WINDOW_INPUT           = 0x0008,
-		ENABLE_VIRTUAL_TERMINAL_INPUT = 0x0200,
+		EnableEchoInput             = 0x0004,
+		EnableExtendedFlags         = 0x0080,
+		EnableInsertMode            = 0x0020,
+		EnableLineInput             = 0x0002,
+		EnableMouseInput            = 0x0010,
+		EnableProcessedInput        = 0x0001,
+		EnableQuickEditMode        = 0x0040,
+		EnableWindowInput           = 0x0008,
+		EnableVirtualTerminalInput = 0x0200,
 	}
 
 	public enum HandleOption : int
 	{
-		STD_INPUT_HANDLE  = -10,
-		STD_OUTPUT_HANDLE = -11,
-		STD_ERROR_HANDLE  = -12
+		StdInputHandle  = -10,
+		StdOutputHandle = -11,
+		StdErrorHandle  = -12
 	}
 
 	[Flags]
 	public enum OutputMode : ushort
 	{
-		ENABLE_PROCESSED_OUTPUT            = 0x0001,
-		ENABLE_WRAP_AT_EOL_OUTPUT          = 0x0002,
-		ENABLE_VIRTUAL_TERMINAL_PROCESSING = 0x0004,
-		DISABLE_NEWLINE_AUTO_RETURN        = 0x0008,
-		ENABLE_LVB_GRID_WORLDWIDE          = 0x0010,
+		EnableProcessedOutput            = 0x0001,
+		EnableWrapAtEOLOutput          = 0x0002,
+		EnableVirtualTerminalProcessing = 0x0004,
+		DisableNewlineAutoReturn        = 0x0008,
+		EnableLVBGridWorldwide          = 0x0010,
 	}
 }

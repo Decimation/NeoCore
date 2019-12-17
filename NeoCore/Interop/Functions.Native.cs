@@ -39,7 +39,7 @@ namespace NeoCore.Interop
 			{
 				IL.Emit.Ldarg_0();                                         // Load arg "fn"
 				IL.Emit.Conv_I();                                          // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,                 // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,        // Calling convention
 				                              new TypeRef(typeof(TRet)))); // Return type
 				return IL.Return<TRet>();
 			}
@@ -58,7 +58,7 @@ namespace NeoCore.Interop
 				IL.Emit.Ldarg_1();                                       // Load arg "arg1"
 				IL.Emit.Ldarg_0();                                       // Load arg "fn"
 				IL.Emit.Conv_I();                                        // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,               // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,      // Calling convention
 				                              new TypeRef(typeof(TRet)), // Return type
 				                              new TypeRef(typeof(T1)))); // Arg "arg1" type #1
 				return IL.Return<TRet>();
@@ -81,7 +81,7 @@ namespace NeoCore.Interop
 				IL.Emit.Ldarg_2();                                       // Load arg "arg2"
 				IL.Emit.Ldarg_0();                                       // Load arg "fn"
 				IL.Emit.Conv_I();                                        // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,               // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,      // Calling convention
 				                              new TypeRef(typeof(TRet)), // Return type
 				                              new TypeRef(typeof(T1)),   // Arg "arg1" type #1
 				                              new TypeRef(typeof(T2)))); // Arg "arg2" type #2
@@ -108,7 +108,7 @@ namespace NeoCore.Interop
 				IL.Emit.Ldarg_3();                                       // Load arg "arg3"
 				IL.Emit.Ldarg_0();                                       // Load arg "fn"
 				IL.Emit.Conv_I();                                        // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,               // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,      // Calling convention
 				                              new TypeRef(typeof(TRet)), // Return type
 				                              new TypeRef(typeof(T1)),   // Arg "arg1" type #1
 				                              new TypeRef(typeof(T2)),   // Arg "arg2" type #2
@@ -129,7 +129,7 @@ namespace NeoCore.Interop
 			{
 				IL.Emit.Ldarg_0();                                         // Load arg "fn"
 				IL.Emit.Conv_I();                                          // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,                 // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,        // Calling convention
 				                              new TypeRef(typeof(void)))); // Return type
 			}
 
@@ -145,7 +145,7 @@ namespace NeoCore.Interop
 				IL.Emit.Ldarg_1();                                       // Load arg "arg1"
 				IL.Emit.Ldarg_0();                                       // Load arg "fn"
 				IL.Emit.Conv_I();                                        // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,               // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,      // Calling convention
 				                              new TypeRef(typeof(void)), // Return type
 				                              new TypeRef(typeof(T1)))); // Arg "arg1" type #1
 			}
@@ -163,7 +163,7 @@ namespace NeoCore.Interop
 				IL.Emit.Ldarg_2();                                       // Load arg "arg2"
 				IL.Emit.Ldarg_0();                                       // Load arg "fn"
 				IL.Emit.Conv_I();                                        // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,               // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,      // Calling convention
 				                              new TypeRef(typeof(void)), // Return type
 				                              new TypeRef(typeof(T1)),   // Arg "arg1" type #1
 				                              new TypeRef(typeof(T2)))); // Arg "arg2" type #2
@@ -182,7 +182,7 @@ namespace NeoCore.Interop
 			{
 				IL.Emit.Ldarg_0();                                          // Load arg "fn"
 				IL.Emit.Conv_I();                                           // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,                  // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,			// Calling convention
 				                              new TypeRef(typeof(void*)))); // Return type
 				return IL.ReturnPointer();
 			}
@@ -198,7 +198,7 @@ namespace NeoCore.Interop
 				IL.Emit.Ldarg_1();                                          // Load arg "arg1"
 				IL.Emit.Ldarg_0();                                          // Load arg "fn"
 				IL.Emit.Conv_I();                                           // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,                  // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,         // Calling convention
 				                              new TypeRef(typeof(void*)),   // Return type
 				                              new TypeRef(typeof(void*)))); // Arg "arg1" type #1
 				return IL.ReturnPointer();
@@ -217,7 +217,7 @@ namespace NeoCore.Interop
 				IL.Emit.Ldarg_2();                                        // Load arg "arg2"
 				IL.Emit.Ldarg_0();                                        // Load arg "fn"
 				IL.Emit.Conv_I();                                         // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,                // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,       // Calling convention
 				                              new TypeRef(typeof(void*)), // Return type
 				                              new TypeRef(typeof(T1)),    // Arg "arg1" type #1
 				                              new TypeRef(typeof(T2))));  // Arg "arg2" type #2
@@ -239,7 +239,7 @@ namespace NeoCore.Interop
 				IL.Emit.Ldarg_3();                                        // Load arg "arg3"
 				IL.Emit.Ldarg_0();                                        // Load arg "fn"
 				IL.Emit.Conv_I();                                         // Convert arg "fn" to native
-				IL.Emit.Calli(new SAMethodSig(CC.Standard,                // Calling convention
+				IL.Emit.Calli(new SAMethodSig(CC.Standard,       // Calling convention
 				                              new TypeRef(typeof(void*)), // Return type
 				                              new TypeRef(typeof(void*)), // Arg "arg1" type #1
 				                              new TypeRef(typeof(void*)), // Arg "arg2" type #2

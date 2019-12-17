@@ -73,12 +73,17 @@ namespace NeoCore.Utilities.Extensions
 
 		#endregion
 
-		public static bool ImplementsGenericInterface(this Type type, Type interfaceType)
+		public static bool ImplementsGenericInterface(this Type type, Type interfaceName)
 		{
-			return type.GetInterfaces().Any(x => x.IsGenericType
-			                                     && x.GetGenericTypeDefinition() == interfaceType);
+			bool IsMatch(Type t)
+			{
+				return t.IsGenericType && t.GetGenericTypeDefinition() == interfaceName;
+			}
+
+			return type.GetInterfaces().Any(IsMatch);
 		}
 
-		public static bool ImplementsInterface(this Type type, string name) => type.GetInterface(name) != null;
+		public static bool ImplementsInterface(this Type type, string interfaceName) => 
+			type.GetInterface(interfaceName) != null;
 	}
 }

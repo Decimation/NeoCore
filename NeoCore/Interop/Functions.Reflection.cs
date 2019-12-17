@@ -22,24 +22,20 @@ namespace NeoCore.Interop
 			///     Executes a generic method
 			/// </summary>
 			/// <param name="method">Method to execute</param>
-			/// <param name="typeArgs">Generic type parameters</param>
+			/// <param name="args">Generic type parameters</param>
 			/// <param name="value">Instance of type; <c>null</c> if the method is static</param>
-			/// <param name="args">Method arguments</param>
+			/// <param name="fnArgs">Method arguments</param>
 			/// <returns>Return value of the method specified by <paramref name="method"/></returns>
-			public static object CallGeneric(MethodInfo      method,
-			                                 Type[]          typeArgs,
-			                                 object          value,
-			                                 params object[] args)
+			public static object CallGeneric(MethodInfo method, Type[]          args,
+			                                 object     value,  params object[] fnArgs)
 			{
-				return method.MakeGenericMethod(typeArgs).Invoke(value, args);
+				return method.MakeGenericMethod(args).Invoke(value, fnArgs);
 			}
 
-			public static object CallGeneric(MethodInfo      method,
-			                                 Type            typeArg,
-			                                 object          value,
-			                                 params object[] args)
+			public static object CallGeneric(MethodInfo method, Type            arg,
+			                                 object     value,  params object[] fnArgs)
 			{
-				return method.MakeGenericMethod(typeArg).Invoke(value, args);
+				return method.MakeGenericMethod(arg).Invoke(value, fnArgs);
 			}
 
 			#endregion
@@ -51,10 +47,8 @@ namespace NeoCore.Interop
 				return FindFunction<TDelegate>(attr.DeclaringType, attr.Name);
 			}
 
-			public static TDelegate FindFunction<TDelegate, TSource>(string name) where TDelegate : Delegate
-			{
-				return FindFunction<TDelegate>(typeof(TSource), name);
-			}
+			public static TDelegate FindFunction<TDelegate, TSource>(string name) where TDelegate : Delegate =>
+				FindFunction<TDelegate>(typeof(TSource), name);
 
 			public static TDelegate FindFunction<TDelegate>(Type type, string name) where TDelegate : Delegate
 			{

@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
@@ -66,5 +67,6 @@ namespace NeoCore.CoreClr.VM.Jit
 		public byte[] CodeIL => Code.Copy(CodeSize);
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
+		public string NativeName => null;
 	}
 }

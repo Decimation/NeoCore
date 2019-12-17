@@ -1,5 +1,6 @@
 using System.Runtime.InteropServices;
 using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.CoreClr.VM.Jit;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
@@ -140,5 +141,6 @@ namespace NeoCore.CoreClr.VM
 		#endregion
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
+		public string NativeName => nameof(MethodDesc);
 	}
 }

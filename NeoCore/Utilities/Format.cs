@@ -6,6 +6,8 @@ using System.Text;
 using Microsoft.VisualBasic;
 using NeoCore.Utilities.Extensions;
 
+// ReSharper disable ParameterTypeCanBeEnumerable.Global
+
 // ReSharper disable StringCompareToIsCultureSpecific
 
 namespace NeoCore.Utilities
@@ -16,10 +18,18 @@ namespace NeoCore.Utilities
 	public static class Format
 	{
 		public const char SPACE = ' ';
-		
+
+		public const char PERIOD = '.';
+
+
 		public static StringBuilder CreateTreeString(DirectoryInfo dir, string delim = "")
 		{
 			// https://github.com/kddeisz/tree/blob/master/Tree.java
+
+			const string SPACE4_X           = "    ";
+			const string RIGHT_ANGLE_BRANCH = "└── ";
+			const string MID_BRANCH         = "├── ";
+			const string BRANCH             = "│   ";
 
 			var sb = new StringBuilder();
 
@@ -29,24 +39,24 @@ namespace NeoCore.Utilities
 			for (int i = 0; i < children.Length; i++) {
 				var child = children[i];
 
-				if (child.Name[0] == '.') {
+				if (child.Name[0] == PERIOD) {
 					continue;
 				}
 
 				sb.Append(delim);
 
 				if (i == children.Length - 1) {
-					sb.Append("└── ").AppendLine(child.Name);
+					sb.Append(RIGHT_ANGLE_BRANCH).AppendLine(child.Name);
 
 					if (child is DirectoryInfo d) {
-						sb.Append(CreateTreeString(d, delim + "    "));
+						sb.Append(CreateTreeString(d, delim + SPACE4_X));
 					}
 				}
 				else {
-					sb.Append("├── ").AppendLine(child.Name);
+					sb.Append(MID_BRANCH).AppendLine(child.Name);
 
 					if (child is DirectoryInfo d) {
-						sb.Append(CreateTreeString(d, delim + "│   "));
+						sb.Append(CreateTreeString(d, delim + BRANCH));
 					}
 				}
 			}
@@ -75,7 +85,6 @@ namespace NeoCore.Utilities
 		/// </summary>
 		public const string JOIN_SCOPE = "::";
 
-		
 
 		/// <summary>
 		/// Concatenates the strings returned by <paramref name="toString"/>
@@ -129,15 +138,15 @@ namespace NeoCore.Utilities
 			}
 
 			string hexStr = null;
-			
+
 			if (value is IFormattable fmt) {
 				hexStr = fmt.ToString(HEX_FORMAT_SPECIFIER, null);
 			}
 			else {
 				throw new NotImplementedException();
 			}
-			
-			
+
+
 			if (options.HasFlagFast(HexOptions.Lowercase)) {
 				hexStr = hexStr.ToLower();
 			}

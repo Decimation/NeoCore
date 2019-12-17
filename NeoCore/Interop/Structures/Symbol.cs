@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
@@ -10,7 +12,7 @@ namespace NeoCore.Interop.Structures
 	/// <summary>
 	///     Wraps a <see cref="NativeSymbol" />
 	/// </summary>
-	public unsafe class Symbol
+	public unsafe class Symbol : IWrapper<NativeSymbol>
 	{
 		internal Symbol(NativeSymbol* pSymInfo)
 		{
@@ -70,8 +72,10 @@ namespace NeoCore.Interop.Structures
 	/// </summary>
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	internal unsafe struct NativeSymbol
+	internal unsafe struct NativeSymbol : INativeStructure
 	{
+		public string NativeName => "SYMBOL_INFO";
+		
 		// https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info
 
 		/// <summary>

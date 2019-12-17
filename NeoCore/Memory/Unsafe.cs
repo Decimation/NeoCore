@@ -50,12 +50,14 @@ namespace NeoCore.Memory
 		///     <remarks>
 		///         <para><c>pData</c> is what <c>Object::GetData()</c> returns in VM.</para>
 		///         <para><c>pData</c> is also equal to offsetting the pointer by <see cref="OffsetOptions.Fields" />. </para>
-		///         <para>From <see cref="System.Runtime.CompilerServices.JitHelpers" />. </para>
+		///         <para>From <see cref="SOURCE" />. </para>
 		///     </remarks>
 		/// </summary>
 		[UsedImplicitly]
 		public sealed class PinHelper
 		{
+			private const string SOURCE = "System.Runtime.CompilerServices.JitHelpers";
+			
 			/// <summary>
 			///     Represents the first field in an object, such as <see cref="OffsetOptions.Fields" />.
 			/// </summary>
@@ -311,16 +313,14 @@ namespace NeoCore.Memory
 
 			// Value of GetSizeField()
 			int length = 0;
-
-			/**
-			 * Type			x86 size				x64 size
-			 *
-			 * object		12						24
-			 * object[]		16 + length * 4			32 + length * 8
-			 * int[]		12 + length * 4			28 + length * 4
-			 * byte[]		12 + length				24 + length
-			 * string		14 + length * 2			26 + length * 2
-			 */
+			
+			// Type			x86 size				x64 size
+			// 
+			// object		12						24
+			// object[]		16 + length * 4			32 + length * 8
+			// int[]		12 + length * 4			28 + length * 4
+			// byte[]		12 + length				24 + length
+			// string		14 + length * 2			26 + length * 2
 
 			// From object.h line 65:
 

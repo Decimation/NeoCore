@@ -62,9 +62,7 @@ namespace NeoCore.Interop
 
 
 			[DllImport(DBGHELP_DLL, EntryPoint = SYM_PREFIX + nameof(Initialize), CharSet = CharSet.Unicode)]
-			private static extern bool Initialize(IntPtr hProcess,
-			                                      IntPtr userSearchPath,
-			                                      bool   fInvadeProcess);
+			private static extern bool Initialize(IntPtr hProcess, IntPtr userSearchPath, bool fInvadeProcess);
 
 
 			[DllImport(DBGHELP_DLL, EntryPoint = SYM_PREFIX + nameof(Cleanup), CharSet = CharSet.Unicode)]

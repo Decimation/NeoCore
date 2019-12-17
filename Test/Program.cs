@@ -14,6 +14,7 @@ using System.Text;
 using System.Threading;
 using NeoCore;
 using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;
@@ -35,7 +36,8 @@ using Unsafe = NeoCore.Memory.Unsafe;
 namespace Test
 {
 	// nuget pack -Prop Configuration=Release
-
+	
+	
 	public static unsafe class Program
 	{
 		static int Add(int a, int b)
@@ -43,15 +45,15 @@ namespace Test
 			return a + b;
 		}
 
+		static void Func<T>(T s) where T : INativeStructure
+		{
+			Console.WriteLine(s.NativeName);
+		}
+
 		private static void Main(string[] args)
 		{
 			var g = ClrInformation.GCHeap;
-			var s = "foo";
-
-			fixed (byte* p = &Unsafe.GetPinHelper(s).Data) {
-				int i = *(int*) p;
-				Console.WriteLine(i);
-			}
+			Func(g.Value.Value);
 		}
 	}
 }

@@ -1,4 +1,5 @@
 using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.Memory.Pointers;
 
 // ReSharper disable InconsistentNaming

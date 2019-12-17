@@ -4,6 +4,7 @@ using System.Reflection;
 using NeoCore.Interop.Structures;
 using NeoCore.Memory;
 using NeoCore.Utilities.Extensions;
+// ReSharper disable UnusedAutoPropertyAccessor.Global
 
 // ReSharper disable InconsistentNaming
 
@@ -95,7 +96,7 @@ namespace NeoCore.Interop
 		/// <summary>
 		/// Gets if the file header is 32 bit or not
 		/// </summary>
-		public bool Is32BitHeader => FileHeader.Characteristics.HasFlag(ImageFileCharacteristics.BIT32_MACHINE);
+		public bool Is32BitHeader => FileHeader.Characteristics.HasFlagFast(ImageFileCharacteristics.BIT32_MACHINE);
 
 		public ImageDOSHeader DOSHeader { get; }
 

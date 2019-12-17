@@ -1,4 +1,4 @@
-namespace NeoCore.Assets
+namespace NeoCore.Assets.Representation
 {
 	/// <summary>
 	/// Specifies implicit native inheritance.

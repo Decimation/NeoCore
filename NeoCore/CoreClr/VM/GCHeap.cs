@@ -1,6 +1,7 @@
 // ReSharper disable InconsistentNaming
 
 using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Memory;
@@ -41,5 +42,6 @@ namespace NeoCore.CoreClr.VM
 		}
 
 		public ClrStructureType Type => ClrStructureType.Memory;
+		//public string NativeName => nameof(GCHeap);
 	}
 }

@@ -2,6 +2,8 @@
 
 using System;
 using System.Runtime.InteropServices;
+using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.Interop.Attributes;
 
 #endregion
@@ -13,8 +15,10 @@ namespace NeoCore.Interop.Structures
 	/// </summary>
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct MemoryBasicInformation
+	internal struct MemoryInfo : INativeStructure
 	{
+		public string NativeName => "MEMORY_BASIC_INFORMATION";
+
 		/// <summary>
 		///     A pointer to the base address of the region of pages.
 		/// </summary>
@@ -53,8 +57,6 @@ namespace NeoCore.Interop.Structures
 		/// </summary>
 		internal MemoryType Type { get; }
 	}
-	
-	
 
 	/// <summary>
 	///     <a href="https://docs.microsoft.com/en-us/windows/desktop/memory/memory-protection-constants">Doc</a>

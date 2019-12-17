@@ -1,16 +1,20 @@
 using System;
 using System.Runtime.InteropServices;
+using NeoCore.Assets;
+using NeoCore.Assets.Representation;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
 
-
 // ReSharper disable InconsistentNaming
+
 
 namespace NeoCore.Interop.Structures
 {
 	[NativeStructure]
-	public unsafe struct ImageDOSHeader
+	public unsafe struct ImageDOSHeader : INativeStructure
 	{
+		public string NativeName => "IMAGE_DOS_HEADER";
+
 		// DOS .EXE header
 
 		/// <summary>
@@ -109,11 +113,13 @@ namespace NeoCore.Interop.Structures
 		/// </summary>
 		public uint Lfanew { get; }
 	}
-	
+
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct ImageFileHeader
+	public struct ImageFileHeader : INativeStructure
 	{
+		public string NativeName => "IMAGE_FILE_HEADER";
+
 		public MachineArchitecture Machine { get; }
 
 		public ushort NumberOfSections { get; }
@@ -128,19 +134,23 @@ namespace NeoCore.Interop.Structures
 
 		public ImageFileCharacteristics Characteristics { get; }
 	}
-	
+
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public struct ImageDataDirectory
+	public struct ImageDataDirectory : INativeStructure
 	{
+		public string NativeName => "IMAGE_DATA_DIRECTORY";
+
 		public uint VirtualAddress { get; }
 		public uint Size           { get; }
 	}
-	
+
 	[NativeStructure]
 	[StructLayout(LayoutKind.Explicit)]
-	public struct ImageSectionHeader
+	public struct ImageSectionHeader : INativeStructure
 	{
+		public string NativeName => "IMAGE_SECTION_HEADER";
+
 		// Grabbed the following 2 definitions from http://www.pinvoke.net/default.aspx/Structures/IMAGE_SECTION_HEADER.html
 
 
@@ -186,12 +196,14 @@ namespace NeoCore.Interop.Structures
 		[FieldOffset(36)]
 		public ImageSectionFlags Characteristics;
 	}
-	
-	
+
+
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct ImageOptionalHeader64
+	public struct ImageOptionalHeader64 : INativeStructure
 	{
+		public string NativeName => "IMAGE_OPTIONAL_HEADER";
+
 		public ushort Magic;
 
 		public byte MajorLinkerVersion;
@@ -282,11 +294,13 @@ namespace NeoCore.Interop.Structures
 
 		public ImageDataDirectory Reserved;
 	}
-	
+
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct ImageOptionalHeader32
+	public struct ImageOptionalHeader32 : INativeStructure
 	{
+		public string NativeName => "IMAGE_OPTIONAL_HEADER";
+
 		public ushort Magic;
 
 		public byte MajorLinkerVersion;
@@ -379,22 +393,24 @@ namespace NeoCore.Interop.Structures
 
 		public ImageDataDirectory Reserved;
 	}
-	
+
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
-	public struct ImageNtHeaders64
+	public struct ImageNtHeaders64 : INativeStructure
 	{
+		public string NativeName => "IMAGE_NT_HEADERS";
+
 		public uint Signature { get; }
 
 		public ImageFileHeader FileHeader { get; }
 
 		public ImageOptionalHeader64 OptionalHeader { get; }
 	}
-	
+
 	/// <summary>
 	/// Wraps an <see cref="ImageSectionHeader"/>
 	/// </summary>
-	public sealed class ImageSectionInfo
+	public sealed class ImageSectionInfo : IWrapper<ImageSectionHeader>
 	{
 		public string Name { get; }
 
@@ -406,8 +422,11 @@ namespace NeoCore.Interop.Structures
 
 		public ImageSectionFlags Characteristics { get; }
 
+		public ImageSectionHeader Value { get; }
+
 		internal ImageSectionInfo(ImageSectionHeader struc, int number, IntPtr address)
 		{
+			Value           = struc;
 			Number          = number;
 			Name            = new string(struc.Name);
 			Address         = address;
@@ -421,7 +440,7 @@ namespace NeoCore.Interop.Structures
 			                     Number, Name, Address, Size, Characteristics);
 		}
 	}
-	
+
 	[Flags]
 	public enum ImageSectionFlags : uint
 	{
@@ -639,14 +658,14 @@ namespace NeoCore.Interop.Structures
 	[Flags]
 	public enum ImageDllCharacteristics : ushort
 	{
-		DYNAMIC_BASE          = 0x0040,
-		FORCE_INTEGRITY       = 0x0080,
-		NX_COMPAT             = 0x0100,
-		NO_ISOLATION          = 0x0200,
-		NO_SEH                = 0x0400,
-		NO_BIND               = 0x0800,
-		WDM_DRIVER            = 0x2000,
-		TERMINAL_SERVER_AWARE = 0x8000
+		DynamicBase         = 0x0040,
+		ForceIntegrity      = 0x0080,
+		NXCompat            = 0x0100,
+		NoIsolation         = 0x0200,
+		NoSEH               = 0x0400,
+		NoBind              = 0x0800,
+		WDMDriver           = 0x2000,
+		TerminalServerAware = 0x8000
 	}
 
 

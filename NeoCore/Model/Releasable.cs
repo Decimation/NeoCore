@@ -14,7 +14,7 @@ namespace NeoCore.Model
 	///         </item>
 	///         <item>
 	///             <description>
-	///                 <see cref="Functions.Clr" />
+	///                 <see cref="Functions.Native" />
 	///             </description>
 	///         </item>
 	///         <item>

@@ -18,7 +18,6 @@ namespace NeoCore.Utilities
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool ReadBit(int value, int bitOfs) => (value & (1 << bitOfs)) != 0;
 
-
 		private static int GetMask(int bitOfs, int bitCount) => ((1 << bitCount) - 1) << bitOfs;
 
 		public static int ReadBitsFrom(int value, int bitOfs, int bitCount)

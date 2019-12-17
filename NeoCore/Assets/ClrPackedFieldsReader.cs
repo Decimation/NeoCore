@@ -1,4 +1,5 @@
 using System;
+using NeoCore.Assets.Representation;
 using NeoCore.CoreClr;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
@@ -16,6 +17,8 @@ namespace NeoCore.Assets
 	[NativeStructure]
 	internal readonly struct ClrPackedFieldsReader : IClrStructure
 	{
+		public string NativeName => null;
+		
 		private const int PACKED_FIELDS_RG_LEN = 1;
 		private const int MAX_LENGTH_BITS      = 5;
 
