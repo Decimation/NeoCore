@@ -45,7 +45,7 @@ namespace NeoCore.Assets
 			typeof(EEClass),
 			typeof(EEClassLayoutInfo),
 			typeof(MethodDescChunk),
-			typeof(ClrInformation),
+			typeof(ClrAssets),
 		};
 
 		private static readonly Closable[] CoreObjects =

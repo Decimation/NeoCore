@@ -157,7 +157,7 @@ namespace NeoCore.Utilities
 				case CorElementType.CModOpt:
 				case CorElementType.Internal:
 				case CorElementType.MVar:
-					return ClrInformation.INVALID_VALUE;
+					return ClrAssets.INVALID_VALUE;
 
 				case CorElementType.TypedByRef:
 					return IntPtr.Size * 2;

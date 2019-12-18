@@ -50,7 +50,7 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		public override int GetHashCode()
 		{
-			return ClrInformation.INVALID_VALUE;
+			return ClrAssets.INVALID_VALUE;
 		}
 
 		public static bool operator ==(ClrStructure<TClr> left, ClrStructure<TClr> right) => Equals(left, right);

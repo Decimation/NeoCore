@@ -13,9 +13,9 @@ namespace NeoCore.CoreClr
 	/// <summary>
 	/// Contains global CLR variables, offsets, sizes, and other constants.
 	/// </summary>
-	public static class ClrInformation
+	public static class ClrAssets
 	{
-		static ClrInformation()
+		static ClrAssets()
 		{
 			var clr = Resources.Clr.Imports;
 
@@ -55,14 +55,14 @@ namespace NeoCore.CoreClr
 		///     Size of <see cref="TypeHandle" /> and <see cref="ObjHeader" />
 		///     <list type="bullet">
 		///         <item>
-		///             <description>+ <see cref="ClrInformation.ObjHeaderSize" />: <see cref="ObjHeader" /></description>
+		///             <description>+ <see cref="ClrAssets.ObjHeaderSize" />: <see cref="ObjHeader" /></description>
 		///         </item>
 		///         <item>
 		///             <description>+ <see cref="Mem.Size" />: <see cref="TypeHandle"/></description>
 		///         </item>
 		///     </list>
 		/// </summary>
-		public static readonly unsafe int ObjectBaseSize = ClrInformation.ObjHeaderSize + sizeof(TypeHandle);
+		public static readonly unsafe int ObjectBaseSize = ClrAssets.ObjHeaderSize + sizeof(TypeHandle);
 
 
 		/// <summary>
@@ -86,7 +86,7 @@ namespace NeoCore.CoreClr
 		/// <summary>
 		///     <para>Minimum GC object heap size</para>
 		/// </summary>
-		public static readonly int MinObjectSize = (Mem.Size * 2) + ClrInformation.ObjHeaderSize;
+		public static readonly int MinObjectSize = (Mem.Size * 2) + ClrAssets.ObjHeaderSize;
 
 		#endregion
 
@@ -116,7 +116,7 @@ namespace NeoCore.CoreClr
 		///         </item>
 		///     </list>
 		/// </summary>
-		public static readonly int OffsetToArrayData = ClrInformation.OffsetToData + ArrayOverhead;
+		public static readonly int OffsetToArrayData = ClrAssets.OffsetToData + ArrayOverhead;
 
 		/// <summary>
 		///     Heap offset to the first string character.
