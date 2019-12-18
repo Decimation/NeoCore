@@ -10,7 +10,7 @@ namespace NeoCore.CoreClr.VM
 	[ImportNamespace]
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	public struct ArrayClass : IClrStructure, INativeInheritance<EEClass>
+	public struct ArrayClass : IClrStructure, INativeSubclass<EEClass>
 	{
 		internal byte Rank { get; }
 

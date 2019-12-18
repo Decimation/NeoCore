@@ -9,6 +9,7 @@ using NeoCore.Assets;
 using NeoCore.CoreClr.VM.Jit;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+using NeoCore.Utilities.Extensions;
 
 // ReSharper disable ConvertSwitchStatementToSwitchExpression
 // ReSharper disable SwitchStatementMissingSomeCases
@@ -40,6 +41,62 @@ namespace NeoCore.Interop
 			{
 				OpCodes          = GetAllOpCodes();
 				OperandBaseSizes = GetOperandBaseSizes();
+				
+				
+				static Dictionary<short, OpCode> GetAllOpCodes()
+				{
+					FieldInfo[] opCodesFields = typeof(OpCodes).GetFields();
+
+					var opCodes = new Dictionary<short, OpCode>(opCodesFields.Length);
+
+					foreach (var t in opCodesFields) {
+						var v = (OpCode) t.GetValue(null);
+						opCodes.Add(v.Value, v);
+					}
+
+					return opCodes;
+				}
+				
+				static Dictionary<OperandType, int> GetOperandBaseSizes()
+				{
+					var dict = new Dictionary<OperandType, int>();
+
+					var intSize = new[]
+					{
+						OperandType.InlineField,
+						OperandType.InlineMethod,
+						OperandType.InlineString,
+						OperandType.InlineType,
+						OperandType.InlineSig,
+						OperandType.InlineTok,
+						OperandType.InlineSwitch,
+						OperandType.InlineBrTarget,
+						OperandType.ShortInlineR,
+						OperandType.InlineI
+					};
+
+
+					var longSize = new[]
+					{
+						OperandType.InlineR,
+						OperandType.InlineI8
+					};
+
+					var byteSize = new[]
+					{
+						OperandType.ShortInlineVar,
+						OperandType.ShortInlineBrTarget,
+						OperandType.ShortInlineI
+					};
+
+					dict.AddRange(intSize, sizeof(int));
+					dict.AddRange(longSize, sizeof(long));
+					dict.Add(OperandType.InlineVar, sizeof(short));
+					dict.AddRange(byteSize, sizeof(byte));
+					dict.Add(OperandType.InlineNone, 0);
+
+					return dict;
+				}
 			}
 
 			public static Instruction[] ReadInstructions(byte[] bytes)
@@ -127,63 +184,7 @@ namespace NeoCore.Interop
 			// Commit with old ILString:
 			// 7bff50a8777f9ff528e381d0b740d7e7bdcb760a
 			// https://github.com/GeorgePlotnikov/ClrAnalyzer/blob/master/Win32Native/ildump.h
-
-
-			private static Dictionary<short, OpCode> GetAllOpCodes()
-			{
-				FieldInfo[] opCodesFields = typeof(OpCodes).GetFields();
-
-				var opCodes = new Dictionary<short, OpCode>(opCodesFields.Length);
-
-				foreach (var t in opCodesFields) {
-					var v = (OpCode) t.GetValue(null);
-					opCodes.Add(v.Value, v);
-				}
-
-				return opCodes;
-			}
-
-			private static Dictionary<OperandType, int> GetOperandBaseSizes()
-			{
-				var dict = new Dictionary<OperandType, int>();
-
-				var intSize = new[]
-				{
-					OperandType.InlineField,
-					OperandType.InlineMethod,
-					OperandType.InlineString,
-					OperandType.InlineType,
-					OperandType.InlineSig,
-					OperandType.InlineTok,
-					OperandType.InlineSwitch,
-					OperandType.InlineBrTarget,
-					OperandType.ShortInlineR,
-					OperandType.InlineI
-				};
-
-
-				var longSize = new[]
-				{
-					OperandType.InlineR,
-					OperandType.InlineI8
-				};
-
-				var byteSize = new[]
-				{
-					OperandType.ShortInlineVar,
-					OperandType.ShortInlineBrTarget,
-					OperandType.ShortInlineI
-				};
-
-				dict.AddRange(intSize, sizeof(int));
-				dict.AddRange(longSize, sizeof(long));
-				dict.Add(OperandType.InlineVar, sizeof(short));
-				dict.AddRange(byteSize, sizeof(byte));
-				dict.Add(OperandType.InlineNone, 0);
-
-				return dict;
-			}
-
+			
 			public static bool FunctionThrows(Action action)
 			{
 				try {

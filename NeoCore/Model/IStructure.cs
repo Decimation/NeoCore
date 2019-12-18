@@ -5,8 +5,12 @@ namespace NeoCore.Model
 {
 	/// <summary>
 	/// Represents a structure that has unique identifiable properties.
+	/// <seealso cref="INativeStructure"/>
+	/// <seealso cref="INativeSubclass{TSuper}"/>
+	/// <seealso cref="IWrapper{TNative}"/>
+	/// <seealso cref="IClrStructure"/>
 	/// </summary>
-	public interface IKnownStructure
+	public interface IStructure
 	{
 		/// <summary>
 		/// Name of this structure.

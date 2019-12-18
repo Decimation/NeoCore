@@ -35,24 +35,13 @@ using Unsafe = NeoCore.Memory.Unsafe;
 namespace Test
 {
 	// nuget pack -Prop Configuration=Release
-	
-	
+
+
 	public static unsafe class Program
 	{
-		static int Add(int a, int b)
-		{
-			return a + b;
-		}
-
-		static void Func<T>(T s) where T : INativeStructure
-		{
-			Console.WriteLine(s.NativeName);
-		}
-
 		private static void Main(string[] args)
 		{
-			var g = ClrInformation.GCHeap;
-			Func(g.Value.Value);
+			
 		}
 	}
 }

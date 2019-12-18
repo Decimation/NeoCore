@@ -7,6 +7,7 @@ using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import;
 using NeoCore.Interop;
 using NeoCore.Model;
+using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
 [assembly: InternalsVisibleTo("Test")]

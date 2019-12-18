@@ -3,6 +3,10 @@ namespace NeoCore.Model
 	/// <summary>
 	/// Designates a native CLR metadata source structure.
 	/// <para>https://github.com/dotnet/runtime</para>
+	/// <seealso cref="INativeStructure"/>
+	/// <seealso cref="INativeSubclass{TSuper}"/>
+	/// <seealso cref="IWrapper{TNative}"/>
+	/// <seealso cref="IStructure"/>
 	/// </summary>
 	public interface IClrStructure : INativeStructure
 	{

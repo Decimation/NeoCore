@@ -1,15 +1,14 @@
 using System.Runtime.CompilerServices;
+using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
-using NeoCore.Import;
-using NeoCore.Import.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
 // ReSharper disable InconsistentNaming
 #pragma warning disable 649
 
-namespace NeoCore.Assets
+namespace NeoCore.CoreClr
 {
 	/// <summary>
 	/// Contains global CLR variables, offsets, sizes, and other constants.
@@ -36,7 +35,7 @@ namespace NeoCore.Assets
 		/// </summary>
 		public static readonly MetaHeap GCHeap;
 
-		#region Sizes-
+		#region Sizes
 
 		// https://github.com/dotnet/coreclr/blob/master/src/vm/object.h
 

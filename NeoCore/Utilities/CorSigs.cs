@@ -1,10 +1,11 @@
 using System;
+using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.VM;
 
-namespace NeoCore.Assets
+namespace NeoCore.Utilities
 {
-	internal static class ClrSigReader
+	internal static class CorSigs
 	{
 		// src/inc/corhdr.h
 

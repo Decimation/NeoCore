@@ -1,4 +1,5 @@
 using System;
+using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
@@ -7,7 +8,7 @@ using NeoCore.Model;
 // ReSharper disable BuiltInTypeReferenceStyle
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 
-namespace NeoCore.Assets
+namespace NeoCore.Utilities
 {
 	using DWORD = UInt32;
 
@@ -15,7 +16,7 @@ namespace NeoCore.Assets
 	/// Packed DWORD fields
 	/// </summary>
 	[NativeStructure]
-	internal readonly struct ClrPackedFieldsReader : IClrStructure
+	internal readonly struct PackedFieldsReader : IClrStructure
 	{
 		public string NativeName => null;
 		
@@ -45,7 +46,7 @@ namespace NeoCore.Assets
 		/// </summary>
 		private Pointer<DWORD> UnpackedFields => m_ptr;
 
-		internal ClrPackedFieldsReader(Pointer<DWORD> p, int l)
+		internal PackedFieldsReader(Pointer<DWORD> p, int l)
 		{
 			m_ptr                  = p;
 			m_unpackedFieldsLength = l;

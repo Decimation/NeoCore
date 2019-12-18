@@ -2,7 +2,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 
-namespace NeoCore.Assets
+namespace NeoCore.Utilities
 {
 	public sealed class NeoProcess
 	{

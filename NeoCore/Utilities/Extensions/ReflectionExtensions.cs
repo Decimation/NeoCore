@@ -12,46 +12,30 @@ namespace NeoCore.Utilities.Extensions
 	/// </summary>
 	internal static class ReflectionExtensions
 	{
-		#region Flags
-
-		/// <summary>
-		///     <see cref="ALL_INSTANCE_FLAGS" /> and <see cref="BindingFlags.Static" />
-		/// </summary>
-		private const BindingFlags ALL_FLAGS = ALL_INSTANCE_FLAGS | BindingFlags.Static;
-
-		/// <summary>
-		///     <see cref="BindingFlags.Public" />, <see cref="BindingFlags.Instance" />,
-		///     and <see cref="BindingFlags.NonPublic" />
-		/// </summary>
-		private const BindingFlags ALL_INSTANCE_FLAGS =
-			BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
-
-		#endregion
-
 		#region Member
 
-		internal static MemberInfo[] GetAllMembers(this Type t) => t.GetMembers(ALL_FLAGS);
+		internal static MemberInfo[] GetAllMembers(this Type t) => t.GetMembers(EasyReflection.ALL_FLAGS);
 
 		internal static MemberInfo[] GetAnyMember(this Type t, string name) =>
-			t.GetMember(name, ALL_FLAGS);
+			t.GetMember(name, EasyReflection.ALL_FLAGS);
 
 		#endregion
 
 		#region Field
 
 		internal static FieldInfo GetAnyField(this Type t, string name) =>
-			t.GetField(name, ALL_FLAGS);
+			t.GetField(name, EasyReflection.ALL_FLAGS);
 
-		internal static FieldInfo[] GetAllFields(this Type t) => t.GetFields(ALL_FLAGS);
+		internal static FieldInfo[] GetAllFields(this Type t) => t.GetFields(EasyReflection.ALL_FLAGS);
 
 		#endregion
 
 		#region Methods
 
-		internal static MethodInfo[] GetAllMethods(this Type t) => t.GetMethods(ALL_FLAGS);
+		internal static MethodInfo[] GetAllMethods(this Type t) => t.GetMethods(EasyReflection.ALL_FLAGS);
 
 		internal static MethodInfo GetAnyMethod(this Type t, string name) =>
-			t.GetMethod(name, ALL_FLAGS);
+			t.GetMethod(name, EasyReflection.ALL_FLAGS);
 
 		#endregion
 
@@ -83,7 +67,7 @@ namespace NeoCore.Utilities.Extensions
 			return type.GetInterfaces().Any(IsMatch);
 		}
 
-		public static bool ImplementsInterface(this Type type, string interfaceName) => 
+		public static bool ImplementsInterface(this Type type, string interfaceName) =>
 			type.GetInterface(interfaceName) != null;
 	}
 }

@@ -13,6 +13,7 @@ using NeoCore.Assets;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory.Pointers;
+using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
 
@@ -167,7 +168,7 @@ namespace NeoCore.CoreClr
 
 						if (mt.IsArray) {
 							var  corType         = mt.ElementTypeHandle.NormType;
-							bool isPrimitiveElem = ClrSigReader.IsPrimitiveType(corType);
+							bool isPrimitiveElem = CorSigs.IsPrimitiveType(corType);
 
 							if (isPrimitiveElem) {
 								return true;

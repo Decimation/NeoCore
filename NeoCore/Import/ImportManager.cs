@@ -28,7 +28,6 @@ namespace NeoCore.Import
 
 		protected override string Id => nameof(ImportManager);
 
-		private const string GET_PROPERTY_PREFIX      = "get_";
 		private const string GET_PROPERTY_REPLACEMENT = "Get";
 
 		#endregion
@@ -117,7 +116,7 @@ namespace NeoCore.Import
 
 			if (options.HasFlagFast(IdentifierOptions.UseAccessorName)) {
 				Guard.Assert(member.MemberType == MemberTypes.Method);
-				resolvedId = resolvedId.Replace(GET_PROPERTY_PREFIX, GET_PROPERTY_REPLACEMENT);
+				resolvedId = resolvedId.Replace(EasyReflection.GET_PROPERTY_PREFIX, GET_PROPERTY_REPLACEMENT);
 			}
 
 			Guard.AssertNotNull(resolvedId, nameof(resolvedId));
@@ -167,14 +166,12 @@ namespace NeoCore.Import
 				var mem  = components[i].Member;
 				var attr = components[i].Attribute;
 
-				
 
 				switch (mem.MemberType) {
 					case MemberTypes.Property:
 						var propInfo = (PropertyInfo) mem;
 						var get      = propInfo.GetMethod;
 
-						
 
 						break;
 					case MemberTypes.Field:
@@ -187,7 +184,6 @@ namespace NeoCore.Import
 						break;
 					case MemberTypes.Method:
 
-						
 
 						break;
 					default:
@@ -197,7 +193,7 @@ namespace NeoCore.Import
 
 			m_boundTypes.Remove(type);
 
-			CoreLogger.Value.WriteInfo(null, "Unloaded {Name}", type.Name);
+//			CoreLogger.Value.WriteInfo(null, "Unloaded {Name}", type.Name);
 		}
 
 		public void Unload<T>(ref T value)
@@ -407,9 +403,9 @@ namespace NeoCore.Import
 
 				var name = method.Name;
 
-				if (name.StartsWith(GET_PROPERTY_PREFIX)) {
+				if (name.StartsWith(EasyReflection.GET_PROPERTY_PREFIX)) {
 					// The nameof operator does not return the name with the get prefix
-					name = name.Replace(GET_PROPERTY_PREFIX, String.Empty);
+					name = name.Replace(EasyReflection.GET_PROPERTY_PREFIX, String.Empty);
 				}
 
 				importMaps[enclosing].Add(name, addr);

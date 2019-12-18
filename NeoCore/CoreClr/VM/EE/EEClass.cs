@@ -6,6 +6,7 @@ using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
+using NeoCore.Utilities;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 
@@ -141,7 +142,7 @@ namespace NeoCore.CoreClr.VM.EE
 		private int GetPackableField(EEClassFieldId eField)
 		{
 			var u  = (uint) eField;
-			var pf = new ClrPackedFieldsReader(PackedFields, (int) EEClassFieldId.COUNT);
+			var pf = new PackedFieldsReader(PackedFields, (int) EEClassFieldId.COUNT);
 			return (int) (FieldsArePacked ? pf.GetPackedField(u) : pf.GetUnpackedField(u));
 		}
 
@@ -161,7 +162,7 @@ namespace NeoCore.CoreClr.VM.EE
 	}
 
 	[StructLayout(LayoutKind.Explicit)]
-	internal struct LayoutEEClass : IClrStructure, INativeInheritance<EEClass>
+	internal struct LayoutEEClass : IClrStructure, INativeSubclass<EEClass>
 	{
 		// Note: This offset should be 72 or sizeof(EEClass)
 		// 		 but I'm keeping it at 0 to minimize size usage,

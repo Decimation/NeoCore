@@ -78,7 +78,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public OptionalSlotsFlags SlotFlags => Value.Reference.SlotsFlags;
 
-		public override int Token => ClrSigReader.TokenFromRid(Value.Reference.RawToken, CorTokenType.TypeDef);
+		public override int Token => CorSigs.TokenFromRid(Value.Reference.RawToken, CorTokenType.TypeDef);
 
 		public short VirtualsCount => Value.Reference.NumVirtuals;
 

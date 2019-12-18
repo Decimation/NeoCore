@@ -50,7 +50,7 @@ namespace NeoCore.Memory
 		}
 
 		internal static Pointer<TSub> ReadSubStructure<TSuper, TSub>(Pointer<TSuper> super)
-			where TSub : INativeInheritance<TSuper>
+			where TSub : INativeSubclass<TSuper>
 			where TSuper : INativeStructure
 		{
 			int size = Unsafe.SizeOf<TSuper>();
@@ -60,7 +60,7 @@ namespace NeoCore.Memory
 		public static int OffsetOf(Type t, string name, OffsetOfType type, bool isProperty = false)
 		{
 			if (isProperty) {
-				name = Format.GetBackingFieldName(name);
+				name = EasyReflection.GetBackingFieldName(name);
 			}
 
 			switch (type) {

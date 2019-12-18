@@ -1,10 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Text;
-using JetBrains.Annotations;
-using NeoCore.CoreClr;
 using NeoCore.Model;
-using NeoCore.Utilities.Diagnostics;
 using Serilog;
 using Serilog.Context;
 using Serilog.Core;
@@ -13,7 +10,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 
-namespace NeoCore.Assets
+namespace NeoCore.Utilities.Diagnostics
 {
 	/// <summary>
 	/// Contains the logger for NeoCore.

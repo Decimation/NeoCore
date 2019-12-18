@@ -6,6 +6,7 @@ using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
+using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
@@ -55,9 +56,9 @@ namespace NeoCore.CoreClr.VM
 				var rawToken = (int) (UInt1 & 0xFFFFFF);
 				// Check if this FieldDesc is using the packed mb layout
 				if (!BitFlags.HasFlagFast(FieldBitFlags.RequiresFullMBValue))
-					return ClrSigReader.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, CorTokenType.FieldDef);
+					return CorSigs.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, CorTokenType.FieldDef);
 
-				return ClrSigReader.TokenFromRid(rawToken, CorTokenType.FieldDef);
+				return CorSigs.TokenFromRid(rawToken, CorTokenType.FieldDef);
 			}
 		}
 

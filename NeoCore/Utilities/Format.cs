@@ -20,8 +20,7 @@ namespace NeoCore.Utilities
 		public const char SPACE = ' ';
 
 		public const char PERIOD = '.';
-
-
+		
 		public static StringBuilder CreateTreeString(DirectoryInfo dir, string delim = "")
 		{
 			// https://github.com/kddeisz/tree/blob/master/Tree.java
@@ -62,16 +61,6 @@ namespace NeoCore.Utilities
 			}
 
 			return sb;
-		}
-
-		/// <summary>
-		/// Returns the internal metadata name of a property's backing field.
-		/// </summary>
-		/// <param name="name">Regular field name (name of the property)</param>
-		/// <returns>Actual name of the backing field.</returns>
-		public static string GetBackingFieldName(string name)
-		{
-			return String.Format("<{0}>k__BackingField", name);
 		}
 
 		#region Join
