@@ -302,7 +302,7 @@ namespace NeoCore.Import
 			CheckAnnotations(type, false, out _);
 
 			if (!ContainsAnnotatedMembers(type, out AnnotatedMember<ImportAttribute>[] components)) {
-				CoreLogger.Value.WriteWarning(null, "Load: {Name} has no members to import", type.Name);
+				Global.Value.WriteWarning(null, "Load: {Name} has no members to import", type.Name);
 				return value;
 			}
 
@@ -318,7 +318,7 @@ namespace NeoCore.Import
 
 			m_boundTypes.Add(type);
 
-			CoreLogger.Value.WriteInfo(null, "Loaded {Name}", type.Name);
+			Global.Value.WriteInfo(null, "Loaded {Name}", type.Name);
 			return value;
 		}
 
@@ -364,7 +364,7 @@ namespace NeoCore.Import
 
 			object fieldValue;
 
-			CoreLogger.Value.WriteDebug(null, "Loading field {Id} with {Option}",
+			Global.Value.WriteDebug(null, "Loading field {Id} with {Option}",
 			                            field.Name, options);
 
 			switch (options) {

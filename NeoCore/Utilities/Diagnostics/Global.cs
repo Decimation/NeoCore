@@ -15,7 +15,7 @@ namespace NeoCore.Utilities.Diagnostics
 	/// <summary>
 	/// Contains the logger for NeoCore.
 	/// </summary>
-	internal sealed class CoreLogger : Releasable
+	internal sealed class Global : Releasable
 	{
 		// todo: remove Serilog from Release build
 
@@ -37,15 +37,14 @@ namespace NeoCore.Utilities.Diagnostics
 #endif
 
 		#endregion
-
-
-		protected override string Id => nameof(CoreLogger);
+		
+		protected override string Id => nameof(Global);
 
 		#region Singleton
 
-		internal static CoreLogger Value { get; private set; } = new CoreLogger();
+		internal static Global Value { get; private set; } = new Global();
 
-		private CoreLogger()
+		private Global()
 		{
 #if DEBUG
 			var levelSwitch = new LoggingLevelSwitch

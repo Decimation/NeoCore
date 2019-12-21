@@ -91,7 +91,7 @@ namespace NeoCore.Utilities
 		}
 
 		public static string FormatJoin<T>(IEnumerable<T>  values,          string format,
-		                                   IFormatProvider provider = null, string delim = JOIN_COMMA)
+		                                   IFormatProvider? provider = null, string delim = JOIN_COMMA)
 			where T : IFormattable
 		{
 			return String.Join(delim, values.Select(v => v.ToString(format, provider)));

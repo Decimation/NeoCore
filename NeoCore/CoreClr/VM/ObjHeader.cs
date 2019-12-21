@@ -43,6 +43,7 @@ namespace NeoCore.CoreClr.VM
 		}
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
+
 		public string NativeName => nameof(ObjHeader);
 	}
 }

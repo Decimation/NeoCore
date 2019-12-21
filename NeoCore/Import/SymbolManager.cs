@@ -27,7 +27,7 @@ namespace NeoCore.Import
 		private ulong        m_modBase;
 		private string       m_singleNameBuffer;
 		private List<Symbol> m_symBuffer;
-		private FileInfo     m_pdb;
+		private FileInfo?     m_pdb;
 
 		internal bool IsImageLoaded {
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -114,7 +114,7 @@ namespace NeoCore.Import
 		{
 			string img = m_pdb.FullName;
 
-			CoreLogger.Value.WriteVerbose(Id, "Loading image {Img}", m_pdb.Name);
+			Global.Value.WriteVerbose(Id, "Loading image {Img}", m_pdb.Name);
 
 			UnloadModule();
 

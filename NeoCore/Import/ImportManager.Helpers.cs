@@ -124,7 +124,7 @@ namespace NeoCore.Import
 				            && callAttr.Options == IdentifierOptions.UseAccessorName;
 
 				if (warn) {
-					CoreLogger.Value.WriteWarning(null, "Use {Name} on member {Member} in {Type}",
+					Global.Value.WriteWarning(null, "Use {Name} on member {Member} in {Type}",
 					                              nameof(ImportAccessorAttribute),
 					                              mem.Name, mem.DeclaringType?.Name);
 				}

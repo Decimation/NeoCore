@@ -39,6 +39,7 @@ namespace NeoCore.CoreClr.VM
 //		internal bool IsTypeDesc => (AsTAddr & 2) != 0;
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
+		
 		public string NativeName => nameof(TypeHandle);
 	}
 }

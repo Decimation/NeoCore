@@ -4,7 +4,7 @@ namespace NeoCore.Interop.Attributes
 {
 	public abstract class NativeAttribute : Attribute
 	{
-		public string NativeId { get; set; }
+		public string? NativeId { get; set; }
 
 		public string[] Files { get; set; }
 

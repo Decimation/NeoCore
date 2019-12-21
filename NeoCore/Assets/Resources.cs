@@ -52,7 +52,7 @@ namespace NeoCore.Assets
 		{
 			SymbolManager.Value,
 			ImportManager.Value,
-			CoreLogger.Value,
+			Global.Value,
 		};
 
 		internal static ClrFramework Framework => ClrFrameworks.Core;

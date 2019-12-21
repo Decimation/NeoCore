@@ -48,6 +48,7 @@ namespace NeoCore.CoreClr.VM.EE
 		#endregion
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
+		
 		public string NativeName => nameof(EEClassLayoutInfo);
 	}
 }

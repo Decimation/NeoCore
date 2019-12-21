@@ -141,6 +141,7 @@ namespace NeoCore.CoreClr.VM
 		#endregion
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
+		
 		public string NativeName => nameof(MethodDesc);
 	}
 }

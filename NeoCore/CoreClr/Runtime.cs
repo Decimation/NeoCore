@@ -26,7 +26,7 @@ namespace NeoCore.CoreClr
 	{
 		static Runtime()
 		{
-			GetTypeFromHandle = Functions.Reflection.FindFunction<GetTypeFromHandleDelegate>();
+			GetTypeFromHandle = Functions.Reflection.FindFunction<GetTypeFromHandleUnsafeDelegate>();
 		}
 
 		public static bool IsInDebugMode => Debugger.IsAttached;
@@ -46,10 +46,10 @@ namespace NeoCore.CoreClr
 		}
 
 
-		[ReflectionFunction(typeof(Type), "GetTypeFromHandleUnsafe")]
-		private delegate Type GetTypeFromHandleDelegate(IntPtr handle);
+		[FunctionSpecifier(typeof(Type))]
+		private delegate Type GetTypeFromHandleUnsafeDelegate(IntPtr handle);
 
-		private static readonly GetTypeFromHandleDelegate GetTypeFromHandle;
+		private static readonly GetTypeFromHandleUnsafeDelegate GetTypeFromHandle;
 
 		internal static Type ResolveType(Pointer<byte> handle) => GetTypeFromHandle(handle.Address);
 

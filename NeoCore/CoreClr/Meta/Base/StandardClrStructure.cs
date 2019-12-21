@@ -43,7 +43,7 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		#region Equality
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return obj != null && base.Equals(obj);
 		}

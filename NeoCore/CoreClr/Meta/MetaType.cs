@@ -234,7 +234,7 @@ namespace NeoCore.CoreClr.Meta
 			return base.Equals(other); /*&& RuntimeType == other.RuntimeType*/
 		}
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (ReferenceEquals(null, obj))
 				return false;

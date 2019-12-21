@@ -18,7 +18,7 @@ namespace NeoCore.Utilities
 	[NativeStructure]
 	internal readonly struct PackedFieldsReader : IClrStructure
 	{
-		public string NativeName => null;
+		public string NativeName => "PackedDWORDFields";
 		
 		private const int PACKED_FIELDS_RG_LEN = 1;
 		private const int MAX_LENGTH_BITS      = 5;

@@ -72,9 +72,9 @@ namespace NeoCore.Assets
 
 		public string FullName { get; }
 
-		public string PreprocessorName { get; internal set; }
+		public string? PreprocessorName { get; internal set; }
 
-		public string FilenameRoot { get; internal set; }
+		public string? FilenameRoot { get; internal set; }
 
 		public ClrFramework([NotNull] string name)
 		{
@@ -87,8 +87,8 @@ namespace NeoCore.Assets
 
 		private bool Equals(ClrFramework other) => Name == other.Name;
 
-		public override bool Equals(object obj) =>
-			ReferenceEquals(this, obj) || obj is ClrFramework other && Equals(other);
+		public override bool Equals(object? obj) =>
+			obj is ClrFramework other && Equals(other);
 
 		public override int GetHashCode() => (Name != null ? Name.GetHashCode() : 0);
 

@@ -131,7 +131,7 @@ namespace NeoCore.Memory.Pointers
 		/// <returns></returns>
 		public bool Equals(Pointer<T> other) => Address == other.Address;
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (ReferenceEquals(null, obj))
 				return false;
