@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
@@ -69,5 +70,18 @@ namespace NeoCore.Utilities.Extensions
 
 		public static bool ImplementsInterface(this Type type, string interfaceName) =>
 			type.GetInterface(interfaceName) != null;
+
+		// https://docs.microsoft.com/en-us/dotnet/framework/reflection-and-codedom/specifying-fully-qualified-type-names
+
+		private static MemberInfo[] MemberOfInternal(string name, string f)
+		{
+			var asm = Assembly.GetCallingAssembly();
+			var t   = asm.GetType(asm.GetName().Name + Format.PERIOD + name);
+			return t.GetAnyMember(f);
+		}
+
+		public static FieldInfo FieldOf(string name, string f) => (FieldInfo) MemberOfInternal(name, f)[0];
+
+		public static MethodInfo MethodOf(string name, string f) => (MethodInfo) MemberOfInternal(name, f)[0];
 	}
 }

@@ -29,7 +29,7 @@ using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
 using Serilog.Core;
 using Unsafe = NeoCore.Memory.Unsafe;
-
+using static NeoCore.Utilities.Extensions.ReflectionExtensions;
 #endregion
 
 namespace Test
@@ -37,6 +37,10 @@ namespace Test
 	// nuget pack -Prop Configuration=Release
 
 
+	struct MyStruct
+	{
+		public int a;
+	}
 	public static unsafe class Program
 	{
 		private static void Main(string[] args)
