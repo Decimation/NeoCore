@@ -20,6 +20,7 @@ namespace NeoCore.CoreClr
 {
 	/// <summary>
 	/// Contains utilities for interacting with the .NET runtime.
+	/// <seealso cref="System.Runtime.CompilerServices.RuntimeHelpers"/>
 	/// </summary>
 	public static unsafe partial class Runtime
 	{

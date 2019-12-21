@@ -2,6 +2,7 @@ using System.Runtime.CompilerServices;
 using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
+using NeoCore.Import.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
@@ -13,6 +14,7 @@ namespace NeoCore.CoreClr
 	/// <summary>
 	/// Contains global CLR variables, offsets, sizes, and other constants.
 	/// </summary>
+	[ImportNamespace]
 	public static class ClrAssets
 	{
 		static ClrAssets()

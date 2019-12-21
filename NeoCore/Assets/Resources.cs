@@ -23,7 +23,7 @@ namespace NeoCore.Assets
 		/// Name of this assembly.
 		/// </summary>
 		public const string NAME = "NeoCore";
-		
+
 		// - https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces?redirectedfrom=MSDN
 		// - <Company>.(<Product>|<Technology>)[.<Feature>][.<Subnamespace>]
 
@@ -60,6 +60,15 @@ namespace NeoCore.Assets
 		internal static NeoProcess CurrentProcess => Process.GetCurrentProcess();
 
 		internal static ClrRuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(Framework);
+
+		internal static void FullSetup()
+		{
+			foreach (var type in CoreClrTypes) {
+				RuntimeHelpers.RunClassConstructor(type.TypeHandle);
+			}
+
+			ImportManager.Value.LoadAll(CoreClrTypes, Clr.Imports);
+		}
 
 		private static void SetupAll()
 		{
