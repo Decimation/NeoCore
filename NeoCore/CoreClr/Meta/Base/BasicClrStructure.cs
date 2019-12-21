@@ -13,7 +13,7 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// Describes a CLR structure that doesn't have an accompanying token or <see cref="MemberInfo"/>
 	/// </summary>
 	/// <typeparam name="TClr">CLR structure type</typeparam>
-	public abstract unsafe class AnonymousClrStructure<TClr> : IWrapper<TClr> where TClr : unmanaged, IClrStructure
+	public abstract unsafe class BasicClrStructure<TClr> : IWrapper<TClr> where TClr : unmanaged, IClrStructure
 	{
 		#region Fields
 
@@ -35,14 +35,14 @@ namespace NeoCore.CoreClr.Meta.Base
 		/// Root constructor
 		/// </summary>
 		/// <param name="ptr">Metadata structure handle</param>
-		protected AnonymousClrStructure(Pointer<TClr> ptr)
+		protected BasicClrStructure(Pointer<TClr> ptr)
 		{
 			Value = ptr;
 
 			LoadSources();
 		}
 
-		protected AnonymousClrStructure(MemberInfo member) : this(Runtime.ResolveHandle(member)) { }
+		protected BasicClrStructure(MemberInfo member) : this(Runtime.ResolveHandle(member)) { }
 
 		#endregion
 
@@ -72,7 +72,7 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		#region Equality
 
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			if (ReferenceEquals(null, obj))
 				return false;
@@ -83,10 +83,10 @@ namespace NeoCore.CoreClr.Meta.Base
 			if (obj.GetType() != this.GetType())
 				return false;
 
-			return Equals((ClrStructure<TClr>) obj);
+			return Equals((StandardClrStructure<TClr>) obj);
 		}
 
-		public bool Equals(ClrStructure<TClr> other)
+		public bool Equals(StandardClrStructure<TClr> other)
 		{
 			return this.Value == other.Value;
 		}
@@ -96,10 +96,10 @@ namespace NeoCore.CoreClr.Meta.Base
 			return ClrAssets.INVALID_VALUE;
 		}
 
-		public static bool operator ==(AnonymousClrStructure<TClr> left, AnonymousClrStructure<TClr> right) =>
+		public static bool operator ==(BasicClrStructure<TClr> left, BasicClrStructure<TClr> right) =>
 			Equals(left, right);
 
-		public static bool operator !=(AnonymousClrStructure<TClr> left, AnonymousClrStructure<TClr> right) =>
+		public static bool operator !=(BasicClrStructure<TClr> left, BasicClrStructure<TClr> right) =>
 			!Equals(left, right);
 
 		#endregion

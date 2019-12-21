@@ -23,7 +23,7 @@ namespace NeoCore.CoreClr.Meta
 	///         <item><description>Reflection structure: <see cref="Type"/></description></item>
 	///     </list>
 	/// </summary>
-	public unsafe class MetaType : ClrStructure<MethodTable>
+	public unsafe class MetaType : StandardClrStructure<MethodTable>
 	{
 		#region Constructor
 
@@ -148,7 +148,7 @@ namespace NeoCore.CoreClr.Meta
 		public int InstanceFieldsCount => EEClass.Reference.NumInstanceFields;
 
 		/// <summary>
-		/// Number of fields that are not <see cref="MetaField.IsLiteral"/> but <see cref="MetaField.IsStatic"/>
+		/// Number of fields that are not <see cref="FieldInfo.IsLiteral"/> but <see cref="MetaField.IsStatic"/>
 		/// </summary>
 		public int StaticFieldsCount => EEClass.Reference.NumStaticFields;
 

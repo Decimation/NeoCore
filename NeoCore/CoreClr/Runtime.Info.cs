@@ -65,7 +65,7 @@ namespace NeoCore.CoreClr
 			}
 
 			[ReflectionFunction(typeof(Marshal), "IsPinnable")]
-			private delegate bool IsPinnableDelegate([CanBeNull] object handle);
+			private delegate bool IsPinnableDelegate(object? handle);
 
 			/// <summary>
 			///     Hueristically determines whether <paramref name="value" /> is blank.
@@ -131,9 +131,8 @@ namespace NeoCore.CoreClr
 			/// <see cref="GCHandle"/> and <see cref="GCHandleType.Pinned"/>
 			/// </summary>
 			/// <param name="value">Value to check for pinnability</param>
-			/// <param name="options">How to determine pinnability.</param>
 			/// <returns><c>true</c> if <paramref name="value"/> is pinnable; <c>false</c> otherwise</returns>
-			public static bool IsPinnable([CanBeNull] object value) => IsPinnable(value, PinTestOptions.Fast);
+			public static bool IsPinnable( object? value) => IsPinnable(value, PinTestOptions.Fast);
 
 			/// <summary>
 			/// Determines whether <paramref name="value"/> is pinnable; that is, usable with
@@ -142,7 +141,7 @@ namespace NeoCore.CoreClr
 			/// <param name="value">Value to check for pinnability</param>
 			/// <param name="options">How to determine pinnability.</param>
 			/// <returns><c>true</c> if <paramref name="value"/> is pinnable; <c>false</c> otherwise</returns>
-			private static bool IsPinnable([CanBeNull] object value, PinTestOptions options)
+			private static bool IsPinnable(object? value, PinTestOptions options)
 			{
 				switch (options) {
 					case PinTestOptions.SystemMarshal:

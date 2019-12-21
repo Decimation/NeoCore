@@ -12,7 +12,7 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// Describes a CLR structure that has metadata information.
 	/// </summary>
 	/// <typeparam name="TClr">CLR structure type (<see cref="IClrStructure"/>)</typeparam>
-	public abstract unsafe class ClrStructure<TClr> : AnonymousClrStructure<TClr> where TClr : unmanaged, IClrStructure
+	public abstract unsafe class StandardClrStructure<TClr> : BasicClrStructure<TClr> where TClr : unmanaged, IClrStructure
 	{
 		#region Fields
 
@@ -26,9 +26,9 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		#region Constructors
 
-		internal ClrStructure(Pointer<TClr> ptr) : base(ptr) { }
+		internal StandardClrStructure(Pointer<TClr> ptr) : base(ptr) { }
 
-		protected ClrStructure(MemberInfo member) : base(member) { }
+		protected StandardClrStructure(MemberInfo member) : base(member) { }
 
 		#endregion
 		
@@ -53,9 +53,9 @@ namespace NeoCore.CoreClr.Meta.Base
 			return ClrAssets.INVALID_VALUE;
 		}
 
-		public static bool operator ==(ClrStructure<TClr> left, ClrStructure<TClr> right) => Equals(left, right);
+		public static bool operator ==(StandardClrStructure<TClr> left, StandardClrStructure<TClr> right) => Equals(left, right);
 
-		public static bool operator !=(ClrStructure<TClr> left, ClrStructure<TClr> right) => !Equals(left, right);
+		public static bool operator !=(StandardClrStructure<TClr> left, StandardClrStructure<TClr> right) => !Equals(left, right);
 
 		#endregion
 	}

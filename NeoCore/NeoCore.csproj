@@ -4,7 +4,7 @@
         <TargetFramework>netcoreapp3.0</TargetFramework>
         <LangVersion>8.0</LangVersion>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <!--<Nullable>enable</Nullable>-->
+        <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <!-- <Reference Include="Foo" Condition="'$(Configuration)'=='Debug'"/> -->

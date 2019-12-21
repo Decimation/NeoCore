@@ -5,6 +5,7 @@ using System.Runtime.InteropServices;
 using NeoCore.CoreClr.VM;
 using NeoCore.Interop;
 using NeoCore.Memory.Pointers;
+using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
 
 namespace NeoCore.CoreClr

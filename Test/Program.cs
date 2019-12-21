@@ -12,6 +12,7 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
+using JetBrains.Annotations;
 using NeoCore;
 using NeoCore.Assets;
 using NeoCore.CoreClr;
@@ -29,7 +30,8 @@ using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
 using Serilog.Core;
 using Unsafe = NeoCore.Memory.Unsafe;
-using static NeoCore.Utilities.Extensions.ReflectionExtensions;
+using static NeoCore.Utilities.EasyReflection;
+
 #endregion
 
 namespace Test
@@ -41,11 +43,14 @@ namespace Test
 	{
 		public int a;
 	}
+
 	public static unsafe class Program
 	{
+		
 		private static void Main(string[] args)
 		{
-			
+			var f = FieldOf(nameof(MyStruct), "a");
+			Console.WriteLine(f.Name);
 		}
 	}
 }

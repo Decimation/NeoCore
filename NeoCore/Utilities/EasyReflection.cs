@@ -1,16 +1,14 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Reflection.Emit;
 using System.Text;
-using NeoCore.Utilities.Diagnostics;
-using NeoCore.Utilities.Extensions;
+
+// ReSharper disable ReturnTypeCanBeEnumerable.Global
 
 namespace NeoCore.Utilities
 {
 	/// <summary>
-	/// <seealso cref="ReflectionExtensions"/>
+	/// Provides utilities for accessing members of a type.
 	/// </summary>
 	public static class EasyReflection
 	{
@@ -96,5 +94,91 @@ namespace NeoCore.Utilities
 		public const string OPERATOR_METHOD_PREFIX = "op_";
 
 		#endregion
+		
+		#region Member
+
+		internal static MemberInfo[] GetAllMembers(this Type t) => t.GetMembers(Utilities.EasyReflection.ALL_FLAGS);
+
+		internal static MemberInfo[] GetAnyMember(this Type t, string name) =>
+			t.GetMember(name, Utilities.EasyReflection.ALL_FLAGS);
+
+		#endregion
+
+		#region Field
+
+		internal static FieldInfo GetAnyField(this Type t, string name) =>
+			t.GetField(name, Utilities.EasyReflection.ALL_FLAGS);
+
+		internal static FieldInfo[] GetAllFields(this Type t) => t.GetFields(Utilities.EasyReflection.ALL_FLAGS);
+
+		#endregion
+
+		#region Methods
+
+		internal static MethodInfo[] GetAllMethods(this Type t) => t.GetMethods(Utilities.EasyReflection.ALL_FLAGS);
+
+		internal static MethodInfo GetAnyMethod(this Type t, string name) =>
+			t.GetMethod(name, Utilities.EasyReflection.ALL_FLAGS);
+
+		#endregion
+
+		#region Attributes
+
+		internal static AnnotatedMember<TAttr> GetFirstAnnotated<TAttr>(this Type t) where TAttr : Attribute
+		{
+			AnnotatedMember<TAttr>[] rg = t.GetAnnotated<TAttr>();
+
+			return rg.Length == default ? new AnnotatedMember<TAttr>() : rg[0];
+		}
+
+		internal static AnnotatedMember<TAttr>[] GetAnnotated<TAttr>(this Type t) where TAttr : Attribute
+		{
+			return (from member in t.GetAllMembers()
+			        where Attribute.IsDefined(member, typeof(TAttr))
+			        select new AnnotatedMember<TAttr>(member, member.GetCustomAttribute<TAttr>())).ToArray();
+		}
+
+		#endregion
+
+		public static bool ImplementsGenericInterface(this Type type, Type interfaceName)
+		{
+			bool IsMatch(Type t)
+			{
+				return t.IsGenericType && t.GetGenericTypeDefinition() == interfaceName;
+			}
+
+			return type.GetInterfaces().Any(IsMatch);
+		}
+
+		public static bool ImplementsInterface(this Type type, string interfaceName) =>
+			type.GetInterface(interfaceName) != null;
+
+		// https://docs.microsoft.com/en-us/dotnet/framework/reflection-and-codedom/specifying-fully-qualified-type-names
+
+		public static Type GetTypeSimple(this Assembly asm, string name)
+		{
+			return asm.GetType(asm.GetName().Name + Format.PERIOD + name);
+		}
+
+		public static MemberInfo[] MemberOf(string type, string name)
+		{
+			return Assembly.GetCallingAssembly()
+			               .GetTypeSimple(type)
+			               .GetAnyMember(name);
+		}
+		
+		public static FieldInfo FieldOf(string type, string name)
+		{
+			return Assembly.GetCallingAssembly()
+			               .GetTypeSimple(type)
+			               .GetAnyField(name);
+		}
+
+		public static MethodInfo MethodOf(string type, string name)
+		{
+			return Assembly.GetCallingAssembly()
+			               .GetTypeSimple(type)
+			               .GetAnyMethod(name);
+		}
 	}
 }

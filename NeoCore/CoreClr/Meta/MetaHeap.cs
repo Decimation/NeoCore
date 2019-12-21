@@ -15,7 +15,7 @@ namespace NeoCore.CoreClr.Meta
 	///         <item><description>CLR structure: <see cref="GCHeap"/></description></item>
 	///     </list>
 	/// </summary>
-	public sealed unsafe class MetaHeap : AnonymousClrStructure<GCHeap>
+	public sealed unsafe class MetaHeap : BasicClrStructure<GCHeap>
 	{
 		internal MetaHeap(Pointer<GCHeap> ptr, Pointer<byte> lo, Pointer<byte> hi) : base(ptr)
 		{

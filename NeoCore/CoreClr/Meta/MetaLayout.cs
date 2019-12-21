@@ -14,7 +14,7 @@ namespace NeoCore.CoreClr.Meta
 	///         <item><description>CLR structure: <see cref="EEClassLayoutInfo"/></description></item>
 	///     </list>
 	/// </summary>
-	public sealed unsafe class MetaLayout : AnonymousClrStructure<EEClassLayoutInfo>
+	public sealed unsafe class MetaLayout : BasicClrStructure<EEClassLayoutInfo>
 	{
 		#region Constructors
 

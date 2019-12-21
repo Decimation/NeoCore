@@ -14,7 +14,7 @@ namespace NeoCore.CoreClr.Meta
 	///         <item><description>Reflection structure: <see cref="MethodBody"/></description></item>
 	///     </list>
 	/// </summary>
-	public sealed class MetaIL : AnonymousClrStructure<CorMethod>
+	public sealed class MetaIL : BasicClrStructure<CorMethod>
 	{
 		public MetaIL(Pointer<CorMethod> ptr) : base(ptr) { }
 
