@@ -47,11 +47,10 @@ namespace Test
 	public static unsafe class Program
 	{
 		
+		
 		private static void Main(string[] args)
 		{
-			Resources.FullSetup();
-			var f = FieldOf(nameof(MyStruct), "a");
-			Console.WriteLine(f.Name);
+			
 		}
 	}
 }

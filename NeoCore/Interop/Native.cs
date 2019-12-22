@@ -76,7 +76,7 @@ namespace NeoCore.Interop
 		EnableVirtualTerminalInput = 0x0200,
 	}
 
-	public enum HandleOption : int
+	public enum HandleOption
 	{
 		StdInputHandle  = -10,
 		StdOutputHandle = -11,

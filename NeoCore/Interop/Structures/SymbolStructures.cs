@@ -6,6 +6,7 @@ using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
+// ReSharper disable InconsistentNaming
 
 namespace NeoCore.Interop.Structures
 {

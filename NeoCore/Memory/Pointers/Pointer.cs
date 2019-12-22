@@ -332,7 +332,7 @@ namespace NeoCore.Memory.Pointers
 		public void WriteAny(Type type, object value, int elemOffset = OFFSET)
 		{
 			var fn = GetMethod(type, nameof(Write), out var ptr);
-			fn.Invoke(ptr, new object[] {value, elemOffset});
+			fn.Invoke(ptr, new[] {value, elemOffset});
 		}
 
 		public object ReadAny(Type type, int elemOffset = OFFSET)

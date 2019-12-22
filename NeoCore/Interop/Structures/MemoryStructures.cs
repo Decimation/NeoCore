@@ -14,7 +14,7 @@ namespace NeoCore.Interop.Structures
 	/// </summary>
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
-	internal struct MemoryInfo : INativeStructure
+	public struct MemoryBasicInfo : INativeStructure
 	{
 		public string NativeName => "MEMORY_BASIC_INFORMATION";
 

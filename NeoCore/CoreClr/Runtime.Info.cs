@@ -64,7 +64,7 @@ namespace NeoCore.CoreClr
 				Fast
 			}
 
-			[FunctionSpecifier(typeof(Marshal), "IsPinnable")]
+			[FunctionSpecifier(typeof(Marshal))]
 			private delegate bool IsPinnableDelegate(object? handle);
 
 			/// <summary>

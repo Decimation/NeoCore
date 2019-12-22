@@ -8,7 +8,7 @@ using System.Text;
 namespace NeoCore.Utilities
 {
 	/// <summary>
-	/// Provides utilities for accessing members of a type.
+	/// Provides Reflection utilities.
 	/// </summary>
 	public static class EasyReflection
 	{
@@ -140,11 +140,11 @@ namespace NeoCore.Utilities
 
 		#endregion
 
-		public static bool ImplementsGenericInterface(this Type type, Type interfaceName)
+		public static bool ImplementsGenericInterface(this Type type, Type genericType)
 		{
 			bool IsMatch(Type t)
 			{
-				return t.IsGenericType && t.GetGenericTypeDefinition() == interfaceName;
+				return t.IsGenericType && t.GetGenericTypeDefinition() == genericType;
 			}
 
 			return type.GetInterfaces().Any(IsMatch);
@@ -155,7 +155,7 @@ namespace NeoCore.Utilities
 
 		// https://docs.microsoft.com/en-us/dotnet/framework/reflection-and-codedom/specifying-fully-qualified-type-names
 
-		public static Type GetTypeSimple(this Assembly asm, string name)
+		public static Type? GetTypeSimple(this Assembly asm, string name)
 		{
 			return asm.GetType(asm.GetName().Name + Format.PERIOD + name);
 		}

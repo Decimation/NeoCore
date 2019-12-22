@@ -47,9 +47,9 @@ namespace NeoCore.Memory
 		public static (Pointer<byte> Base, long Size) StackRegion {
 			get {
 				
-				var info = new MemoryInfo();
+				var info = new MemoryBasicInfo();
 				var ptr  = new IntPtr(&info);
-				Native.Kernel.VirtualQuery(ptr, ref info, Marshal.SizeOf<MemoryInfo>());
+				Native.Kernel.VirtualQuery(ptr, ref info, Marshal.SizeOf<MemoryBasicInfo>());
 
 				// todo: verify
 				long size = (info.BaseAddress.ToInt64() - info.AllocationBase.ToInt64()) + info.RegionSize.ToInt64();
@@ -103,6 +103,9 @@ namespace NeoCore.Memory
 			return value;
 		}
 
+		
+
+
 		/*[NativeFunction]
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static T ReadFast<T>(void* source, int elemOfs)
@@ -148,6 +151,7 @@ namespace NeoCore.Memory
 			value = default;
 		}
 	}
+	
 
 	/// <summary>
 	///     Offset options for <see cref="Unsafe.AddressOfHeap{T}(T,OffsetOptions)" />

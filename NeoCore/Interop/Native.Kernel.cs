@@ -25,6 +25,13 @@ namespace NeoCore.Interop
 			internal static IntPtr OpenCurrentProcess(ProcessAccess flags = ProcessAccess.All) =>
 				OpenProcess(Process.GetCurrentProcess(), flags);
 
+			internal static MemoryBasicInfo VirtualQuery(IntPtr ptr)
+			{
+				var mbi = new MemoryBasicInfo();
+				var bufSize=VirtualQuery(ptr, ref mbi, Marshal.SizeOf<MemoryBasicInfo>());
+				return mbi;
+			}
+
 			#endregion
 
 			[DllImport(KERNEL32_DLL, SetLastError = true, PreserveSig = true, EntryPoint = nameof(CloseHandle))]
@@ -39,7 +46,7 @@ namespace NeoCore.Interop
 
 			[DllImport(KERNEL32_DLL, EntryPoint = nameof(VirtualQuery))]
 			internal static extern IntPtr VirtualQuery(IntPtr                     address,
-			                                           ref MemoryInfo buffer, int length);
+			                                           ref MemoryBasicInfo buffer, int length);
 
 			[DllImport(KERNEL32_DLL, EntryPoint = nameof(VirtualProtect))]
 			internal static extern bool VirtualProtect(IntPtr               address, int size,
@@ -52,7 +59,9 @@ namespace NeoCore.Interop
 
 			[DllImport(KERNEL32_DLL, CharSet = CharSet.Ansi, SetLastError = true, EntryPoint = nameof(GetProcAddress))]
 			internal static extern IntPtr GetProcAddress(IntPtr module, string procName);
-
+			
+			[DllImport(KERNEL32_DLL, CharSet = CharSet.Ansi, SetLastError = true, EntryPoint = nameof(LoadLibrary))]
+			internal static extern IntPtr LoadLibrary(string name);
 
 			#region Read / write
 
