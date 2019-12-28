@@ -5,14 +5,13 @@ using NeoCore.CoreClr;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import;
-using NeoCore.Interop;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
 [assembly: InternalsVisibleTo("Test")]
 
-namespace NeoCore.Assets
+namespace NeoCore.Support
 {
 	/// <summary>
 	/// Contains core resources for NeoCore.
@@ -45,7 +44,7 @@ namespace NeoCore.Assets
 			typeof(EEClass),
 			typeof(EEClassLayoutInfo),
 			typeof(MethodDescChunk),
-			typeof(ClrAssets),
+			typeof(Runtime),
 		};
 
 		private static readonly Closable[] CoreObjects =

@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using NeoCore.Assets;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;

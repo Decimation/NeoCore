@@ -1,25 +1,25 @@
+using System.Text;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
 using NeoCore.Interop;
 using NeoCore.Interop.Structures;
 using NeoCore.Memory.Pointers;
+using NeoCore.Support;
 
 namespace NeoCore.Memory
 {
-	public class MemInfo
+	public sealed class MemInfo
 	{
-		public Pointer<byte> Address        { get; }
-		public Pointer<byte> HighestAddress { get; private set; }
-		public Pointer<byte> LowestAddress  { get; private set; }
+		public Pointer<byte> Address { get; }
+
+		public Region Region { get; private set; }
 
 		public MemoryType Type { get; private set; }
-
-		public long Size { get; private set; }
 		
-		public MemoryBasicInfo Info { get; private set;}
+		public MemoryBasicInfo Info { get; private set; }
 
-		internal MemInfo(Pointer<byte> ptr)
+		private MemInfo(Pointer<byte> ptr)
 		{
 			Address = ptr;
 		}
@@ -29,21 +29,18 @@ namespace NeoCore.Memory
 		{
 			var info = new MemInfo(ptr);
 
-			var gcHeap = ClrAssets.GCHeap;
+			var gcHeap = Runtime.GC;
 
-			if (Mem.IsAddressInRange(ptr, gcHeap.LowestAddress, gcHeap.HighestAddress)) {
-				info.LowestAddress  = gcHeap.LowestAddress;
-				info.HighestAddress = gcHeap.HighestAddress;
-				info.Size           = -1;
-				info.Type           = MemoryType.GC;
+			var gcRegion = gcHeap.GCRegion;
+			if (Mem.IsAddressInRange(ptr, gcRegion)) {
+				info.Region = gcRegion;
+				info.Type   = MemoryType.GC;
 			}
 
-			(Pointer<byte> stackLo, long stackSize) = Mem.StackRegion;
-			if (Mem.IsAddressInRange(ptr, stackLo, stackLo + stackSize)) {
-				info.LowestAddress  = stackLo;
-				info.HighestAddress = stackLo + stackSize;
-				info.Size           = stackSize;
-				info.Type           = MemoryType.Stack;
+			var stackRegion = Mem.StackRegion;
+			if (Mem.IsAddressInRange(ptr, stackRegion)) {
+				info.Region = stackRegion;
+				info.Type   = MemoryType.Stack;
 			}
 
 			var mbi = Native.Kernel.VirtualQuery(ptr.Address);
@@ -55,8 +52,10 @@ namespace NeoCore.Memory
 
 		public override string ToString()
 		{
-			return string.Format("Address: {0} | Type: {1} | Size: {2} | Lo: {3} | Hi: {4}", Address, Type, Size,
-			                     LowestAddress, HighestAddress);
+			var sb = new StringBuilder();
+			sb.AppendFormat("Address: {0}\n", Address);
+			sb.AppendFormat("Type: {0}", Type);
+			return sb.ToString();
 		}
 	}
 }

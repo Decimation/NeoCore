@@ -1,10 +1,10 @@
 using System.Runtime.CompilerServices;
-using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
 using NeoCore.Import.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Support;
 
 // ReSharper disable InconsistentNaming
 #pragma warning disable 649
@@ -12,31 +12,10 @@ using NeoCore.Memory.Pointers;
 namespace NeoCore.CoreClr
 {
 	/// <summary>
-	/// Contains global CLR variables, offsets, sizes, and other constants.
+	/// Contains offsets, sizes, and other constants.
 	/// </summary>
-	[ImportNamespace]
-	public static class ClrAssets
+	public static class Assets
 	{
-		static ClrAssets()
-		{
-			var clr = Resources.Clr.Imports;
-
-			const string GLOBAL_GCHEAP_PTR = "g_pGCHeap";
-			const string GLOBAL_GCHEAP_LO = "g_lowest_address";
-			const string GLOBAL_GCHEAP_HI = "g_highest_address";
-			
-			Pointer<byte> gc = clr.GetAddress(GLOBAL_GCHEAP_PTR);
-			Pointer<byte> lo = clr.GetAddress(GLOBAL_GCHEAP_LO).ReadPointer();
-			Pointer<byte> hi = clr.GetAddress(GLOBAL_GCHEAP_HI).ReadPointer();
-
-			GCHeap = new MetaHeap(gc, lo, hi);
-		}
-
-		/// <summary>
-		/// Represents the global CLR GC heap.
-		/// </summary>
-		public static readonly MetaHeap GCHeap;
-
 		#region Sizes
 
 		// https://github.com/dotnet/coreclr/blob/master/src/vm/object.h
@@ -57,14 +36,14 @@ namespace NeoCore.CoreClr
 		///     Size of <see cref="TypeHandle" /> and <see cref="ObjHeader" />
 		///     <list type="bullet">
 		///         <item>
-		///             <description>+ <see cref="ClrAssets.ObjHeaderSize" />: <see cref="ObjHeader" /></description>
+		///             <description>+ <see cref="Assets.ObjHeaderSize" />: <see cref="ObjHeader" /></description>
 		///         </item>
 		///         <item>
 		///             <description>+ <see cref="Mem.Size" />: <see cref="TypeHandle"/></description>
 		///         </item>
 		///     </list>
 		/// </summary>
-		public static readonly unsafe int ObjectBaseSize = ClrAssets.ObjHeaderSize + sizeof(TypeHandle);
+		public static readonly unsafe int ObjectBaseSize = Assets.ObjHeaderSize + sizeof(TypeHandle);
 
 
 		/// <summary>
@@ -88,7 +67,7 @@ namespace NeoCore.CoreClr
 		/// <summary>
 		///     <para>Minimum GC object heap size</para>
 		/// </summary>
-		public static readonly int MinObjectSize = (Mem.Size * 2) + ClrAssets.ObjHeaderSize;
+		public static readonly int MinObjectSize = (Mem.Size * 2) + Assets.ObjHeaderSize;
 
 		#endregion
 
@@ -118,7 +97,7 @@ namespace NeoCore.CoreClr
 		///         </item>
 		///     </list>
 		/// </summary>
-		public static readonly int OffsetToArrayData = ClrAssets.OffsetToData + ArrayOverhead;
+		public static readonly int OffsetToArrayData = Assets.OffsetToData + ArrayOverhead;
 
 		/// <summary>
 		///     Heap offset to the first string character.

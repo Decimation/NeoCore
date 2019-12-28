@@ -4,7 +4,6 @@ using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using JetBrains.Annotations;
-using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
@@ -148,23 +147,23 @@ namespace NeoCore.Memory
 			switch (offset) {
 				case OffsetOptions.StringData:
 					Guard.Assert(Runtime.Inspection.IsString(value));
-					offsetValue = ClrAssets.OffsetToStringData;
+					offsetValue = Assets.OffsetToStringData;
 					break;
 
 				case OffsetOptions.ArrayData:
 					Guard.Assert(Runtime.Inspection.IsArray(value));
-					offsetValue = ClrAssets.OffsetToArrayData;
+					offsetValue = Assets.OffsetToArrayData;
 					break;
 
 				case OffsetOptions.Fields:
-					offsetValue = ClrAssets.OffsetToData;
+					offsetValue = Assets.OffsetToData;
 					break;
 
 				case OffsetOptions.None:
 					break;
 
 				case OffsetOptions.Header:
-					offsetValue = -ClrAssets.OffsetToData;
+					offsetValue = -Assets.OffsetToData;
 					break;
 
 				default:
@@ -209,7 +208,7 @@ namespace NeoCore.Memory
 					return mt.NativeSize;
 
 				case SizeOfOptions.Managed:
-					return mt.HasLayout ? mt.LayoutInfo.ManagedSize : ClrAssets.INVALID_VALUE;
+					return mt.HasLayout ? mt.LayoutInfo.ManagedSize : Assets.INVALID_VALUE;
 
 				case SizeOfOptions.Intrinsic:
 					return SizeOf<T>();
@@ -238,7 +237,7 @@ namespace NeoCore.Memory
 				}
 
 				// Subtract the size of the ObjHeader and MethodTable*
-				return HeapSizeOfInternal(data) - ClrAssets.ObjectBaseSize;
+				return HeapSizeOfInternal(data) - Assets.ObjectBaseSize;
 			}
 
 			static int BaseSizeOfData(Type type)
@@ -255,7 +254,7 @@ namespace NeoCore.Memory
 			}
 
 
-			return ClrAssets.INVALID_VALUE;
+			return Assets.INVALID_VALUE;
 		}
 
 
@@ -273,7 +272,7 @@ namespace NeoCore.Memory
 		///         <item>
 		///             <description>
 		///                 <see cref="MethodTable.BaseSize" /> = The base instance size of a type
-		///                 (<c>24</c> (x64) or <c>12</c> (x86) by default) (<see cref="ClrAssets.MinObjectSize" />)
+		///                 (<c>24</c> (x64) or <c>12</c> (x86) by default) (<see cref="Assets.MinObjectSize" />)
 		///             </description>
 		///         </item>
 		///         <item>
@@ -304,7 +303,7 @@ namespace NeoCore.Memory
 			Guard.Assert(!Runtime.Inspection.IsStruct(value));
 
 			if (Runtime.Info.IsNil(value)) {
-				return ClrAssets.INVALID_VALUE;
+				return Assets.INVALID_VALUE;
 			}
 
 			// By manually reading the MethodTable*, we can calculate the size correctly if the reference

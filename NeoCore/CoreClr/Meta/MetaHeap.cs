@@ -3,6 +3,7 @@ using System.Reflection;
 using System.Text;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
+using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
 // ReSharper disable InconsistentNaming
@@ -19,15 +20,12 @@ namespace NeoCore.CoreClr.Meta
 	{
 		internal MetaHeap(Pointer<GCHeap> ptr, Pointer<byte> lo, Pointer<byte> hi) : base(ptr)
 		{
-			LowestAddress = lo;
-			HighestAddress = hi;
+			GCRegion = new Region(lo,hi);
 		}
 
 		protected override Type[] AdditionalSources => null;
 
-		public Pointer<byte> LowestAddress { get; }
-		
-		public Pointer<byte> HighestAddress { get; }
+		public Region GCRegion { get; }
 		
 		public int GCCount => Value.Reference.GCCount;
 		
@@ -45,8 +43,8 @@ namespace NeoCore.CoreClr.Meta
 		{
 			var sb = new StringBuilder();
 			sb.AppendFormat("Heap: {0}\n", Value);
-			sb.AppendFormat("Lowest address: {0}\n", LowestAddress);
-			sb.AppendFormat("Highest address: {0}", HighestAddress);
+			sb.AppendFormat("Lowest address: {0}\n", GCRegion.Low);
+			sb.AppendFormat("Highest address: {0}", GCRegion.High);
 			return sb.ToString();
 		}
 	}

@@ -1,4 +1,3 @@
-using NeoCore.Assets;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 

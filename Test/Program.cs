@@ -14,7 +14,6 @@ using System.Text;
 using System.Threading;
 using JetBrains.Annotations;
 using NeoCore;
-using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;
@@ -46,11 +45,11 @@ namespace Test
 
 	public static unsafe class Program
 	{
-		
-		
 		private static void Main(string[] args)
 		{
-			
+			int i    = 256;
+			var info = MemInfo.Inspect(&i);
+			Console.WriteLine(info);
 		}
 	}
 }

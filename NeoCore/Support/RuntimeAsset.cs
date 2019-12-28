@@ -1,14 +1,10 @@
-using System;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using NeoCore.Import;
 using NeoCore.Interop;
 using NeoCore.Memory.Pointers;
-using NeoCore.Utilities;
-using NeoCore.Utilities.Diagnostics;
 
-namespace NeoCore.Assets
+namespace NeoCore.Support
 {
 	public class RuntimeAsset
 	{

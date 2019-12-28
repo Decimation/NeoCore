@@ -1,7 +1,6 @@
 using System;
 using System.Reflection;
 using JetBrains.Annotations;
-using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;

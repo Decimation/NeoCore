@@ -1,5 +1,4 @@
 using System;
-using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.VM;
 
@@ -157,7 +156,7 @@ namespace NeoCore.Utilities
 				case CorElementType.CModOpt:
 				case CorElementType.Internal:
 				case CorElementType.MVar:
-					return ClrAssets.INVALID_VALUE;
+					return Assets.INVALID_VALUE;
 
 				case CorElementType.TypedByRef:
 					return IntPtr.Size * 2;

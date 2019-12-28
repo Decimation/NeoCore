@@ -3,9 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using NeoCore.CoreClr;
 using NeoCore.Interop;
-using NeoCore.Utilities;
 
-namespace NeoCore.Assets
+namespace NeoCore.Support
 {
 	/// <summary>
 	/// Contains possible CLR framework types.

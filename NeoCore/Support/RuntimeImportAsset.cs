@@ -1,8 +1,7 @@
-using System.Diagnostics;
 using System.IO;
 using NeoCore.Import;
 
-namespace NeoCore.Assets
+namespace NeoCore.Support
 {
 	public class RuntimeImportAsset : RuntimeAsset
 	{

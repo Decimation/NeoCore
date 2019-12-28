@@ -1,6 +1,5 @@
 // ReSharper disable InconsistentNaming
 
-using NeoCore.Assets;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Memory;

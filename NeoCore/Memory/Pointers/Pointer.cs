@@ -111,14 +111,16 @@ namespace NeoCore.Memory.Pointers
 		public static explicit operator ulong(Pointer<T> ptr) => ptr.ToUInt64();
 
 		public static explicit operator Pointer<byte>(Pointer<T> ptr) => ptr.ToPointer();
-
+		
+		public static explicit operator Pointer<T>(long value) => new Pointer<T>((void*) value);
+		
 		public static implicit operator Pointer<T>(void* value) => new Pointer<T>(value);
 
 		public static implicit operator Pointer<T>(IntPtr value) => new Pointer<T>(value);
 
 		public static implicit operator Pointer<T>(Pointer<byte> ptr) => ptr.Address;
 
-		public static explicit operator Pointer<T>(long value) => new Pointer<T>((void*) value);
+		
 
 		#endregion
 
@@ -254,6 +256,12 @@ namespace NeoCore.Memory.Pointers
 		/// <returns>The offset <see cref="Address" /></returns>
 		public static Pointer<T> operator --(Pointer<T> ptr) => ptr.Decrement();
 
+		public static bool operator >(Pointer<T> ptr, Pointer<T> b) => ptr.ToInt64() > b.ToInt64();
+		public static bool operator >=(Pointer<T> ptr, Pointer<T> b) => ptr.ToInt64() >= b.ToInt64();
+		
+		public static bool operator <(Pointer<T> ptr, Pointer<T> b) => ptr.ToInt64() < b.ToInt64();
+		public static bool operator <=(Pointer<T> ptr, Pointer<T> b) => ptr.ToInt64() <= b.ToInt64();
+		
 		#endregion
 
 		#endregion

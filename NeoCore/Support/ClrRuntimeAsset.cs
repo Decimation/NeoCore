@@ -1,8 +1,4 @@
-using System;
-using System.Diagnostics;
-using NeoCore.CoreClr;
-
-namespace NeoCore.Assets
+namespace NeoCore.Support
 {
 	public sealed class ClrRuntimeAsset : RuntimeImportAsset
 	{

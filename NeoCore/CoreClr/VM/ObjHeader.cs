@@ -1,6 +1,5 @@
 using System;
 using System.Runtime.InteropServices;
-using NeoCore.Assets;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Model;

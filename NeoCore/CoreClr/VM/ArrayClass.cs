@@ -1,5 +1,4 @@
 using System.Runtime.InteropServices;
-using NeoCore.Assets;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop.Attributes;

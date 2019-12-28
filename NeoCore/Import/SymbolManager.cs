@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using NeoCore.Assets;
 using NeoCore.Interop;
 using NeoCore.Interop.Structures;
 using NeoCore.Model;

@@ -5,13 +5,14 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime;
 using System.Runtime.InteropServices;
-using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
+using NeoCore.Import.Attributes;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Support;
 using NeoCore.Utilities.Diagnostics;
 
 // ReSharper disable InconsistentNaming
@@ -22,12 +23,30 @@ namespace NeoCore.CoreClr
 	/// Contains utilities for interacting with the .NET runtime.
 	/// <seealso cref="System.Runtime.CompilerServices.RuntimeHelpers"/>
 	/// </summary>
+	[ImportNamespace]
 	public static unsafe partial class Runtime
 	{
 		static Runtime()
 		{
 			GetTypeFromHandle = Functions.Reflection.FindFunction<GetTypeFromHandleUnsafeDelegate>();
+			
+			var clr = Resources.Clr.Imports;
+
+			const string GLOBAL_GCHEAP_PTR = "g_pGCHeap";
+			const string GLOBAL_GCHEAP_LO  = "g_lowest_address";
+			const string GLOBAL_GCHEAP_HI  = "g_highest_address";
+			
+			Pointer<byte> gc = clr.GetAddress(GLOBAL_GCHEAP_PTR);
+			Pointer<byte> lo = clr.GetAddress(GLOBAL_GCHEAP_LO).ReadPointer();
+			Pointer<byte> hi = clr.GetAddress(GLOBAL_GCHEAP_HI).ReadPointer();
+
+			GC = new MetaHeap(gc, lo, hi);
 		}
+		
+		/// <summary>
+		/// Represents the global CLR GC heap.
+		/// </summary>
+		public static readonly MetaHeap GC;
 
 		public static bool IsInDebugMode => Debugger.IsAttached;
 

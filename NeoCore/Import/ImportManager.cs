@@ -5,7 +5,6 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using JetBrains.Annotations;
-using NeoCore.Assets;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Import.Attributes;
 using NeoCore.Interop;

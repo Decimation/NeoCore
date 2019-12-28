@@ -1,11 +1,11 @@
 using System;
 using System.Reflection;
 using System.Text;
-using NeoCore.Assets;
 using NeoCore.Import;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
+using NeoCore.Support;
 
 namespace NeoCore.CoreClr.Meta.Base
 {
@@ -93,7 +93,7 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		public override int GetHashCode()
 		{
-			return ClrAssets.INVALID_VALUE;
+			return Assets.INVALID_VALUE;
 		}
 
 		public static bool operator ==(BasicClrStructure<TClr> left, BasicClrStructure<TClr> right) =>

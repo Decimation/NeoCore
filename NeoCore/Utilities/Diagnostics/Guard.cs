@@ -3,10 +3,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using JetBrains.Annotations;
-using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Support;
 
 namespace NeoCore.Utilities.Diagnostics
 {

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using NeoCore.Assets;
 using NeoCore.CoreClr.VM.Jit;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;

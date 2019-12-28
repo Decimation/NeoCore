@@ -1,6 +1,5 @@
 using System;
 using JetBrains.Annotations;
-using NeoCore.Assets;
 using NeoCore.CoreClr;
 using NeoCore.Memory;
 using NeoCore.Utilities;
