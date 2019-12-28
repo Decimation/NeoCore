@@ -24,6 +24,7 @@ using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
+using NeoCore.Support;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
@@ -47,9 +48,16 @@ namespace Test
 	{
 		private static void Main(string[] args)
 		{
-			int i    = 256;
-			var info = MemInfo.Inspect(&i);
-			Console.WriteLine(info);
+			var clr = new Region(Resources.Clr.Module.BaseAddress, Resources.Clr.Module.ModuleMemorySize);
+			var ss  = new SigScanner(clr);
+			var p   = ss.FindPattern("48 83 EC 28 F6 C1 02 75 28");
+			Console.WriteLine(p);
+			Console.WriteLine(p.Copy(5).FormatJoin("X"));
+
+			var actual = Resources.Clr.Imports.GetAddress("FieldDesc::LoadSize");
+			Console.WriteLine(actual);
+			Console.WriteLine(actual.Copy(5).FormatJoin("X"));
+			Console.WriteLine("{0:X}",actual.ToInt64()-Resources.Clr.Module.BaseAddress.ToInt64());
 		}
 	}
 }

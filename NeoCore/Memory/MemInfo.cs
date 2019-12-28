@@ -29,7 +29,7 @@ namespace NeoCore.Memory
 		{
 			var info = new MemInfo(ptr);
 
-			var gcHeap = Runtime.GC;
+			var gcHeap = MetaHeap.GC;
 
 			var gcRegion = gcHeap.GCRegion;
 			if (Mem.IsAddressInRange(ptr, gcRegion)) {

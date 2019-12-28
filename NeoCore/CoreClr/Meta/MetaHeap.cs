@@ -5,6 +5,7 @@ using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
+using NeoCore.Support;
 
 // ReSharper disable InconsistentNaming
 
@@ -46,6 +47,26 @@ namespace NeoCore.CoreClr.Meta
 			sb.AppendFormat("Lowest address: {0}\n", GCRegion.Low);
 			sb.AppendFormat("Highest address: {0}", GCRegion.High);
 			return sb.ToString();
+		}
+
+		/// <summary>
+		/// Represents the global CLR GC heap.
+		/// </summary>
+		public static readonly MetaHeap GC = ReadGC();
+		
+		private static MetaHeap ReadGC()
+		{
+			var clr = Resources.Clr.Imports;
+
+			const string GLOBAL_GCHEAP_PTR = "g_pGCHeap";
+			const string GLOBAL_GCHEAP_LO  = "g_lowest_address";
+			const string GLOBAL_GCHEAP_HI  = "g_highest_address";
+
+			Pointer<byte> gc = clr.GetAddress(GLOBAL_GCHEAP_PTR);
+			Pointer<byte> lo = clr.GetAddress(GLOBAL_GCHEAP_LO).ReadPointer();
+			Pointer<byte> hi = clr.GetAddress(GLOBAL_GCHEAP_HI).ReadPointer();
+
+			return new MetaHeap(gc, lo, hi);
 		}
 	}
 }

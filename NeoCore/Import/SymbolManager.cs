@@ -26,7 +26,7 @@ namespace NeoCore.Import
 		private ulong        m_modBase;
 		private string       m_singleNameBuffer;
 		private List<Symbol> m_symBuffer;
-		private FileInfo?     m_pdb;
+		private FileInfo?    m_pdb;
 
 		internal bool IsImageLoaded {
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]

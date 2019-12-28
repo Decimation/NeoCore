@@ -27,7 +27,7 @@ namespace NeoCore.Import
 			SymbolFile = pdb;
 		}
 
-		internal Symbol GetSymbol(string name)
+		private Symbol GetSymbol(string name)
 		{
 			SymbolManager.Value.CurrentImage = SymbolFile;
 			return SymbolManager.Value.GetSymbol(name);
