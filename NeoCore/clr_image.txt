@@ -1,17 +1,19 @@
-"#all"
 {
-	"JIT_GetRuntimeType"
-	{
-		"type"		"signature"
-		"value"		"48 83 EC 28 F6 C1 02 75 28"
-	}
-}
+	"Global":
+	[
+		{
+			"name":			"JIT_GetRuntimeType",
+			"type":			"signature",
+			"value":		"48 83 EC 28 F6 C1 02 75 28"
+		}
+	],
 
-"FieldDesc"
-{
-	"LoadSize"
-	{
-		"type"		"offset"
-		"value"		"129414"
-	}
+	"FieldDesc":
+	[
+		{
+			"name":			"LoadSize",
+			"type":			"offset",
+			"value":		"129414"
+		}
+	]
 }

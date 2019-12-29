@@ -1,4 +1,5 @@
 using NeoCore.Import;
+using NeoCore.Import.Providers.Symbol;
 using NeoCore.Interop;
 using NeoCore.Utilities.Diagnostics;
 

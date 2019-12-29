@@ -5,6 +5,7 @@ using NeoCore.CoreClr;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import;
+using NeoCore.Import.Providers.Symbol;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;

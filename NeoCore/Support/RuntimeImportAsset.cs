@@ -1,5 +1,6 @@
 using System.IO;
 using NeoCore.Import;
+using NeoCore.Import.Providers.Symbol;
 
 namespace NeoCore.Support
 {
@@ -8,11 +9,11 @@ namespace NeoCore.Support
 		/// <summary>
 		/// Asset symbol access
 		/// </summary>
-		public IImportProvider Imports { get; }
+		public ImportProvider Imports { get; }
 
 		public RuntimeImportAsset(FileInfo libFile, FileInfo symFile) : base(libFile, symFile)
 		{
-			Imports = new ModuleImport(SymbolsFile, Module);
+			Imports = new SymbolImport(SymbolsFile, Module.BaseAddress);
 		}
 	}
 }

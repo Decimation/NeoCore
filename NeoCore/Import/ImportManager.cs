@@ -22,6 +22,9 @@ using Unsafe = NeoCore.Memory.Unsafe;
 
 namespace NeoCore.Import
 {
+	/// <summary>
+	/// Loads, links, and dynamically binds imports to the decorated members in a type.
+	/// </summary>
 	public sealed partial class ImportManager : Releasable
 	{
 		#region Constants
@@ -70,59 +73,6 @@ namespace NeoCore.Import
 		private readonly Dictionary<Type, ImportMap> m_typeImportMaps = new Dictionary<Type, ImportMap>();
 
 		#endregion
-
-
-		private static string ResolveIdentifier(ImportAttribute      attr,
-		                                        [NotNull] MemberInfo member,
-		                                        out       string     resolvedId)
-		{
-			Guard.AssertNotNull(member.DeclaringType, nameof(member.DeclaringType));
-
-			CheckAnnotations(member, true, out var nameSpaceAttr);
-
-			// Resolve the symbol
-
-			resolvedId = attr.Identifier ?? member.Name;
-
-			string nameSpace          = nameSpaceAttr.Namespace;
-			string enclosingNamespace = member.DeclaringType.Name;
-
-			var options = attr.Options;
-
-			bool isMethod   = member.MemberType == MemberTypes.Method;
-			bool isCallAttr = attr is ImportCallAttribute;
-
-			if (isCallAttr) {
-				var  callAttr = (ImportCallAttribute) attr;
-				bool isCtor   = callAttr.CallOptions.HasFlagFast(ImportCallOptions.Constructor);
-
-				if (isMethod && isCtor) {
-					CheckConstructorOptions(options);
-
-					return ScopeJoin(new[] {enclosingNamespace, enclosingNamespace});
-				}
-			}
-
-
-			if (!options.HasFlagFast(IdentifierOptions.IgnoreEnclosingNamespace)) {
-				resolvedId = ScopeJoin(new[] {enclosingNamespace, resolvedId});
-			}
-
-			if (!options.HasFlagFast(IdentifierOptions.IgnoreNamespace)) {
-				if (nameSpace != null) {
-					resolvedId = ScopeJoin(new[] {nameSpace, resolvedId});
-				}
-			}
-
-			if (options.HasFlagFast(IdentifierOptions.UseAccessorName)) {
-				Guard.Assert(member.MemberType == MemberTypes.Method);
-				resolvedId = resolvedId.Replace(EasyReflection.GET_PROPERTY_PREFIX, GET_PROPERTY_REPLACEMENT);
-			}
-
-			Guard.AssertNotNull(resolvedId, nameof(resolvedId));
-
-			return resolvedId;
-		}
 
 
 		#region Unload
@@ -285,14 +235,14 @@ namespace NeoCore.Import
 
 		/// <summary>
 		///     Root load function. Loads <paramref name="value" /> of type <paramref name="type" /> using the
-		///     specified <see cref="IImportProvider" /> <paramref name="ip" />.
+		///     specified <see cref="ImportProvider" /> <paramref name="ip" />.
 		/// </summary>
 		/// <param name="value">Value of type <paramref name="type" /> to load</param>
 		/// <param name="type"><see cref="MetaType" /> of <paramref name="value" /></param>
-		/// <param name="ip"><see cref="IImportProvider" /> to use to load components</param>
+		/// <param name="ip"><see cref="ImportProvider" /> to use to load components</param>
 		/// <typeparam name="T">Type of <paramref name="value" /></typeparam>
 		/// <returns><paramref name="value" />, fully loaded</returns>
-		private T Load<T>(T value, Type type, IImportProvider ip)
+		private T Load<T>(T value, Type type, ImportProvider ip)
 		{
 			if (IsBound(type)) {
 				return value;
@@ -325,20 +275,20 @@ namespace NeoCore.Import
 		///     Loads <paramref name="value" /> using <paramref name="ip" />.
 		/// </summary>
 		/// <param name="value">Value to load</param>
-		/// <param name="ip"><see cref="IImportProvider" /> to use</param>
+		/// <param name="ip"><see cref="ImportProvider" /> to use</param>
 		/// <typeparam name="T">Type of <paramref name="value" /></typeparam>
 		/// <returns><paramref name="value" />, fully loaded</returns>
-		public T Load<T>(T value, IImportProvider ip) => Load(value, value.GetType(), ip);
+		public T Load<T>(T value, ImportProvider ip) => Load(value, value.GetType(), ip);
 
 		/// <summary>
 		///     Loads any non-instance components of type <paramref name="t" />.
 		/// </summary>
 		/// <param name="t"><see cref="Type" /> to load</param>
-		/// <param name="ip"><see cref="IImportProvider" /> to use</param>
+		/// <param name="ip"><see cref="ImportProvider" /> to use</param>
 		/// <returns>A <c>default</c> object of type <paramref name="t" /></returns>
-		public object Load(Type t, IImportProvider ip) => Load(default(object), t, ip);
+		public object Load(Type t, ImportProvider ip) => Load(default(object), t, ip);
 
-		public void LoadAll(Type[] t, IImportProvider ip)
+		public void LoadAll(Type[] t, ImportProvider ip)
 		{
 			foreach (var type in t) {
 				Load(type, ip);
@@ -346,7 +296,7 @@ namespace NeoCore.Import
 		}
 
 		private static void LoadFieldComponent<T>(ImportAttribute attr, ref T value,
-		                                          IImportProvider ip,
+		                                          ImportProvider ip,
 		                                          string          identifier,
 		                                          MetaField       field)
 		{
@@ -364,7 +314,7 @@ namespace NeoCore.Import
 			object fieldValue;
 
 			Global.Value.WriteDebug(null, "Loading field {Id} with {Option}",
-			                            field.Name, options);
+			                        field.Name, options);
 
 			switch (options) {
 				case ImportFieldOptions.Proxy:
@@ -414,7 +364,7 @@ namespace NeoCore.Import
 
 
 		private static T LoadComponents<T>(T                                  value,
-		                                   IImportProvider                    ip,
+		                                   ImportProvider                    ip,
 		                                   AnnotatedMember<ImportAttribute>[] components,
 		                                   Dictionary<Type, ImportMap>        importMaps)
 		{

@@ -12,6 +12,58 @@ namespace NeoCore.Import
 {
 	public sealed partial class ImportManager
 	{
+		private static string ResolveIdentifier(ImportAttribute      attr,
+		                                        [NotNull] MemberInfo member,
+		                                        out       string     resolvedId)
+		{
+			Guard.AssertNotNull(member.DeclaringType, nameof(member.DeclaringType));
+
+			CheckAnnotations(member, true, out var nameSpaceAttr);
+
+			// Resolve the symbol
+
+			resolvedId = attr.Identifier ?? member.Name;
+
+			string nameSpace          = nameSpaceAttr.Namespace;
+			string enclosingNamespace = member.DeclaringType.Name;
+
+			var options = attr.Options;
+
+			bool isMethod   = member.MemberType == MemberTypes.Method;
+			bool isCallAttr = attr is ImportCallAttribute;
+
+			if (isCallAttr) {
+				var  callAttr = (ImportCallAttribute) attr;
+				bool isCtor   = callAttr.CallOptions.HasFlagFast(ImportCallOptions.Constructor);
+
+				if (isMethod && isCtor) {
+					CheckConstructorOptions(options);
+
+					return ScopeJoin(new[] {enclosingNamespace, enclosingNamespace});
+				}
+			}
+
+
+			if (!options.HasFlagFast(IdentifierOptions.IgnoreEnclosingNamespace)) {
+				resolvedId = ScopeJoin(new[] {enclosingNamespace, resolvedId});
+			}
+
+			if (!options.HasFlagFast(IdentifierOptions.IgnoreNamespace)) {
+				if (nameSpace != null) {
+					resolvedId = ScopeJoin(new[] {nameSpace, resolvedId});
+				}
+			}
+
+			if (options.HasFlagFast(IdentifierOptions.UseAccessorName)) {
+				Guard.Assert(member.MemberType == MemberTypes.Method);
+				resolvedId = resolvedId.Replace(EasyReflection.GET_PROPERTY_PREFIX, GET_PROPERTY_REPLACEMENT);
+			}
+
+			Guard.AssertNotNull(resolvedId, nameof(resolvedId));
+
+			return resolvedId;
+		}
+		
 		private bool IsBound(Type t) => m_boundTypes.Contains(t);
 
 		
