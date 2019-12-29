@@ -20,7 +20,7 @@ using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
-using NeoCore.Import.Providers.ImageIndex;
+using NeoCore.Import.Providers;
 using NeoCore.Interop;
 using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
@@ -40,17 +40,10 @@ namespace Test
 {
 	// nuget pack -Prop Configuration=Release
 
-
-	struct MyStruct
-	{
-		public int a;
-	}
-
 	public static unsafe class Program
 	{
 		private static void Main(string[] args)
 		{
-			
 			var clr = new Region(Resources.Clr.Module.BaseAddress, Resources.Clr.Module.ModuleMemorySize);
 			var ss  = new SigScanner(clr);
 			var p   = ss.FindPattern("48 83 EC 28 F6 C1 02 75 28");
@@ -60,11 +53,11 @@ namespace Test
 			var actual = Resources.Clr.Imports.GetAddress("FieldDesc::LoadSize");
 			Console.WriteLine(actual);
 			Console.WriteLine(actual.Copy(5).FormatJoin("X"));
-			Console.WriteLine("{0:X}",actual.ToInt64()-Resources.Clr.Module.BaseAddress.ToInt64());
+			Console.WriteLine("{0:X}", actual.ToInt64() - Resources.Clr.Module.BaseAddress.ToInt64());
 
 			var idx = @"C:\Users\Deci\RiderProjects\NeoCore\NeoCore\clr_image.txt";
-			var v = new ImageIndex(idx, Resources.Clr.Module.BaseAddress);
-			foreach (var j in v.Index) {
+			var v   = new ImageRecordImport(idx, Resources.Clr.Module.BaseAddress);
+			foreach (var j in v.Records) {
 				Console.WriteLine(j);
 			}
 		}

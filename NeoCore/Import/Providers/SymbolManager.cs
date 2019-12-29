@@ -11,7 +11,7 @@ using NeoCore.Utilities.Diagnostics;
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable RedundantAssignment
 
-namespace NeoCore.Import.Providers.Symbol
+namespace NeoCore.Import.Providers
 {
 	/// <summary>
 	/// Provides access to symbols in a specified image

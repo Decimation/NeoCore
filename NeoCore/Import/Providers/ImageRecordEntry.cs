@@ -1,9 +1,9 @@
 using System;
 using NeoCore.Utilities;
 
-namespace NeoCore.Import.Providers.ImageIndex
+namespace NeoCore.Import.Providers
 {
-	public readonly struct IndexEntry
+	public readonly struct ImageRecordEntry
 	{
 		public string Name { get; }
 
@@ -16,7 +16,7 @@ namespace NeoCore.Import.Providers.ImageIndex
 		public object Value { get; }
 
 
-		internal IndexEntry(string name, EntryType t, object v)
+		internal ImageRecordEntry(string name, EntryType t, object v)
 		{
 			Name  = name;
 			Type  = t;

@@ -1,6 +1,6 @@
 using System.IO;
 using NeoCore.Import;
-using NeoCore.Import.Providers.Symbol;
+using NeoCore.Import.Providers;
 
 namespace NeoCore.Support
 {

@@ -1,8 +1,7 @@
-using System;
 using System.IO;
 using NeoCore.Memory.Pointers;
 
-namespace NeoCore.Import.Providers.Symbol
+namespace NeoCore.Import.Providers
 {
 	/// <summary>
 	/// Matches imports against memory
@@ -13,7 +12,6 @@ namespace NeoCore.Import.Providers.Symbol
 
 		public SymbolImport(FileInfo pdb, Pointer<byte> baseAddr) : base(baseAddr)
 		{
-			
 			SymbolFile = pdb;
 		}
 
@@ -22,7 +20,7 @@ namespace NeoCore.Import.Providers.Symbol
 			SymbolManager.Value.CurrentImage = SymbolFile;
 			return SymbolManager.Value.GetSymbol(name);
 		}
-		
+
 		public override Pointer<byte> GetAddress(string id)
 		{
 			long ofs = GetSymbol(id).Offset;

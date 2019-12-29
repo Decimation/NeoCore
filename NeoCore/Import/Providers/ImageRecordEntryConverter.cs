@@ -4,11 +4,11 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using NeoCore.Utilities;
 
-namespace NeoCore.Import.Providers.ImageIndex
+namespace NeoCore.Import.Providers
 {
-	internal sealed class IndexEntryConverter : JsonConverter<IndexEntry>
+	internal sealed class ImageRecordEntryConverter : JsonConverter<ImageRecordEntry>
 	{
-		public override IndexEntry Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+		public override ImageRecordEntry Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
 			if (reader.TokenType != JsonTokenType.StartObject) {
 				throw new JsonException();
@@ -20,7 +20,7 @@ namespace NeoCore.Import.Providers.ImageIndex
 
 			while (reader.Read()) {
 				if (reader.TokenType == JsonTokenType.EndObject) {
-					return new IndexEntry(name, type, value);
+					return new ImageRecordEntry(name, type, value);
 				}
 
 				// Get the key.
@@ -28,17 +28,17 @@ namespace NeoCore.Import.Providers.ImageIndex
 					throw new JsonException();
 				}
 				
-				if (reader.GetString() == nameof(IndexEntry.Name).ToLower()) {
+				if (reader.GetString() == nameof(ImageRecordEntry.Name).ToLower()) {
 					reader.Read();
 					name = reader.GetString();
 				}
 
-				if (reader.GetString() == nameof(IndexEntry.Type).ToLower()) {
+				if (reader.GetString() == nameof(ImageRecordEntry.Type).ToLower()) {
 					reader.Read();
 					type = Enum.Parse<EntryType>(reader.GetString(), true);
 				}
 
-				if (reader.GetString() == nameof(IndexEntry.Value).ToLower()) {
+				if (reader.GetString() == nameof(ImageRecordEntry.Value).ToLower()) {
 					reader.Read();
 					string rawValue = reader.GetString();
 
@@ -54,7 +54,7 @@ namespace NeoCore.Import.Providers.ImageIndex
 			throw new JsonException();
 		}
 
-		public override void Write(Utf8JsonWriter writer, IndexEntry value, JsonSerializerOptions options)
+		public override void Write(Utf8JsonWriter writer, ImageRecordEntry value, JsonSerializerOptions options)
 		{
 			throw new NotImplementedException();
 		}

@@ -5,17 +5,17 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using NeoCore.Memory.Pointers;
 
-namespace NeoCore.Import.Providers.ImageIndex
+namespace NeoCore.Import.Providers
 {
-	public sealed class ImageIndex : ImportProvider
+	public sealed class ImageRecordImport : ImportProvider
 	{
-		public IndexEntry[] Index { get; }
+		public ImageRecordEntry[] Records { get; }
 
 		// https://github.com/alliedmodders/sourcemod/blob/master/gamedata/sm-tf2.games.txt
 
-		public ImageIndex(string s, Pointer<byte> baseAddr) : base(baseAddr)
+		public ImageRecordImport(string file, Pointer<byte> baseAddr) : base(baseAddr)
 		{
-			string txt = File.ReadAllText(s);
+			string txt = File.ReadAllText(file);
 
 			var options = new JsonSerializerOptions
 			{
@@ -23,18 +23,18 @@ namespace NeoCore.Import.Providers.ImageIndex
 				WriteIndented               = true,
 			};
 			options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
-			options.Converters.Add(new IndexEntryConverter());
+			options.Converters.Add(new ImageRecordEntryConverter());
 
 
-			var fullIndex = JsonSerializer.Deserialize<Dictionary<string, IndexEntry[]>>(txt, options);
-			Index = Compact(fullIndex);
+			var fullIndex = JsonSerializer.Deserialize<Dictionary<string, ImageRecordEntry[]>>(txt, options);
+			Records = Compact(fullIndex);
 		}
 
 
-		private static IndexEntry[] Compact(Dictionary<string, IndexEntry[]> fullIndex)
+		private static ImageRecordEntry[] Compact(Dictionary<string, ImageRecordEntry[]> fullIndex)
 		{
 			var compactLength = fullIndex.Values.Sum(v => v.Length);
-			var compactIndex  = new List<IndexEntry>(compactLength);
+			var compactIndex  = new List<ImageRecordEntry>(compactLength);
 
 			// Special case
 			const string GLOBAL_KEY = "Global";
@@ -47,10 +47,10 @@ namespace NeoCore.Import.Providers.ImageIndex
 
 				foreach (var oldEntry in fullIndex[enclosingName]) {
 					string memberName = oldEntry.Name;
-					string[] scopes     = new[] {enclosingName, memberName};
+					string[] scopes     = {enclosingName, memberName};
 					string fullName   = ImportManager.ScopeJoin(scopes);
 
-					var compactIndexEntry = new IndexEntry(fullName, oldEntry.Type, oldEntry.Value);
+					var compactIndexEntry = new ImageRecordEntry(fullName, oldEntry.Type, oldEntry.Value);
 					compactIndex.Add(compactIndexEntry);
 				}
 			}

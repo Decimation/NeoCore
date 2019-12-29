@@ -10,6 +10,10 @@ namespace NeoCore.Import
 	/// </summary>
 	public abstract class ImportProvider
     {
+	    // todo: organize symbols and image record
+	    // todo: figure this problem out
+	    // todo: reorganize import model
+	    
 	    public Pointer<byte> BaseAddress { get; }
 
 	    protected ImportProvider(Pointer<byte> baseAddr)
