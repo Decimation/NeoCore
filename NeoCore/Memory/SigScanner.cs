@@ -2,35 +2,20 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using Microsoft.VisualBasic;
-using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 
-namespace NeoCore.Utilities
+namespace NeoCore.Memory
 {
 	/// <summary>
 	///     A basic sig scanner.
 	/// </summary>
 	public class SigScanner
 	{
-		private byte[]        m_buffer;
-		private Pointer<byte> m_lo;
+		private readonly byte[]        m_buffer;
+		private readonly Pointer<byte> m_lo;
 
-		public SigScanner(ProcessModule module) : this(new Region(module.BaseAddress, module.ModuleMemorySize)) {}
 
 		public SigScanner(Region r)
-		{
-			SelectRegion(r);
-		}
-
-		private void EnsureSetup()
-		{
-			if (m_lo.IsNull || m_buffer == null) {
-				throw new Exception("A memory region must be specified.");
-			}
-		}
-
-		private void SelectRegion(Region r)
 		{
 			m_buffer = r.Low.Copy((int) r.Size);
 			m_lo     = r.Low;
@@ -78,8 +63,6 @@ namespace NeoCore.Utilities
 
 		public Pointer<byte> FindPattern(byte[] pattern)
 		{
-			EnsureSetup();
-
 			for (int i = 0; i < m_buffer.Length; i++) {
 				if (m_buffer[i] != pattern[0])
 					continue;

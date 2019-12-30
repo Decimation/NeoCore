@@ -84,7 +84,7 @@
 			}
 		],
 
-		"GCHeap":
+		"WKS::GCHeap":
 		[
 			{
 				"name": "GetGcCount",

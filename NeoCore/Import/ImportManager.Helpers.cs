@@ -64,7 +64,7 @@ namespace NeoCore.Import
 			return resolvedId;
 		}
 
-		private bool IsBound(Type t) => m_boundTypes.Contains(t);
+		private bool IsBoundOrIgnored(Type t) => m_completeTypes.Contains(t);
 
 
 		internal static string ScopeJoin(string[] scopes) =>
@@ -94,7 +94,7 @@ namespace NeoCore.Import
 		[AssertionMethod]
 		private void CloseCheck()
 		{
-			if (m_boundTypes.Count != 0 || m_typeImportMaps.Count != 0) {
+			if (m_completeTypes.Count != 0 || m_typeImportMaps.Count != 0) {
 				Guard.Fail();
 			}
 		}

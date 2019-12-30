@@ -68,7 +68,10 @@ namespace NeoCore.Import
 
 		#region Fields
 
-		private readonly ISet<Type> m_boundTypes = new HashSet<Type>();
+		/// <summary>
+		/// Types bound or ignored
+		/// </summary>
+		private readonly ISet<Type> m_completeTypes = new HashSet<Type>();
 
 		private readonly Dictionary<Type, ImportMap> m_typeImportMaps = new Dictionary<Type, ImportMap>();
 
@@ -99,7 +102,7 @@ namespace NeoCore.Import
 		/// </summary>
 		public void Unload(Type type)
 		{
-			if (!IsBound(type)) {
+			if (!IsBoundOrIgnored(type)) {
 				return;
 			}
 
@@ -141,7 +144,7 @@ namespace NeoCore.Import
 				}
 			}
 
-			m_boundTypes.Remove(type);
+			m_completeTypes.Remove(type);
 
 //			CoreLogger.Value.WriteInfo(null, "Unloaded {Name}", type.Name);
 		}
@@ -162,7 +165,7 @@ namespace NeoCore.Import
 			}
 		}
 
-		public void UnloadAll() => UnloadAll(m_boundTypes.ToArray());
+		public void UnloadAll() => UnloadAll(m_completeTypes.ToArray());
 
 		#endregion
 
@@ -244,14 +247,15 @@ namespace NeoCore.Import
 		/// <returns><paramref name="value" />, fully loaded</returns>
 		private T Load<T>(T value, Type type, ImportProvider ip)
 		{
-			if (IsBound(type)) {
+			if (IsBoundOrIgnored(type)) {
 				return value;
 			}
 
 			CheckAnnotations(type, false, out _);
 
 			if (!ContainsAnnotatedMembers(type, out AnnotatedMember<ImportAttribute>[] components)) {
-				Global.Value.WriteWarning(null, "Load: {Name} has no members to import", type.Name);
+//				Global.Value.WriteWarning(null, "Load: {Name} has no members to import; ignoring", type.Name);
+				m_completeTypes.Add(type);
 				return value;
 			}
 
@@ -265,9 +269,9 @@ namespace NeoCore.Import
 
 			value = LoadComponents(value, ip, components, m_typeImportMaps);
 
-			m_boundTypes.Add(type);
+			m_completeTypes.Add(type);
 
-			Global.Value.WriteInfo(null, "Loaded {Name}", type.Name);
+//			Global.Value.WriteInfo(null, "Loaded {Name}", type.Name);
 			return value;
 		}
 
@@ -312,9 +316,6 @@ namespace NeoCore.Import
 
 
 			object fieldValue;
-
-			Global.Value.WriteDebug(null, "Loading field {Id} with {Option}",
-			                        field.Name, options);
 
 			switch (options) {
 				case ImportFieldOptions.Proxy:
@@ -400,7 +401,7 @@ namespace NeoCore.Import
 						break;
 				}
 
-				//Global.Value.WriteVerbose(null, "Loaded member {Id} @ {Addr}", id, addr);
+//				Global.Value.WriteVerbose(null, "{Check} Loaded member {Id} @ {Addr}", '\u2714',id, addr);
 			}
 
 			return value;

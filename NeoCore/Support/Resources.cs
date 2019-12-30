@@ -34,7 +34,6 @@ namespace NeoCore.Support
 			typeof(EEClass),
 			typeof(EEClassLayoutInfo),
 			typeof(MethodDescChunk),
-			typeof(Runtime),
 		};
 
 		private static readonly Closable[] CoreObjects =

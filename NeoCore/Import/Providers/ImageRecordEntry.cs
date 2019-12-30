@@ -15,9 +15,7 @@ namespace NeoCore.Import.Providers
 		/// </summary>
 		public object Value { get; }
 
-		public bool IsNull {
-			get { return Name == null && Type == EntryType.Null && Value == null; }
-		}
+		public bool IsNull => Name == null && Type == EntryType.Null && Value == null;
 
 		internal ImageRecordEntry(string name, EntryType t, object v)
 		{
@@ -28,7 +26,6 @@ namespace NeoCore.Import.Providers
 
 		public bool Equals(ImageRecordEntry other)
 		{
-			
 			return Name == other.Name && Type == other.Type && Value.Equals(other.Value);
 		}
 

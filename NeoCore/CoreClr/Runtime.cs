@@ -23,7 +23,6 @@ namespace NeoCore.CoreClr
 	/// Contains utilities for interacting with the .NET runtime.
 	/// <seealso cref="System.Runtime.CompilerServices.RuntimeHelpers"/>
 	/// </summary>
-	[ImportNamespace]
 	public static unsafe partial class Runtime
 	{
 		private static readonly GetTypeFromHandleUnsafeDelegate GetTypeFromHandle;

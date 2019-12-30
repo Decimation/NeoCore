@@ -7,6 +7,7 @@ namespace NeoCore.Import
 	public sealed unsafe class ImportMap
 	{
 		public const string FIELD_NAME = "Imports";
+		
 		private readonly Dictionary<string, Pointer<byte>> m_imports;
 
 		public ImportMap()

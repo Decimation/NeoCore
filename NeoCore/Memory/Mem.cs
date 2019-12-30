@@ -37,20 +37,16 @@ namespace NeoCore.Memory
 
 		public static bool IsAddressInRange(Pointer<byte> p, Region r)
 		{
-			if (r.HasAddresses) {
-				return IsAddressInRange(p, r.Low, r.High);
-			}
-			else if (r.HasSize) {
-				return IsAddressInRange(p, r.Low, r.Size);
-			}
-			throw new InvalidOperationException();
+			return IsAddressInRange(p, r.Low, r.High);
 		}
 
 		/// <param name="p">Operand</param>
-		/// <param name="lo">Start address</param>
-		/// <param name="hi">End address</param>
+		/// <param name="lo">Start address (inclusive)</param>
+		/// <param name="hi">End address (inclusive)</param>
 		public static bool IsAddressInRange(Pointer<byte> p, Pointer<byte> lo, Pointer<byte> hi)
 		{
+			// [lo, hi]
+			
 			// if ((ptrStack < stackBase) && (ptrStack > (stackBase - stackSize)))
 			// (p >= regionStart && p < regionStart + regionSize) ;
 			// return target >= start && target < end;
@@ -58,7 +54,7 @@ namespace NeoCore.Memory
 			// if (!((object < g_gc_highest_address) && (object >= g_gc_lowest_address)))
 			// return max.ToInt64() < p.ToInt64() && p.ToInt64() <= min.ToInt64();
 
-			return p < hi && p >= lo;
+			return p <= hi && p >= lo;
 		}
 
 		public static bool IsAddressInRange(Pointer<byte> p, Pointer<byte> lo, long size)

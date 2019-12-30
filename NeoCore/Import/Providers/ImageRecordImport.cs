@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
@@ -25,20 +26,19 @@ namespace NeoCore.Import.Providers
 				PropertyNameCaseInsensitive = true,
 				WriteIndented               = true,
 			};
-			
+
 			options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 			options.Converters.Add(new ImageRecordEntryConverter());
 			options.Converters.Add(new ImageRecordInfoConverter());
-
 
 			var fullIndex = JsonSerializer.Deserialize<ImageRecord>(txt, options);
 			Records = Compact(fullIndex.Records);
 			Info    = fullIndex.Info;
 
-			
+
 			Guard.Assert(Info.Check(module));
-			
-			
+
+
 			m_scanner = new SigScanner(module);
 		}
 
@@ -55,7 +55,7 @@ namespace NeoCore.Import.Providers
 
 		private static ImageRecordEntry[] Compact(Dictionary<string, ImageRecordEntry[]> fullIndex)
 		{
-			var compactLength = fullIndex.Values.Sum(v => v.Length);
+			int compactLength = fullIndex.Values.Sum(v => v.Length);
 			var compactIndex  = new List<ImageRecordEntry>(compactLength);
 
 			// Special case
@@ -101,7 +101,7 @@ namespace NeoCore.Import.Providers
 				default:
 					throw new ArgumentOutOfRangeException();
 			}
-			
+
 			throw new InvalidOperationException();
 		}
 

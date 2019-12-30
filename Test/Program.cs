@@ -47,14 +47,31 @@ namespace Test
 			var t = typeof(MyStruct[]).AsMetaType();
 			Console.WriteLine(t.DebugTable);
 
-			var f = t["a"];
-			Console.WriteLine(f);
+			
+			
+		}
 
+		static void fn()
+		{
+			int           i  = 256;
+			Pointer<byte> p  = &i;
+			Pointer<byte> lo = &i;
+			Pointer<byte> hi = ((byte*) &i) + 3;
 
-			var m = t.GetMethod("func");
-			Console.WriteLine(m);
-			m.Prepare();
-			Console.WriteLine(m.NativeCode);
+			Console.WriteLine("lo: {0}", lo);
+			Console.WriteLine("hi: {0}", hi);
+			Console.WriteLine("p: {0}", p);
+			Console.WriteLine("size: {0}", sizeof(int));
+			
+			Console.WriteLine(Mem.IsAddressInRange(p, lo,hi));
+			Console.WriteLine(Mem.IsAddressInRange(p+3, lo,hi));
+			Console.WriteLine(Mem.IsAddressInRange(p+3,lo,4));
+			
+			var r1 = new Region(lo, hi);
+			Console.WriteLine(r1);
+			
+			var r2 = new Region(lo, 4);
+			Console.WriteLine(r2);
 		}
 
 		class MyClass
