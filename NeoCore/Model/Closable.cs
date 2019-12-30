@@ -9,8 +9,8 @@ namespace NeoCore.Model
 	{
 		protected abstract string Id { get; }
 
-		public virtual void Close() { }
-
 		public void Dispose() => Close();
+
+		public virtual void Close() { }
 	}
 }

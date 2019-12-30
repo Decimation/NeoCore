@@ -83,13 +83,13 @@ namespace NeoCore.CoreClr.VM
 			}
 		}
 
-		[ImportCall(ImportCallOptions.Map)]
+		/*[ImportCall(ImportCallOptions.Map)]
 		internal void* GetCurrentStaticAddress()
 		{
 			fixed (FieldDesc* value = &this) {
 				return Imports.CallReturnPointer(nameof(GetCurrentStaticAddress), (ulong) value);
 			}
-		}
+		}*/
 
 		#endregion
 

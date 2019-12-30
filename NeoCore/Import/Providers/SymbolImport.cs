@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.IO;
 using NeoCore.Memory.Pointers;
 
@@ -8,12 +9,12 @@ namespace NeoCore.Import.Providers
 	/// </summary>
 	public sealed class SymbolImport : ImportProvider
 	{
-		public FileInfo SymbolFile { get; }
-
-		public SymbolImport(FileInfo pdb, Pointer<byte> baseAddr) : base(baseAddr)
+		public SymbolImport(FileInfo pdb, ProcessModule module) : base(module)
 		{
 			SymbolFile = pdb;
 		}
+
+		public FileInfo SymbolFile { get; }
 
 		private Interop.Structures.Symbol GetSymbol(string name)
 		{

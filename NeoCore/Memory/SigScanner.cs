@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using Microsoft.VisualBasic;
 using NeoCore.Memory;
@@ -15,6 +16,8 @@ namespace NeoCore.Utilities
 		private byte[]        m_buffer;
 		private Pointer<byte> m_lo;
 
+		public SigScanner(ProcessModule module) : this(new Region(module.BaseAddress, module.ModuleMemorySize)) {}
+
 		public SigScanner(Region r)
 		{
 			SelectRegion(r);
@@ -27,7 +30,7 @@ namespace NeoCore.Utilities
 			}
 		}
 
-		public void SelectRegion(Region r)
+		private void SelectRegion(Region r)
 		{
 			m_buffer = r.Low.Copy((int) r.Size);
 			m_lo     = r.Low;
@@ -67,7 +70,7 @@ namespace NeoCore.Utilities
 
 			return patternBytes;
 		}
-		
+
 		public Pointer<byte> FindPattern(string pattern)
 		{
 			return FindPattern(ParseByteArray(pattern));

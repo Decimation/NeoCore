@@ -126,8 +126,6 @@ namespace NeoCore.Memory
 
 			#endregion
 		}
-		
-		
 	}
 	
 	/// <summary>

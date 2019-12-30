@@ -19,13 +19,13 @@ namespace NeoCore.Import.Providers
 	/// </summary>
 	internal sealed class SymbolManager : Releasable
 	{
-		protected override string Id => nameof(SymbolManager);
+		private ulong        m_modBase;
+		private FileInfo?    m_pdb;
 
 		private IntPtr       m_proc;
-		private ulong        m_modBase;
 		private string       m_singleNameBuffer;
 		private List<Interop.Structures.Symbol> m_symBuffer;
-		private FileInfo?    m_pdb;
+		protected override string Id => nameof(SymbolManager);
 
 		internal bool IsImageLoaded {
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -41,20 +41,6 @@ namespace NeoCore.Import.Providers
 				}
 			}
 		}
-
-		#region Singleton
-
-		private SymbolManager()
-		{
-			Setup();
-		}
-
-		/// <summary>
-		/// Gets an instance of <see cref="SymbolManager"/>
-		/// </summary>
-		internal static SymbolManager Value { get; private set; } = new SymbolManager();
-
-		#endregion
 
 		public override void Close()
 		{
@@ -182,6 +168,20 @@ namespace NeoCore.Import.Providers
 
 			return cpy;
 		}
+
+		#region Singleton
+
+		private SymbolManager()
+		{
+			Setup();
+		}
+
+		/// <summary>
+		/// Gets an instance of <see cref="SymbolManager"/>
+		/// </summary>
+		internal static SymbolManager Value { get; private set; } = new SymbolManager();
+
+		#endregion
 
 		#region Callbacks
 

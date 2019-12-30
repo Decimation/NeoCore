@@ -3,6 +3,7 @@ using NeoCore.CoreClr.VM;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
+using NeoCore.Utilities;
 
 namespace NeoCore.CoreClr.Meta.Base
 {
@@ -12,17 +13,27 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// <typeparam name="TClr">CLR structure type</typeparam>
 	public abstract unsafe class EmbeddedClrStructure<TClr> : StandardClrStructure<TClr> where TClr : unmanaged, IClrStructure
 	{
+		#region MethodTable
+
+		public abstract MetaType EnclosingType { get; }
+
+		#endregion
+
+		public override ConsoleTable DebugTable {
+			get {
+				var table = base.DebugTable;
+
+				table.AddRow(nameof(EnclosingType), EnclosingType);
+
+				return table;
+			}
+		}
+
 		#region Constructors
 
 		protected EmbeddedClrStructure(Pointer<TClr> ptr) : base(ptr) { }
 
 		protected EmbeddedClrStructure(MemberInfo info) : base(info) { }
-
-		#endregion
-
-		#region MethodTable
-
-		public abstract MetaType EnclosingType { get; }
 
 		#endregion
 	}

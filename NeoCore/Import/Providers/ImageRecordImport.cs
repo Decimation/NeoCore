@@ -1,19 +1,22 @@
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using NeoCore.Memory.Pointers;
+using NeoCore.Utilities;
+using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Import.Providers
 {
 	public sealed class ImageRecordImport : ImportProvider
 	{
-		public ImageRecordEntry[] Records { get; }
+		private readonly SigScanner m_scanner;
 
-		// https://github.com/alliedmodders/sourcemod/blob/master/gamedata/sm-tf2.games.txt
-
-		public ImageRecordImport(string file, Pointer<byte> baseAddr) : base(baseAddr)
+		public ImageRecordImport(string file, ProcessModule module) : base(module)
 		{
 			string txt = File.ReadAllText(file);
 
@@ -22,12 +25,31 @@ namespace NeoCore.Import.Providers
 				PropertyNameCaseInsensitive = true,
 				WriteIndented               = true,
 			};
+			
 			options.Converters.Add(new JsonStringEnumConverter(JsonNamingPolicy.CamelCase));
 			options.Converters.Add(new ImageRecordEntryConverter());
+			options.Converters.Add(new ImageRecordInfoConverter());
 
 
-			var fullIndex = JsonSerializer.Deserialize<Dictionary<string, ImageRecordEntry[]>>(txt, options);
-			Records = Compact(fullIndex);
+			var fullIndex = JsonSerializer.Deserialize<ImageRecord>(txt, options);
+			Records = Compact(fullIndex.Records);
+			Info    = fullIndex.Info;
+
+			
+			Guard.Assert(Info.Check(module));
+			
+			
+			m_scanner = new SigScanner(module);
+		}
+
+		public ImageRecordInfo    Info    { get; }
+		public ImageRecordEntry[] Records { get; }
+
+
+		// https://github.com/alliedmodders/sourcemod/blob/master/gamedata/sm-tf2.games.txt
+
+		public ImageRecordEntry this[string id] {
+			get { return Records.FirstOrDefault(r => r.Name == id); }
 		}
 
 
@@ -37,7 +59,7 @@ namespace NeoCore.Import.Providers
 			var compactIndex  = new List<ImageRecordEntry>(compactLength);
 
 			// Special case
-			const string GLOBAL_KEY = "Global";
+			const string GLOBAL_KEY = "#Global";
 			compactIndex.AddRange(fullIndex[GLOBAL_KEY]);
 
 			foreach (string enclosingName in fullIndex.Keys) {
@@ -46,9 +68,9 @@ namespace NeoCore.Import.Providers
 				}
 
 				foreach (var oldEntry in fullIndex[enclosingName]) {
-					string memberName = oldEntry.Name;
+					string   memberName = oldEntry.Name;
 					string[] scopes     = {enclosingName, memberName};
-					string fullName   = ImportManager.ScopeJoin(scopes);
+					string   fullName   = ImportManager.ScopeJoin(scopes);
 
 					var compactIndexEntry = new ImageRecordEntry(fullName, oldEntry.Type, oldEntry.Value);
 					compactIndex.Add(compactIndexEntry);
@@ -61,12 +83,36 @@ namespace NeoCore.Import.Providers
 
 		public override Pointer<byte> GetAddress(string id)
 		{
-			throw new System.NotImplementedException();
+			var entry = this[id];
+
+			if (entry.IsNull) {
+				string msg = String.Format("No entry for {0}", id);
+				throw new InvalidOperationException(msg);
+			}
+
+			switch (entry.Type) {
+				case EntryType.Signature:
+					return m_scanner.FindPattern((byte[]) entry.Value);
+				case EntryType.Offset:
+					var modPtr = (Pointer<byte>) Module.BaseAddress;
+					return modPtr.Add((long) entry.Value);
+				case EntryType.Null:
+					break;
+				default:
+					throw new ArgumentOutOfRangeException();
+			}
+			
+			throw new InvalidOperationException();
 		}
 
 		public override Pointer<byte>[] GetAddresses(string[] ids)
 		{
 			throw new System.NotImplementedException();
+		}
+
+		public override string ToString()
+		{
+			return Info.ToString();
 		}
 	}
 }

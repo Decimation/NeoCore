@@ -24,6 +24,31 @@ namespace NeoCore.Utilities.Diagnostics
 
 		private const string STRING_FMT_ARG = "msg";
 
+		[AssertionMethod]
+		[ContractAnnotation(UNCONDITIONAL_HALT)]
+		[StringFormatMethod(STRING_FMT_ARG)]
+		internal static void Fail<TException>(string? msg = null, params object[] args)
+			where TException : Exception, new()
+		{
+			if (msg != null) {
+				msg = String.Format(msg, args);
+
+				throw (TException) Activator.CreateInstance(typeof(TException), msg);
+			}
+
+			throw new TException();
+		}
+
+		[AssertionMethod]
+		[ContractAnnotation(UNCONDITIONAL_HALT)]
+		[StringFormatMethod(STRING_FMT_ARG)]
+		internal static void Fail(string? msg = null, params object[] args) => Fail<GuardException>(msg, args);
+
+		internal static string CreateErrorMessage(string template, string? msg = null)
+		{
+			return msg == null ? template : String.Format("{0}: {1}", template, msg);
+		}
+
 		#region Assert
 
 		[AssertionMethod]
@@ -87,30 +112,5 @@ namespace NeoCore.Utilities.Diagnostics
 			Assert<ArgumentNullException>(!value.IsNull, name);
 
 		#endregion
-
-		[AssertionMethod]
-		[ContractAnnotation(UNCONDITIONAL_HALT)]
-		[StringFormatMethod(STRING_FMT_ARG)]
-		internal static void Fail<TException>(string? msg = null, params object[] args)
-			where TException : Exception, new()
-		{
-			if (msg != null) {
-				msg = String.Format(msg, args);
-
-				throw (TException) Activator.CreateInstance(typeof(TException), msg);
-			}
-
-			throw new TException();
-		}
-
-		[AssertionMethod]
-		[ContractAnnotation(UNCONDITIONAL_HALT)]
-		[StringFormatMethod(STRING_FMT_ARG)]
-		internal static void Fail(string? msg = null, params object[] args) => Fail<GuardException>(msg, args);
-
-		internal static string CreateErrorMessage(string template, string? msg = null)
-		{
-			return msg == null ? template : String.Format("{0}: {1}", template, msg);
-		}
 	}
 }

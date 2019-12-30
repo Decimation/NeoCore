@@ -24,17 +24,6 @@ namespace NeoCore.Support
 		/// </summary>
 		public const string NAME = "NeoCore";
 
-		// - https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces?redirectedfrom=MSDN
-		// - <Company>.(<Product>|<Technology>)[.<Feature>][.<Subnamespace>]
-
-		private static bool IsSetup { get; set; }
-
-		static Resources()
-		{
-			Guard.AssertCompatibility();
-			SetupAll();
-		}
-
 		private static readonly Type[] CoreClrTypes =
 		{
 			typeof(TypeHandle),
@@ -54,6 +43,17 @@ namespace NeoCore.Support
 			ImportManager.Value,
 			Global.Value,
 		};
+
+		static Resources()
+		{
+			Guard.AssertCompatibility();
+			SetupAll();
+		}
+
+		// - https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/names-of-namespaces?redirectedfrom=MSDN
+		// - <Company>.(<Product>|<Technology>)[.<Feature>][.<Subnamespace>]
+
+		private static bool IsSetup { get; set; }
 
 		internal static ClrFramework Framework => ClrFrameworks.Core;
 

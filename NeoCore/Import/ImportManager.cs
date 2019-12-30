@@ -27,6 +27,23 @@ namespace NeoCore.Import
 	/// </summary>
 	public sealed partial class ImportManager : Releasable
 	{
+		#region Override
+
+		public override void Close()
+		{
+			UnloadAll();
+
+			// Sanity check
+			CloseCheck();
+
+			// Delete instance
+			Value = null;
+
+			base.Close();
+		}
+
+		#endregion
+
 		#region Constants
 
 		protected override string Id => nameof(ImportManager);
@@ -45,23 +62,6 @@ namespace NeoCore.Import
 		private ImportManager()
 		{
 			Setup();
-		}
-
-		#endregion
-
-		#region Override
-
-		public override void Close()
-		{
-			UnloadAll();
-
-			// Sanity check
-			CloseCheck();
-
-			// Delete instance
-			Value = null;
-
-			base.Close();
 		}
 
 		#endregion

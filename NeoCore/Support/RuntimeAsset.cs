@@ -8,6 +8,13 @@ namespace NeoCore.Support
 {
 	public class RuntimeAsset
 	{
+		public RuntimeAsset(FileInfo libFile, FileInfo symFile)
+		{
+			LibraryFile = libFile;
+			SymbolsFile = symFile;
+			Module      = Resources.CurrentProcess[libFile.Name];
+		}
+
 		/// <summary>
 		///     Asset DLL file
 		/// </summary>
@@ -22,14 +29,6 @@ namespace NeoCore.Support
 		///     The <see cref="ProcessModule" /> of this asset
 		/// </summary>
 		public ProcessModule Module { get; }
-
-
-		public RuntimeAsset(FileInfo libFile, FileInfo symFile)
-		{
-			LibraryFile = libFile;
-			SymbolsFile = symFile;
-			Module      = Resources.CurrentProcess[libFile.Name];
-		}
 
 		public Pointer<byte> FindExport(string name)
 		{

@@ -17,10 +17,10 @@ namespace NeoCore.Utilities
 	[NativeStructure]
 	internal readonly struct PackedFieldsReader : IClrStructure
 	{
-		public string NativeName => "PackedDWORDFields";
-		
 		private const int PACKED_FIELDS_RG_LEN = 1;
 		private const int MAX_LENGTH_BITS      = 5;
+
+		private readonly Pointer<DWORD> m_ptr;
 
 //		[FieldOffset(0)]
 //		private fixed DWORD m_rgUnpackedFields[EECLASS_LENGTH];
@@ -32,7 +32,11 @@ namespace NeoCore.Utilities
 
 		private readonly int m_unpackedFieldsLength;
 
-		private readonly Pointer<DWORD> m_ptr;
+		internal PackedFieldsReader(Pointer<DWORD> p, int l)
+		{
+			m_ptr                  = p;
+			m_unpackedFieldsLength = l;
+		}
 
 		/// <summary>
 		/// The first DWORD block of fields in the packed state.
@@ -45,11 +49,9 @@ namespace NeoCore.Utilities
 		/// </summary>
 		private Pointer<DWORD> UnpackedFields => m_ptr;
 
-		internal PackedFieldsReader(Pointer<DWORD> p, int l)
-		{
-			m_ptr                  = p;
-			m_unpackedFieldsLength = l;
-		}
+		public string NativeName => "PackedDWORDFields";
+
+		public ClrStructureType Type => ClrStructureType.Utility;
 
 
 		/// <summary>
@@ -118,7 +120,5 @@ namespace NeoCore.Utilities
 
 			return dwReturn;
 		}
-
-		public ClrStructureType Type => ClrStructureType.Utility;
 	}
 }

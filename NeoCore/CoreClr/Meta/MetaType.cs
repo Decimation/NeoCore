@@ -218,6 +218,20 @@ namespace NeoCore.CoreClr.Meta
 
 		#endregion
 
+		public override ConsoleTable DebugTable {
+			get {
+				var table = base.DebugTable;
+
+				table.AddRow(nameof(BaseSize), BaseSize);
+				table.AddRow(nameof(ComponentSize), ComponentSize);
+				table.AddRow(nameof(Attributes), Attributes);
+				table.AddRow(nameof(TypeFlags),TypeFlags);
+				table.AddRow(nameof(GenericFlags),GenericFlags);
+				
+				return table;
+			}
+		}
+
 		#endregion
 
 		#endregion

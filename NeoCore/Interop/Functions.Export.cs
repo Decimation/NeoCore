@@ -14,6 +14,7 @@ namespace NeoCore.Interop
 				var fn = Marshal.GetDelegateForFunctionPointer<TDelegate>(f);
 				return fn;
 			}
+
 			public static Delegate Find(Pointer<byte> h, string s, Type t)
 			{
 				var f  = Interop.Native.Kernel.GetProcAddress(h.Address, s);

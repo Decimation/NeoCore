@@ -19,6 +19,11 @@ namespace NeoCore.CoreClr.Meta
 	/// </summary>
 	public sealed unsafe class MetaHeap : BasicClrStructure<GCHeap>
 	{
+		/// <summary>
+		/// Represents the global CLR GC heap.
+		/// </summary>
+		public static readonly MetaHeap GC = ReadGC();
+
 		internal MetaHeap(Pointer<GCHeap> ptr, Pointer<byte> lo, Pointer<byte> hi) : base(ptr)
 		{
 			GCRegion = new Region(lo,hi);
@@ -27,9 +32,9 @@ namespace NeoCore.CoreClr.Meta
 		protected override Type[] AdditionalSources => null;
 
 		public Region GCRegion { get; }
-		
+
 		public int GCCount => Value.Reference.GCCount;
-		
+
 		public bool IsHeapPointer<T>(T v, bool smallHeapOnly = false)
 		{
 			return Value.Reference.IsHeapPointer(v, smallHeapOnly);
@@ -49,11 +54,6 @@ namespace NeoCore.CoreClr.Meta
 			return sb.ToString();
 		}
 
-		/// <summary>
-		/// Represents the global CLR GC heap.
-		/// </summary>
-		public static readonly MetaHeap GC = ReadGC();
-		
 		private static MetaHeap ReadGC()
 		{
 			var clr = Resources.Clr.Imports;

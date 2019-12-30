@@ -411,6 +411,15 @@ namespace NeoCore.Interop.Structures
 	/// </summary>
 	public sealed class ImageSectionInfo : IWrapper<ImageSectionHeader>
 	{
+		internal ImageSectionInfo(ImageSectionHeader struc, int number, IntPtr address)
+		{
+			Number          = number;
+			Name            = new string(struc.Name);
+			Address         = address;
+			Size            = (int) struc.VirtualSize;
+			Characteristics = struc.Characteristics;
+		}
+
 		public string Name { get; }
 
 		public int Number { get; }
@@ -420,15 +429,6 @@ namespace NeoCore.Interop.Structures
 		public int Size { get; }
 
 		public ImageSectionFlags Characteristics { get; }
-
-		internal ImageSectionInfo(ImageSectionHeader struc, int number, IntPtr address)
-		{
-			Number          = number;
-			Name            = new string(struc.Name);
-			Address         = address;
-			Size            = (int) struc.VirtualSize;
-			Characteristics = struc.Characteristics;
-		}
 
 		public override string ToString()
 		{

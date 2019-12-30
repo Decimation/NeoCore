@@ -6,15 +6,15 @@ namespace NeoCore.Utilities
 {
 	public sealed class NeoProcess
 	{
+		public NeoProcess(Process proc)
+		{
+			Process = proc;
+			Modules = Process.Modules.Cast<ProcessModule>().ToArray();
+		}
+
 		public Process Process { get; }
 
 		public ProcessModule[] Modules { get; }
-
-		public NeoProcess(Process proc)
-		{
-			Process  = proc;
-			Modules = Process.Modules.Cast<ProcessModule>().ToArray();
-		}
 
 		/// <summary>
 		/// Returns the first <see cref="ProcessModule"/> whose <see cref="ProcessModule.ModuleName"/> equals

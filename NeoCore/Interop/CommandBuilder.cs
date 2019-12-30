@@ -9,10 +9,9 @@ namespace NeoCore.Interop
 	/// </summary>
 	public sealed class CommandBuilder
 	{
+		private readonly StringBuilder m_cmdBuild;
 		private readonly string m_cmdFmt;
 		private readonly string m_exe;
-
-		private readonly StringBuilder m_cmdBuild;
 
 		public CommandBuilder(string exe, string cmdFmt)
 		{

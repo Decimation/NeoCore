@@ -21,28 +21,6 @@ namespace NeoCore.Memory
 {
 	public static unsafe partial class Mem
 	{
-		#region Fields
-
-		/// <summary>
-		/// Size of a pointer. Equals <see cref="IntPtr.Size"/>.
-		/// </summary>
-		public static readonly int Size = IntPtr.Size;
-
-		/// <summary>
-		/// Determines whether this process is 64-bit.
-		/// </summary>
-		public static readonly bool Is64Bit = Size == sizeof(long) && Environment.Is64BitProcess;
-
-		public static readonly bool IsBigEndian = !BitConverter.IsLittleEndian;
-
-		/// <summary>
-		/// Represents a <c>null</c> <see cref="Pointer{T}"/>. Equivalent to <see cref="IntPtr.Zero"/>.
-		/// </summary>
-		public static readonly Pointer<byte> Nullptr = null;
-
-		#endregion
-
-
 		public static Region StackRegion {
 			get {
 				
@@ -67,7 +45,7 @@ namespace NeoCore.Memory
 			}
 			throw new InvalidOperationException();
 		}
-		
+
 		/// <param name="p">Operand</param>
 		/// <param name="lo">Start address</param>
 		/// <param name="hi">End address</param>
@@ -95,7 +73,7 @@ namespace NeoCore.Memory
 			
 			return (p >= lo && p < lo + size) ;
 		}
-		
+
 		/// <summary>
 		/// Calculates the total byte size of <paramref name="elemCnt"/> elements with
 		/// the size of <paramref name="elemSize"/>.
@@ -125,8 +103,6 @@ namespace NeoCore.Memory
 
 			return value;
 		}
-
-		
 
 
 		/*[NativeFunction]
@@ -173,6 +149,27 @@ namespace NeoCore.Memory
 
 			value = default;
 		}
+
+		#region Fields
+
+		/// <summary>
+		/// Size of a pointer. Equals <see cref="IntPtr.Size"/>.
+		/// </summary>
+		public static readonly int Size = IntPtr.Size;
+
+		/// <summary>
+		/// Determines whether this process is 64-bit.
+		/// </summary>
+		public static readonly bool Is64Bit = Size == sizeof(long) && Environment.Is64BitProcess;
+
+		public static readonly bool IsBigEndian = !BitConverter.IsLittleEndian;
+
+		/// <summary>
+		/// Represents a <c>null</c> <see cref="Pointer{T}"/>. Equivalent to <see cref="IntPtr.Zero"/>.
+		/// </summary>
+		public static readonly Pointer<byte> Nullptr = null;
+
+		#endregion
 	}
 	
 

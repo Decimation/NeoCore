@@ -183,7 +183,7 @@ namespace NeoCore.Interop
 			// Commit with old ILString:
 			// 7bff50a8777f9ff528e381d0b740d7e7bdcb760a
 			// https://github.com/GeorgePlotnikov/ClrAnalyzer/blob/master/Win32Native/ildump.h
-			
+
 			public static bool FunctionThrows(Action action)
 			{
 				try {

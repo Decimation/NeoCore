@@ -32,9 +32,9 @@ namespace NeoCore.Model
 	/// </summary>
 	public abstract class Releasable : Closable
 	{
-		public bool IsSetup { get; protected set; }
-
 		public Releasable() { }
+
+		public bool IsSetup { get; protected set; }
 
 		public virtual void Setup()
 		{

@@ -15,12 +15,41 @@ namespace NeoCore.Import.Providers
 		/// </summary>
 		public object Value { get; }
 
+		public bool IsNull {
+			get { return Name == null && Type == EntryType.Null && Value == null; }
+		}
 
 		internal ImageRecordEntry(string name, EntryType t, object v)
 		{
 			Name  = name;
 			Type  = t;
 			Value = v;
+		}
+
+		public bool Equals(ImageRecordEntry other)
+		{
+			
+			return Name == other.Name && Type == other.Type && Value.Equals(other.Value);
+		}
+
+		public override bool Equals(object? obj)
+		{
+			return obj is ImageRecordEntry other && Equals(other);
+		}
+
+		public override int GetHashCode()
+		{
+			return HashCode.Combine(Name, (int) Type, Value);
+		}
+
+		public static bool operator ==(ImageRecordEntry left, ImageRecordEntry right)
+		{
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(ImageRecordEntry left, ImageRecordEntry right)
+		{
+			return !left.Equals(right);
 		}
 
 		public override string ToString()
@@ -47,6 +76,7 @@ namespace NeoCore.Import.Providers
 
 	public enum EntryType
 	{
+		Null,
 		Signature,
 		Offset
 	}

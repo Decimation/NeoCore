@@ -30,42 +30,6 @@ namespace NeoCore.CoreClr
 		/// </summary>
 		public static class Info
 		{
-			private enum NilTestOptions
-			{
-				/// <summary>
-				/// Determines whether a value is <c>nil</c> using <see cref="EqualityComparer{T}.Default"/>.
-				/// </summary>
-				EqualityComparer,
-
-				/// <summary>
-				/// Determines whether a value is <c>nil</c> using IL <see cref="OpCodes.Ldnull"/> comparison.
-				/// </summary>
-				Fast
-			}
-
-			private enum PinTestOptions
-			{
-				/// <summary>
-				/// Determines pinnability using the internal <see cref="Marshal"/> function that tests for pinnability.
-				/// </summary>
-				SystemMarshal,
-
-				/// <summary>
-				/// Determines pinnability by checking whether allocating a pinned <see cref="GCHandle"/>
-				/// throws an exception. This is the most reliable method, but it is very slow.
-				/// </summary>
-				GCHandleException,
-
-				/// <summary>
-				/// Determines pinnability by using a function that resembles the internal CLR
-				/// source code which tests for pinnability.
-				/// </summary>
-				Fast
-			}
-
-			[FunctionSpecifier(typeof(Marshal))]
-			private delegate bool IsPinnableDelegate(object? handle);
-
 			/// <summary>
 			///     Hueristically determines whether <paramref name="value" /> is blank.
 			///     This always returns <c>true</c> if <paramref name="value" /> is <c>null</c> or nil.
@@ -221,6 +185,42 @@ namespace NeoCore.CoreClr
 				IL.Emit.Ret();
 				return IL.Return<bool>();
 			}
+
+			private enum NilTestOptions
+			{
+				/// <summary>
+				/// Determines whether a value is <c>nil</c> using <see cref="EqualityComparer{T}.Default"/>.
+				/// </summary>
+				EqualityComparer,
+
+				/// <summary>
+				/// Determines whether a value is <c>nil</c> using IL <see cref="OpCodes.Ldnull"/> comparison.
+				/// </summary>
+				Fast
+			}
+
+			private enum PinTestOptions
+			{
+				/// <summary>
+				/// Determines pinnability using the internal <see cref="Marshal"/> function that tests for pinnability.
+				/// </summary>
+				SystemMarshal,
+
+				/// <summary>
+				/// Determines pinnability by checking whether allocating a pinned <see cref="GCHandle"/>
+				/// throws an exception. This is the most reliable method, but it is very slow.
+				/// </summary>
+				GCHandleException,
+
+				/// <summary>
+				/// Determines pinnability by using a function that resembles the internal CLR
+				/// source code which tests for pinnability.
+				/// </summary>
+				Fast
+			}
+
+			[FunctionSpecifier(typeof(Marshal))]
+			private delegate bool IsPinnableDelegate(object? handle);
 		}
 	}
 }

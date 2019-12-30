@@ -4,6 +4,7 @@ using System.Text;
 using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
+using NeoCore.Utilities;
 
 namespace NeoCore.CoreClr.Meta.Base
 {
@@ -11,7 +12,8 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// Describes a CLR structure that has metadata information.
 	/// </summary>
 	/// <typeparam name="TClr">CLR structure type (<see cref="IClrStructure"/>)</typeparam>
-	public abstract unsafe class StandardClrStructure<TClr> : BasicClrStructure<TClr> where TClr : unmanaged, IClrStructure
+	public abstract unsafe class StandardClrStructure<TClr> : BasicClrStructure<TClr>
+		where TClr : unmanaged, IClrStructure
 	{
 		#region Fields
 
@@ -30,8 +32,20 @@ namespace NeoCore.CoreClr.Meta.Base
 		protected StandardClrStructure(MemberInfo member) : base(member) { }
 
 		#endregion
-		
+
 		#region ToString
+
+		public override ConsoleTable DebugTable {
+			get {
+				var table = base.DebugTable;
+
+				table.AddRow(nameof(Name), Name);
+				table.AddRow(nameof(Info), Info);
+				table.AddRow(nameof(Token), Format.ToHexString(Token));
+
+				return table;
+			}
+		}
 
 		public override string ToString()
 		{
@@ -52,13 +66,15 @@ namespace NeoCore.CoreClr.Meta.Base
 			return Assets.INVALID_VALUE;
 		}
 
-		public static bool operator ==(StandardClrStructure<TClr> left, StandardClrStructure<TClr> right) => Equals(left, right);
+		public static bool operator ==(StandardClrStructure<TClr> left, StandardClrStructure<TClr> right) =>
+			Equals(left, right);
 
-		public static bool operator !=(StandardClrStructure<TClr> left, StandardClrStructure<TClr> right) => !Equals(left, right);
+		public static bool operator !=(StandardClrStructure<TClr> left, StandardClrStructure<TClr> right) =>
+			!Equals(left, right);
 
 		#endregion
 	}
-	
+
 	public static class MetaExtensions
 	{
 		public static MetaType AsMetaType(this Type t) => t;

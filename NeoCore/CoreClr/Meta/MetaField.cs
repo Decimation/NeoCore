@@ -27,6 +27,35 @@ namespace NeoCore.CoreClr.Meta
 
 		private const int FIELD_OFFSET_NEW_ENC = FIELD_OFFSET_MAX - 4;
 
+		protected override Type[] AdditionalSources => null;
+
+		public override ConsoleTable DebugTable {
+			get {
+				var table = base.DebugTable;
+
+				table.AddRow(nameof(Size), Size);
+				table.AddRow(nameof(Offset), Offset);
+
+				return table;
+			}
+		}
+
+		public Pointer<byte> GetAddress<T>(ref T value)
+		{
+			Guard.Assert(!IsStatic, nameof(IsStatic));
+			Guard.Assert(Offset != FIELD_OFFSET_NEW_ENC);
+
+			Pointer<byte> data = Unsafe.AddressOfFields(ref value) + Offset;
+
+			return data;
+		}
+
+		public object GetValue(object value) => FieldInfo.GetValue(value);
+
+		public Pointer<byte> GetValueAddress<T>(ref T value) => IsStatic ? GetStaticAddress() : GetAddress(ref value);
+
+		public T GetValue<T>(T value) => GetAddress(ref value).Cast<T>().Read();
+
 		#region Constructors
 
 		public MetaField(Pointer<FieldDesc> ptr) : base(ptr) { }
@@ -75,30 +104,15 @@ namespace NeoCore.CoreClr.Meta
 		/// <summary>
 		/// <remarks>Ensure the enclosing type is loaded!</remarks>
 		/// </summary>
-		public Pointer<byte> GetStaticAddress() => Value.Reference.GetCurrentStaticAddress();
-
-		#endregion
-
-		#endregion
-
-		protected override Type[] AdditionalSources => null;
-
-		public Pointer<byte> GetValueAddress<T>(ref T value) => IsStatic ? GetStaticAddress() : GetAddress(ref value);
-
-		public Pointer<byte> GetAddress<T>(ref T value)
+		public Pointer<byte> GetStaticAddress()
 		{
-			Guard.Assert(!IsStatic, nameof(IsStatic));
-			Guard.Assert(Offset != FIELD_OFFSET_NEW_ENC);
-
-			Pointer<byte> data = Unsafe.AddressOfFields(ref value) + Offset;
-
-			return data;
+			throw new NotImplementedException();
+			//return Value.Reference.GetCurrentStaticAddress();
 		}
 
-		public object GetValue(object value) => FieldInfo.GetValue(value);
+		#endregion
 
-		public T GetValue<T>(T value) => GetAddress(ref value).Cast<T>().Read();
-
+		#endregion
 
 		#region Operators
 

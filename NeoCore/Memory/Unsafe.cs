@@ -38,33 +38,6 @@ namespace NeoCore.Memory
 		/// </summary>
 		public static PinHelper GetPinHelper(object value) => As<PinHelper>(value);
 
-
-		/// <summary>
-		///     <para>Helper class to assist with unsafe pinning of arbitrary objects. The typical usage pattern is:</para>
-		///     <code>
-		///  fixed (byte* pData = &amp;GetPinHelper(value).Data)
-		///  {
-		///  }
-		///  </code>
-		///     <remarks>
-		///         <para><c>pData</c> is what <c>Object::GetData()</c> returns in VM.</para>
-		///         <para><c>pData</c> is also equal to offsetting the pointer by <see cref="OffsetOptions.Fields" />. </para>
-		///         <para>From <see cref="SOURCE" />. </para>
-		///     </remarks>
-		/// </summary>
-		[UsedImplicitly]
-		public sealed class PinHelper
-		{
-			private const string SOURCE = "System.Runtime.CompilerServices.JitHelpers";
-			
-			/// <summary>
-			///     Represents the first field in an object, such as <see cref="OffsetOptions.Fields" />.
-			/// </summary>
-			public byte Data;
-
-			private PinHelper() { }
-		}
-
 		/// <summary>
 		///     <para>Returns the address of <paramref name="value" />.</para>
 		/// </summary>
@@ -171,6 +144,33 @@ namespace NeoCore.Memory
 			}
 
 			return heapPtr + offsetValue;
+		}
+
+
+		/// <summary>
+		///     <para>Helper class to assist with unsafe pinning of arbitrary objects. The typical usage pattern is:</para>
+		///     <code>
+		///  fixed (byte* pData = &amp;GetPinHelper(value).Data)
+		///  {
+		///  }
+		///  </code>
+		///     <remarks>
+		///         <para><c>pData</c> is what <c>Object::GetData()</c> returns in VM.</para>
+		///         <para><c>pData</c> is also equal to offsetting the pointer by <see cref="OffsetOptions.Fields" />. </para>
+		///         <para>From <see cref="SOURCE" />. </para>
+		///     </remarks>
+		/// </summary>
+		[UsedImplicitly]
+		public sealed class PinHelper
+		{
+			private const string SOURCE = "System.Runtime.CompilerServices.JitHelpers";
+
+			/// <summary>
+			///     Represents the first field in an object, such as <see cref="OffsetOptions.Fields" />.
+			/// </summary>
+			public byte Data;
+
+			private PinHelper() { }
 		}
 
 

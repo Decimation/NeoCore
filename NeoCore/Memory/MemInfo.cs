@@ -11,18 +11,18 @@ namespace NeoCore.Memory
 {
 	public sealed class MemInfo
 	{
+		private MemInfo(Pointer<byte> ptr)
+		{
+			Address = ptr;
+		}
+
 		public Pointer<byte> Address { get; }
 
 		public Region Region { get; private set; }
 
 		public MemoryType Type { get; private set; }
-		
-		public MemoryBasicInfo Info { get; private set; }
 
-		private MemInfo(Pointer<byte> ptr)
-		{
-			Address = ptr;
-		}
+		public MemoryBasicInfo Info { get; private set; }
 
 
 		public static MemInfo Inspect(Pointer<byte> ptr)

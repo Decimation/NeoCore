@@ -8,5 +8,5 @@ namespace NeoCore.Model
 	/// <seealso cref="IClrStructure"/>
 	/// </summary>
 	/// <typeparam name="TSuper">Base structure</typeparam>
-	public interface INativeSubclass<TSuper> where TSuper : INativeStructure { }
+	public interface INativeSubclass<TSuper> where TSuper : INativeStructure {}
 }

@@ -25,6 +25,16 @@ namespace NeoCore.CoreClr.Meta
 	/// </summary>
 	public unsafe class MetaMethod : EmbeddedClrStructure<MethodDesc>
 	{
+		public override ConsoleTable DebugTable {
+			get {
+				var table = base.DebugTable;
+
+				table.AddRow(nameof(NativeCode), NativeCode);
+
+				return table;
+			}
+		}
+
 		#region Constructors
 
 		public MetaMethod(Pointer<MethodDesc> ptr) : base(ptr) { }
@@ -108,10 +118,8 @@ namespace NeoCore.CoreClr.Meta
 			set => NativeCode = value;
 		}
 
-		public void Reset() => Value.Reference.Reset();
-
 		public bool IsPointingToNativeCode => Value.Reference.IsPointingToNativeCode();
-		
+
 		public MetaIL ILHeader {
 			get {
 				

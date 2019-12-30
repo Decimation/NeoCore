@@ -17,32 +17,6 @@ namespace NeoCore.Interop
 		/// </summary>
 		internal static class Kernel
 		{
-			#region Abstraction
-
-			internal static IntPtr OpenProcess(Process proc, ProcessAccess flags = ProcessAccess.All) =>
-				OpenProcess(flags, false, proc.Id);
-
-			internal static IntPtr OpenCurrentProcess(ProcessAccess flags = ProcessAccess.All) =>
-				OpenProcess(Process.GetCurrentProcess(), flags);
-
-			internal static MemoryBasicInfo VirtualQuery(IntPtr ptr)
-			{
-				var mbi = new MemoryBasicInfo();
-				var bufSize=VirtualQuery(ptr, ref mbi, Marshal.SizeOf<MemoryBasicInfo>());
-				return mbi;
-			}
-			
-			internal static IntPtr[] GetProcessHeaps()
-			{
-				const int MAX_HEAPS = 256;
-				var rg = new IntPtr[MAX_HEAPS];
-				var nHeapsReturned = GetProcessHeaps(MAX_HEAPS, rg);
-				Array.Resize(ref rg, nHeapsReturned);
-				return rg;
-			}
-			
-			#endregion
-
 			[DllImport(KERNEL32_DLL, SetLastError = true, PreserveSig = true, EntryPoint = nameof(CloseHandle))]
 			internal static extern bool CloseHandle(IntPtr obj);
 
@@ -68,16 +42,42 @@ namespace NeoCore.Interop
 
 			[DllImport(KERNEL32_DLL, CharSet = CharSet.Ansi, SetLastError = true, EntryPoint = nameof(GetProcAddress))]
 			internal static extern IntPtr GetProcAddress(IntPtr module, string procName);
-			
+
 			[DllImport(KERNEL32_DLL, CharSet = CharSet.Ansi, SetLastError = true, EntryPoint = nameof(LoadLibrary))]
 			internal static extern IntPtr LoadLibrary(string name);
 
 			[DllImport(KERNEL32_DLL, CharSet = CharSet.Ansi, SetLastError = true, EntryPoint = nameof(GetProcessHeap))]
 			internal static extern IntPtr GetProcessHeap();
-			
+
 			[DllImport(KERNEL32_DLL, CharSet = CharSet.Ansi, SetLastError = true, EntryPoint = nameof(GetProcessHeaps))]
 			private static extern int GetProcessHeaps(int nHeaps, IntPtr[] procHeaps);
-			
+
+			#region Abstraction
+
+			internal static IntPtr OpenProcess(Process proc, ProcessAccess flags = ProcessAccess.All) =>
+				OpenProcess(flags, false, proc.Id);
+
+			internal static IntPtr OpenCurrentProcess(ProcessAccess flags = ProcessAccess.All) =>
+				OpenProcess(Process.GetCurrentProcess(), flags);
+
+			internal static MemoryBasicInfo VirtualQuery(IntPtr ptr)
+			{
+				var mbi = new MemoryBasicInfo();
+				var bufSize=VirtualQuery(ptr, ref mbi, Marshal.SizeOf<MemoryBasicInfo>());
+				return mbi;
+			}
+
+			internal static IntPtr[] GetProcessHeaps()
+			{
+				const int MAX_HEAPS = 256;
+				var rg = new IntPtr[MAX_HEAPS];
+				var nHeapsReturned = GetProcessHeaps(MAX_HEAPS, rg);
+				Array.Resize(ref rg, nHeapsReturned);
+				return rg;
+			}
+
+			#endregion
+
 			#region Read / write
 
 			[DllImport(KERNEL32_DLL, EntryPoint = nameof(Mem.Kernel.ReadProcessMemory))]

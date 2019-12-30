@@ -12,8 +12,6 @@ namespace NeoCore.Import.Attributes
 	{
 		internal const AttributeTargets METHOD_TARGETS = AttributeTargets.Method | AttributeTargets.Property;
 
-		public ImportCallOptions CallOptions { get; set; } = ImportCallOptions.Map;
-
 		public ImportCallAttribute() { }
 
 		public ImportCallAttribute(ImportCallOptions callOptions)
@@ -40,6 +38,8 @@ namespace NeoCore.Import.Attributes
 
 		public ImportCallAttribute(string id, IdentifierOptions options = IdentifierOptions.None)
 			: base(id, options) { }
+
+		public ImportCallOptions CallOptions { get; set; } = ImportCallOptions.Map;
 	}
 	
 	/// <summary>

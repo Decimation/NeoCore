@@ -10,5 +10,5 @@ namespace NeoCore.Import.Attributes
 	/// </summary>
 	[MeansImplicitUse]
 	[AttributeUsage(AttributeTargets.Field)]
-	public sealed class ImportMapFieldAttribute : Attribute { }
+	public sealed class ImportMapFieldAttribute : Attribute {}
 }

@@ -17,6 +17,33 @@ namespace NeoCore.Utilities.Diagnostics
 	/// </summary>
 	internal sealed class Global : Releasable
 	{
+		protected override string Id => nameof(Global);
+
+		public override void Setup()
+		{
+			Console.OutputEncoding = Encoding.Unicode;
+
+			base.Setup();
+		}
+
+		/// <summary>
+		///     Disposes the logger
+		/// </summary>
+		public override void Close()
+		{
+			Guard.Assert(IsSetup);
+#if DEBUG
+			if (Log is Logger logger) {
+				logger.Dispose();
+			}
+
+
+			Log = null;
+#endif
+
+			Value = null;
+			base.Close();
+		}
 		// todo: remove Serilog from Release build
 
 		#region Logger
@@ -37,8 +64,6 @@ namespace NeoCore.Utilities.Diagnostics
 #endif
 
 		#endregion
-		
-		protected override string Id => nameof(Global);
 
 		#region Singleton
 
@@ -158,31 +183,5 @@ namespace NeoCore.Utilities.Diagnostics
 			ContextLog(ctx, Log.Fatal, msg, args);
 
 		#endregion
-
-		public override void Setup()
-		{
-			Console.OutputEncoding = Encoding.Unicode;
-
-			base.Setup();
-		}
-
-		/// <summary>
-		///     Disposes the logger
-		/// </summary>
-		public override void Close()
-		{
-			Guard.Assert(IsSetup);
-#if DEBUG
-			if (Log is Logger logger) {
-				logger.Dispose();
-			}
-
-
-			Log = null;
-#endif
-
-			Value = null;
-			base.Close();
-		}
 	}
 }

@@ -63,10 +63,10 @@ namespace NeoCore.Import
 
 			return resolvedId;
 		}
-		
+
 		private bool IsBound(Type t) => m_boundTypes.Contains(t);
 
-		
+
 		internal static string ScopeJoin(string[] scopes) =>
 			String.Join(Format.JOIN_SCOPE, scopes);
 

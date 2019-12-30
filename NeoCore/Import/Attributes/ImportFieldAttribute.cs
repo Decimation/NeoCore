@@ -12,18 +12,6 @@ namespace NeoCore.Import.Attributes
 	{
 		internal const AttributeTargets FIELD_TARGETS = AttributeTargets.Field;
 
-		/// <summary>
-		/// The <see cref="Type"/> to load this field as. If left unset, the field will be interpreted as
-		/// the target field's type.
-		/// <remarks>To use this, <see cref="FieldOptions"/> must be <see cref="ImportFieldOptions.Proxy"/>.</remarks>
-		/// </summary>
-		public Type LoadAs { get; set; }
-
-		/// <summary>
-		/// Specifies how the target field will be loaded.
-		/// </summary>
-		public ImportFieldOptions FieldOptions { get; private set; } = ImportFieldOptions.Proxy;
-
 		public ImportFieldAttribute() { }
 
 		public ImportFieldAttribute(IdentifierOptions options, ImportFieldOptions fieldOptions) : this(options)
@@ -35,6 +23,18 @@ namespace NeoCore.Import.Attributes
 
 		public ImportFieldAttribute(string id, IdentifierOptions options = IdentifierOptions.None)
 			: base(id, options) { }
+
+		/// <summary>
+		/// The <see cref="Type"/> to load this field as. If left unset, the field will be interpreted as
+		/// the target field's type.
+		/// <remarks>To use this, <see cref="FieldOptions"/> must be <see cref="ImportFieldOptions.Proxy"/>.</remarks>
+		/// </summary>
+		public Type LoadAs { get; set; }
+
+		/// <summary>
+		/// Specifies how the target field will be loaded.
+		/// </summary>
+		public ImportFieldOptions FieldOptions { get; private set; } = ImportFieldOptions.Proxy;
 	}
 	
 	

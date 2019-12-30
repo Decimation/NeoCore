@@ -44,22 +44,30 @@ namespace Test
 	{
 		private static void Main(string[] args)
 		{
-			var clr = new Region(Resources.Clr.Module.BaseAddress, Resources.Clr.Module.ModuleMemorySize);
-			var ss  = new SigScanner(clr);
-			var p   = ss.FindPattern("48 83 EC 28 F6 C1 02 75 28");
-			Console.WriteLine(p);
-			Console.WriteLine(p.Copy(5).FormatJoin("X"));
+			var t = typeof(MyStruct[]).AsMetaType();
+			Console.WriteLine(t.DebugTable);
 
-			var actual = Resources.Clr.Imports.GetAddress("FieldDesc::LoadSize");
-			Console.WriteLine(actual);
-			Console.WriteLine(actual.Copy(5).FormatJoin("X"));
-			Console.WriteLine("{0:X}", actual.ToInt64() - Resources.Clr.Module.BaseAddress.ToInt64());
+			var f = t["a"];
+			Console.WriteLine(f);
 
-			var idx = @"C:\Users\Deci\RiderProjects\NeoCore\NeoCore\clr_image.txt";
-			var v   = new ImageRecordImport(idx, Resources.Clr.Module.BaseAddress);
-			foreach (var j in v.Records) {
-				Console.WriteLine(j);
-			}
+
+			var m = t.GetMethod("func");
+			Console.WriteLine(m);
+			m.Prepare();
+			Console.WriteLine(m.NativeCode);
+		}
+
+		class MyClass
+		{
+			private int  b;
+			public  void f() { }
+		}
+
+		class MyStruct : MyClass
+		{
+			public int a;
+
+			public void func() { }
 		}
 	}
 }

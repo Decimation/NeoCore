@@ -1,19 +1,101 @@
 {
-	"Global":
-	[
-		{
-			"name":			"JIT_GetRuntimeType",
-			"type":			"signature",
-			"value":		"48 83 EC 28 F6 C1 02 75 28"
-		}
-	],
+	"Info":
+	{
+		"module": "coreclr.dll",
+		"version": "4.700.19.46205"
+	},
 
-	"FieldDesc":
-	[
-		{
-			"name":			"LoadSize",
-			"type":			"offset",
-			"value":		"129414"
-		}
-	]
+	"Records":
+	{
+		"#Global":
+		[
+			{
+				"name": "JIT_GetRuntimeType",
+				"type": "signature",
+				"value": "48 83 EC 28 F6 C1 02 75 28"
+			}
+		],
+
+		"FieldDesc":
+		[
+			{
+				"name": "LoadSize",
+				"type": "signature",
+				"value": "48 83 EC 28 8B 41 0C"
+			}
+		],
+
+		"MethodDesc":
+		[
+			{
+				"name": "IsPointingToNativeCode",
+				"type": "signature",
+				"value": "40 53 48 83 EC 20 8A 41 03"
+			},
+			{
+				"name": "SetNativeCodeInterlocked",
+				"type": "signature",
+				"value": "48 89 5C 24 08 48 89 6C 24 10 48 89 74 24 20 57 48 83 EC 20"
+			},
+			{
+				"name": "GetILHeader",
+				"type": "signature",
+				"value": "48 89 5C 24 08 48 89 74 24 10 57 48 83 EC 20 0F B6 41 02 4C 8B C1"
+			},
+			{
+				"name": "GetRVA",
+				"type": "signature",
+				"value": "48 83 EC 38 0F B7 41 06"
+			},
+			{
+				"name": "GetNativeCode",
+				"type": "offset",
+				"value": "6F36C"
+			},
+			{
+				"name": "GetMemberDef",
+				"type": "signature",
+				"value": "0F B6 41 02 48 8B D1 0F B7 09"
+			}
+
+		],
+
+		"MethodTable":
+		[
+			{
+				"name": "GetClass_NoLogging",
+				"type": "offset",
+				"value": "6D198"
+			},
+			{
+				"name": "GetCanonicalMethodTable",
+				"type": "offset",
+				"value": "6E978"
+			}
+
+		],
+
+		"TypeHandle":
+		[
+			{
+				"name": "GetMethodTable",
+				"type": "offset",
+				"value": "35724"
+			}
+		],
+
+		"GCHeap":
+		[
+			{
+				"name": "GetGcCount",
+				"type": "signature",
+				"value": "48 8B 05 59 09 3E 00"
+			},
+			{
+				"name": "IsHeapPointer",
+				"type": "signature",
+				"value": "48 83 EC 28 48 8B CA 41 0F B6 D0"
+			}
+		]
+	}
 }

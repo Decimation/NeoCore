@@ -53,14 +53,6 @@ namespace NeoCore.CoreClr.VM
 		#region Import
 
 		[ImportCall(ImportCallOptions.Map)]
-		internal void Reset()
-		{
-			fixed (MethodDesc* value = &this) {
-				Imports.CallVoid<ulong>(nameof(Reset), (ulong) value);
-			}
-		}
-
-		[ImportCall(ImportCallOptions.Map)]
 		internal bool IsPointingToNativeCode()
 		{
 			fixed (MethodDesc* value = &this) {

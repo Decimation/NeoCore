@@ -26,6 +26,8 @@ namespace NeoCore.CoreClr
 	[ImportNamespace]
 	public static unsafe partial class Runtime
 	{
+		private static readonly GetTypeFromHandleUnsafeDelegate GetTypeFromHandle;
+
 		static Runtime()
 		{
 			GetTypeFromHandle = Functions.Reflection.FindFunction<GetTypeFromHandleUnsafeDelegate>();
@@ -46,12 +48,6 @@ namespace NeoCore.CoreClr
 				return ClrFrameworks.AllFrameworks.First(f => fwkName.StartsWith(f.FullName));
 			}
 		}
-
-
-		[FunctionSpecifier(typeof(Type))]
-		private delegate Type GetTypeFromHandleUnsafeDelegate(IntPtr handle);
-
-		private static readonly GetTypeFromHandleUnsafeDelegate GetTypeFromHandle;
 
 		internal static Type ResolveType(Pointer<byte> handle) => GetTypeFromHandle(handle.Address);
 
@@ -101,6 +97,8 @@ namespace NeoCore.CoreClr
 		internal static FileInfo GetRuntimeFile(string fileName) =>
 			new FileInfo(RuntimeEnvironment.GetRuntimeDirectory() + fileName);
 
-		
+
+		[FunctionSpecifier(typeof(Type))]
+		private delegate Type GetTypeFromHandleUnsafeDelegate(IntPtr handle);
 	}
 }

@@ -52,27 +52,6 @@ namespace NeoCore.CoreClr
 				return mp;
 			}
 
-			#region Unmanaged
-
-			/// <summary>
-			///     Dummy class for use with <see cref="IsUnmanaged" /> and <see cref="IsUnmanaged" />
-			/// </summary>
-			private sealed class U<T> where T : unmanaged { }
-
-			/// <summary>
-			///     Determines whether this type fits the <c>unmanaged</c> type constraint.
-			/// </summary>
-			private static bool IsUnmanaged(Type t)
-			{
-				return !Functions.Inspection.FunctionThrows<Exception>(() =>
-				{
-					// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
-					typeof(U<>).MakeGenericType(t);
-				});
-			}
-
-			#endregion
-
 			private static bool IsInteger(Type t)
 			{
 				return Type.GetTypeCode(t) switch
@@ -155,6 +134,27 @@ namespace NeoCore.CoreClr
 			/// <typeparam name="T">Type to test</typeparam>
 			/// <returns><c>true</c> if <paramref name="value" /> is a <see cref="string" />; <c>false</c> otherwise</returns>
 			internal static bool IsString<T>(T value) => value is string;
+
+			#region Unmanaged
+
+			/// <summary>
+			///     Dummy class for use with <see cref="IsUnmanaged" /> and <see cref="IsUnmanaged" />
+			/// </summary>
+			private sealed class U<T> where T : unmanaged {}
+
+			/// <summary>
+			///     Determines whether this type fits the <c>unmanaged</c> type constraint.
+			/// </summary>
+			private static bool IsUnmanaged(Type t)
+			{
+				return !Functions.Inspection.FunctionThrows<Exception>(() =>
+				{
+					// ReSharper disable once ReturnValueOfPureMethodIsNotUsed
+					typeof(U<>).MakeGenericType(t);
+				});
+			}
+
+			#endregion
 		}
 	}
 }

@@ -12,6 +12,47 @@ namespace NeoCore.Utilities
 	/// </summary>
 	public static class EasyReflection
 	{
+		public static bool ImplementsGenericInterface(this Type type, Type genericType)
+		{
+			bool IsMatch(Type t)
+			{
+				return t.IsGenericType && t.GetGenericTypeDefinition() == genericType;
+			}
+
+			return type.GetInterfaces().Any(IsMatch);
+		}
+
+		public static bool ImplementsInterface(this Type type, string interfaceName) =>
+			type.GetInterface(interfaceName) != null;
+
+		// https://docs.microsoft.com/en-us/dotnet/framework/reflection-and-codedom/specifying-fully-qualified-type-names
+
+		public static Type? GetTypeSimple(this Assembly asm, string name)
+		{
+			return asm.GetType(asm.GetName().Name + Format.PERIOD + name);
+		}
+
+		public static MemberInfo[] MemberOf(string type, string name)
+		{
+			return Assembly.GetCallingAssembly()
+			               .GetTypeSimple(type)
+			               .GetAnyMember(name);
+		}
+
+		public static FieldInfo FieldOf(string type, string name)
+		{
+			return Assembly.GetCallingAssembly()
+			               .GetTypeSimple(type)
+			               .GetAnyField(name);
+		}
+
+		public static MethodInfo MethodOf(string type, string name)
+		{
+			return Assembly.GetCallingAssembly()
+			               .GetTypeSimple(type)
+			               .GetAnyMethod(name);
+		}
+
 		#region Flags
 
 		/// <summary>
@@ -94,7 +135,7 @@ namespace NeoCore.Utilities
 		public const string OPERATOR_METHOD_PREFIX = "op_";
 
 		#endregion
-		
+
 		#region Member
 
 		internal static MemberInfo[] GetAllMembers(this Type t) => t.GetMembers(Utilities.EasyReflection.ALL_FLAGS);
@@ -139,46 +180,5 @@ namespace NeoCore.Utilities
 		}
 
 		#endregion
-
-		public static bool ImplementsGenericInterface(this Type type, Type genericType)
-		{
-			bool IsMatch(Type t)
-			{
-				return t.IsGenericType && t.GetGenericTypeDefinition() == genericType;
-			}
-
-			return type.GetInterfaces().Any(IsMatch);
-		}
-
-		public static bool ImplementsInterface(this Type type, string interfaceName) =>
-			type.GetInterface(interfaceName) != null;
-
-		// https://docs.microsoft.com/en-us/dotnet/framework/reflection-and-codedom/specifying-fully-qualified-type-names
-
-		public static Type? GetTypeSimple(this Assembly asm, string name)
-		{
-			return asm.GetType(asm.GetName().Name + Format.PERIOD + name);
-		}
-
-		public static MemberInfo[] MemberOf(string type, string name)
-		{
-			return Assembly.GetCallingAssembly()
-			               .GetTypeSimple(type)
-			               .GetAnyMember(name);
-		}
-		
-		public static FieldInfo FieldOf(string type, string name)
-		{
-			return Assembly.GetCallingAssembly()
-			               .GetTypeSimple(type)
-			               .GetAnyField(name);
-		}
-
-		public static MethodInfo MethodOf(string type, string name)
-		{
-			return Assembly.GetCallingAssembly()
-			               .GetTypeSimple(type)
-			               .GetAnyMethod(name);
-		}
 	}
 }

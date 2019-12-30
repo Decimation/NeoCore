@@ -20,7 +20,7 @@ namespace NeoCore.Utilities
 		public const char SPACE = ' ';
 
 		public const char PERIOD = '.';
-		
+
 		public static StringBuilder CreateTreeString(DirectoryInfo dir, string delim = "")
 		{
 			// https://github.com/kddeisz/tree/blob/master/Tree.java
@@ -83,15 +83,15 @@ namespace NeoCore.Utilities
 		/// <param name="toString">Function which returns a <see cref="string"/> given a member of <paramref name="values"/></param>
 		/// <param name="delim">Delimiter</param>
 		/// <typeparam name="T">Element type</typeparam>
-		public static string FuncJoin<T>(this IEnumerable<T>  values,
-		                                 Func<T, string> toString,
-		                                 string          delim = JOIN_COMMA)
+		public static string FuncJoin<T>(this IEnumerable<T> values,
+		                                 Func<T, string>     toString,
+		                                 string              delim = JOIN_COMMA)
 		{
 			return String.Join(delim, values.Select(toString));
 		}
 
-		public static string FormatJoin<T>(this IEnumerable<T>  values,          string format,
-		                                   IFormatProvider? provider = null, string delim = JOIN_COMMA)
+		public static string FormatJoin<T>(this IEnumerable<T> values,          string format,
+		                                   IFormatProvider?    provider = null, string delim = JOIN_COMMA)
 			where T : IFormattable
 		{
 			return String.Join(delim, values.Select(v => v.ToString(format, provider)));
@@ -99,8 +99,8 @@ namespace NeoCore.Utilities
 
 		public static string SimpleJoin<T>(this IEnumerable<T> values, string delim = JOIN_COMMA) =>
 			String.Join(delim, values);
-		
-		
+
+
 		public static string ToString<T>(T[] rg)
 		{
 			if (typeof(T) == typeof(byte)) {

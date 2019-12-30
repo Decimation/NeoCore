@@ -9,16 +9,10 @@ using System.Text.RegularExpressions;
 namespace NeoCore.Utilities
 {
 	// https://github.com/khalidabuhakmeh/ConsoleTables
-	
-	internal class ConsoleTable
+
+	public class ConsoleTable
 	{
-		internal IList<object>   Columns { get; set; }
-		internal IList<object[]> Rows    { get; set; }
-
-		internal ConsoleTableOptions Options     { get; set; }
-		internal Type[]              ColumnTypes { get; private set; }
-
-		internal static HashSet<Type> NumericTypes = new HashSet<Type>
+		public static HashSet<Type> NumericTypes = new HashSet<Type>
 		{
 			typeof(int), typeof(double), typeof(decimal),
 			typeof(long), typeof(short), typeof(sbyte),
@@ -26,24 +20,30 @@ namespace NeoCore.Utilities
 			typeof(uint), typeof(float)
 		};
 
-		internal ConsoleTable(params string[] columns)
+		public ConsoleTable(params string[] columns)
 			: this(new ConsoleTableOptions {Columns = new List<string>(columns)}) { }
 
-		internal ConsoleTable(ConsoleTableOptions options)
+		public ConsoleTable(ConsoleTableOptions options)
 		{
 			Options = options ?? throw new ArgumentNullException(nameof(options));
 			Rows    = new List<object[]>();
 			Columns = new List<object>(options.Columns);
 		}
 
-		internal ConsoleTable AddColumn(IEnumerable<string> names)
+		public IList<object>   Columns { get; set; }
+		public IList<object[]> Rows    { get; set; }
+
+		public ConsoleTableOptions Options     { get; set; }
+		public Type[]              ColumnTypes { get; private set; }
+
+		public ConsoleTable AddColumn(IEnumerable<string> names)
 		{
 			foreach (var name in names)
 				Columns.Add(name);
 			return this;
 		}
 
-		internal ConsoleTable AddRow(params object[] values)
+		public ConsoleTable AddRow(params object[] values)
 		{
 			if (values == null)
 				throw new ArgumentNullException(nameof(values));
@@ -59,13 +59,13 @@ namespace NeoCore.Utilities
 			return this;
 		}
 
-		internal ConsoleTable Configure(Action<ConsoleTableOptions> action)
+		public ConsoleTable Configure(Action<ConsoleTableOptions> action)
 		{
 			action(Options);
 			return this;
 		}
 
-		internal static ConsoleTable From<T>(IEnumerable<T> values)
+		public static ConsoleTable From<T>(IEnumerable<T> values)
 		{
 			var table = new ConsoleTable
 			{
@@ -85,6 +85,11 @@ namespace NeoCore.Utilities
 		}
 
 		public override string ToString()
+		{
+			return ToMarkDownString();
+		}
+
+		public string ToDefaultString()
 		{
 			var builder = new StringBuilder();
 
@@ -132,12 +137,12 @@ namespace NeoCore.Utilities
 			return builder.ToString();
 		}
 
-		internal string ToMarkDownString()
+		public string ToMarkDownString()
 		{
 			return ToMarkDownString('|');
 		}
 
-		private string ToMarkDownString(char delimiter)
+		public string ToMarkDownString(char delimiter)
 		{
 			var builder = new StringBuilder();
 
@@ -163,12 +168,12 @@ namespace NeoCore.Utilities
 			return builder.ToString();
 		}
 
-		internal string ToMinimalString()
+		public string ToMinimalString()
 		{
 			return ToMarkDownString(char.MinValue);
 		}
 
-		internal string ToStringAlternative()
+		public string ToStringAlternative()
 		{
 			var builder = new StringBuilder();
 
@@ -236,7 +241,7 @@ namespace NeoCore.Utilities
 			return columnLengths;
 		}
 
-		internal void Write(TableFormat format = TableFormat.Default)
+		public void Write(TableFormat format = TableFormat.Default)
 		{
 			switch (format) {
 				case TableFormat.Default:
@@ -272,23 +277,23 @@ namespace NeoCore.Utilities
 		}
 	}
 
-	internal class ConsoleTableOptions
+	public class ConsoleTableOptions
 	{
-		internal IEnumerable<string> Columns     { get; set; } = new List<string>();
-		internal bool                EnableCount { get; set; } = true;
+		public IEnumerable<string> Columns     { get; set; } = new List<string>();
+		public bool                EnableCount { get; set; } = true;
 
 		/// <summary>
 		/// Enable only from a list of objects
 		/// </summary>
-		internal TableAlignment NumberAlignment { get; set; } = TableAlignment.Left;
+		public TableAlignment NumberAlignment { get; set; } = TableAlignment.Left;
 
 		/// <summary>
 		/// The <see cref="TextWriter"/> to write to. Defaults to <see cref="Console.Out"/>.
 		/// </summary>
-		internal TextWriter OutputTo { get; set; } = Console.Out;
+		public TextWriter OutputTo { get; set; } = Console.Out;
 	}
 
-	internal enum TableFormat
+	public enum TableFormat
 	{
 		Default     = 0,
 		MarkDown    = 1,
@@ -296,7 +301,7 @@ namespace NeoCore.Utilities
 		Minimal     = 3
 	}
 
-	internal enum TableAlignment
+	public enum TableAlignment
 	{
 		Left,
 		Right

@@ -6,6 +6,7 @@ namespace NeoCore.Import
 {
 	public sealed unsafe class ImportMap
 	{
+		public const string FIELD_NAME = "Imports";
 		private readonly Dictionary<string, Pointer<byte>> m_imports;
 
 		public ImportMap()
@@ -18,8 +19,6 @@ namespace NeoCore.Import
 		internal void Add(string key, Pointer<byte> value) => m_imports.Add(key, value);
 
 		internal void Clear() => m_imports.Clear();
-
-		public const string FIELD_NAME = "Imports";
 
 		#region Call
 

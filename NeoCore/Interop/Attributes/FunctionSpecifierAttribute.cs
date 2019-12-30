@@ -8,14 +8,6 @@ namespace NeoCore.Interop.Attributes
 	[AttributeUsage(AttributeTargets.Delegate)]
 	public sealed class FunctionSpecifierAttribute : Attribute
 	{
-		public Type DeclaringType { get; set; }
-
-		/// <summary>
-		/// If <c>null</c>, the <see cref="Delegate"/> name will be used with
-		/// substrings in <see cref="Functions.Reflection.DelegateNameRemoval"/> removed
-		/// </summary>
-		public string? Name { get; set; }
-
 		public FunctionSpecifierAttribute(Type t, string? name = null)
 		{
 			DeclaringType = t;
@@ -23,5 +15,12 @@ namespace NeoCore.Interop.Attributes
 		}
 
 		public FunctionSpecifierAttribute() { }
+		public Type DeclaringType { get; set; }
+
+		/// <summary>
+		/// If <c>null</c>, the <see cref="Delegate"/> name will be used with
+		/// substrings in <see cref="Functions.Reflection.DelegateNameRemoval"/> removed
+		/// </summary>
+		public string? Name { get; set; }
 	}
 }

@@ -16,6 +16,13 @@ namespace NeoCore.CoreClr
 	/// </summary>
 	public static class Assets
 	{
+		/// <summary>
+		/// Common value representing an invalid value or a failure
+		/// </summary>
+		internal const int INVALID_VALUE = -1;
+
+		internal const int BITS_PER_DWORD = 32;
+
 		#region Sizes
 
 		// https://github.com/dotnet/coreclr/blob/master/src/vm/object.h
@@ -107,13 +114,6 @@ namespace NeoCore.CoreClr
 		public static readonly int OffsetToStringData = RuntimeHelpers.OffsetToStringData;
 
 		#endregion
-
-		/// <summary>
-		/// Common value representing an invalid value or a failure
-		/// </summary>
-		internal const int INVALID_VALUE = -1;
-
-		internal const int BITS_PER_DWORD = 32;
 	}
 }
 

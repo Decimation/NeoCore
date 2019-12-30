@@ -6,14 +6,14 @@ namespace NeoCore.Support
 {
 	public class RuntimeImportAsset : RuntimeAsset
 	{
+		public RuntimeImportAsset(FileInfo libFile, FileInfo symFile, string imgRecordFile) : base(libFile, symFile)
+		{
+			Imports = new ImageRecordImport(imgRecordFile, Module);
+		}
+
 		/// <summary>
 		/// Asset symbol access
 		/// </summary>
 		public ImportProvider Imports { get; }
-
-		public RuntimeImportAsset(FileInfo libFile, FileInfo symFile) : base(libFile, symFile)
-		{
-			Imports = new SymbolImport(SymbolsFile, Module.BaseAddress);
-		}
 	}
 }

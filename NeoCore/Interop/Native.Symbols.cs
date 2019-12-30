@@ -26,41 +26,6 @@ namespace NeoCore.Interop
 			private const string SYM_PREFIX = "Sym";
 
 
-			#region Abstraction
-
-			internal static void Initialize(IntPtr hProcess) =>
-				Initialize(hProcess, IntPtr.Zero, false);
-
-
-			internal static bool EnumSymbols(IntPtr hProcess, ulong modBase, EnumSymbolsCallback callback) =>
-				EnumSymbols(hProcess, modBase, null, callback, IntPtr.Zero);
-
-			internal static ulong LoadModuleEx(IntPtr hProc, string img, ulong dllBase, uint fileSize)
-			{
-				return LoadModuleEx(hProc, IntPtr.Zero, img, null, dllBase,
-				                    fileSize, IntPtr.Zero, default);
-			}
-
-
-			internal static Symbol GetSymbol(IntPtr hProc, string name)
-			{
-				byte* byteBuffer = stackalloc byte[DebugSymbol.FullSize];
-				var   buffer     = (DebugSymbol*) byteBuffer;
-
-				buffer->SizeOfStruct = (uint) DebugSymbol.SizeOf;
-				buffer->MaxNameLen   = DebugSymbol.MaxNameLength;
-
-				Guard.Assert<NativeException>(FromName(hProc, name, (IntPtr) buffer),
-				                              "Symbol \"{0}\" not found", name);
-
-				return new Symbol(buffer);
-			}
-
-			#endregion
-
-			internal delegate bool EnumSymbolsCallback(IntPtr symInfo, uint symbolSize, IntPtr pUserContext);
-
-
 			[DllImport(DBGHELP_DLL, EntryPoint = SYM_PREFIX + nameof(Initialize), CharSet = CharSet.Unicode)]
 			private static extern bool Initialize(IntPtr hProcess, IntPtr userSearchPath, bool fInvadeProcess);
 
@@ -94,6 +59,41 @@ namespace NeoCore.Interop
 			private static extern ulong LoadModuleEx(IntPtr hProcess,   IntPtr hFile,     string imageName,
 			                                         string moduleName, ulong  baseOfDll, uint   dllSize,
 			                                         IntPtr data,       uint   flags);
+
+			internal delegate bool EnumSymbolsCallback(IntPtr symInfo, uint symbolSize, IntPtr pUserContext);
+
+
+			#region Abstraction
+
+			internal static void Initialize(IntPtr hProcess) =>
+				Initialize(hProcess, IntPtr.Zero, false);
+
+
+			internal static bool EnumSymbols(IntPtr hProcess, ulong modBase, EnumSymbolsCallback callback) =>
+				EnumSymbols(hProcess, modBase, null, callback, IntPtr.Zero);
+
+			internal static ulong LoadModuleEx(IntPtr hProc, string img, ulong dllBase, uint fileSize)
+			{
+				return LoadModuleEx(hProc, IntPtr.Zero, img, null, dllBase,
+				                    fileSize, IntPtr.Zero, default);
+			}
+
+
+			internal static Symbol GetSymbol(IntPtr hProc, string name)
+			{
+				byte* byteBuffer = stackalloc byte[DebugSymbol.FullSize];
+				var   buffer     = (DebugSymbol*) byteBuffer;
+
+				buffer->SizeOfStruct = (uint) DebugSymbol.SizeOf;
+				buffer->MaxNameLen   = DebugSymbol.MaxNameLength;
+
+				Guard.Assert<NativeException>(FromName(hProc, name, (IntPtr) buffer),
+				                              "Symbol \"{0}\" not found", name);
+
+				return new Symbol(buffer);
+			}
+
+			#endregion
 		}
 	}
 }

@@ -6,6 +6,7 @@ using NeoCore.Memory;
 using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Support;
+using NeoCore.Utilities;
 
 namespace NeoCore.CoreClr.Meta.Base
 {
@@ -13,8 +14,23 @@ namespace NeoCore.CoreClr.Meta.Base
 	/// Describes a CLR structure that doesn't have an accompanying token or <see cref="MemberInfo"/>
 	/// </summary>
 	/// <typeparam name="TClr">CLR structure type</typeparam>
-	public abstract unsafe class BasicClrStructure<TClr> : IWrapper<TClr> where TClr : unmanaged, IClrStructure
+	public abstract unsafe class BasicClrStructure<TClr> : IDebuggable, IWrapper<TClr>
+		where TClr : unmanaged, IClrStructure
 	{
+		/// <summary>
+		/// Additional <see cref="IClrStructure"/> metadata sources.
+		/// </summary>
+		protected abstract Type[] AdditionalSources { get; }
+
+		private void LoadSources()
+		{
+			ImportManager.Value.Load(typeof(TClr), Resources.Clr.Imports);
+
+			if (AdditionalSources != null && AdditionalSources.Length > 0) {
+				ImportManager.Value.LoadAll(AdditionalSources, Resources.Clr.Imports);
+			}
+		}
+
 		#region Fields
 
 		/// <summary>
@@ -46,26 +62,22 @@ namespace NeoCore.CoreClr.Meta.Base
 
 		#endregion
 
-		/// <summary>
-		/// Additional <see cref="IClrStructure"/> metadata sources.
-		/// </summary>
-		protected abstract Type[] AdditionalSources { get; }
-
-		private void LoadSources()
-		{
-			ImportManager.Value.Load(typeof(TClr), Resources.Clr.Imports);
-
-			if (AdditionalSources != null && AdditionalSources.Length > 0) {
-				ImportManager.Value.LoadAll(AdditionalSources, Resources.Clr.Imports);
-			}
-		}
-
 
 		#region ToString
 
 		public override string ToString()
 		{
 			return String.Format("Handle: {0}", Value);
+		}
+
+		public virtual ConsoleTable DebugTable {
+			get {
+				var table =new ConsoleTable("Field","Value");
+
+				table.AddRow("Handle", Value);
+				
+				return table;
+			}
 		}
 
 		#endregion
