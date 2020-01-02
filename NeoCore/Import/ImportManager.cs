@@ -16,7 +16,6 @@ using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
 using static NeoCore.Utilities.Format;
 using EasyReflection = NeoCore.Utilities.EasyReflection;
-using Unsafe = NeoCore.Memory.Unsafe;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 

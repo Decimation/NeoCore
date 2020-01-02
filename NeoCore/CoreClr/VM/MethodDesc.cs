@@ -122,7 +122,7 @@ namespace NeoCore.CoreClr.VM
 			get {
 				// PTR_MethodDescChunk(dac_cast<TADDR>(this) -(sizeof(MethodDescChunk) + (GetMethodDescIndex() * MethodDesc::ALIGNMENT)));
 
-				var thisptr = Unsafe.AddressOf(ref this).Cast();
+				var thisptr = Mem.AddressOf(ref this).Cast();
 				return (thisptr - (sizeof(MethodDescChunk) + (ChunkIndex * Alignment)));
 			}
 		}

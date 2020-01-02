@@ -75,7 +75,7 @@ namespace NeoCore.CoreClr
 			if (Inspection.IsStruct(value))
 				return ReadTypeHandle(value.GetType());
 
-			Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr);
+			Mem.TryGetAddressOfHeap(value, out Pointer<byte> ptr);
 			Guard.AssertNotNull(ptr, nameof(ptr));
 
 			var handle = *(TypeHandle*) ptr;
@@ -90,7 +90,7 @@ namespace NeoCore.CoreClr
 		}
 
 		internal static ObjHeader ReadObjHeader<T>(T value) where T : class =>
-			Unsafe.AddressOfHeap(value, OffsetOptions.Header).Cast<ObjHeader>().Value;
+			Mem.AddressOfHeap(value, OffsetOptions.Header).Cast<ObjHeader>().Value;
 
 
 		internal static FileInfo GetRuntimeFile(string fileName) =>

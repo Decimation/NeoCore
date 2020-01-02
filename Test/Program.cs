@@ -31,7 +31,6 @@ using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
 using Serilog.Core;
-using Unsafe = NeoCore.Memory.Unsafe;
 using static NeoCore.Utilities.EasyReflection;
 
 #endregion
@@ -48,7 +47,7 @@ namespace Test
 			Console.WriteLine(t.DebugTable);
 
 			
-			
+			Console.WriteLine(Mem.IsBigEndian);
 		}
 
 		static void fn()
@@ -72,6 +71,8 @@ namespace Test
 			
 			var r2 = new Region(lo, 4);
 			Console.WriteLine(r2);
+
+			
 		}
 
 		class MyClass

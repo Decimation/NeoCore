@@ -58,4 +58,10 @@ namespace NeoCore.Memory
 			return sb.ToString();
 		}
 	}
+	
+	public enum MemoryType
+	{
+		GC,
+		Stack
+	}
 }

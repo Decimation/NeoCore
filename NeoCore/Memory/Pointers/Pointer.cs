@@ -42,7 +42,7 @@ namespace NeoCore.Memory.Pointers
 		/// <summary>
 		///     Size of element type <typeparamref name="T" />.
 		/// </summary>
-		public int ElementSize => Unsafe.SizeOf<T>();
+		public int ElementSize => Mem.SizeOf<T>();
 
 		/// <summary>
 		///     Indexes <see cref="Address" /> as a reference.

@@ -80,12 +80,12 @@ namespace NeoCore.Interop
 
 			#region Read / write
 
-			[DllImport(KERNEL32_DLL, EntryPoint = nameof(Mem.Kernel.ReadProcessMemory))]
+			[DllImport(KERNEL32_DLL, EntryPoint = nameof(Mem.ReadProcessMemory))]
 			internal static extern bool ReadProcMemoryInternal(IntPtr proc, IntPtr  baseAddr, IntPtr buffer,
 			                                                   int    size, out int numBytesRead);
 
 
-			[DllImport(KERNEL32_DLL, SetLastError = true, EntryPoint = nameof(Mem.Kernel.WriteProcessMemory))]
+			[DllImport(KERNEL32_DLL, SetLastError = true, EntryPoint = nameof(Mem.WriteProcessMemory))]
 			internal static extern bool WriteProcMemoryInternal(IntPtr proc, IntPtr  baseAddr, IntPtr buffer,
 			                                                    int    size, out int numberBytesWritten);
 

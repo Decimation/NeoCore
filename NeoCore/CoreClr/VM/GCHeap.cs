@@ -27,7 +27,7 @@ namespace NeoCore.CoreClr.VM
 
 		internal bool IsHeapPointer<T>(T value, bool smallHeapOnly = false)
 		{
-			return Unsafe.TryGetAddressOfHeap(value, out Pointer<byte> ptr) &&
+			return Mem.TryGetAddressOfHeap(value, out Pointer<byte> ptr) &&
 			       IsHeapPointer(ptr.ToPointer(), smallHeapOnly);
 		}
 

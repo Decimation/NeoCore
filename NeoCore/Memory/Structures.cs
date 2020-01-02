@@ -19,7 +19,7 @@ namespace NeoCore.Memory
 		internal static Pointer<byte> FieldOffsetAlt<T>(ref T value, long ofs, Pointer<byte> fieldValue)
 			where T : unmanaged
 		{
-			return Unsafe.AddressOf(ref value).Add((long) fieldValue).Add(ofs).Cast();
+			return Mem.AddressOf(ref value).Add((long) fieldValue).Add(ofs).Cast();
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace NeoCore.Memory
 			where TSub : INativeSubclass<TSuper>
 			where TSuper : INativeStructure
 		{
-			int size = Unsafe.SizeOf<TSuper>();
+			int size = Mem.SizeOf<TSuper>();
 			return super.Add(size).Cast<TSub>();
 		}
 

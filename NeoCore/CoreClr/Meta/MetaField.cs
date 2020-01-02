@@ -45,7 +45,7 @@ namespace NeoCore.CoreClr.Meta
 			Guard.Assert(!IsStatic, nameof(IsStatic));
 			Guard.Assert(Offset != FIELD_OFFSET_NEW_ENC);
 
-			Pointer<byte> data = Unsafe.AddressOfFields(ref value) + Offset;
+			Pointer<byte> data = Mem.AddressOfFields(ref value) + Offset;
 
 			return data;
 		}
