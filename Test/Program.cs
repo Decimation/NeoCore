@@ -39,8 +39,11 @@ namespace Test
 {
 	// nuget pack -Prop Configuration=Release
 	
-	// todo: rewrite entire library :/
-
+	// C:\Library\Nuget
+	// dotnet pack -c Release -o %cd%
+	// dotnet nuget push "*.nupkg"
+	// del *.nupkg & dotnet pack -c Release -o %cd%
+	
 	public static unsafe class Program
 	{
 		

@@ -6,15 +6,15 @@ namespace NeoCore.Utilities
 	/// Designates the function to import with <see cref="Functions.Find{TDelegate}()"/>
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Delegate)]
-	public sealed class FunctionSpecifierAttribute : Attribute
+	public sealed class FunctionImportAttribute : Attribute
 	{
-		public FunctionSpecifierAttribute(Type t, string? name = null)
+		public FunctionImportAttribute(Type t, string? name = null)
 		{
 			DeclaringType = t;
 			Name          = name;
 		}
 
-		public FunctionSpecifierAttribute() { }
+		public FunctionImportAttribute() { }
 
 		public Type DeclaringType { get; set; }
 

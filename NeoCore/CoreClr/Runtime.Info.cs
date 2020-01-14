@@ -217,7 +217,7 @@ namespace NeoCore.CoreClr
 				Fast
 			}
 
-			[FunctionSpecifier(typeof(Marshal))]
+			[FunctionImport(typeof(Marshal))]
 			private delegate bool IsPinnableDelegate(object? handle);
 		}
 	}

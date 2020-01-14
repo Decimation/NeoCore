@@ -18,9 +18,9 @@ namespace NeoCore.Utilities
 	public static partial class Functions
 	{
 		/// <summary>
-		/// Strings to remove from <see cref="Delegate"/> names
+		/// Strings to remove from <see cref="Delegate"/> member names annotated with <see cref="FunctionImportAttribute"/>
 		/// </summary>
-		public static readonly string[] DelegateNameRemoval = {"Delegate"};
+		private static readonly string[] DelegateNameRemoval = {"Delegate"};
 
 		public static bool Throws(Action action)
 		{
@@ -70,7 +70,7 @@ namespace NeoCore.Utilities
 
 		public static TDelegate Find<TDelegate>() where TDelegate : Delegate
 		{
-			var attr = typeof(TDelegate).GetCustomAttribute<FunctionSpecifierAttribute>();
+			var attr = typeof(TDelegate).GetCustomAttribute<FunctionImportAttribute>();
 			Guard.AssertNotNull(attr);
 
 			string? nameStub = attr.Name ?? typeof(TDelegate).Name;

@@ -298,7 +298,7 @@ namespace NeoCore.CoreClr
 		}
 
 
-		[FunctionSpecifier(typeof(Type))]
+		[FunctionImport(typeof(Type))]
 		private delegate Type GetTypeFromHandleUnsafeDelegate(IntPtr handle);
 	}
 
