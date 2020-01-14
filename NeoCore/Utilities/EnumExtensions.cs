@@ -1,13 +1,9 @@
 using System;
-using Memkit.Utilities;
-using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;
-using NeoCore.Import;
 using NeoCore.Import.Attributes;
-using NeoCore.Win32.Structures;
 
-namespace NeoCore.Utilities.Extensions
+namespace NeoCore.Utilities
 {
 	/// <summary>
 	/// Contains optimized versions of the <see cref="Enum.HasFlag"/> function.
@@ -17,7 +13,7 @@ namespace NeoCore.Utilities.Extensions
 		// ((uThis & uFlag) == uFlag)
 		// ((uThis & uFlag) != 0)
 
-		public static bool HasFlagFast(this ImageFileCharacteristics value, ImageFileCharacteristics flag) => (value & flag) != 0;
+		
 
 		public static bool HasFlagFast(this HexOptions value, HexOptions flag) => (value & flag) != 0;
 

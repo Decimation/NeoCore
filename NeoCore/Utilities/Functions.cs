@@ -3,11 +3,9 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Memkit.Pointers;
-using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
-using NeoCore.Win32.Attributes;
 
-namespace NeoCore.Win32
+namespace NeoCore.Utilities
 {
 	/// <summary>
 	/// Contains various utilities for working with native (unmanaged) and managed functions.

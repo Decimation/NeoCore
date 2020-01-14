@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Memkit;
 using Memkit.Pointers;
+using NeoCore.Utilities;
 using NeoCore.Win32;
 
 namespace NeoCore.Import

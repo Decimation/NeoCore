@@ -1,9 +1,9 @@
 using System.Runtime.InteropServices;
+using Memkit.Model;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
 using NeoCore.Utilities;
-using NeoCore.Win32.Attributes;
 
 namespace NeoCore.CoreClr.VM
 {

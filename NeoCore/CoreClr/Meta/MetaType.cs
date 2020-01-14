@@ -7,7 +7,6 @@ using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
-using NeoCore.Utilities.Extensions;
 
 // ReSharper disable SuggestBaseTypeForParameter
 

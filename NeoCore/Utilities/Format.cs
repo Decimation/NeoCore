@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualBasic;
-using NeoCore.Utilities.Extensions;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
 

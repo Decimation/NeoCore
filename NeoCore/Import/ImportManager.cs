@@ -14,7 +14,6 @@ using NeoCore.Import.Attributes;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
-using NeoCore.Utilities.Extensions;
 using static NeoCore.Utilities.Format;
 using EasyReflection = NeoCore.Utilities.EasyReflection;
 

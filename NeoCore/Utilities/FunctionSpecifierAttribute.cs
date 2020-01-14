@@ -1,6 +1,6 @@
 using System;
 
-namespace NeoCore.Win32.Attributes
+namespace NeoCore.Utilities
 {
 	/// <summary>
 	/// Designates the function to import with <see cref="Functions.Find{TDelegate}()"/>

@@ -1,10 +1,10 @@
 using System;
 using System.Runtime.InteropServices;
 using Memkit;
+using Memkit.Model.Attributes;
 using Memkit.Utilities;
 using NeoCore.Model;
 using NeoCore.Utilities.Diagnostics;
-using NeoCore.Win32.Attributes;
 
 namespace NeoCore.CoreClr.VM
 {

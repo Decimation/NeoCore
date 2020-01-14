@@ -1,10 +1,10 @@
 using System;
 using Memkit;
+using Memkit.Model.Attributes;
 using Memkit.Pointers;
 using Memkit.Utilities;
 using NeoCore.CoreClr;
 using NeoCore.Model;
-using NeoCore.Win32.Attributes;
 
 // ReSharper disable BuiltInTypeReferenceStyle
 // ReSharper disable ConvertToAutoPropertyWhenPossible

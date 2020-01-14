@@ -29,7 +29,6 @@ using NeoCore.Model;
 using NeoCore.Support;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
-using NeoCore.Utilities.Extensions;
 using NeoCore.Win32;
 using Serilog.Core;
 using static NeoCore.Utilities.EasyReflection;

@@ -1,3 +1,5 @@
+using Memkit.Model;
+
 namespace NeoCore.Model
 {
 	/// <summary>

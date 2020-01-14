@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using System.Text;
+using Memkit.Model;
 using Memkit.Pointers;
 using Memkit.Utilities;
 using NeoCore.Import;

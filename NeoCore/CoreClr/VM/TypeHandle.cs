@@ -6,7 +6,6 @@ using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
 using NeoCore.Support;
-using NeoCore.Win32.Attributes;
 
 namespace NeoCore.CoreClr.VM
 {

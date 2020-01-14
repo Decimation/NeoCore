@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
 using Memkit;
+using Memkit.Model;
 using Memkit.Pointers;
 using Memkit.Utilities;
 using NeoCore.CoreClr.Meta.Base;
@@ -8,7 +9,6 @@ using NeoCore.CoreClr.VM;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
-using NeoCore.Utilities.Extensions;
 
 // ReSharper disable SuggestBaseTypeForParameter
 

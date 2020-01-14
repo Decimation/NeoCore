@@ -1,6 +1,6 @@
 using System;
 using JetBrains.Annotations;
-using NeoCore.Win32.Attributes;
+using Memkit.Model.Attributes;
 
 namespace NeoCore.Import.Attributes
 {

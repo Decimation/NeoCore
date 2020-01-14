@@ -3,7 +3,6 @@ using Memkit;
 using Memkit.Pointers;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
-using NeoCore.Win32.Attributes;
 
 // ReSharper disable ArrangeAccessorOwnerBody
 // ReSharper disable InconsistentNaming

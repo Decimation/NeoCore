@@ -6,7 +6,6 @@ using Memkit.Pointers.ExtraPointers;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
 using NeoCore.Utilities;
-using NeoCore.Win32.Attributes;
 
 namespace NeoCore.CoreClr.VM
 {

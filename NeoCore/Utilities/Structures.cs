@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Memkit.Model;
 using Memkit.Pointers;
 using Memkit.Utilities;
 using NeoCore.CoreClr.Meta;
@@ -77,13 +78,7 @@ namespace NeoCore.Utilities
 		public static int OffsetOf<T>(string name, OffsetOfType type, bool isProperty = false) =>
 			OffsetOf(typeof(T), name, type, isProperty);
 
-		public static T ReadStructure<T>(this BinaryReader reader) where T : struct
-		{
-			// Read in a byte array
-			byte[] bytes = reader.ReadBytes(Marshal.SizeOf<T>());
-
-			return Mem.ReadStructure<T>(bytes);
-		}
+		
 	}
 
 	public enum OffsetOfType

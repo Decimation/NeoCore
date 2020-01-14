@@ -6,7 +6,6 @@ using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.Jit;
 using NeoCore.Utilities;
-using NeoCore.Utilities.Extensions;
 using NeoCore.Win32;
 
 // ReSharper disable ReturnTypeCanBeEnumerable.Global

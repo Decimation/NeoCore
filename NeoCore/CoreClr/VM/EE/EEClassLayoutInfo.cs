@@ -2,7 +2,6 @@ using System;
 using System.Runtime.InteropServices;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
-using NeoCore.Win32.Attributes;
 
 // ReSharper disable InconsistentNaming
 

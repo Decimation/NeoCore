@@ -12,9 +12,9 @@ using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Support;
+using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Win32;
-using NeoCore.Win32.Attributes;
 
 // ReSharper disable InconsistentNaming
 

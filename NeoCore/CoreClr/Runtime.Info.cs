@@ -9,14 +9,13 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using InlineIL;
 using JetBrains.Annotations;
+using Memkit.Model.Attributes;
 using Memkit.Pointers;
 using Memkit.Utilities;
 using NeoCore.CoreClr.VM;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
-using NeoCore.Utilities.Extensions;
 using NeoCore.Win32;
-using NeoCore.Win32.Attributes;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedTypeParameter

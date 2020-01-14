@@ -2,11 +2,11 @@
 
 using System.Reflection;
 using InlineIL;
-using NeoCore.Win32.Attributes;
+using Memkit.Model.Attributes;
 
 #endregion
 
-namespace NeoCore.Win32
+namespace NeoCore.Utilities
 {
 	#region
 

@@ -1,7 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
+using Memkit.Model;
+using Memkit.Model.Attributes;
 using NeoCore.Model;
-using NeoCore.Win32.Attributes;
 
 // ReSharper disable InconsistentNaming
 
@@ -10,6 +11,7 @@ namespace NeoCore.Win32.Structures
 	/// <summary>
 	///     Wraps a <see cref="DebugSymbol" />
 	/// </summary>
+	[NativeStructure]
 	public unsafe class Symbol : IWrapper<DebugSymbol>
 	{
 		internal Symbol(DebugSymbol* pSymInfo)
@@ -87,7 +89,7 @@ namespace NeoCore.Win32.Structures
 
 		/// <summary>
 		///     The name of the symbol. The name can be undecorated if the <see cref="SymbolOptions.UNDNAME" /> option is
-		///     used with the <see cref="Win32Native.Symbols.SetOptions" /> function.
+		///     used with the <see cref="Symbols.SetOptions" /> function.
 		/// </summary>
 		internal fixed sbyte Name[1];
 

@@ -6,7 +6,6 @@ using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
-using NeoCore.Win32.Attributes;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable InconsistentNaming

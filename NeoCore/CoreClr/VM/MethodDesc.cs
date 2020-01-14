@@ -7,7 +7,6 @@ using NeoCore.CoreClr.VM.Jit;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
-using NeoCore.Win32.Attributes;
 
 // ReSharper disable InconsistentNaming
 

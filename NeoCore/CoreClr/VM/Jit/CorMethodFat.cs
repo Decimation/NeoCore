@@ -4,7 +4,6 @@ using Memkit.Pointers;
 using Memkit.Utilities;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
-using NeoCore.Win32.Attributes;
 
 // ReSharper disable InconsistentNaming
 
