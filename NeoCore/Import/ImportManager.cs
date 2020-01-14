@@ -14,7 +14,6 @@ using NeoCore.Import.Attributes;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
-using static NeoCore.Utilities.Format;
 using EasyReflection = NeoCore.Utilities.EasyReflection;
 
 // ReSharper disable ParameterTypeCanBeEnumerable.Global
@@ -353,9 +352,9 @@ namespace NeoCore.Import
 
 				var name = method.Name;
 
-				if (name.StartsWith(EasyReflection.GET_PROPERTY_PREFIX)) {
+				if (name.StartsWith(UniqueMember.Get.Value)) {
 					// The nameof operator does not return the name with the get prefix
-					name = name.Replace(EasyReflection.GET_PROPERTY_PREFIX, String.Empty);
+					name = name.Replace(UniqueMember.Get.Value, String.Empty);
 				}
 
 				importMaps[enclosing].Add(name, addr);

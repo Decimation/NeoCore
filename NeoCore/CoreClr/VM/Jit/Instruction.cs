@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using NeoCore.Utilities;
+using SimpleCore;
+using SimpleCore.Formatting;
 
 namespace NeoCore.CoreClr.VM.Jit
 {

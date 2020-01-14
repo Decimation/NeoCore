@@ -4,8 +4,11 @@ using JetBrains.Annotations;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
+using NeoCore.Support;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
+using SimpleCore;
+using SimpleCore.Formatting;
 
 namespace NeoCore.Import
 {
@@ -55,7 +58,7 @@ namespace NeoCore.Import
 
 			if (options.HasFlagFast(IdentifierOptions.UseAccessorName)) {
 				Guard.Assert(member.MemberType == MemberTypes.Method);
-				resolvedId = resolvedId.Replace(EasyReflection.GET_PROPERTY_PREFIX, GET_PROPERTY_REPLACEMENT);
+				resolvedId = resolvedId.Replace(UniqueMember.Get.Value, GET_PROPERTY_REPLACEMENT);
 			}
 
 			Guard.AssertNotNull(resolvedId, nameof(resolvedId));

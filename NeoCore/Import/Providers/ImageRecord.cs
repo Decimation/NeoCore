@@ -4,6 +4,8 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Serialization;
 using NeoCore.Utilities;
+using SimpleCore;
+using SimpleCore.Formatting;
 
 namespace NeoCore.Import.Providers
 {

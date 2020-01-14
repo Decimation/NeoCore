@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using NeoCore.Model;
+using NeoCore.Support;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Win32;
 using NeoCore.Win32.Structures;

@@ -1,4 +1,6 @@
 using NeoCore.Utilities;
+using SimpleCore;
+using SimpleCore.Formatting;
 
 namespace NeoCore.Model
 {

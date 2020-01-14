@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 using NeoCore.Model;
+using NeoCore.Utilities.Diagnostics;
 using Serilog;
 using Serilog.Context;
 using Serilog.Core;
@@ -10,7 +11,7 @@ using Serilog.Sinks.SystemConsole.Themes;
 
 // ReSharper disable MemberCanBeMadeStatic.Global
 
-namespace NeoCore.Utilities.Diagnostics
+namespace NeoCore.Support
 {
 	/// <summary>
 	/// Contains the logger for NeoCore.
@@ -124,7 +125,7 @@ namespace NeoCore.Utilities.Diagnostics
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
 		[Conditional(Guard.COND_DEBUG)]
-		internal void WriteDebug(string ctx, string msg, params object[] args) => 
+		internal void WriteDebug(string ctx, string msg, params object[] args) =>
 			ContextLog(ctx, Log.Debug, msg, args);
 
 		/// <summary>
@@ -168,7 +169,7 @@ namespace NeoCore.Utilities.Diagnostics
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
 		[Conditional(Guard.COND_DEBUG)]
-		internal void WriteError(string ctx, string msg, params object[] args) => 
+		internal void WriteError(string ctx, string msg, params object[] args) =>
 			ContextLog(ctx, Log.Error, msg, args);
 
 		/// <summary>
@@ -179,7 +180,7 @@ namespace NeoCore.Utilities.Diagnostics
 		/// <param name="msg">Message template</param>
 		/// <param name="args">Property values</param>
 		[Conditional(Guard.COND_DEBUG)]
-		internal void WriteFatal(string ctx, string msg, params object[] args) => 
+		internal void WriteFatal(string ctx, string msg, params object[] args) =>
 			ContextLog(ctx, Log.Fatal, msg, args);
 
 		#endregion

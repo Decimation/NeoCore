@@ -43,14 +43,18 @@ namespace Test
 
 	public static unsafe class Program
 	{
-		[UsedImplicitly]
+		
 		private static void Main(string[] args)
 		{
-			var t = typeof(MyStruct[]).AsMetaType();
-			Console.WriteLine(t.DebugTable);
+			Console.WriteLine(UniqueMember.Get);
+			Console.WriteLine(typeof(MyStructx).GetAllFields()[0].FieldType.Name);
+			Console.WriteLine(UniqueMember.FixedBufferType.GetName("buffer"));
+			
+		}
 
-
-			Commands.RunSymCheck(Resources.Clr.LibraryFile, new DirectoryInfo(@"C:\Users\Deci\Desktop\"));
+		struct MyStructx
+		{
+			private fixed int buffer[5];
 		}
 
 		static void fn()

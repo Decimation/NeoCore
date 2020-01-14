@@ -3,6 +3,8 @@ using Memkit.Pointers;
 using NeoCore.CoreClr.VM;
 using NeoCore.Model;
 using NeoCore.Utilities;
+using SimpleCore;
+using SimpleCore.Formatting;
 
 namespace NeoCore.CoreClr.Meta.Base
 {

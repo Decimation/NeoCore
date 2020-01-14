@@ -1,6 +1,5 @@
 using System;
 using JetBrains.Annotations;
-using static NeoCore.Utilities.Format;
 
 namespace NeoCore.Import.Attributes
 {

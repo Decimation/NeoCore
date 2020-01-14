@@ -61,7 +61,7 @@ namespace NeoCore.Utilities
 		public static int OffsetOf(Type t, string name, OffsetOfType type, bool isProperty = false)
 		{
 			if (isProperty) {
-				name = EasyReflection.GetBackingFieldName(name);
+				name = UniqueMember.BackingField.GetName(name);
 			}
 
 			switch (type) {
@@ -77,8 +77,6 @@ namespace NeoCore.Utilities
 
 		public static int OffsetOf<T>(string name, OffsetOfType type, bool isProperty = false) =>
 			OffsetOf(typeof(T), name, type, isProperty);
-
-		
 	}
 
 	public enum OffsetOfType

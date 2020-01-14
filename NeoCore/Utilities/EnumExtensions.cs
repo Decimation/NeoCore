@@ -15,8 +15,6 @@ namespace NeoCore.Utilities
 
 		
 
-		public static bool HasFlagFast(this HexOptions value, HexOptions flag) => (value & flag) != 0;
-
 		public static bool HasFlagFast(this FieldBitFlags value, FieldBitFlags flag) => (value & flag) != 0;
 
 		public static bool HasFlagFast(this CodeFlags value, CodeFlags flag) => (value & flag) != 0;

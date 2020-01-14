@@ -8,6 +8,8 @@ using NeoCore.Import;
 using NeoCore.Model;
 using NeoCore.Support;
 using NeoCore.Utilities;
+using SimpleCore;
+using SimpleCore.Formatting;
 
 namespace NeoCore.CoreClr.Meta.Base
 {

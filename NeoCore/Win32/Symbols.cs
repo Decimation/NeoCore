@@ -75,7 +75,7 @@ namespace NeoCore.Win32
 			buffer->SizeOfStruct = (uint) DebugSymbol.SizeOf;
 			buffer->MaxNameLen   = DebugSymbol.MaxNameLength;
 
-			Guard.Assert<NativeException>(FromName(hProc, name, (IntPtr) buffer),
+			Guard.Assert(FromName(hProc, name, (IntPtr) buffer),
 			                              "Symbol \"{0}\" not found", name);
 
 			return new Symbol(buffer);

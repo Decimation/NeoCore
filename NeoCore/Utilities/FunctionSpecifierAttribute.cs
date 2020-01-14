@@ -15,6 +15,7 @@ namespace NeoCore.Utilities
 		}
 
 		public FunctionSpecifierAttribute() { }
+
 		public Type DeclaringType { get; set; }
 
 		/// <summary>

@@ -5,6 +5,8 @@ using Memkit.Pointers;
 using Memkit.Utilities;
 using NeoCore.Model;
 using NeoCore.Utilities;
+using SimpleCore;
+using SimpleCore.Formatting;
 
 namespace NeoCore.CoreClr.Meta.Base
 {

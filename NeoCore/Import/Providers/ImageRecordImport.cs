@@ -9,6 +9,7 @@ using System.Text.Json.Serialization;
 using Memkit;
 using Memkit.Pointers;
 using Memkit.Utilities;
+using NeoCore.Support;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
