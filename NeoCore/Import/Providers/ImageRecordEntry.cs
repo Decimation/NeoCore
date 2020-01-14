@@ -14,14 +14,17 @@ namespace NeoCore.Import.Providers
 		/// <see cref="long"/> if <see cref="Type"/> is <see cref="EntryType.Offset"/>
 		/// </summary>
 		public object Value { get; }
+		
+		public string Alias { get; }
 
 		public bool IsNull => Name == null && Type == EntryType.Null && Value == null;
 
-		internal ImageRecordEntry(string name, EntryType t, object v)
+		internal ImageRecordEntry(string name, EntryType t, object v, string a)
 		{
 			Name  = name;
 			Type  = t;
 			Value = v;
+			Alias = a;
 		}
 
 		public bool Equals(ImageRecordEntry other)

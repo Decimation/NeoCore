@@ -9,12 +9,11 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using InlineIL;
 using JetBrains.Annotations;
-using NeoCore.Interop;
-using NeoCore.Interop.Attributes;
-using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
+using NeoCore.Win32;
+using NeoCore.Win32.Attributes;
 
 // ReSharper disable InconsistentNaming
 // ReSharper disable UnusedTypeParameter

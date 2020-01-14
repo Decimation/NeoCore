@@ -1,10 +1,12 @@
+using System;
 using System.Runtime.InteropServices;
+using Memkit;
+using Memkit.Pointers;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
-using NeoCore.Interop.Attributes;
-using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Support;
+using NeoCore.Win32.Attributes;
 
 namespace NeoCore.CoreClr.VM
 {
@@ -15,7 +17,7 @@ namespace NeoCore.CoreClr.VM
 	{
 		static TypeHandle()
 		{
-			ImportManager.Value.Load(typeof(TypeHandle), Resources.Clr.Imports);
+			//ImportManager.Value.Load(typeof(TypeHandle), Resources.Clr.Imports);
 		}
 
 		private void* Union1 { get; }

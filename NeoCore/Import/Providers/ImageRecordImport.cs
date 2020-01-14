@@ -6,8 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Memkit;
+using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
@@ -20,6 +22,7 @@ namespace NeoCore.Import.Providers
 		public ImageRecordImport(string file, ProcessModule module) : base(module)
 		{
 			string txt = File.ReadAllText(file);
+
 
 			var options = new JsonSerializerOptions
 			{
@@ -40,6 +43,8 @@ namespace NeoCore.Import.Providers
 
 
 			m_scanner = new SigScanner(module);
+
+			Global.Value.WriteInfo(null, "Initialized with {Count} records", Records.Length);
 		}
 
 		public ImageRecordInfo    Info    { get; }
@@ -49,7 +54,16 @@ namespace NeoCore.Import.Providers
 		// https://github.com/alliedmodders/sourcemod/blob/master/gamedata/sm-tf2.games.txt
 
 		public ImageRecordEntry this[string id] {
-			get { return Records.FirstOrDefault(r => r.Name == id); }
+			get {
+				var first = Records.FirstOrDefault(r => r.Name == id);
+
+				if (first == default) {
+					first = Records.FirstOrDefault(r => r.Alias == id);
+					Global.Value.WriteWarning(null, "Using fallback alias {Match} for {Id}", first, id);
+				}
+
+				return first;
+			}
 		}
 
 
@@ -72,7 +86,8 @@ namespace NeoCore.Import.Providers
 					string[] scopes     = {enclosingName, memberName};
 					string   fullName   = ImportManager.ScopeJoin(scopes);
 
-					var compactIndexEntry = new ImageRecordEntry(fullName, oldEntry.Type, oldEntry.Value);
+					var compactIndexEntry =
+						new ImageRecordEntry(fullName, oldEntry.Type, oldEntry.Value, oldEntry.Alias);
 					compactIndex.Add(compactIndexEntry);
 				}
 			}
@@ -83,7 +98,9 @@ namespace NeoCore.Import.Providers
 
 		public override Pointer<byte> GetAddress(string id)
 		{
+			Global.Value.WriteInfo(null, "Retrieving {Name}", id);
 			var entry = this[id];
+
 
 			if (entry.IsNull) {
 				string msg = String.Format("No entry for {0}", id);

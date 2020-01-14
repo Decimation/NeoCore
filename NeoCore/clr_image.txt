@@ -80,7 +80,8 @@
 			{
 				"name": "GetMethodTable",
 				"type": "offset",
-				"value": "35724"
+				"value": "35724",
+				"alias": "MethodTable"
 			}
 		],
 

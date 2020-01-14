@@ -1,9 +1,11 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using Memkit;
+using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;
-using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 
@@ -53,7 +55,7 @@ namespace NeoCore.Memory
 			where TSub : INativeSubclass<TSuper>
 			where TSuper : INativeStructure
 		{
-			int size = Mem.SizeOf<TSuper>();
+			int size = Mem.QuickSizeOf<TSuper>();
 			return super.Add(size).Cast<TSub>();
 		}
 

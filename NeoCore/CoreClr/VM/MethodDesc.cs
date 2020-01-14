@@ -1,11 +1,12 @@
 using System.Runtime.InteropServices;
+using Memkit;
+using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore.CoreClr.VM.Jit;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
-using NeoCore.Interop.Attributes;
-using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Model;
+using NeoCore.Win32.Attributes;
 
 // ReSharper disable InconsistentNaming
 

@@ -1,4 +1,5 @@
-using NeoCore.Memory.Pointers;
+using Memkit;
+using Memkit.Pointers;
 using NeoCore.Model;
 
 // ReSharper disable InconsistentNaming

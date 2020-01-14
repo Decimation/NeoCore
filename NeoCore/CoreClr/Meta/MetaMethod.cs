@@ -1,14 +1,15 @@
 using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using Memkit.Pointers;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.Jit;
-using NeoCore.Interop;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
+using NeoCore.Win32;
+
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 
 // ReSharper disable SuggestBaseTypeForParameter

@@ -1,7 +1,8 @@
 using System;
 using System.Diagnostics;
+using Memkit;
+using Memkit.Pointers;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Utilities.Diagnostics;
 
 namespace NeoCore.Import

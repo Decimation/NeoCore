@@ -14,6 +14,10 @@ using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading;
 using JetBrains.Annotations;
+using Memkit;
+using Memkit.Model;
+using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
@@ -21,10 +25,7 @@ using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Import.Providers;
-using NeoCore.Interop;
-using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Support;
 using NeoCore.Utilities;
@@ -38,9 +39,12 @@ using static NeoCore.Utilities.EasyReflection;
 namespace Test
 {
 	// nuget pack -Prop Configuration=Release
+	
+	// todo: rewrite entire library :/
 
 	public static unsafe class Program
 	{
+		[UsedImplicitly]
 		private static void Main(string[] args)
 		{
 			var t = typeof(MyStruct[]).AsMetaType();
@@ -48,6 +52,7 @@ namespace Test
 
 			
 			Console.WriteLine(Mem.IsBigEndian);
+			Console.WriteLine(typeof(string[]).AsMetaType().DebugTable);
 		}
 
 		static void fn()

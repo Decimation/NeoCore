@@ -1,8 +1,8 @@
 using System.Runtime.InteropServices;
 using NeoCore.CoreClr.VM.EE;
 using NeoCore.Import.Attributes;
-using NeoCore.Interop.Attributes;
 using NeoCore.Model;
+using NeoCore.Win32.Attributes;
 
 namespace NeoCore.CoreClr.VM
 {

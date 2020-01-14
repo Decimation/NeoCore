@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using NeoCore.Interop;
-using NeoCore.Interop.Structures;
+using Memkit.Interop;
 using NeoCore.Model;
 using NeoCore.Utilities.Diagnostics;
+using NeoCore.Win32.Structures;
 
 // ReSharper disable ReturnTypeCanBeEnumerable.Global
 // ReSharper disable RedundantAssignment
@@ -24,7 +24,7 @@ namespace NeoCore.Import.Providers
 
 		private IntPtr       m_proc;
 		private string       m_singleNameBuffer;
-		private List<Interop.Structures.Symbol> m_symBuffer;
+		private List<Symbol> m_symBuffer;
 		protected override string Id => nameof(SymbolManager);
 
 		internal bool IsImageLoaded {
@@ -45,7 +45,7 @@ namespace NeoCore.Import.Providers
 		public override void Close()
 		{
 			UnloadModule();
-			Native.Symbols.Cleanup(m_proc);
+			Win32.Native.Symbols.Cleanup(m_proc);
 
 			m_proc    = IntPtr.Zero;
 			m_modBase = default;
@@ -61,9 +61,9 @@ namespace NeoCore.Import.Providers
 
 		public override void Setup()
 		{
-			m_proc = Native.Kernel.GetCurrentProcess();
+			m_proc = Native.GetCurrentProcess().Address;
 
-			var options = Native.Symbols.GetOptions();
+			var options = Win32.Native.Symbols.GetOptions();
 
 			// SYMOPT_DEBUG option asks DbgHelp to print additional troubleshooting
 			// messages to debug output - use the debugger's Debug Output window
@@ -71,10 +71,10 @@ namespace NeoCore.Import.Providers
 
 			options |= SymbolOptions.DEBUG;
 
-			Native.Symbols.SetOptions(options);
+			global::NeoCore.Win32.Native.Symbols.SetOptions(options);
 
 			// Initialize DbgHelp and load symbols for all modules of the current process 
-			Native.Symbols.Initialize(m_proc);
+			Win32.Native.Symbols.Initialize(m_proc);
 
 
 			base.Setup();
@@ -83,7 +83,7 @@ namespace NeoCore.Import.Providers
 		private void UnloadModule()
 		{
 			if (IsImageLoaded) {
-				Native.Symbols.UnloadModule64(m_proc, m_modBase);
+				Win32.Native.Symbols.UnloadModule64(m_proc, m_modBase);
 			}
 		}
 
@@ -104,9 +104,9 @@ namespace NeoCore.Import.Providers
 
 			Guard.Assert(IsSetup);
 
-			Native.FileSystem.GetFileParams(img, out ulong baseAddr, out ulong fileSize);
+			Win32.Native.FileSystem.GetFileParams(img, out ulong baseAddr, out ulong fileSize);
 
-			m_modBase = Native.Symbols.LoadModuleEx(m_proc, img, baseAddr, (uint) fileSize);
+			m_modBase = Win32.Native.Symbols.LoadModuleEx(m_proc, img, baseAddr, (uint) fileSize);
 
 			CheckModule();
 		}
@@ -115,25 +115,25 @@ namespace NeoCore.Import.Providers
 
 		internal long GetSymOffset(string name) => GetSymbol(name).Offset;
 
-		internal Interop.Structures.Symbol[] GetSymbols()
+		internal Symbol[] GetSymbols()
 		{
 			CheckModule();
 
-			m_symBuffer = new List<Interop.Structures.Symbol>();
+			m_symBuffer = new List<Symbol>();
 
-			Native.Symbols.EnumSymbols(m_proc, m_modBase, AddSymCallback);
+			Win32.Native.Symbols.EnumSymbols(m_proc, m_modBase, AddSymCallback);
 
-			Interop.Structures.Symbol[] cpy = m_symBuffer.ToArray();
+			Symbol[] cpy = m_symBuffer.ToArray();
 			ClearBuffer();
 
 			return cpy;
 		}
 
-		internal Interop.Structures.Symbol[] GetSymbols(string[] names)
+		internal Symbol[] GetSymbols(string[] names)
 		{
 			CheckModule();
 
-			var rg = new Interop.Structures.Symbol[names.Length];
+			var rg = new Symbol[names.Length];
 
 			for (int i = 0; i < rg.Length; i++) {
 				rg[i] = GetSymbol(names[i]);
@@ -143,7 +143,7 @@ namespace NeoCore.Import.Providers
 		}
 
 		// note: doesn't check module
-		internal Interop.Structures.Symbol GetSymbol(string name) => Native.Symbols.GetSymbol(m_proc, name);
+		internal Symbol GetSymbol(string name) => Win32.Native.Symbols.GetSymbol(m_proc, name);
 
 		private void ClearBuffer()
 		{
@@ -153,16 +153,16 @@ namespace NeoCore.Import.Providers
 			m_symBuffer        = null;
 		}
 
-		internal Interop.Structures.Symbol[] GetSymbolsContainingName(string name)
+		internal Symbol[] GetSymbolsContainingName(string name)
 		{
 			CheckModule();
 
-			m_symBuffer        = new List<Interop.Structures.Symbol>();
+			m_symBuffer        = new List<Symbol>();
 			m_singleNameBuffer = name;
 
-			Native.Symbols.EnumSymbols(m_proc, m_modBase, AddSymByNameCallback);
+			Win32.Native.Symbols.EnumSymbols(m_proc, m_modBase, AddSymByNameCallback);
 
-			Interop.Structures.Symbol[] cpy = m_symBuffer.ToArray();
+			Symbol[] cpy = m_symBuffer.ToArray();
 
 			ClearBuffer();
 
@@ -190,7 +190,7 @@ namespace NeoCore.Import.Providers
 			string symName = ((DebugSymbol*) sym)->ReadSymbolName();
 
 			if (symName.Contains(m_singleNameBuffer)) {
-				m_symBuffer.Add(new Interop.Structures.Symbol(sym));
+				m_symBuffer.Add(new Symbol(sym));
 			}
 
 			return true;
@@ -198,7 +198,7 @@ namespace NeoCore.Import.Providers
 
 		private bool AddSymCallback(IntPtr sym, uint symSize, IntPtr userCtx)
 		{
-			m_symBuffer.Add(new Interop.Structures.Symbol(sym));
+			m_symBuffer.Add(new Symbol(sym));
 
 			return true;
 		}

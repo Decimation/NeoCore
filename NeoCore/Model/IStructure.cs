@@ -1,5 +1,6 @@
+using Memkit;
+using Memkit.Pointers;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 
 namespace NeoCore.Model
 {

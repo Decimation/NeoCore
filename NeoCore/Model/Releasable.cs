@@ -1,7 +1,7 @@
 using NeoCore.Import;
 using NeoCore.Import.Providers;
-using NeoCore.Interop;
 using NeoCore.Utilities.Diagnostics;
+using NeoCore.Win32;
 
 namespace NeoCore.Model
 {

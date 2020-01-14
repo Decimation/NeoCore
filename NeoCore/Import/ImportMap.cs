@@ -1,6 +1,7 @@
 using System.Collections.Generic;
-using NeoCore.Interop;
-using NeoCore.Memory.Pointers;
+using Memkit;
+using Memkit.Pointers;
+using NeoCore.Win32;
 
 namespace NeoCore.Import
 {
@@ -15,7 +16,17 @@ namespace NeoCore.Import
 			m_imports = new Dictionary<string, Pointer<byte>>();
 		}
 
-		public Pointer<byte> this[string key] => m_imports[key];
+		public Pointer<byte> this[string key] {
+			get {
+
+				if (!m_imports.ContainsKey(key)) {
+					var msg = string.Format("Key not found: {0}; Pairs: {1}", key, m_imports.Count);
+					throw new KeyNotFoundException(msg);
+				}
+
+				return m_imports[key];
+			}
+		}
 
 		internal void Add(string key, Pointer<byte> value) => m_imports.Add(key, value);
 

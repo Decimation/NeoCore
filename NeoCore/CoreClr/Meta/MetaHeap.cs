@@ -1,10 +1,12 @@
 using System;
 using System.Reflection;
 using System.Text;
+using Memkit;
+using Memkit.Model;
+using Memkit.Pointers;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Support;
 
 // ReSharper disable InconsistentNaming

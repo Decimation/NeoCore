@@ -2,11 +2,12 @@ using System;
 using System.Collections;
 using System.IO;
 using System.Runtime.InteropServices;
+using Memkit;
+using Memkit.Pointers;
 using NeoCore.CoreClr.VM;
-using NeoCore.Interop;
-using NeoCore.Memory.Pointers;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
+using NeoCore.Win32;
 
 namespace NeoCore.CoreClr
 {

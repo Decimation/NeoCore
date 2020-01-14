@@ -1,8 +1,9 @@
 using System;
 using System.Reflection;
 using System.Text;
+using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 

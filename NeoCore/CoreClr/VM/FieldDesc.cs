@@ -1,12 +1,14 @@
 using System.Runtime.InteropServices;
+using Memkit;
+using Memkit.Pointers;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
-using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
+using NeoCore.Memory.ExtraPointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
+using NeoCore.Win32.Attributes;
 
 // ReSharper disable UnassignedGetOnlyAutoProperty
 // ReSharper disable InconsistentNaming

@@ -3,7 +3,7 @@ using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
-using NeoCore.Interop.Structures;
+using NeoCore.Win32.Structures;
 
 namespace NeoCore.Utilities.Extensions
 {

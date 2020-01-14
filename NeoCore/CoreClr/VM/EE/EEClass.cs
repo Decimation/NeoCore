@@ -1,11 +1,12 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Memkit.Pointers;
 using NeoCore.Import.Attributes;
-using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
+using NeoCore.Memory.ExtraPointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
+using NeoCore.Win32.Attributes;
 
 // ReSharper disable ConvertToAutoPropertyWhenPossible
 

@@ -1,6 +1,8 @@
 using System.Diagnostics;
 using System.IO;
-using NeoCore.Memory.Pointers;
+using Memkit;
+using Memkit.Pointers;
+using NeoCore.Win32.Structures;
 
 namespace NeoCore.Import.Providers
 {
@@ -16,7 +18,7 @@ namespace NeoCore.Import.Providers
 
 		public FileInfo SymbolFile { get; }
 
-		private Interop.Structures.Symbol GetSymbol(string name)
+		private Symbol GetSymbol(string name)
 		{
 			SymbolManager.Value.CurrentImage = SymbolFile;
 			return SymbolManager.Value.GetSymbol(name);

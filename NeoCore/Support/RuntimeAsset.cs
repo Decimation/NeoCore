@@ -1,8 +1,9 @@
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using NeoCore.Interop;
-using NeoCore.Memory.Pointers;
+using Memkit;
+using Memkit.Pointers;
+using Native = NeoCore.Win32.Native;
 
 namespace NeoCore.Support
 {

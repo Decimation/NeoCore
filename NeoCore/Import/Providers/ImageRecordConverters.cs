@@ -2,6 +2,8 @@ using System;
 using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using Memkit;
+using Memkit.Utilities;
 using NeoCore.Memory;
 using NeoCore.Utilities;
 
@@ -19,10 +21,11 @@ namespace NeoCore.Import.Providers
 			string    name  = null;
 			EntryType type  = default;
 			object    value = null;
+			string alias = null;
 
 			while (reader.Read()) {
 				if (reader.TokenType == JsonTokenType.EndObject) {
-					return new ImageRecordEntry(name, type, value);
+					return new ImageRecordEntry(name, type, value, alias);
 				}
 
 				// Get the key.
@@ -50,6 +53,11 @@ namespace NeoCore.Import.Providers
 						EntryType.Offset => Int64.Parse(rawValue, NumberStyles.HexNumber),
 						_ => throw new JsonException()
 					};
+				}
+				
+				if (reader.GetString() == nameof(ImageRecordEntry.Alias).ToLower()) {
+					reader.Read();
+					alias = reader.GetString();
 				}
 			}
 

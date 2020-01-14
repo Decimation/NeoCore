@@ -2,7 +2,7 @@ using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using NeoCore.CoreClr;
-using NeoCore.Interop;
+using NeoCore.Win32;
 
 namespace NeoCore.Support
 {

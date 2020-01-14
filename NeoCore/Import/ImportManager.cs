@@ -5,11 +5,12 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using JetBrains.Annotations;
+using Memkit;
+using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Import.Attributes;
-using NeoCore.Interop;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
@@ -154,7 +155,7 @@ namespace NeoCore.Import
 
 			Unload(type);
 
-			Mem.Destroy(ref value);
+			Neomem.Destroy(ref value);
 		}
 
 		public void UnloadAll(Type[] t)

@@ -1,8 +1,8 @@
 using System;
 using System.Reflection;
+using Memkit.Pointers;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM.Jit;
-using NeoCore.Memory.Pointers;
 
 // ReSharper disable InconsistentNaming
 

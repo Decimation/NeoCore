@@ -1,9 +1,10 @@
 // ReSharper disable InconsistentNaming
 
+using Memkit;
+using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
-using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Model;
 
 namespace NeoCore.CoreClr.VM

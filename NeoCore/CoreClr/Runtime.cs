@@ -5,15 +5,18 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime;
 using System.Runtime.InteropServices;
+using Memkit;
+using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.VM;
+using NeoCore.Import;
 using NeoCore.Import.Attributes;
-using NeoCore.Interop;
-using NeoCore.Interop.Attributes;
 using NeoCore.Memory;
-using NeoCore.Memory.Pointers;
 using NeoCore.Support;
 using NeoCore.Utilities.Diagnostics;
+using NeoCore.Win32;
+using NeoCore.Win32.Attributes;
 
 // ReSharper disable InconsistentNaming
 
@@ -29,6 +32,8 @@ namespace NeoCore.CoreClr
 
 		static Runtime()
 		{
+			Resources.FullSetup();
+			//ImportManager.Value.Load(typeof(TypeHandle), Resources.Clr.Imports);
 			GetTypeFromHandle = Functions.Reflection.FindFunction<GetTypeFromHandleUnsafeDelegate>();
 		}
 

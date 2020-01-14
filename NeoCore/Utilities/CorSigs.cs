@@ -1,4 +1,5 @@
 using System;
+using Memkit.Utilities;
 using NeoCore.CoreClr;
 using NeoCore.CoreClr.VM;
 

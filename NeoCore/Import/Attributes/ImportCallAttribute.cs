@@ -1,8 +1,8 @@
 using System;
 using JetBrains.Annotations;
-using NeoCore.Interop;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
+using NeoCore.Win32;
 
 namespace NeoCore.Import.Attributes
 {
