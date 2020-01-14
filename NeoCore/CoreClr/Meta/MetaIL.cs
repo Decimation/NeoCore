@@ -1,8 +1,11 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+using System.Reflection.Emit;
 using Memkit.Pointers;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM.Jit;
+using NeoCore.Utilities;
 
 // ReSharper disable InconsistentNaming
 
@@ -18,7 +21,7 @@ namespace NeoCore.CoreClr.Meta
 	{
 		public MetaIL(Pointer<CorMethod> ptr) : base(ptr) { }
 
-		private MetaIL(MemberInfo member) : base(member) { }
+//		private MetaIL(MemberInfo member) : base(member) { }
 
 		protected override Type[] AdditionalSources => new[] {typeof(CorMethodTiny), typeof(CorMethodFat)};
 
@@ -42,5 +45,7 @@ namespace NeoCore.CoreClr.Meta
 		/// </remarks>
 		/// </summary>
 		public byte[] CodeIL => Value.Reference.CodeIL;
+
+		public Instruction[] Instructions => Instruction.ReadInstructions(CodeIL);
 	}
 }

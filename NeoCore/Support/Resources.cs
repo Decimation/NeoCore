@@ -24,6 +24,9 @@ namespace NeoCore.Support
 		/// </summary>
 		public const string NAME = "NeoCore";
 
+		// todo: portability
+		private const string IDX = @"C:\Users\Deci\RiderProjects\NeoCore\NeoCore\clr_image.json";
+
 		private static readonly Type[] CoreClrTypes =
 		{
 			typeof(TypeHandle),
@@ -56,9 +59,9 @@ namespace NeoCore.Support
 
 		internal static ClrFramework Framework => ClrFrameworks.Core;
 
-		internal static NeoProcess CurrentProcess => Process.GetCurrentProcess();
+		internal static LibraryProcess CurrentProcess => Process.GetCurrentProcess();
 
-		internal static ClrRuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(Framework);
+		internal static ClrRuntimeAsset Clr { get; private set; } = new ClrRuntimeAsset(Framework, IDX);
 
 		internal static void FullSetup()
 		{

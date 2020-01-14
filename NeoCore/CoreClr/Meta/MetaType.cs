@@ -1,10 +1,10 @@
 using System;
 using System.Reflection;
 using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;
-using NeoCore.Memory;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
@@ -29,7 +29,7 @@ namespace NeoCore.CoreClr.Meta
 		public MetaType(Pointer<MethodTable> mt) : base(mt)
 		{
 			RuntimeType         = Runtime.ResolveType(mt.Cast());
-			InspectionProperties = Runtime.Inspection.ReadProperties(RuntimeType);
+			InspectionProperties = Inspector.ReadProperties(RuntimeType);
 		}
 
 		public MetaType(Type t) : this(Runtime.ResolveHandle(t)) { }
@@ -77,7 +77,7 @@ namespace NeoCore.CoreClr.Meta
 
 		public OptionalSlotsFlags SlotFlags => Value.Reference.SlotsFlags;
 
-		public override int Token => CorSigs.TokenFromRid(Value.Reference.RawToken, CorTokenType.TypeDef);
+		public override int Token => Tokens.TokenFromRid(Value.Reference.RawToken, CorTokenType.TypeDef);
 
 		public short VirtualsCount => Value.Reference.NumVirtuals;
 

@@ -6,7 +6,6 @@ using Memkit.Model;
 using Memkit.Pointers;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
-using NeoCore.Memory;
 using NeoCore.Support;
 
 // ReSharper disable InconsistentNaming

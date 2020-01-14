@@ -3,7 +3,6 @@ using System.Reflection;
 using System.Text;
 using Memkit.Pointers;
 using Memkit.Utilities;
-using NeoCore.Memory;
 using NeoCore.Model;
 using NeoCore.Utilities;
 

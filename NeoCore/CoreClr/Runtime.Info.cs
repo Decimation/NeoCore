@@ -9,6 +9,9 @@ using System.Runtime;
 using System.Runtime.InteropServices;
 using InlineIL;
 using JetBrains.Annotations;
+using Memkit.Pointers;
+using Memkit.Utilities;
+using NeoCore.CoreClr.VM;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
@@ -29,6 +32,38 @@ namespace NeoCore.CoreClr
 		/// </summary>
 		public static class Info
 		{
+			// https://github.com/dotnet/coreclr/blob/master/src/vm/object.h
+
+			/// <summary>
+			/// <list type="bullet">
+			///         <item>
+			///             <description>+ 2: <see cref="ObjHeader.Padding"/> (x64)</description>
+			///         </item>
+			///         <item>
+			///             <description>+ 2: <see cref="ObjHeader.SyncBlock"/></description>
+			///         </item>
+			///     </list>
+			/// </summary>
+			public static readonly unsafe int ObjHeaderSize = sizeof(ObjHeader);
+
+			/// <summary>
+			///     Size of <see cref="TypeHandle" /> and <see cref="ObjHeader" />
+			///     <list type="bullet">
+			///         <item>
+			///             <description>+ <see cref="Runtime.Info.ObjHeaderSize" />: <see cref="ObjHeader" /></description>
+			///         </item>
+			///         <item>
+			///             <description>+ sizeof <see cref="TypeHandle" />: <see cref="TypeHandle"/></description>
+			///         </item>
+			///     </list>
+			/// </summary>
+			public static readonly unsafe int ObjectBaseSize = ObjHeaderSize + sizeof(TypeHandle);
+
+			/// <summary>
+			///     <para>Minimum GC object heap size</para>
+			/// </summary>
+			public static readonly int MinObjectSize = (Mem.Size * 2) + ObjHeaderSize;
+
 			/// <summary>
 			///     Hueristically determines whether <paramref name="value" /> is blank.
 			///     This always returns <c>true</c> if <paramref name="value" /> is <c>null</c> or nil.
@@ -55,7 +90,7 @@ namespace NeoCore.CoreClr
 					return false;
 				}
 
-				if (!Inspection.IsCompileStruct<T>()) {
+				if (!Inspector.IsCompileStruct<T>()) {
 					// Null comparison should be equivalent to nil comparison,
 					// but this is a sanity check
 					if (value == null) {
@@ -73,7 +108,7 @@ namespace NeoCore.CoreClr
 					_ => new bool?()
 				};
 
-				return !test.HasValue ? IsNil(value, NilTestOptions.EqualityComparer) : test.Value;
+				return !test.HasValue ? Inspector.IsNil(value) : test.Value;
 			}
 
 			/// <summary>
@@ -85,7 +120,7 @@ namespace NeoCore.CoreClr
 			public static bool IsBoxed<T>([CanBeNull] T value)
 			{
 				return (typeof(T).IsInterface || typeof(T) == typeof(object)) && value != null &&
-				       Inspection.IsStruct(value);
+				       Inspector.IsStruct(value);
 			}
 
 			/// <summary>
@@ -94,7 +129,7 @@ namespace NeoCore.CoreClr
 			/// </summary>
 			/// <param name="value">Value to check for pinnability</param>
 			/// <returns><c>true</c> if <paramref name="value"/> is pinnable; <c>false</c> otherwise</returns>
-			public static bool IsPinnable( object? value) => IsPinnable(value, PinTestOptions.Fast);
+			public static bool IsPinnable(object? value) => IsPinnable(value, PinTestOptions.Fast);
 
 			/// <summary>
 			/// Determines whether <paramref name="value"/> is pinnable; that is, usable with
@@ -107,9 +142,9 @@ namespace NeoCore.CoreClr
 			{
 				switch (options) {
 					case PinTestOptions.SystemMarshal:
-						return Functions.Reflection.FindFunction<IsPinnableDelegate>()(value);
+						return Functions.Find<IsPinnableDelegate>()(value);
 					case PinTestOptions.GCHandleException:
-						return !Functions.Inspection.FunctionThrows<ArgumentException>(() =>
+						return !Functions.Throws<ArgumentException>(() =>
 						{
 							var gc = GCHandle.Alloc(value, GCHandleType.Pinned);
 							gc.Free();
@@ -123,13 +158,13 @@ namespace NeoCore.CoreClr
 
 						var mt = ReadTypeHandle(value);
 
-						if (Inspection.IsString(value)) {
+						if (Inspector.IsString(value)) {
 							return true;
 						}
 
 						if (mt.IsArray) {
 							var  corType         = mt.ElementTypeHandle.NormType;
-							bool isPrimitiveElem = CorSigs.IsPrimitiveType(corType);
+							bool isPrimitiveElem = Tokens.IsPrimitiveType(corType);
 
 							if (isPrimitiveElem) {
 								return true;
@@ -152,30 +187,8 @@ namespace NeoCore.CoreClr
 				}
 			}
 
-			/// <summary>
-			///     Determines whether the value of <paramref name="value" /> is <c>default</c> or <c>null</c> bytes,
-			///     or <paramref name="value" /> is <c>null</c>
-			///     <remarks>"Nil" is <c>null</c> or <c>default</c>.</remarks>
-			/// </summary>
-			public static bool IsNil<T>([CanBeNull] T value) => IsNil(value, NilTestOptions.Fast);
-
-			/// <summary>
-			///     Determines whether the value of <paramref name="value" /> is <c>default</c> or <c>null</c> bytes,
-			///     or <paramref name="value" /> is <c>null</c>
-			///     <remarks>"Nil" is <c>null</c> or <c>default</c>.</remarks>
-			/// </summary>
-			private static bool IsNil<T>([CanBeNull] T value, NilTestOptions options)
-			{
-				return options switch
-				{
-					NilTestOptions.EqualityComparer => EqualityComparer<T>.Default.Equals(value, default),
-					NilTestOptions.Fast => IsNilFast(value),
-					_ => throw new ArgumentOutOfRangeException(nameof(options), options, null)
-				};
-			}
-
 			[NativeFunction]
-			private static bool IsNilFast<T>([CanBeNull] T value)
+			public static bool IsNilFast<T>([CanBeNull] T value)
 			{
 				// Fastest method for calculating whether a value is nil.
 				IL.Emit.Ldarg(nameof(value));
@@ -183,19 +196,6 @@ namespace NeoCore.CoreClr
 				IL.Emit.Ceq();
 				IL.Emit.Ret();
 				return IL.Return<bool>();
-			}
-
-			private enum NilTestOptions
-			{
-				/// <summary>
-				/// Determines whether a value is <c>nil</c> using <see cref="EqualityComparer{T}.Default"/>.
-				/// </summary>
-				EqualityComparer,
-
-				/// <summary>
-				/// Determines whether a value is <c>nil</c> using IL <see cref="OpCodes.Ldnull"/> comparison.
-				/// </summary>
-				Fast
 			}
 
 			private enum PinTestOptions

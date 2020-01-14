@@ -3,7 +3,7 @@ using System;
 namespace NeoCore.Win32.Attributes
 {
 	/// <summary>
-	/// Designates the function to import with <see cref="Functions.Reflection.FindFunction{TDelegate}()"/>
+	/// Designates the function to import with <see cref="Functions.Find{TDelegate}()"/>
 	/// </summary>
 	[AttributeUsage(AttributeTargets.Delegate)]
 	public sealed class FunctionSpecifierAttribute : Attribute
@@ -19,7 +19,7 @@ namespace NeoCore.Win32.Attributes
 
 		/// <summary>
 		/// If <c>null</c>, the <see cref="Delegate"/> name will be used with
-		/// substrings in <see cref="Functions.Reflection.DelegateNameRemoval"/> removed
+		/// substrings in <see cref="Functions.DelegateNameRemoval"/> removed
 		/// </summary>
 		public string? Name { get; set; }
 	}

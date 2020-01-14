@@ -1,7 +1,6 @@
 using System;
 using JetBrains.Annotations;
 using NeoCore.CoreClr;
-using NeoCore.Memory;
 using NeoCore.Utilities;
 
 namespace NeoCore.Import.Attributes

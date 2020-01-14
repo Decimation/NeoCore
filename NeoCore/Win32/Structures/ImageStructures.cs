@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.InteropServices;
+using Memkit.Interop;
 using Memkit.Pointers;
 using NeoCore.Model;
 using NeoCore.Win32.Attributes;
@@ -12,7 +13,15 @@ namespace NeoCore.Win32.Structures
 	[NativeStructure]
 	public unsafe struct ImageDOSHeader : INativeStructure
 	{
-		public string NativeName => "IMAGE_DOS_HEADER";
+		/// <summary>
+		/// Reserved
+		/// </summary>
+		public fixed ushort Res0[4];
+
+		/// <summary>
+		/// Reserved
+		/// </summary>
+		public fixed ushort Res2[10];
 
 		// DOS .EXE header
 
@@ -88,11 +97,6 @@ namespace NeoCore.Win32.Structures
 		public ushort Ovno { get; }
 
 		/// <summary>
-		/// Reserved
-		/// </summary>
-		public fixed ushort Res0[4];
-
-		/// <summary>
 		/// OEM identifier (for <see cref="Oeminfo"/>)
 		/// </summary>
 		public ushort Oemid { get; }
@@ -103,22 +107,17 @@ namespace NeoCore.Win32.Structures
 		public ushort Oeminfo { get; }
 
 		/// <summary>
-		/// Reserved
-		/// </summary>
-		public fixed ushort Res2[10];
-
-		/// <summary>
 		/// File address of new exe header
 		/// </summary>
 		public uint Lfanew { get; }
+
+		public string NativeName => "IMAGE_DOS_HEADER";
 	}
 
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct ImageFileHeader : INativeStructure
 	{
-		public string NativeName => "IMAGE_FILE_HEADER";
-
 		public MachineArchitecture Machine { get; }
 
 		public ushort NumberOfSections { get; }
@@ -132,23 +131,24 @@ namespace NeoCore.Win32.Structures
 		public ushort SizeOfOptionalHeader { get; }
 
 		public ImageFileCharacteristics Characteristics { get; }
+		public string NativeName => "IMAGE_FILE_HEADER";
 	}
 
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
 	public struct ImageDataDirectory : INativeStructure
 	{
-		public string NativeName => "IMAGE_DATA_DIRECTORY";
-
 		public uint VirtualAddress { get; }
 		public uint Size           { get; }
+		public string NativeName => "IMAGE_DATA_DIRECTORY";
 	}
 
 	[NativeStructure]
 	[StructLayout(LayoutKind.Explicit)]
 	public struct ImageSectionHeader : INativeStructure
 	{
-		public string NativeName => "IMAGE_SECTION_HEADER";
+		[FieldOffset(36)]
+		public ImageSectionFlags Characteristics;
 
 		// Grabbed the following 2 definitions from http://www.pinvoke.net/default.aspx/Structures/IMAGE_SECTION_HEADER.html
 
@@ -157,19 +157,17 @@ namespace NeoCore.Win32.Structures
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 8)]
 		public char[] Name;
 
-		public string SectionName => new string(Name);
+
+		[FieldOffset(34)]
+		public ushort NumberOfLinenumbers;
 
 
-		[FieldOffset(8)]
-		public uint VirtualSize;
+		[FieldOffset(32)]
+		public ushort NumberOfRelocations;
 
 
-		[FieldOffset(12)]
-		public uint VirtualAddress;
-
-
-		[FieldOffset(16)]
-		public uint SizeOfRawData;
+		[FieldOffset(28)]
+		public uint PointerToLinenumbers;
 
 
 		[FieldOffset(20)]
@@ -180,20 +178,19 @@ namespace NeoCore.Win32.Structures
 		public uint PointerToRelocations;
 
 
-		[FieldOffset(28)]
-		public uint PointerToLinenumbers;
+		[FieldOffset(16)]
+		public uint SizeOfRawData;
 
 
-		[FieldOffset(32)]
-		public ushort NumberOfRelocations;
+		[FieldOffset(12)]
+		public uint VirtualAddress;
 
 
-		[FieldOffset(34)]
-		public ushort NumberOfLinenumbers;
+		[FieldOffset(8)]
+		public uint VirtualSize;
 
-
-		[FieldOffset(36)]
-		public ImageSectionFlags Characteristics;
+		public string SectionName => new string(Name);
+		public string NativeName => "IMAGE_SECTION_HEADER";
 	}
 
 
@@ -201,209 +198,206 @@ namespace NeoCore.Win32.Structures
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct ImageOptionalHeader64 : INativeStructure
 	{
-		public string NativeName => "IMAGE_OPTIONAL_HEADER64";
-
-		public ushort Magic;
-
-		public byte MajorLinkerVersion;
-
-		public byte MinorLinkerVersion;
-
-		public uint SizeOfCode;
-
-		public uint SizeOfInitializedData;
-
-		public uint SizeOfUninitializedData;
-
 		public uint AddressOfEntryPoint;
-
-		public uint BaseOfCode;
-
-		public ulong ImageBase;
-
-		public uint SectionAlignment;
-
-		public uint FileAlignment;
-
-		public ushort MajorOperatingSystemVersion;
-
-		public ushort MinorOperatingSystemVersion;
-
-		public ushort MajorImageVersion;
-
-		public ushort MinorImageVersion;
-
-		public ushort MajorSubsystemVersion;
-
-		public ushort MinorSubsystemVersion;
-
-		public uint Win32VersionValue;
-
-		public uint SizeOfImage;
-
-		public uint SizeOfHeaders;
-
-		public uint CheckSum;
-
-		public ImageSubSystem Subsystem;
-
-		public ImageDllCharacteristics DllCharacteristics;
-
-		public ulong SizeOfStackReserve;
-
-		public ulong SizeOfStackCommit;
-
-		public ulong SizeOfHeapReserve;
-
-		public ulong SizeOfHeapCommit;
-
-		public uint LoaderFlags;
-
-		public uint NumberOfRvaAndSizes;
-
-		public ImageDataDirectory ExportTable;
-
-		public ImageDataDirectory ImportTable;
-
-		public ImageDataDirectory ResourceTable;
-
-		public ImageDataDirectory ExceptionTable;
-
-		public ImageDataDirectory CertificateTable;
-
-		public ImageDataDirectory BaseRelocationTable;
-
-		public ImageDataDirectory Debug;
 
 		public ImageDataDirectory Architecture;
 
-		public ImageDataDirectory GlobalPtr;
+		public uint BaseOfCode;
 
-		public ImageDataDirectory TLSTable;
-
-		public ImageDataDirectory LoadConfigTable;
+		public ImageDataDirectory BaseRelocationTable;
 
 		public ImageDataDirectory BoundImport;
 
-		public ImageDataDirectory IAT;
+		public ImageDataDirectory CertificateTable;
 
-		public ImageDataDirectory DelayImportDescriptor;
+		public uint CheckSum;
 
 		public ImageDataDirectory CLRRuntimeHeader;
 
+		public ImageDataDirectory Debug;
+
+		public ImageDataDirectory DelayImportDescriptor;
+
+		public ImageDllCharacteristics DllCharacteristics;
+
+		public ImageDataDirectory ExceptionTable;
+
+		public ImageDataDirectory ExportTable;
+
+		public uint FileAlignment;
+
+		public ImageDataDirectory GlobalPtr;
+
+		public ImageDataDirectory IAT;
+
+		public ulong ImageBase;
+
+		public ImageDataDirectory ImportTable;
+
+		public ImageDataDirectory LoadConfigTable;
+
+		public uint LoaderFlags;
+
+		public ushort Magic;
+
+		public ushort MajorImageVersion;
+
+		public byte MajorLinkerVersion;
+
+		public ushort MajorOperatingSystemVersion;
+
+		public ushort MajorSubsystemVersion;
+
+		public ushort MinorImageVersion;
+
+		public byte MinorLinkerVersion;
+
+		public ushort MinorOperatingSystemVersion;
+
+		public ushort MinorSubsystemVersion;
+
+		public uint NumberOfRvaAndSizes;
+
 		public ImageDataDirectory Reserved;
+
+		public ImageDataDirectory ResourceTable;
+
+		public uint SectionAlignment;
+
+		public uint SizeOfCode;
+
+		public uint SizeOfHeaders;
+
+		public ulong SizeOfHeapCommit;
+
+		public ulong SizeOfHeapReserve;
+
+		public uint SizeOfImage;
+
+		public uint SizeOfInitializedData;
+
+		public ulong SizeOfStackCommit;
+
+		public ulong SizeOfStackReserve;
+
+		public uint SizeOfUninitializedData;
+
+		public ImageSubSystem Subsystem;
+
+		public ImageDataDirectory TLSTable;
+
+		public uint Win32VersionValue;
+		public string NativeName => "IMAGE_OPTIONAL_HEADER64";
 	}
 
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct ImageOptionalHeader32 : INativeStructure
 	{
-		public string NativeName => "IMAGE_OPTIONAL_HEADER32";
-
-		public ushort Magic;
-
-		public byte MajorLinkerVersion;
-
-		public byte MinorLinkerVersion;
-
-		public uint SizeOfCode;
-
-		public uint SizeOfInitializedData;
-
-		public uint SizeOfUninitializedData;
-
 		public uint AddressOfEntryPoint;
+
+		public ImageDataDirectory Architecture;
 
 		public uint BaseOfCode;
 
 		public uint BaseOfData;
 
-		public uint ImageBase;
-
-		public uint SectionAlignment;
-
-		public uint FileAlignment;
-
-		public ushort MajorOperatingSystemVersion;
-
-		public ushort MinorOperatingSystemVersion;
-
-		public ushort MajorImageVersion;
-
-		public ushort MinorImageVersion;
-
-		public ushort MajorSubsystemVersion;
-
-		public ushort MinorSubsystemVersion;
-
-		public uint Win32VersionValue;
-
-		public uint SizeOfImage;
-
-		public uint SizeOfHeaders;
-
-		public uint CheckSum;
-
-		public ImageSubSystem Subsystem;
-
-		public ImageDllCharacteristics DllCharacteristics;
-
-		public uint SizeOfStackReserve;
-
-		public uint SizeOfStackCommit;
-
-		public uint SizeOfHeapReserve;
-
-		public uint SizeOfHeapCommit;
-
-		public uint LoaderFlags;
-
-		public uint NumberOfRvaAndSizes;
-
-		public ImageDataDirectory ExportTable;
-
-		public ImageDataDirectory ImportTable;
-
-		public ImageDataDirectory ResourceTable;
-
-		public ImageDataDirectory ExceptionTable;
-
-		public ImageDataDirectory CertificateTable;
-
 		public ImageDataDirectory BaseRelocationTable;
-
-		public ImageDataDirectory Debug;
-
-		public ImageDataDirectory Architecture;
-
-		public ImageDataDirectory GlobalPtr;
-
-		public ImageDataDirectory TLSTable;
-
-		public ImageDataDirectory LoadConfigTable;
 
 		public ImageDataDirectory BoundImport;
 
-		public ImageDataDirectory IAT;
+		public ImageDataDirectory CertificateTable;
 
-		public ImageDataDirectory DelayImportDescriptor;
+		public uint CheckSum;
 
 		public ImageDataDirectory CLRRuntimeHeader;
 
+		public ImageDataDirectory Debug;
+
+		public ImageDataDirectory DelayImportDescriptor;
+
+		public ImageDllCharacteristics DllCharacteristics;
+
+		public ImageDataDirectory ExceptionTable;
+
+		public ImageDataDirectory ExportTable;
+
+		public uint FileAlignment;
+
+		public ImageDataDirectory GlobalPtr;
+
+		public ImageDataDirectory IAT;
+
+		public uint ImageBase;
+
+		public ImageDataDirectory ImportTable;
+
+		public ImageDataDirectory LoadConfigTable;
+
+		public uint LoaderFlags;
+
+		public ushort Magic;
+
+		public ushort MajorImageVersion;
+
+		public byte MajorLinkerVersion;
+
+		public ushort MajorOperatingSystemVersion;
+
+		public ushort MajorSubsystemVersion;
+
+		public ushort MinorImageVersion;
+
+		public byte MinorLinkerVersion;
+
+		public ushort MinorOperatingSystemVersion;
+
+		public ushort MinorSubsystemVersion;
+
+		public uint NumberOfRvaAndSizes;
+
 		public ImageDataDirectory Reserved;
+
+		public ImageDataDirectory ResourceTable;
+
+		public uint SectionAlignment;
+
+		public uint SizeOfCode;
+
+		public uint SizeOfHeaders;
+
+		public uint SizeOfHeapCommit;
+
+		public uint SizeOfHeapReserve;
+
+		public uint SizeOfImage;
+
+		public uint SizeOfInitializedData;
+
+		public uint SizeOfStackCommit;
+
+		public uint SizeOfStackReserve;
+
+		public uint SizeOfUninitializedData;
+
+		public ImageSubSystem Subsystem;
+
+		public ImageDataDirectory TLSTable;
+
+		public uint Win32VersionValue;
+		public string NativeName => "IMAGE_OPTIONAL_HEADER32";
 	}
 
 	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct ImageNtHeaders64 : INativeStructure
 	{
-		public string NativeName => "IMAGE_NT_HEADERS64";
-
 		public uint Signature { get; }
 
 		public ImageFileHeader FileHeader { get; }
 
 		public ImageOptionalHeader64 OptionalHeader { get; }
+		public string NativeName => "IMAGE_NT_HEADERS64";
 	}
 
 	/// <summary>

@@ -2,7 +2,6 @@ using System;
 using System.Runtime.InteropServices;
 using Memkit;
 using Memkit.Utilities;
-using NeoCore.Memory;
 using NeoCore.Model;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Win32.Attributes;
@@ -46,5 +45,20 @@ namespace NeoCore.CoreClr.VM
 		public ClrStructureType Type => ClrStructureType.Metadata;
 
 		public string NativeName => nameof(ObjHeader);
+	}
+	
+	[Flags]
+	public enum SyncBlockFlags : uint
+	{
+		StringHasNoHighChars = 0x80000000,
+		AgileInProgress      = 0x80000000,
+		StringHighCharsKnown = 0x40000000,
+		StringHasSpecialSort = 0xC0000000,
+		StringHighCharMask   = 0xC0000000,
+		FinalizerRun         = 0x40000000,
+		GcReserve            = 0x20000000,
+		SpinLock             = 0x10000000,
+		IsHashOrSyncblkindex = 0x08000000,
+		IsHashcode           = 0x04000000
 	}
 }

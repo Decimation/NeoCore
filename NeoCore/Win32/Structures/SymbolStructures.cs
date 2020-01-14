@@ -72,8 +72,30 @@ namespace NeoCore.Win32.Structures
 	[StructLayout(LayoutKind.Sequential)]
 	internal unsafe struct DebugSymbol : INativeStructure
 	{
-		public string NativeName => "SYMBOL_INFO";
-		
+		/// <summary>
+		///     Max string length for <see cref="DebugSymbol.Name" />
+		/// </summary>
+		internal const int MaxNameLength = 2000;
+
+		/// <summary>
+		///     Size of <see cref="DebugSymbol" />
+		/// </summary>
+		internal static readonly int SizeOf = Marshal.SizeOf<DebugSymbol>();
+
+		internal static readonly int FullSize =
+			SizeOf + MaxNameLength * sizeof(byte) + sizeof(ulong) - 1 / sizeof(ulong);
+
+		/// <summary>
+		///     The name of the symbol. The name can be undecorated if the <see cref="SymbolOptions.UNDNAME" /> option is
+		///     used with the <see cref="Win32Native.Symbols.SetOptions" /> function.
+		/// </summary>
+		internal fixed sbyte Name[1];
+
+		/// <summary>
+		///     Reserved.
+		/// </summary>
+		private fixed ulong Reserved[2];
+
 		// https://docs.microsoft.com/en-us/windows/win32/api/dbghelp/ns-dbghelp-symbol_info
 
 		/// <summary>
@@ -88,11 +110,6 @@ namespace NeoCore.Win32.Structures
 		///     This value does not persist between sessions.
 		/// </summary>
 		internal uint TypeIndex { get; set; }
-
-		/// <summary>
-		///     Reserved.
-		/// </summary>
-		private fixed ulong Reserved[2];
 
 		/// <summary>
 		///     The unique value for the symbol. The value associated with a symbol is not guaranteed to be the same
@@ -155,25 +172,7 @@ namespace NeoCore.Win32.Structures
 		/// </summary>
 		internal uint MaxNameLen { get; set; }
 
-		/// <summary>
-		///     The name of the symbol. The name can be undecorated if the <see cref="SymbolOptions.UNDNAME" /> option is
-		///     used with the <see cref="Native.Symbols.SetOptions" /> function.
-		/// </summary>
-		internal fixed sbyte Name[1];
-
-
-		/// <summary>
-		///     Max string length for <see cref="DebugSymbol.Name" />
-		/// </summary>
-		internal const int MaxNameLength = 2000;
-
-		/// <summary>
-		///     Size of <see cref="DebugSymbol" />
-		/// </summary>
-		internal static readonly int SizeOf = Marshal.SizeOf<DebugSymbol>();
-
-		internal static readonly int FullSize =
-			SizeOf + MaxNameLength * sizeof(byte) + sizeof(ulong) - 1 / sizeof(ulong);
+		public string NativeName => "SYMBOL_INFO";
 
 		// !
 		internal static int GetSymbolInfoSize(DebugSymbol* pSym)

@@ -1,15 +1,13 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
-using Memkit;
 using Memkit.Pointers;
 using Memkit.Utilities;
 using NeoCore.CoreClr.Meta;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Model;
-using NeoCore.Utilities;
 
-namespace NeoCore.Memory
+namespace NeoCore.Utilities
 {
 	public static class Structures
 	{

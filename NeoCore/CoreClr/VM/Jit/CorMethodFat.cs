@@ -11,16 +11,15 @@ using NeoCore.Win32.Attributes;
 namespace NeoCore.CoreClr.VM.Jit
 {
 	[ImportNamespace]
-	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct CorMethodFat : ICorMethodStructure
 	{
 		// IMAGE_COR_ILMETHOD_FAT
 		// COR_ILMETHOD_FAT
-		
+
 		// https://github.com/dotnet/coreclr/blob/master/src/inc/corhlpr.h
 		// https://github.com/dotnet/coreclr/blob/master/src/inc/corhdr.h
-		
+
 		// This strucuture is the 'fat' layout, where no compression is attempted.
 		// Note that this structure can be added on at the end, thus making it extensible
 

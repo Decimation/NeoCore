@@ -1,10 +1,11 @@
+using System;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using Memkit;
 using Memkit.Pointers;
+using Memkit.Pointers.ExtraPointers;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
-using NeoCore.Memory;
-using NeoCore.Memory.ExtraPointers;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
@@ -16,12 +17,45 @@ using NeoCore.Win32.Attributes;
 namespace NeoCore.CoreClr.VM
 {
 	[ImportNamespace]
-	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct FieldDesc : IClrStructure
 	{
 		[ImportMapField]
 		private static readonly ImportMap Imports = new ImportMap();
+
+		internal Pointer<MethodTable> ApproxEnclosingMethodTable {
+			get {
+				// m_pMTOfEnclosingClass.GetValue(PTR_HOST_MEMBER_TADDR(FieldDesc, this, m_pMTOfEnclosingClass));
+
+				const int MT_FIELD_OFS = 0;
+
+				return Structures.FieldOffset(EnclosingMethodTableStub.NativeValue, MT_FIELD_OFS);
+			}
+		}
+
+		public ClrStructureType Type => ClrStructureType.Metadata;
+
+		public string NativeName => nameof(FieldDesc);
+
+		#region Imports
+
+		[ImportCall(ImportCallOptions.Map)]
+		internal int LoadSize()
+		{
+			fixed (FieldDesc* value = &this) {
+				return Imports.Call<int, ulong>(nameof(LoadSize), (ulong) value);
+			}
+		}
+
+		/*[ImportCall(ImportCallOptions.Map)]
+		internal void* GetCurrentStaticAddress()
+		{
+			fixed (FieldDesc* value = &this) {
+				return Imports.CallReturnPointer(nameof(GetCurrentStaticAddress), (ulong) value);
+			}
+		}*/
+
+		#endregion
 
 		#region Fields
 
@@ -57,9 +91,9 @@ namespace NeoCore.CoreClr.VM
 				var rawToken = (int) (UInt1 & 0xFFFFFF);
 				// Check if this FieldDesc is using the packed mb layout
 				if (!BitFlags.HasFlagFast(FieldBitFlags.RequiresFullMBValue))
-					return CorSigs.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, CorTokenType.FieldDef);
+					return Tokens.TokenFromRid(rawToken & (int) PackedLayoutMask.MBMask, CorTokenType.FieldDef);
 
-				return CorSigs.TokenFromRid(rawToken, CorTokenType.FieldDef);
+				return Tokens.TokenFromRid(rawToken, CorTokenType.FieldDef);
 			}
 		}
 
@@ -74,39 +108,77 @@ namespace NeoCore.CoreClr.VM
 		internal FieldBitFlags BitFlags => (FieldBitFlags) UInt1;
 
 		#endregion
+	}
+	
+	/// <summary>
+	/// Describes access modifiers for <see cref="FieldDesc.Access"/>
+	/// </summary>
+	public enum AccessModifiers
+	{
+		/// <summary>
+		///     <remarks>Equals <see cref="FieldInfo.IsPrivate" /></remarks>
+		/// </summary>
+		Private = 2,
 
-		#region Imports
+		/// <summary>
+		///     <remarks>Equals <see cref="FieldInfo.IsFamilyAndAssembly" /></remarks>
+		/// </summary>
+		PrivateProtected = 4,
 
-		[ImportCall(ImportCallOptions.Map)]
-		internal int LoadSize()
-		{
-			fixed (FieldDesc* value = &this) {
-				return Imports.Call<int, ulong>(nameof(LoadSize), (ulong) value);
-			}
-		}
+		/// <summary>
+		///     <remarks>Equals <see cref="FieldInfo.IsAssembly" /></remarks>
+		/// </summary>
+		Internal = 6,
 
-		/*[ImportCall(ImportCallOptions.Map)]
-		internal void* GetCurrentStaticAddress()
-		{
-			fixed (FieldDesc* value = &this) {
-				return Imports.CallReturnPointer(nameof(GetCurrentStaticAddress), (ulong) value);
-			}
-		}*/
+		/// <summary>
+		///     <remarks>Equals <see cref="FieldInfo.IsFamily" /></remarks>
+		/// </summary>
+		Protected = 8,
 
-		#endregion
+		/// <summary>
+		///     <remarks>Equals <see cref="FieldInfo.IsFamilyOrAssembly" /></remarks>
+		/// </summary>
+		ProtectedInternal = 10,
 
-		internal Pointer<MethodTable> ApproxEnclosingMethodTable {
-			get {
-				// m_pMTOfEnclosingClass.GetValue(PTR_HOST_MEMBER_TADDR(FieldDesc, this, m_pMTOfEnclosingClass));
+		/// <summary>
+		///     <remarks>Equals <see cref="FieldInfo.IsPublic" /></remarks>
+		/// </summary>
+		Public = 12
+	}
 
-				const int MT_FIELD_OFS = 0;
+	/// <summary>
+	/// Flags for <see cref="FieldDesc.UInt1"/>
+	/// </summary>
+	[Flags]
+	public enum FieldBitFlags
+	{
+		// <summary>
+		// <c>DWORD</c> #1
+		//     <para>unsigned m_mb : 24;</para>
+		//     <para>unsigned m_isStatic : 1;</para>
+		//     <para>unsigned m_isThreadLocal : 1;</para>
+		//     <para>unsigned m_isRVA : 1;</para>
+		//     <para>unsigned m_prot : 3;</para>
+		//     <para>unsigned m_requiresFullMbValue : 1;</para>
+		// </summary>
 
-				return Structures.FieldOffset(EnclosingMethodTableStub.NativeValue, MT_FIELD_OFS);
-			}
-		}
+		None = 0,
 
-		public ClrStructureType Type => ClrStructureType.Metadata;
-		
-		public string NativeName => nameof(FieldDesc);
+		Static = 1 << 24,
+
+		ThreadLocal = 1 << 25,
+
+		RVA = 1 << 26,
+
+		RequiresFullMBValue = 1 << 31
+	}
+	
+	/// <summary>
+	///     Packed MB layout masks
+	/// </summary>
+	internal enum PackedLayoutMask
+	{
+		MBMask       = 0x01FFFF,
+		NameHashMask = 0xFE0000
 	}
 }

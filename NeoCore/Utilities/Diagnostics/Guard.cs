@@ -6,7 +6,6 @@ using JetBrains.Annotations;
 using Memkit;
 using Memkit.Pointers;
 using NeoCore.CoreClr;
-using NeoCore.Memory;
 using NeoCore.Support;
 
 namespace NeoCore.Utilities.Diagnostics

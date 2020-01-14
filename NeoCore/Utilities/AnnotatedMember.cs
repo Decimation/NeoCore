@@ -9,6 +9,12 @@ namespace NeoCore.Utilities
 	/// <typeparam name="TAttr"><see cref="Attribute"/> type</typeparam>
 	public readonly struct AnnotatedMember<TAttr> where TAttr : Attribute
 	{
+		public AnnotatedMember(MemberInfo memberInfo, TAttr attribute)
+		{
+			(Member, Attribute) = (memberInfo, attribute);
+			IsNull              = Attribute == null && Member == null;
+		}
+
 		/// <summary>
 		/// Decorated member.
 		/// </summary>
@@ -20,11 +26,5 @@ namespace NeoCore.Utilities
 		public TAttr Attribute { get; }
 
 		public bool IsNull { get; }
-
-		public AnnotatedMember(MemberInfo memberInfo, TAttr attribute)
-		{
-			(Member, Attribute) = (memberInfo, attribute);
-			IsNull              = Attribute == null && Member == null;
-		}
 	}
 }

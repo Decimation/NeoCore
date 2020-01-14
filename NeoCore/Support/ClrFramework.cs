@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
+using Memkit.Interop;
 using NeoCore.CoreClr;
 using NeoCore.Win32;
 
@@ -59,6 +60,15 @@ namespace NeoCore.Support
 	/// </summary>
 	public struct ClrFramework
 	{
+		public ClrFramework([NotNull] string name)
+		{
+			Name     = name;
+			FullName = String.Format(".NET {0}", Name);
+
+			PreprocessorName = null;
+			FilenameRoot     = null;
+		}
+
 		public FileInfo SymbolFile {
 			get { return Runtime.GetRuntimeFile(FilenameRoot + Native.PDB_EXT); }
 		}
@@ -74,15 +84,6 @@ namespace NeoCore.Support
 		public string? PreprocessorName { get; internal set; }
 
 		public string? FilenameRoot { get; internal set; }
-
-		public ClrFramework([NotNull] string name)
-		{
-			Name     = name;
-			FullName = String.Format(".NET {0}", Name);
-
-			PreprocessorName = null;
-			FilenameRoot     = null;
-		}
 
 		private bool Equals(ClrFramework other) => Name == other.Name;
 

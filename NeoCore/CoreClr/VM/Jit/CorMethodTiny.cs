@@ -11,7 +11,6 @@ using NeoCore.Win32.Attributes;
 namespace NeoCore.CoreClr.VM.Jit
 {
 	[ImportNamespace]
-	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct CorMethodTiny : ICorMethodStructure
 	{

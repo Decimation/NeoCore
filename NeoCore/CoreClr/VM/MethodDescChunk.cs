@@ -1,16 +1,16 @@
+using System;
 using System.Runtime.InteropServices;
 using Memkit;
 using Memkit.Pointers;
+using Memkit.Pointers.ExtraPointers;
 using NeoCore.Import.Attributes;
-using NeoCore.Memory;
-using NeoCore.Memory.ExtraPointers;
 using NeoCore.Model;
+using NeoCore.Utilities;
 using NeoCore.Win32.Attributes;
 
 namespace NeoCore.CoreClr.VM
 {
 	[ImportNamespace]
-	[NativeStructure]
 	[StructLayout(LayoutKind.Sequential)]
 	public unsafe struct MethodDescChunk : IClrStructure
 	{
@@ -48,7 +48,28 @@ namespace NeoCore.CoreClr.VM
 		}
 
 		public ClrStructureType Type => ClrStructureType.Metadata;
-		
+
 		public string NativeName => nameof(MethodDescChunk);
+	}
+	
+	[Flags]
+	public enum ChunkFlags : ushort
+	{
+		/// <summary>
+		///     This must equal METHOD_TOKEN_RANGE_MASK calculated higher in this file.
+		///     These are separate to allow the flags space available and used to be obvious here
+		///     and for the logic that splits the token to be algorithmically generated based on the #define
+		/// </summary>
+		TokenRangeMask = 0x03FF,
+
+		/// <summary>
+		///     Compact temporary entry points
+		/// </summary>
+		HasCompactEntryPoints = 0x4000,
+
+		/// <summary>
+		///     This chunk lives in NGen module
+		/// </summary>
+		IsZapped = 0x8000
 	}
 }

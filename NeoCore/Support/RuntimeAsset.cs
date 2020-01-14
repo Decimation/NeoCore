@@ -3,7 +3,6 @@ using System.IO;
 using System.Text;
 using Memkit;
 using Memkit.Pointers;
-using Native = NeoCore.Win32.Native;
 
 namespace NeoCore.Support
 {
@@ -33,7 +32,7 @@ namespace NeoCore.Support
 
 		public Pointer<byte> FindExport(string name)
 		{
-			return Native.Kernel.GetProcAddress(Module.BaseAddress, name);
+			return Memkit.Interop.Native.GetProcAddress(Module.BaseAddress, name);
 		}
 
 		public override string ToString()

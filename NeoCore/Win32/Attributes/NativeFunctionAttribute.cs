@@ -9,5 +9,5 @@ namespace NeoCore.Win32.Attributes
 {
 	[AttributeUsage(AttributeTargets.Method)]
 	[MeansImplicitUse(ImplicitUseTargetFlags.WithMembers)]
-	public sealed class NativeFunctionAttribute : NativeAttribute {}
+	public sealed class NativeFunctionAttribute : Attribute {}
 }

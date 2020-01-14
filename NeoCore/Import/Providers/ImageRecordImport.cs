@@ -9,7 +9,6 @@ using System.Text.Json.Serialization;
 using Memkit;
 using Memkit.Pointers;
 using Memkit.Utilities;
-using NeoCore.Memory;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 
@@ -17,6 +16,8 @@ namespace NeoCore.Import.Providers
 {
 	public sealed class ImageRecordImport : ImportProvider
 	{
+		public const string FILENAME = "clr_image.json";
+
 		private readonly SigScanner m_scanner;
 
 		public ImageRecordImport(string file, ProcessModule module) : base(module)
@@ -34,6 +35,7 @@ namespace NeoCore.Import.Providers
 			options.Converters.Add(new ImageRecordEntryConverter());
 			options.Converters.Add(new ImageRecordInfoConverter());
 
+
 			var fullIndex = JsonSerializer.Deserialize<ImageRecord>(txt, options);
 			Records = Compact(fullIndex.Records);
 			Info    = fullIndex.Info;
@@ -47,23 +49,14 @@ namespace NeoCore.Import.Providers
 			Global.Value.WriteInfo(null, "Initialized with {Count} records", Records.Length);
 		}
 
-		public ImageRecordInfo    Info    { get; }
-		public ImageRecordEntry[] Records { get; }
+		public ImageRecordInfo Info { get; }
 
+		public ImageRecordEntry[] Records { get; }
 
 		// https://github.com/alliedmodders/sourcemod/blob/master/gamedata/sm-tf2.games.txt
 
 		public ImageRecordEntry this[string id] {
-			get {
-				var first = Records.FirstOrDefault(r => r.Name == id);
-
-				if (first == default) {
-					first = Records.FirstOrDefault(r => r.Alias == id);
-					Global.Value.WriteWarning(null, "Using fallback alias {Match} for {Id}", first, id);
-				}
-
-				return first;
-			}
+			get { return Records.FirstOrDefault(r => r.Name == id); }
 		}
 
 
@@ -87,7 +80,7 @@ namespace NeoCore.Import.Providers
 					string   fullName   = ImportManager.ScopeJoin(scopes);
 
 					var compactIndexEntry =
-						new ImageRecordEntry(fullName, oldEntry.Type, oldEntry.Value, oldEntry.Alias);
+						new ImageRecordEntry(fullName, oldEntry.Type, oldEntry.Value);
 					compactIndex.Add(compactIndexEntry);
 				}
 			}
@@ -98,7 +91,6 @@ namespace NeoCore.Import.Providers
 
 		public override Pointer<byte> GetAddress(string id)
 		{
-			Global.Value.WriteInfo(null, "Retrieving {Name}", id);
 			var entry = this[id];
 
 

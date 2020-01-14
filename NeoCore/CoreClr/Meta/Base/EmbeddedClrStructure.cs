@@ -1,7 +1,6 @@
 using System.Reflection;
 using Memkit.Pointers;
 using NeoCore.CoreClr.VM;
-using NeoCore.Memory;
 using NeoCore.Model;
 using NeoCore.Utilities;
 

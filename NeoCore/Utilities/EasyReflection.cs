@@ -12,19 +12,6 @@ namespace NeoCore.Utilities
 	/// </summary>
 	public static class EasyReflection
 	{
-		public static bool ImplementsGenericInterface(this Type type, Type genericType)
-		{
-			bool IsMatch(Type t)
-			{
-				return t.IsGenericType && t.GetGenericTypeDefinition() == genericType;
-			}
-
-			return type.GetInterfaces().Any(IsMatch);
-		}
-
-		public static bool ImplementsInterface(this Type type, string interfaceName) =>
-			type.GetInterface(interfaceName) != null;
-
 		// https://docs.microsoft.com/en-us/dotnet/framework/reflection-and-codedom/specifying-fully-qualified-type-names
 
 		public static Type? GetTypeSimple(this Assembly asm, string name)

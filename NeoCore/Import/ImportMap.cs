@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Memkit;
 using Memkit.Pointers;
@@ -8,7 +9,7 @@ namespace NeoCore.Import
 	public sealed unsafe class ImportMap
 	{
 		public const string FIELD_NAME = "Imports";
-		
+
 		private readonly Dictionary<string, Pointer<byte>> m_imports;
 
 		public ImportMap()
@@ -18,9 +19,8 @@ namespace NeoCore.Import
 
 		public Pointer<byte> this[string key] {
 			get {
-
 				if (!m_imports.ContainsKey(key)) {
-					var msg = string.Format("Key not found: {0}; Pairs: {1}", key, m_imports.Count);
+					string msg = String.Format("Key not found: {0}; Pairs: {1}", key, m_imports.Count);
 					throw new KeyNotFoundException(msg);
 				}
 

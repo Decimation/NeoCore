@@ -26,6 +26,10 @@ namespace NeoCore.CoreClr.VM
 			}
 		}
 
+		public ClrStructureType Type => ClrStructureType.Memory;
+
+		public string NativeName => nameof(GCHeap);
+
 		internal bool IsHeapPointer<T>(T value, bool smallHeapOnly = false)
 		{
 			return Mem.TryGetAddressOfHeap(value, out Pointer<byte> ptr) &&
@@ -40,9 +44,5 @@ namespace NeoCore.CoreClr.VM
 				                                              p.ToUInt64(), smallHeapOnly);
 			}
 		}
-
-		public ClrStructureType Type => ClrStructureType.Memory;
-		
-		public string NativeName => nameof(GCHeap);
 	}
 }

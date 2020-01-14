@@ -25,12 +25,12 @@ using NeoCore.CoreClr.Meta.Base;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Import.Providers;
-using NeoCore.Memory;
 using NeoCore.Model;
 using NeoCore.Support;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
 using NeoCore.Utilities.Extensions;
+using NeoCore.Win32;
 using Serilog.Core;
 using static NeoCore.Utilities.EasyReflection;
 
@@ -50,9 +50,8 @@ namespace Test
 			var t = typeof(MyStruct[]).AsMetaType();
 			Console.WriteLine(t.DebugTable);
 
-			
-			Console.WriteLine(Mem.IsBigEndian);
-			Console.WriteLine(typeof(string[]).AsMetaType().DebugTable);
+
+			Commands.RunSymCheck(Resources.Clr.LibraryFile, new DirectoryInfo(@"C:\Users\Deci\Desktop\"));
 		}
 
 		static void fn()

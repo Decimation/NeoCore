@@ -8,9 +8,9 @@ using JetBrains.Annotations;
 using Memkit;
 using Memkit.Pointers;
 using Memkit.Utilities;
+using NeoCore.CoreClr;
 using NeoCore.CoreClr.Meta;
 using NeoCore.Import.Attributes;
-using NeoCore.Memory;
 using NeoCore.Model;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Diagnostics;
@@ -155,7 +155,7 @@ namespace NeoCore.Import
 
 			Unload(type);
 
-			Neomem.Destroy(ref value);
+			Runtime.Destroy(ref value);
 		}
 
 		public void UnloadAll(Type[] t)

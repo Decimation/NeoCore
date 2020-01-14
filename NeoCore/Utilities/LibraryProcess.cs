@@ -4,9 +4,9 @@ using System.Text;
 
 namespace NeoCore.Utilities
 {
-	public sealed class NeoProcess
+	public sealed class LibraryProcess
 	{
-		public NeoProcess(Process proc)
+		public LibraryProcess(Process proc)
 		{
 			Process = proc;
 			Modules = Process.Modules.Cast<ProcessModule>().ToArray();
@@ -25,7 +25,7 @@ namespace NeoCore.Utilities
 			get { return Modules.FirstOrDefault(m => m.ModuleName == name); }
 		}
 
-		public static implicit operator NeoProcess(Process proc) => new NeoProcess(proc);
+		public static implicit operator LibraryProcess(Process proc) => new LibraryProcess(proc);
 
 		public override string ToString()
 		{

@@ -4,7 +4,6 @@ using Memkit.Pointers;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.EE;
-using NeoCore.Memory;
 
 // ReSharper disable InconsistentNaming
 
@@ -41,4 +40,6 @@ namespace NeoCore.CoreClr.Meta
 
 		#endregion
 	}
+	
+	
 }

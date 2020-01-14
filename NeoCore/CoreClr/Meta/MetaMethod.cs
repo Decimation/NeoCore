@@ -5,7 +5,6 @@ using Memkit.Pointers;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.CoreClr.VM.Jit;
-using NeoCore.Memory;
 using NeoCore.Utilities;
 using NeoCore.Utilities.Extensions;
 using NeoCore.Win32;
@@ -127,13 +126,6 @@ namespace NeoCore.CoreClr.Meta
 				// bool
 				const int ALLOW_OVERRIDES_PARAM = 0;
 				return new MetaIL(Value.Reference.GetILHeader(ALLOW_OVERRIDES_PARAM));
-			}
-		}
-
-		public Instruction[] Instructions {
-			get {
-				byte[] il = MethodInfo.GetMethodBody()?.GetILAsByteArray();
-				return Functions.Inspection.ReadInstructions(il);
 			}
 		}
 
