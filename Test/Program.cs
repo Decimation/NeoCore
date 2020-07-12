@@ -38,64 +38,53 @@ using static NeoCore.Utilities.EasyReflection;
 namespace Test
 {
 	// nuget pack -Prop Configuration=Release
-	
+
 	// C:\Library\Nuget
 	// dotnet pack -c Release -o %cd%
 	// dotnet nuget push "*.nupkg"
 	// del *.nupkg & dotnet pack -c Release -o %cd%
-	
-	public static unsafe class Program
+
+	public unsafe static class Program
 	{
+		private static ProcessModule get(string s)
+		{
+			foreach (ProcessModule module in Process.GetCurrentProcess().Modules) {
+				if (module.ModuleName==s) {
+					return module;
+				}
+			}
+
+			return null;
+		}
+
 		
 		private static void Main(string[] args)
 		{
-			Console.WriteLine(UniqueMember.Get);
-			Console.WriteLine(typeof(MyStructx).GetAllFields()[0].FieldType.Name);
-			Console.WriteLine(UniqueMember.FixedBufferType.GetName("buffer"));
+			// E8 7C F8 FF FF
+			Console.WriteLine("Hello");
 			
-		}
 
-		struct MyStructx
-		{
-			private fixed int buffer[5];
-		}
-
-		static void fn()
-		{
-			int           i  = 256;
-			Pointer<byte> p  = &i;
-			Pointer<byte> lo = &i;
-			Pointer<byte> hi = ((byte*) &i) + 3;
-
-			Console.WriteLine("lo: {0}", lo);
-			Console.WriteLine("hi: {0}", hi);
-			Console.WriteLine("p: {0}", p);
-			Console.WriteLine("size: {0}", sizeof(int));
-			
-			Console.WriteLine(Mem.IsAddressInRange(p, lo,hi));
-			Console.WriteLine(Mem.IsAddressInRange(p+3, lo,hi));
-			Console.WriteLine(Mem.IsAddressInRange(p+3,lo,4));
-			
-			var r1 = new Region(lo, hi);
-			Console.WriteLine(r1);
-			
-			var r2 = new Region(lo, 4);
-			Console.WriteLine(r2);
+		
 
 			
 		}
 
-		class MyClass
+
+		private static int Inlined(string v)
 		{
-			private int  b;
-			public  void f() { }
+			return int.Parse(v);
 		}
 
-		class MyStruct : MyClass
+		private static int NotInlined(string v)
 		{
-			public int a;
-
-			public void func() { }
+			try
+			{
+				return int.Parse(v);
+			}
+			catch (Exception)
+			{
+				return 0;
+			}
 		}
 	}
 }

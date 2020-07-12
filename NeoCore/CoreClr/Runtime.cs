@@ -62,6 +62,18 @@ namespace NeoCore.CoreClr
 			}
 		}
 
+		public static object RunConstructor(object obj, params object[] args)
+		{
+			//var ctors = obj.GetType().GetConstructors(EasyReflection.ALL_FLAGS);
+
+			var ctor = obj.GetType().GetConstructor(EasyReflection.ALL_FLAGS, null,
+			                                        args.Select(s => s.GetType()).ToArray(), null);
+
+			obj = ctor.Invoke(obj, args);
+
+			return obj;
+		}
+
 		internal static Type ResolveType(Pointer<byte> handle) => GetTypeFromHandle(handle.Address);
 
 		/// <summary>
@@ -192,7 +204,7 @@ namespace NeoCore.CoreClr
 
 				if (mtx.IsStruct) {
 					return (int) Functions.CallGeneric(typeof(Mem).GetMethod(nameof(SizeOf)),
-					                                              type, null);
+					                                   type, null);
 				}
 
 				// Subtract the size of the ObjHeader and MethodTable*
@@ -202,6 +214,7 @@ namespace NeoCore.CoreClr
 
 			return Assets.INVALID_VALUE;
 		}
+
 
 		//    Calculates the complete size of a reference type in heap memory.
 		//    This is the most accurate size calculation.

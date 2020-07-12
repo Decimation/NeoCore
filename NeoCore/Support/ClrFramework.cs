@@ -65,6 +65,8 @@ namespace NeoCore.Support
 			Name     = name;
 			FullName = String.Format(".NET {0}", Name);
 
+			
+
 			PreprocessorName = null;
 			FilenameRoot     = null;
 		}
@@ -74,7 +76,13 @@ namespace NeoCore.Support
 		}
 
 		public FileInfo LibraryFile {
-			get { return Runtime.GetRuntimeFile(FilenameRoot + Native.DLL_EXT); }
+			get {
+				
+				var v= Runtime.GetRuntimeFile(FilenameRoot + Native.DLL_EXT);
+
+				
+				return v;
+			}
 		}
 
 		public string Name { get; }

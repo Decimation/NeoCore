@@ -9,6 +9,11 @@
 				"name" : "JIT_GetRuntimeType",
 				"type" : "signature",
 				"value": "48 83 EC 28 F6 C1 02 75 28"
+			},
+			{
+				"name" : "AllocateObject",
+				"type" : "signature",
+				"value": "48 89 5C 24 10 55 56 57 41 54 41 57"
 			}
 		],
 		"FieldDesc"  : [

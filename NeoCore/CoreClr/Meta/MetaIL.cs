@@ -46,6 +46,6 @@ namespace NeoCore.CoreClr.Meta
 		/// </summary>
 		public byte[] CodeIL => Value.Reference.CodeIL;
 
-		public Instruction[] Instructions => Instruction.ReadInstructions(CodeIL);
+		public JitInstruction[] Instructions => JitInstruction.ReadInstructions(CodeIL);
 	}
 }

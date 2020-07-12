@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Memkit.Interop;
 using NeoCore.Model;
 using NeoCore.Support;
 using NeoCore.Utilities.Diagnostics;

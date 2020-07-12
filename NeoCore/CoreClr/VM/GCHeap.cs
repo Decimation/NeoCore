@@ -1,11 +1,15 @@
 // ReSharper disable InconsistentNaming
 
+using System;
+using System.Runtime.CompilerServices;
 using Memkit;
 using Memkit.Pointers;
 using Memkit.Utilities;
+using NeoCore.CoreClr.Meta;
 using NeoCore.Import;
 using NeoCore.Import.Attributes;
 using NeoCore.Model;
+using NeoCore.Utilities;
 
 namespace NeoCore.CoreClr.VM
 {
@@ -30,6 +34,31 @@ namespace NeoCore.CoreClr.VM
 
 		public string NativeName => nameof(GCHeap);
 
+		
+		// todo: fix
+		
+		/*[ImportCall(IdentifierOptions.FullyQualified, ImportCallOptions.Map)]
+		internal void* AllocateObject(Pointer<MethodTable> mt, bool fHandleCom = false)
+		{
+			fixed (GCHeap* value = &this) {
+				return Imports.CallReturnPointer(nameof(AllocateObject),(long) value, mt.ToInt64(), Convert.ToInt64(fHandleCom));
+			}
+			
+		}
+		
+		
+		
+		internal object AllocateObject(MetaType mt, bool fHandleCom = false)
+		{
+			void* p = AllocateObject(mt.Value.ToPointer(), fHandleCom);
+			return Unsafe.Read<object>(&p);
+		}
+		
+		internal T AllocateObject<T>(bool fHandleCom = false)
+		{
+			return (T) AllocateObject(typeof(T), fHandleCom);
+		}*/
+
 		internal bool IsHeapPointer<T>(T value, bool smallHeapOnly = false)
 		{
 			return Mem.TryGetAddressOfHeap(value, out Pointer<byte> ptr) &&
@@ -44,5 +73,7 @@ namespace NeoCore.CoreClr.VM
 				                                              p.ToUInt64(), smallHeapOnly);
 			}
 		}
+		
+		// https://github.com/Decimation/RazorSharp/blob/master/RazorSharp/CoreClr/GCHeap.cs
 	}
 }

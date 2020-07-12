@@ -1,9 +1,12 @@
 using System;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Memkit;
 using Memkit.Model;
 using Memkit.Pointers;
+using Memkit.Utilities;
 using NeoCore.CoreClr.Meta.Base;
 using NeoCore.CoreClr.VM;
 using NeoCore.Support;
@@ -17,6 +20,7 @@ namespace NeoCore.CoreClr.Meta
 	///     <list type="bullet">
 	///         <item><description>CLR structure: <see cref="GCHeap"/></description></item>
 	///     </list>
+	/// <seealso cref="Activator"/>
 	/// </summary>
 	public sealed unsafe class MetaHeap : BasicClrStructure<GCHeap>
 	{
@@ -46,6 +50,19 @@ namespace NeoCore.CoreClr.Meta
 			return Value.Reference.IsHeapPointer(p, smallHeapOnly);
 		}
 
+		private const bool HANDLE_COM = false;
+		
+		/*public object AllocObject(MetaType mt)
+		{
+			var val= Value.Reference.AllocateObject(mt, HANDLE_COM);
+
+			return val;
+		}
+
+		public T AllocObject<T>() => Value.Reference.AllocateObject<T>(HANDLE_COM);
+
+		public Pointer<byte> AllocObject(Pointer<MethodTable> mt) => Value.Reference.AllocateObject(mt,HANDLE_COM);*/
+		
 		public override string ToString()
 		{
 			var sb = new StringBuilder();
@@ -63,11 +80,24 @@ namespace NeoCore.CoreClr.Meta
 			const string GLOBAL_GCHEAP_LO  = "g_lowest_address";
 			const string GLOBAL_GCHEAP_HI  = "g_highest_address";
 
-			Pointer<byte> gc = clr.GetAddress(GLOBAL_GCHEAP_PTR);
-			Pointer<byte> lo = clr.GetAddress(GLOBAL_GCHEAP_LO).ReadPointer();
-			Pointer<byte> hi = clr.GetAddress(GLOBAL_GCHEAP_HI).ReadPointer();
+			// .data	0000000180517000	000000018052F000	R	W	.	.	L	para	0004	public	DATA	64	0000	0000	0004	FFFFFFFFFFFFFFFF	FFFFFFFFFFFFFFFF
 
-			return new MetaHeap(gc, lo, hi);
+			// 000000018051C120
+			var segments=PEFileReader.ReadPESectionInfo(Resources.Clr.Module.BaseAddress);
+			
+			var text=segments.Single(s => s.Name.Contains(".data"));
+			
+			var h = 0x5120;
+
+			Pointer<byte> gc = text.Address + h;
+			//Pointer<byte> lo = clr.GetAddress(GLOBAL_GCHEAP_LO).ReadPointer();
+			//Pointer<byte> hi = clr.GetAddress(GLOBAL_GCHEAP_HI).ReadPointer();
+
+			return new MetaHeap(gc.ReadPointer(), null, null);
 		}
+		
+		
+		// https://gist.github.com/afish/de9efe886164e9cdea74
+		// https://gist.github.com/afish/33046b6c90833c922d6d
 	}
 }

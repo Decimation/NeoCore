@@ -11,7 +11,7 @@ namespace NeoCore.CoreClr.VM.Jit
 	/// <summary>
 	/// Represents an IL instruction.
 	/// </summary>
-	public struct Instruction
+	public struct JitInstruction
 	{
 		public int Offset { get; internal set; }
 
@@ -113,13 +113,13 @@ namespace NeoCore.CoreClr.VM.Jit
 			return dict;
 		}
 
-		public static Instruction[] ReadInstructions(byte[] bytes)
+		public static JitInstruction[] ReadInstructions(byte[] bytes)
 		{
 			// Commit with old ILString:
 			// 7bff50a8777f9ff528e381d0b740d7e7bdcb760a
 			// https://github.com/GeorgePlotnikov/ClrAnalyzer/blob/master/Win32Native/ildump.h
 
-			var instructions = new List<Instruction>();
+			var instructions = new List<JitInstruction>();
 
 			int offset = 0;
 
@@ -127,7 +127,7 @@ namespace NeoCore.CoreClr.VM.Jit
 			const ushort CODE_OR = 0xFE00;
 
 			while (offset < bytes.Length) {
-				var instruction = new Instruction
+				var instruction = new JitInstruction
 				{
 					Offset = offset
 				};
