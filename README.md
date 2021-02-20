@@ -7,6 +7,10 @@
 Low-level utilities and tools for working with the CLR, CLR internal structures, and memory. Improved .NET Core version 
 of [RazorSharp](https://github.com/Decimation/RazorSharp).
 
+# Notice
+
+**For a new and improved .NET 5 implementation, see [Novus](https://github.com/Decimation/Novus).**
+
 # Goals
 
 `NeoCore` aims to provide functionality similar to that of `ClrMD`, `WinDbg SOS`, and `Reflection` but in a more detailed fashion while also exposing more underlying metadata and CLR functionality.
